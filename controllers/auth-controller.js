@@ -1,0 +1,300 @@
+const { StatusCodes } = require("http-status-codes");
+const { phone } = require("phone");
+const { prisma } = require("../config/prisma");
+
+const {
+  NotFoundError,
+  BadRequestError,
+  UnauthenticatedError,
+} = require("../errors");
+const { UserZodModel } = require("../models/user-zod-model");
+
+const { sendTokenToCookies } = require("../utils/jwt-utils");
+const crypto = require("crypto");
+const {
+  checkOtpRestirictionsHelper,
+  sendValidationEmail,
+  verifyOtpHelper,
+  spamOtpRequestHelper,
+} = require("../helpers/redis");
+const { sendOtpHelper } = require("../helpers/redis/send-otp-helper");
+
+const login = async (req, res) => {
+  // const { email, password } = req.body;
+  // if (!email || !password) {
+  //   throw new BadRequestError("Invalid email or password");
+  // }
+  // const user = await User.findOne({ email });
+  // if (!user) {
+  //   throw new UnauthenticatedError("Invalid Credentials");
+  // }
+  // if (!user.isVerified) {
+  //   throw new UnauthenticatedError("Please verify your credentials");
+  // }
+  // const doesPasswordsMatch = await user.comparePasswords(password);
+  // if (!doesPasswordsMatch) {
+  //   throw new UnauthenticatedError("Invalid Credentials");
+  // }
+  // let refreshToken = "";
+  // const existingUserToken = await UserToken.findOne({ user: user._id });
+  // if (existingUserToken) {
+  //   if (!existingUserToken.isValid) {
+  //     throw new UnauthenticatedError("Invalid Credentials");
+  //   }
+  //   refreshToken = existingUserToken.refreshToken;
+  // } else {
+  //   refreshToken = crypto.randomBytes(40).toString("hex");
+  //   const userAgent = req.get("user-agent");
+  //   const ip = req.ip;
+  //   const userToken = { refreshToken, userAgent, ip, user: user._id };
+  //   await UserToken.create(userToken);
+  // }
+  // sendTokenToCookies({ res, user, refreshToken });
+  // return res.status(StatusCodes.OK).json({
+  //   isSuccess: true,
+  //   user: {
+  //     id: user.getId(),
+  //     email: user.getEmail(),
+  //     name: user.getName(),
+  //     role: user.getRole(),
+  //     //   token,
+  //   },
+  //   // token: token,
+  // });
+};
+
+const register = async (req, res, next) => {
+  const { name, phoneNumber, userCountry, dateOfBirth, gender, email } =
+    req.body;
+  const zodModel = UserZodModel.safeParse({
+    name: name,
+    dateOfBirth: dateOfBirth,
+    gender: gender,
+    email: email,
+    userCountry: userCountry,
+    phone: phoneNumber,
+  });
+  const isPhoneValid = phone(phoneNumber.toString());
+
+  console.log(isPhoneValid);
+  console.log(phoneNumber);
+  // console.log(phone("+85291234567"));
+  // console.log(phone("+201275559131"));
+  // console.log(phone("01275559131"));
+
+  if (!zodModel.success) {
+    throw new BadRequestError(zodModel.error.errors[0].message);
+  }
+
+  if (isPhoneValid.isValid != true) {
+    throw new BadRequestError("The phone number is not correct");
+  }
+  const userInDB = await prisma.user.findUnique({
+    where: { email: email, phone: phoneNumber },
+  });
+  if (!userInDB) {
+    const country = await prisma.country.findUnique({
+      where: { countryIsoCode: userCountry },
+    });
+    if (!country) {
+      throw new BadRequestError("Country not found");
+    }
+
+    // Using Date.parse method
+    const parse = Date.parse(dateOfBirth);
+    console.log(parse);
+
+    // Converting to date object
+    const date = new Date(parse);
+
+    // Display output
+    console.log(date);
+    await prisma.user.create({
+      data: {
+        name: name,
+        dateOfBirth: date,
+        gender: gender,
+        email: email,
+        // userCountry: userCountry,
+        phone: phoneNumber,
+        countryId: country.id,
+      },
+    });
+  }
+  /*
+  ELSE SEND OTP AND CREATE USER DATA
+  */
+  await checkOtpRestirictionsHelper({ phone: phoneNumber, next });
+  //  await prisma.user.findUnique({
+  //   where: { phone: phoneNuumber },
+  // });
+  await spamOtpRequestHelper({ phone: phoneNumber, next });
+  await sendOtpHelper({ name, phone: phoneNumber, email });
+  return res.status(StatusCodes.CREATED).json({
+    isSuccess: true,
+    message: "OTP sent. Please check your phone",
+  });
+};
+const verifyEmail = async (req, res) => {
+  const { email, phoneNumber, verificationCode } = req.body;
+  if (
+    !email ||
+    !phoneNumber ||
+    !verificationCode ||
+    verificationCode.length != 4
+  ) {
+    throw new BadRequestError("Please enter all data correctly");
+  }
+  const isPhoneValid = phone(phoneNumber);
+
+  if (isPhoneValid.isValid != true) {
+    throw new BadRequestError("The phone number is not correct");
+  }
+  const user = await prisma.user.findUnique({
+    where: { email: email, phone: phoneNumber },
+  });
+  if (!user) {
+    throw new NotFoundError("User not found");
+  }
+  await verifyOtpHelper({ phone: phoneNumber, userOtp: verificationCode });
+  // user.isVerified = true;
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { isVerified: true },
+  });
+  // await user.save();
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "Account verified successfully",
+    user: user,
+  });
+};
+
+const logout = async (req, res) => {
+  // const token = await UserToken.findOne({ user: req.user.userId });
+  // await token.deleteOne();
+  // res.cookie("accessToken", null, {
+  //   expires: new Date(Date.now()),
+  //   httpOnly: true,
+  //   secure: process.env.NODE_ENV === "production",
+  //   signed: true,
+  //   // maxAge: new Date(Date.now()),
+  // });
+  // res.cookie("refreshToken", null, {
+  //   expires: new Date(Date.now()),
+  //   httpOnly: true,
+  //   secure: process.env.NODE_ENV === "production",
+  //   signed: true,
+  //   // maxAge: new Date(Date.now()),
+  // });
+  // return res.status(StatusCodes.OK).json({
+  //   isSuccess: true,
+  //   message: "Logged out successfully",
+  // });
+};
+
+const updateProfile = async (req, res) => {
+  // const { email, name } = req.body;
+  // if (!email || !name) {
+  //   throw new BadRequestError("Please enter all profile data");
+  // }
+  // const user = await User.findOne({ _id: req.user.userId });
+  // user.email = email;
+  // user.name = name;
+  // await user.save();
+  // const token = user.createJWT();
+  // return res.status(StatusCodes.OK).json({
+  //   isSuccess: true,
+  //   user: {
+  //     id: user.getId(),
+  //     name: user.getName(),
+  //     role: user.getRole(),
+  //     email: user.getEmail(),
+  //     token,
+  //   },
+  //   token,
+  // });
+};
+const resetPassword = async (req, res) => {
+  // const { email, token, password } = req.body;
+  // if (!email || !token || !password) {
+  //   throw new BadRequestError("Please enter valid values");
+  // }
+  // const userInDB = await User.findOne({ email });
+  // if (!userInDB) {
+  //   throw new BadRequestError("This user in not in the database");
+  // }
+  // console.log(userInDB.passwordTokenExpiresAt - Date.now());
+  // console.log(userInDB.passwordTokenExpiresAt - Date.now() < 1000 * 60 * 10);
+  // if (
+  //   !(
+  //     userInDB.passwordToken === token &&
+  //     userInDB.passwordTokenExpiresAt - Date.now() < 1000 * 60 * 10
+  //   )
+  // ) {
+  //   throw new BadRequestError("The password validation time is expired");
+  // }
+  // userInDB.password = password;
+  // userInDB.passwordToken = null;
+  // userInDB.passwordTokenExpiresAt = null;
+  // await userInDB.save();
+  // return res.status(StatusCodes.OK).json({
+  //   isSuccess: true,
+  //   message: "Your password has been reset successfully.",
+  // });
+};
+const forgotPassword = async (req, res) => {
+  // const { email } = req.body;
+  // if (!email) {
+  //   throw new BadRequestError("Please enter a valid email");
+  // }
+  // const userInDB = await User.findOne({ email });
+  // if (!userInDB) {
+  //   throw new BadRequestError("This user in not in the database");
+  // }
+  // if (
+  //   userInDB.passwordToken &&
+  //   Date.now() - userInDB.passwordTokenExpiresAt < 1000 * 60 * 10
+  // ) {
+  //   return res.status(StatusCodes.OK).json({
+  //     isSuccess: true,
+  //     message: "We have sent you an email. Please check your email",
+  //   });
+  // }
+  // const passwordToken = crypto.randomBytes(70).toString("hex");
+  // userInDB.passwordToken = passwordToken;
+  // userInDB.passwordTokenExpiresAt = new Date(Date.now() + 1000 * 60 * 10); // ten mins
+  // await userInDB.save();
+  // const protocol = req.protocol;
+  // const host = req.get("host");
+  // // const origin = `http://${req.headers.host}`;
+  // const origin = `${protocol}://${host}`;
+  // // console.log(origin);
+  // await sendResetPasswordEmail({
+  //   email,
+  //   name: userInDB.name,
+  //   passwordToken,
+  //   origin,
+  // });
+  // return res.status(StatusCodes.OK).json({
+  //   isSuccess: true,
+  //   message: "Please check your email",
+  // });
+};
+const showMe = async (req, res) => {
+  // return res.status(StatusCodes.OK).json({
+  //   isSuccess: true,
+  //   user,
+  // });
+};
+
+module.exports = {
+  login,
+  register,
+  logout,
+  verifyEmail,
+  updateProfile,
+  showMe,
+  resetPassword,
+  forgotPassword,
+};
