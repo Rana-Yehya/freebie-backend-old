@@ -1,3 +1,5 @@
+const crypto = require("crypto");
+
 const { StatusCodes } = require("http-status-codes");
 const { phone } = require("phone");
 const { prisma } = require("../config/prisma");
@@ -9,8 +11,11 @@ const {
 } = require("../errors");
 const { UserZodModel } = require("../models/user-zod-model");
 
-const { sendTokenToCookies } = require("../utils/jwt-utils");
-const crypto = require("crypto");
+const {
+  sendTokenToCookies,
+  createAccessJWT,
+  createRefreshJWT,
+} = require("../utils/jwt-utils");
 const {
   checkOtpRestirictionsHelper,
   sendValidationEmail,
@@ -18,49 +23,35 @@ const {
   spamOtpRequestHelper,
 } = require("../helpers/redis");
 const { sendOtpHelper } = require("../helpers/redis/send-otp-helper");
+//TODO AM I IN NEED TO LOGIN
 
 const login = async (req, res) => {
-  // const { email, password } = req.body;
-  // if (!email || !password) {
-  //   throw new BadRequestError("Invalid email or password");
-  // }
-  // const user = await User.findOne({ email });
-  // if (!user) {
-  //   throw new UnauthenticatedError("Invalid Credentials");
-  // }
-  // if (!user.isVerified) {
-  //   throw new UnauthenticatedError("Please verify your credentials");
-  // }
-  // const doesPasswordsMatch = await user.comparePasswords(password);
-  // if (!doesPasswordsMatch) {
-  //   throw new UnauthenticatedError("Invalid Credentials");
-  // }
-  // let refreshToken = "";
-  // const existingUserToken = await UserToken.findOne({ user: user._id });
-  // if (existingUserToken) {
-  //   if (!existingUserToken.isValid) {
-  //     throw new UnauthenticatedError("Invalid Credentials");
-  //   }
-  //   refreshToken = existingUserToken.refreshToken;
-  // } else {
-  //   refreshToken = crypto.randomBytes(40).toString("hex");
-  //   const userAgent = req.get("user-agent");
-  //   const ip = req.ip;
-  //   const userToken = { refreshToken, userAgent, ip, user: user._id };
-  //   await UserToken.create(userToken);
-  // }
-  // sendTokenToCookies({ res, user, refreshToken });
-  // return res.status(StatusCodes.OK).json({
-  //   isSuccess: true,
-  //   user: {
-  //     id: user.getId(),
-  //     email: user.getEmail(),
-  //     name: user.getName(),
-  //     role: user.getRole(),
-  //     //   token,
-  //   },
-  //   // token: token,
-  // });
+  console.log(req.ip);
+  const { email, phoneNumber } = req.body;
+  //TODO AM I IN NEED TO CHECK EMAIL
+  if (!email || !phoneNumber) {
+    throw new BadRequestError("Invalid email or phone number");
+  }
+  const user = await prisma.user.findUnique({
+    where: { phone: phoneNumber }, // email: email,
+  });
+  if (!user) {
+    throw new UnauthenticatedError("Invalid Credentials");
+  }
+  if (!user.isVerified) {
+    throw new UnauthenticatedError("Please verify your credentials");
+  }
+  const accessTokenJWT = createAccessJWT({ payload: { userId: user.id } });
+  const refreshTokenJWT = createRefreshJWT({
+    payload: { userId: user.id },
+  });
+
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    access_token: accessTokenJWT,
+    refresh_token: refreshTokenJWT,
+    user: user,
+  });
 };
 
 const register = async (req, res, next) => {
@@ -78,9 +69,6 @@ const register = async (req, res, next) => {
 
   console.log(isPhoneValid);
   console.log(phoneNumber);
-  // console.log(phone("+85291234567"));
-  // console.log(phone("+201275559131"));
-  // console.log(phone("01275559131"));
 
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
@@ -99,23 +87,15 @@ const register = async (req, res, next) => {
     if (!country) {
       throw new BadRequestError("Country not found");
     }
-
-    // Using Date.parse method
     const parse = Date.parse(dateOfBirth);
-    console.log(parse);
 
-    // Converting to date object
     const date = new Date(parse);
-
-    // Display output
-    console.log(date);
     await prisma.user.create({
       data: {
         name: name,
         dateOfBirth: date,
         gender: gender,
         email: email,
-        // userCountry: userCountry,
         phone: phoneNumber,
         countryId: country.id,
       },
@@ -135,6 +115,7 @@ const register = async (req, res, next) => {
     message: "OTP sent. Please check your phone",
   });
 };
+
 const verifyEmail = async (req, res) => {
   const { email, phoneNumber, verificationCode } = req.body;
   if (
@@ -158,21 +139,43 @@ const verifyEmail = async (req, res) => {
   }
   await verifyOtpHelper({ phone: phoneNumber, userOtp: verificationCode });
   // user.isVerified = true;
+  const refreshTokenSecret = crypto.randomBytes(40).toString("hex");
+  const accessTokenSecret = crypto.randomBytes(40).toString("hex");
+
   await prisma.user.update({
     where: { id: user.id },
-    data: { isVerified: true },
+    data: {
+      isVerified: true,
+      refreshTokenSecret: refreshTokenSecret,
+      accessTokenSecret: accessTokenSecret,
+    },
   });
-  // await user.save();
+  // send the jwt
+  const accessTokenJWT = createAccessJWT({
+    payload: { userId: user.id, accessTokenSecret },
+  });
+  const refreshTokenJWT = createRefreshJWT({
+    payload: { userId: user.id, refreshTokenSecret },
+  });
+
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     message: "Account verified successfully",
+
+    access_token: accessTokenJWT,
+    refresh_token: refreshTokenJWT,
     user: user,
   });
 };
 
 const logout = async (req, res) => {
-  // const token = await UserToken.findOne({ user: req.user.userId });
-  // await token.deleteOne();
+  await prisma.user.update({
+    where: { id: req.user.id },
+    data: {
+      refreshTokenSecret: null,
+      accessTokenSecret: null,
+    },
+  });
   // res.cookie("accessToken", null, {
   //   expires: new Date(Date.now()),
   //   httpOnly: true,
@@ -187,10 +190,10 @@ const logout = async (req, res) => {
   //   signed: true,
   //   // maxAge: new Date(Date.now()),
   // });
-  // return res.status(StatusCodes.OK).json({
-  //   isSuccess: true,
-  //   message: "Logged out successfully",
-  // });
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "Logged out successfully",
+  });
 };
 
 const updateProfile = async (req, res) => {
@@ -282,10 +285,10 @@ const forgotPassword = async (req, res) => {
   // });
 };
 const showMe = async (req, res) => {
-  // return res.status(StatusCodes.OK).json({
-  //   isSuccess: true,
-  //   user,
-  // });
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    user: req.user,
+  });
 };
 
 module.exports = {

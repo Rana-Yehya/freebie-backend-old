@@ -2070,6 +2070,8 @@ export namespace Prisma {
     email: string | null
     role: string | null
     isVerified: boolean | null
+    refreshTokenSecret: string | null
+    accessTokenSecret: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2084,6 +2086,8 @@ export namespace Prisma {
     email: string | null
     role: string | null
     isVerified: boolean | null
+    refreshTokenSecret: string | null
+    accessTokenSecret: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2098,6 +2102,8 @@ export namespace Prisma {
     email: number
     role: number
     isVerified: number
+    refreshTokenSecret: number
+    accessTokenSecret: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2114,6 +2120,8 @@ export namespace Prisma {
     email?: true
     role?: true
     isVerified?: true
+    refreshTokenSecret?: true
+    accessTokenSecret?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2128,6 +2136,8 @@ export namespace Prisma {
     email?: true
     role?: true
     isVerified?: true
+    refreshTokenSecret?: true
+    accessTokenSecret?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2142,6 +2152,8 @@ export namespace Prisma {
     email?: true
     role?: true
     isVerified?: true
+    refreshTokenSecret?: true
+    accessTokenSecret?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2229,6 +2241,8 @@ export namespace Prisma {
     email: string | null
     role: string
     isVerified: boolean
+    refreshTokenSecret: string | null
+    accessTokenSecret: string | null
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -2260,6 +2274,8 @@ export namespace Prisma {
     email?: boolean
     role?: boolean
     isVerified?: boolean
+    refreshTokenSecret?: boolean
+    accessTokenSecret?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userCountry?: boolean | countryDefaultArgs<ExtArgs>
@@ -2275,6 +2291,8 @@ export namespace Prisma {
     email?: boolean
     role?: boolean
     isVerified?: boolean
+    refreshTokenSecret?: boolean
+    accessTokenSecret?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userCountry?: boolean | countryDefaultArgs<ExtArgs>
@@ -2290,6 +2308,8 @@ export namespace Prisma {
     email?: boolean
     role?: boolean
     isVerified?: boolean
+    refreshTokenSecret?: boolean
+    accessTokenSecret?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userCountry?: boolean | countryDefaultArgs<ExtArgs>
@@ -2305,11 +2325,13 @@ export namespace Prisma {
     email?: boolean
     role?: boolean
     isVerified?: boolean
+    refreshTokenSecret?: boolean
+    accessTokenSecret?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type userOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "dateOfBirth" | "gender" | "countryId" | "phone" | "email" | "role" | "isVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type userOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "dateOfBirth" | "gender" | "countryId" | "phone" | "email" | "role" | "isVerified" | "refreshTokenSecret" | "accessTokenSecret" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type userInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     userCountry?: boolean | countryDefaultArgs<ExtArgs>
   }
@@ -2335,6 +2357,8 @@ export namespace Prisma {
       email: string | null
       role: string
       isVerified: boolean
+      refreshTokenSecret: string | null
+      accessTokenSecret: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -2770,6 +2794,8 @@ export namespace Prisma {
     readonly email: FieldRef<"user", 'String'>
     readonly role: FieldRef<"user", 'String'>
     readonly isVerified: FieldRef<"user", 'Boolean'>
+    readonly refreshTokenSecret: FieldRef<"user", 'String'>
+    readonly accessTokenSecret: FieldRef<"user", 'String'>
     readonly createdAt: FieldRef<"user", 'DateTime'>
     readonly updatedAt: FieldRef<"user", 'DateTime'>
   }
@@ -4276,6 +4302,8 @@ export namespace Prisma {
     email: 'email',
     role: 'role',
     isVerified: 'isVerified',
+    refreshTokenSecret: 'refreshTokenSecret',
+    accessTokenSecret: 'accessTokenSecret',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -4429,6 +4457,8 @@ export namespace Prisma {
     email?: StringNullableFilter<"user"> | string | null
     role?: StringFilter<"user"> | string
     isVerified?: BoolFilter<"user"> | boolean
+    refreshTokenSecret?: StringNullableFilter<"user"> | string | null
+    accessTokenSecret?: StringNullableFilter<"user"> | string | null
     createdAt?: DateTimeFilter<"user"> | Date | string
     updatedAt?: DateTimeFilter<"user"> | Date | string
     userCountry?: XOR<CountryScalarRelationFilter, countryWhereInput>
@@ -4444,6 +4474,8 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     role?: SortOrder
     isVerified?: SortOrder
+    refreshTokenSecret?: SortOrderInput | SortOrder
+    accessTokenSecret?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userCountry?: countryOrderByWithRelationInput
@@ -4462,6 +4494,8 @@ export namespace Prisma {
     email?: StringNullableFilter<"user"> | string | null
     role?: StringFilter<"user"> | string
     isVerified?: BoolFilter<"user"> | boolean
+    refreshTokenSecret?: StringNullableFilter<"user"> | string | null
+    accessTokenSecret?: StringNullableFilter<"user"> | string | null
     createdAt?: DateTimeFilter<"user"> | Date | string
     updatedAt?: DateTimeFilter<"user"> | Date | string
     userCountry?: XOR<CountryScalarRelationFilter, countryWhereInput>
@@ -4477,6 +4511,8 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     role?: SortOrder
     isVerified?: SortOrder
+    refreshTokenSecret?: SortOrderInput | SortOrder
+    accessTokenSecret?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: userCountOrderByAggregateInput
@@ -4497,6 +4533,8 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"user"> | string | null
     role?: StringWithAggregatesFilter<"user"> | string
     isVerified?: BoolWithAggregatesFilter<"user"> | boolean
+    refreshTokenSecret?: StringNullableWithAggregatesFilter<"user"> | string | null
+    accessTokenSecret?: StringNullableWithAggregatesFilter<"user"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"user"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"user"> | Date | string
   }
@@ -4602,6 +4640,8 @@ export namespace Prisma {
     email?: string | null
     role?: string
     isVerified?: boolean
+    refreshTokenSecret?: string | null
+    accessTokenSecret?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userCountry: countryCreateNestedOneWithoutUserInput
@@ -4617,6 +4657,8 @@ export namespace Prisma {
     email?: string | null
     role?: string
     isVerified?: boolean
+    refreshTokenSecret?: string | null
+    accessTokenSecret?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -4630,6 +4672,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
+    refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userCountry?: countryUpdateOneRequiredWithoutUserNestedInput
@@ -4645,6 +4689,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
+    refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -4659,6 +4705,8 @@ export namespace Prisma {
     email?: string | null
     role?: string
     isVerified?: boolean
+    refreshTokenSecret?: string | null
+    accessTokenSecret?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -4672,6 +4720,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
+    refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -4686,6 +4736,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
+    refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -4856,6 +4908,8 @@ export namespace Prisma {
     email?: SortOrder
     role?: SortOrder
     isVerified?: SortOrder
+    refreshTokenSecret?: SortOrder
+    accessTokenSecret?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -4870,6 +4924,8 @@ export namespace Prisma {
     email?: SortOrder
     role?: SortOrder
     isVerified?: SortOrder
+    refreshTokenSecret?: SortOrder
+    accessTokenSecret?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -4884,6 +4940,8 @@ export namespace Prisma {
     email?: SortOrder
     role?: SortOrder
     isVerified?: SortOrder
+    refreshTokenSecret?: SortOrder
+    accessTokenSecret?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -5249,6 +5307,8 @@ export namespace Prisma {
     email?: string | null
     role?: string
     isVerified?: boolean
+    refreshTokenSecret?: string | null
+    accessTokenSecret?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -5262,6 +5322,8 @@ export namespace Prisma {
     email?: string | null
     role?: string
     isVerified?: boolean
+    refreshTokenSecret?: string | null
+    accessTokenSecret?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -5305,6 +5367,8 @@ export namespace Prisma {
     email?: StringNullableFilter<"user"> | string | null
     role?: StringFilter<"user"> | string
     isVerified?: BoolFilter<"user"> | boolean
+    refreshTokenSecret?: StringNullableFilter<"user"> | string | null
+    accessTokenSecret?: StringNullableFilter<"user"> | string | null
     createdAt?: DateTimeFilter<"user"> | Date | string
     updatedAt?: DateTimeFilter<"user"> | Date | string
   }
@@ -5318,6 +5382,8 @@ export namespace Prisma {
     email?: string | null
     role?: string
     isVerified?: boolean
+    refreshTokenSecret?: string | null
+    accessTokenSecret?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -5331,6 +5397,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
+    refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5344,6 +5412,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
+    refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5357,6 +5427,8 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
+    refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

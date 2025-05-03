@@ -23,20 +23,22 @@ model image {
 }
 
 model user {
-  id          String    @id @unique @default(uuid())
-  name        String
-  dateOfBirth DateTime?
-  gender      String?
-  countryId   String
-  userCountry country   @relation(fields: [countryId], references: [id])
-  phone       String    @unique
-  email       String?
-  role        String    @default("user")
-  isVerified  Boolean   @default(false)
+  id                 String    @id @unique @default(uuid())
+  name               String
+  dateOfBirth        DateTime?
+  gender             String?
+  countryId          String
+  userCountry        country   @relation(fields: [countryId], references: [id])
+  phone              String    @unique
+  email              String?
+  role               String    @default("user")
+  isVerified         Boolean   @default(false)
+  refreshTokenSecret String?
+  accessTokenSecret  String?
   // imageId     String?  
   // avatar      image?    @relation(fields: [imageId], references: [id])
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 }
 
 model country {

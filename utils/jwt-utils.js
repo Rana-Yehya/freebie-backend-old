@@ -1,48 +1,53 @@
 const jwt = require("jsonwebtoken");
 
-const createJWT = (payload, expiresIn) => {
+const createAccessJWT = ({ payload }) => {
   return jwt.sign(
     // { userId: this._id, email: this.email },
     payload,
-    process.env.JWT_SECRET,
+    process.env.ACCESS_JWT_SECRET,
     {
-      expiresIn: expiresIn,
+      expiresIn: parseInt(process.env.ACCESS_JWT_LIFETIME),
     }
   );
 };
-
-const isTokenValid = function (token) {
-  return jwt.verify(token, process.env.JWT_SECRET);
+const createRefreshJWT = ({ payload }) => {
+  return jwt.sign(
+    // { userId: this._id, email: this.email },
+    payload,
+    process.env.REFRESH_JWT_SECRET,
+    {
+      expiresIn: parseInt(process.env.REFRESH_JWT_LIFETIME),
+    }
+  );
+};
+const isTokenValid = function ({ token, secret }) {
+  return jwt.verify(token, secret);
 };
 
-const sendTokenToCookies = function ({ res, user, refreshToken }) {
-  console.log(new Date(Date.now() + parseInt(process.env.ACCESS_JWT_LIFETIME)));
-  console.log(Date.now());
-  console.log(parseInt(process.env.ACCESS_JWT_LIFETIME));
-  const accessTokenJWT = createJWT(
-    { userId: user._id, email: user.email },
-    process.env.ACCESS_JWT_LIFETIME
-  );
-  const refreshTokenJWT = createJWT(
-    { user: { userId: user._id, email: user.email }, refreshToken },
-    process.env.REFRESH_JWT_LIFETIME
-  );
+// const sendTokenToCookies = function ({ res, user, refreshToken }) {
+//   console.log(new Date(Date.now() + parseInt(process.env.ACCESS_JWT_LIFETIME)));
+//   console.log(Date.now());
+//   console.log(parseInt(process.env.ACCESS_JWT_LIFETIME));
+//   const accessTokenJWT = createAccessJWT({ payload: { userId: user._id } });
+//   const refreshTokenJWT = createRefreshJWT({
+//     payload: { userId: user._id, refreshToken },
+//   });
 
-  res.cookie("accessToken", accessTokenJWT, {
-    expires: new Date(Date.now() + parseInt(process.env.ACCESS_JWT_LIFETIME)),
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    signed: true,
-    // maxAge: new Date(Date.now() + 1000),
-  });
-  res.cookie("refreshToken", refreshTokenJWT, {
-    expires: new Date(Date.now() + parseInt(process.env.REFRESH_JWT_LIFETIME)),
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    signed: true,
-    // maxAge: new Date(Date.now() + parseInt(process.env.REFRESH_JWT_LIFETIME)),
-  });
-};
+//   res.cookie("accessToken", accessTokenJWT, {
+//     expires: new Date(Date.now() + parseInt(process.env.ACCESS_JWT_LIFETIME)),
+//     httpOnly: true,
+//     secure: process.env.NODE_ENV === "production",
+//     signed: true,
+//     // maxAge: new Date(Date.now() + 1000),
+//   });
+//   res.cookie("refreshToken", refreshTokenJWT, {
+//     expires: new Date(Date.now() + parseInt(process.env.REFRESH_JWT_LIFETIME)),
+//     httpOnly: true,
+//     secure: process.env.NODE_ENV === "production",
+//     signed: true,
+//     // maxAge: new Date(Date.now() + parseInt(process.env.REFRESH_JWT_LIFETIME)),
+//   });
+// };
 
 /*
 
@@ -60,6 +65,7 @@ const sendTokenToCookies = function ({ res, user,  }) {
 */
 module.exports = {
   isTokenValid,
-  createJWT,
-  sendTokenToCookies,
+  createAccessJWT,
+  createRefreshJWT,
+  // sendTokenToCookies,
 };
