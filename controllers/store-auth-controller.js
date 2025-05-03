@@ -9,43 +9,58 @@ const {
   BadRequestError,
   UnauthenticatedError,
 } = require("../errors");
-const { UserZodModel } = require("../models/user-zod-model");
+const { StoreZodModel } = require("../models/store-zod-model");
 
-const {
-  sendTokenToCookies,
-  createAccessJWT,
-  createRefreshJWT,
-} = require("../utils/jwt-utils");
-const {
-  checkOtpRestirictionsHelper,
-  sendValidationEmail,
-  verifyOtpHelper,
-  spamOtpRequestHelper,
-} = require("../helpers/redis");
+const { createAccessJWT, createRefreshJWT } = require("../utils/jwt-utils");
+const { passwordEncrypt, passwordCompare } = require("../utils/password-utils");
+const { verifyOtpHelper } = require("../helpers/redis");
 const { sendOtpHelper } = require("../helpers/redis/send-otp-helper");
-//TODO AM I IN NEED TO LOGIN
 
 const login = async (req, res) => {
-  console.log(req.ip);
-  const { email, phoneNumber } = req.body;
-  //TODO AM I IN NEED TO CHECK EMAIL
-  if (!email || !phoneNumber) {
-    throw new BadRequestError("Invalid email or phone number");
+  const { email, phoneNumber, password } = req.body;
+  if (!(email || phoneNumber) && !password) {
+    throw new BadRequestError(
+      "Please provide email or phone number and password"
+    );
   }
-  const user = await prisma.user.findUnique({
-    where: { phone: phoneNumber }, // email: email,
-  });
+  const user = phoneNumber
+    ? await prisma.store.findUnique({
+        where: { phone: phoneNumber }, // email: email,
+      })
+    : await prisma.store.findUnique({
+        where: { email: email }, // email: email,
+      });
   if (!user) {
     throw new UnauthenticatedError("Invalid Credentials");
   }
-  if (!user.isVerified) {
-    throw new UnauthenticatedError("Please verify your credentials");
+  if (!user.isApprovedByAdmin) {
+    throw new UnauthenticatedError(
+      "Please wait till admins approve your registeration"
+    );
   }
-  const accessTokenJWT = createAccessJWT({ payload: { userId: user.id } });
+  const isPasswordMatch = await passwordCompare({
+    passwordToCmpare: password,
+    password: user.password,
+  });
+  if (!isPasswordMatch) {
+    throw new UnauthenticatedError("Invalid Credentials");
+  }
+  const refreshTokenSecret = crypto.randomBytes(40).toString("hex");
+  const accessTokenSecret = crypto.randomBytes(40).toString("hex");
+  const accessTokenJWT = createAccessJWT({
+    payload: { userId: user.id, accessTokenSecret },
+  });
   const refreshTokenJWT = createRefreshJWT({
-    payload: { userId: user.id },
+    payload: { userId: user.id, refreshTokenSecret },
   });
 
+  await prisma.store.update({
+    where: { id: user.id },
+    data: {
+      refreshTokenSecret: refreshTokenSecret,
+      accessTokenSecret: accessTokenSecret,
+    },
+  });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     access_token: accessTokenJWT,
@@ -55,116 +70,92 @@ const login = async (req, res) => {
 };
 
 const register = async (req, res, next) => {
-  const { name, phoneNumber, userCountry, dateOfBirth, gender, email } =
-    req.body;
-  const zodModel = UserZodModel.safeParse({
+  const {
+    name,
+    bio,
+    logo,
+    banner,
+    phoneNumber,
+    email,
+    password,
+    socialLinks,
+    type,
+  } = req.body;
+  const storeZodModel = StoreZodModel.safeParse({
     name: name,
-    dateOfBirth: dateOfBirth,
-    gender: gender,
-    email: email,
-    userCountry: userCountry,
+    bio: bio,
+    logo: logo,
+    banner: banner,
     phone: phoneNumber,
+    email: email,
+    password: password,
+    type: type,
+    socialLinks: socialLinks,
   });
   const isPhoneValid = phone(phoneNumber.toString());
 
   console.log(isPhoneValid);
   console.log(phoneNumber);
 
-  if (!zodModel.success) {
-    throw new BadRequestError(zodModel.error.errors[0].message);
+  if (!storeZodModel.success) {
+    throw new BadRequestError(storeZodModel.error.errors[0].message);
   }
 
   if (isPhoneValid.isValid != true) {
     throw new BadRequestError("The phone number is not correct");
   }
+  const storeInDB = await prisma.store.findUnique({
+    where: { email: email, phone: phoneNumber },
+  });
   const userInDB = await prisma.user.findUnique({
     where: { email: email, phone: phoneNumber },
   });
-  if (!userInDB) {
-    const country = await prisma.country.findUnique({
-      where: { countryIsoCode: userCountry },
-    });
-    if (!country) {
-      throw new BadRequestError("Country not found");
-    }
-    const parse = Date.parse(dateOfBirth);
-
-    const date = new Date(parse);
-    await prisma.user.create({
-      data: {
-        name: name,
-        dateOfBirth: date,
-        gender: gender,
-        email: email,
-        phone: phoneNumber,
-        countryId: country.id,
-      },
-    });
+  if (storeInDB || userInDB) {
+    throw new BadRequestError(
+      "Email already in use or has an individal account"
+    );
   }
-  /*
-  ELSE SEND OTP AND CREATE USER DATA
-  */
-  await checkOtpRestirictionsHelper({ phone: phoneNumber, next });
-  //  await prisma.user.findUnique({
-  //   where: { phone: phoneNuumber },
-  // });
-  await spamOtpRequestHelper({ phone: phoneNumber, next });
-  await sendOtpHelper({ name, phone: phoneNumber, email });
-  return res.status(StatusCodes.CREATED).json({
-    isSuccess: true,
-    message: "OTP sent. Please check your phone",
-  });
-};
-
-const verifyEmail = async (req, res) => {
-  const { email, phoneNumber, verificationCode } = req.body;
-  if (
-    !email ||
-    !phoneNumber ||
-    !verificationCode ||
-    verificationCode.length != 4
-  ) {
-    throw new BadRequestError("Please enter all data correctly");
-  }
-  const isPhoneValid = phone(phoneNumber);
-
-  if (isPhoneValid.isValid != true) {
-    throw new BadRequestError("The phone number is not correct");
-  }
-  const user = await prisma.user.findUnique({
-    where: { email: email, phone: phoneNumber },
-  });
-  if (!user) {
-    throw new NotFoundError("User not found");
-  }
-  await verifyOtpHelper({ phone: phoneNumber, userOtp: verificationCode });
-  // user.isVerified = true;
-  const refreshTokenSecret = crypto.randomBytes(40).toString("hex");
-  const accessTokenSecret = crypto.randomBytes(40).toString("hex");
-
-  await prisma.user.update({
-    where: { id: user.id },
+  const passwordHash = await passwordEncrypt(password);
+  const socialLinksDb = await prisma.socialLinks.create({
     data: {
-      isVerified: true,
-      refreshTokenSecret: refreshTokenSecret,
-      accessTokenSecret: accessTokenSecret,
+      tiktok: socialLinks.tiktok || undefined,
+      youtube: socialLinks.youtube || undefined,
+      facebook: socialLinks.facebook || undefined,
+      x: socialLinks.x || undefined,
+      instagram: socialLinks.instagram || undefined,
+      // store: store.id,
     },
   });
-  // send the jwt
-  const accessTokenJWT = createAccessJWT({
-    payload: { userId: user.id, accessTokenSecret },
-  });
-  const refreshTokenJWT = createRefreshJWT({
-    payload: { userId: user.id, refreshTokenSecret },
+
+  const store = await prisma.store.create({
+    data: {
+      name: name,
+      bio: bio,
+      logo: logo,
+      banner: banner,
+      phone: phoneNumber,
+      email: email,
+      password: passwordHash,
+      socialLinksId: socialLinksDb.id,
+      // socialLinks: {},
+      // socialLinks: {
+      //   data: {
+      //     tiktok: socialLinks.tiktok || undefined,
+      //     youtube: socialLinks.youtube || undefined,
+      //     facebook: socialLinks.facebook || undefined,
+      //     x: socialLinks.x || undefined,
+      //     instagram: socialLinks.instagram || undefined,
+      //   },
+      // },
+      type: type || undefined,
+    },
   });
 
-  return res.status(StatusCodes.OK).json({
+  return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
-    message: "Account verified successfully",
-
-    access_token: accessTokenJWT,
-    refresh_token: refreshTokenJWT,
-    user: user,
+    store,
+    socialLinksDb,
+    message: "Store created. Please wait for admin's approval",
   });
 };
 
@@ -295,7 +286,6 @@ module.exports = {
   login,
   register,
   logout,
-  verifyEmail,
   updateProfile,
   showMe,
   resetPassword,

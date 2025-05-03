@@ -11,8 +11,10 @@ const cors = require("cors");
 const xss = require("xss-clean");
 require("dotenv").config();
 require("express-async-errors");
-
-const authRouter = require("./routes/auth-route");
+const adminAuthRouter = require("./routes/admin-auth-route");
+const adminRouter = require("./routes/admin-route");
+const storeAuthRouter = require("./routes/store-auth-route");
+const userAuthRouter = require("./routes/user-auth-route");
 const countryRouter = require("./routes/country-route");
 
 const notFound = require("./middleware/not-found");
@@ -71,7 +73,11 @@ app.use(limiter);
 // app.use(cookieParser(process.env.JWT_SECRET));
 // app.use(express.static("./public"));
 
-app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/users/auth", userAuthRouter);
+app.use("/api/v1/admin/auth", adminAuthRouter);
+app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/stores/auth", storeAuthRouter);
+
 app.use("/api/v1/country", countryRouter);
 
 app.use(notFound);

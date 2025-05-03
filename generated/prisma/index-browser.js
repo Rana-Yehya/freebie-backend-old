@@ -131,6 +131,7 @@ exports.Prisma.UserScalarFieldEnum = {
   countryId: 'countryId',
   phone: 'phone',
   email: 'email',
+  password: 'password',
   role: 'role',
   isVerified: 'isVerified',
   refreshTokenSecret: 'refreshTokenSecret',
@@ -143,7 +144,72 @@ exports.Prisma.CountryScalarFieldEnum = {
   id: 'id',
   countryName: 'countryName',
   currencyCode: 'currencyCode',
-  countryIsoCode: 'countryIsoCode'
+  countryIsoCode: 'countryIsoCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BranchesScalarFieldEnum = {
+  id: 'id',
+  storeId: 'storeId',
+  address: 'address',
+  countryId: 'countryId',
+  phone: 'phone',
+  isFreezed: 'isFreezed',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WorkHoursScalarFieldEnum = {
+  id: 'id',
+  branchId: 'branchId',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  day: 'day',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StoreScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  bio: 'bio',
+  logo: 'logo',
+  banner: 'banner',
+  phone: 'phone',
+  email: 'email',
+  password: 'password',
+  socialLinksId: 'socialLinksId',
+  paymentId: 'paymentId',
+  refreshTokenSecret: 'refreshTokenSecret',
+  accessTokenSecret: 'accessTokenSecret',
+  type: 'type',
+  isApprovedByAdmin: 'isApprovedByAdmin',
+  isFreezed: 'isFreezed',
+  isBanned: 'isBanned',
+  isDeleted: 'isDeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TransactionScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  userId: 'userId',
+  storeId: 'storeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SocialLinksScalarFieldEnum = {
+  id: 'id',
+  tiktok: 'tiktok',
+  youtube: 'youtube',
+  facebook: 'facebook',
+  x: 'x',
+  instagram: 'instagram',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -165,7 +231,12 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   image: 'image',
   user: 'user',
-  country: 'country'
+  country: 'country',
+  branches: 'branches',
+  workHours: 'workHours',
+  store: 'store',
+  transaction: 'transaction',
+  socialLinks: 'socialLinks'
 };
 
 /**

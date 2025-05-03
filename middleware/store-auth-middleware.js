@@ -18,7 +18,7 @@ const authenticateMiddleware = async (req, res, next) => {
       secret: process.env.ACCESS_JWT_SECRET,
     });
     if (decoded) {
-      const user = await prisma.user.findUnique({
+      const user = await prisma.store.findUnique({
         where: { id: decoded.userId },
       });
       if (user.accessTokenSecret !== decoded.accessTokenSecret) {
@@ -51,16 +51,5 @@ const authenticateMiddleware = async (req, res, next) => {
   //   throw new UnauthenticatedError("Invalid Credentials");
   // }
 };
-const authorizeMiddleware = (...roles) => {
-  return (req, res, next) => {
-    console.log(req.user);
-    console.log(roles);
-    const { role } = req.user;
-    if (!roles.includes(role)) {
-      throw new UnauthorizatedError("Unauthorized to perform this action");
-    }
-    next();
-  };
-};
 
-module.exports = { authenticateMiddleware, authorizeMiddleware };
+module.exports = { authenticateMiddleware };

@@ -3,24 +3,25 @@ const {
   register,
   login,
   updateProfile,
-  verifyEmail,
   showMe,
   resetPassword,
   forgotPassword,
   logout,
-} = require("../controllers/auth-controller");
+} = require("../controllers/store-auth-controller");
 const { authenticateMiddleware } = require("../middleware/auth-middleware");
+const {
+  adminInvalidRegisterationMiddleware,
+} = require("../middleware/admin-invalid-registeration-middleware");
 
 const router = express.Router();
 
 router.route("/register").post(register);
 router.route("/login").post(login);
-router.route("/verify-email").post(verifyEmail);
 
 router.route("/forgot-password").post(forgotPassword);
 
 router.route("/reset-password").post(resetPassword);
 router.route("/user-info").get(authenticateMiddleware, showMe);
 router.route("/logout").get(authenticateMiddleware, logout);
-router.route("/updateUser").patch(authenticateMiddleware, updateProfile);
+router.route("/update-user").patch(authenticateMiddleware, updateProfile);
 module.exports = router;

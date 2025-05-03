@@ -23,28 +23,126 @@ model image {
 }
 
 model user {
-  id                 String    @id @unique @default(uuid())
+  id                 String        @id @unique @default(uuid())
   name               String
   dateOfBirth        DateTime?
   gender             String?
   countryId          String
-  userCountry        country   @relation(fields: [countryId], references: [id])
-  phone              String    @unique
+  userCountry        country       @relation(fields: [countryId], references: [id])
+  phone              String        @unique
   email              String?
-  role               String    @default("user")
-  isVerified         Boolean   @default(false)
+  password           String?
+  role               String        @default("user")
+  isVerified         Boolean       @default(false)
   refreshTokenSecret String?
   accessTokenSecret  String?
+  transaction        transaction[]
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
   // imageId     String?  
   // avatar      image?    @relation(fields: [imageId], references: [id])
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
 }
 
 model country {
-  id             String @id @unique @default(uuid())
+  id             String     @id @unique @default(uuid())
   countryName    String
   currencyCode   String
-  countryIsoCode String @unique
+  countryIsoCode String     @unique
   user           user[]
+  branches       branches[]
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+}
+
+model branches {
+  id        String      @id @unique @default(uuid())
+  storeId   String
+  store     store       @relation(fields: [storeId], references: [id])
+  address   String
+  country   country     @relation(fields: [countryId], references: [id])
+  countryId String
+  phone     String
+  isFreezed Boolean     @default(false)
+  workHours workHours[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  // branchCity        String
+  // branchState       String
+  // branchZip         String
+  // branchLat         Float
+  // branchLng         Float
+}
+
+model workHours {
+  id        String   @id @unique @default(uuid())
+  branchId  String   @unique
+  branch    branches @relation(fields: [branchId], references: [id])
+  startTime DateTime
+  endTime   DateTime
+  day       Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// model storeAddress {
+//   id      String @id @unique @default(uuid())
+//   storeId String
+//   store   store  @relation(fields: [storeId], references: [id])
+// }
+
+model store {
+  id                 String        @id @unique @default(uuid())
+  name               String
+  bio                String
+  logo               String
+  banner             String
+  phone              String        @unique
+  email              String        @unique
+  password           String
+  socialLinksId      String        @unique
+  socialLinks        socialLinks   @relation(fields: [socialLinksId], references: [id])
+  branches           branches[]
+  paymentId          String?
+  transactions       transaction[]
+  refreshTokenSecret String?
+  accessTokenSecret  String?
+  // store - restaurant - place for weddings
+  type               String        @default("store")
+  isApprovedByAdmin  Boolean       @default(false)
+  isFreezed          Boolean       @default(false)
+  isBanned           Boolean       @default(false)
+  isDeleted          Boolean       @default(false)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  // storeAddress storeAddress[]
+}
+
+model transaction {
+  id   String  @id @unique @default(uuid())
+  // buy something or take money from wallet -> false = buy, true = take
+  type Boolean @default(false)
+
+  user   user?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  store     store?   @relation(fields: [storeId], references: [id])
+  storeId   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model socialLinks {
+  id        String  @id @unique @default(uuid())
+  tiktok    String?
+  youtube   String?
+  facebook  String?
+  x         String?
+  instagram String?
+  // twitter    String
+
+  store     store[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

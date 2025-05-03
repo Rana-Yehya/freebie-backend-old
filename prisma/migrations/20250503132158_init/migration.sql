@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "store" ALTER COLUMN "type" SET DEFAULT 'store',
+ALTER COLUMN "type" SET DATA TYPE TEXT;

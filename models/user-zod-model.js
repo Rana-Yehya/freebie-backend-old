@@ -14,6 +14,8 @@ const UserZodModel = z.object({
   email: z.string().email({ message: "Invalid email address" }),
   userCountry: z.string({ message: "Name is required" }),
   phone: z.string(),
+  password: z.string().optional(),
+  role: z.string().optional(),
 });
 // type UserModel = z.infer<typeof UserZodModel>;
 module.exports = { UserZodModel };
