@@ -1,14 +1,21 @@
 const { CountryZodModel } = require("../models/country-zod-model");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
+const {
+  NotFoundError,
+  BadRequestError,
+  UnauthenticatedError,
+} = require("../errors");
 const getAllCountries = async (req, res, next) => {
   const country = await prisma.country.findMany();
-  return res.json({ isSuccess: true, count: country.length, data: country });
+  return res
+    .status(StatusCodes.OK)
+    .json({ isSuccess: true, count: country.length, data: country });
 };
 const getCountry = async (req, res, next) => {
   const { id: countryId } = req.params;
-  const Country = await prisma.Country.findUnique({
-    where: { id: parseInt(countryId) },
+  const country = await prisma.country.findUnique({
+    where: { id: countryId },
   });
   if (!country) {
     throw new BadRequestError("Country not found");
@@ -17,7 +24,7 @@ const getCountry = async (req, res, next) => {
     //   .status(404)
     //   .json({ isSuccess: false, message: "Country not found" });
   }
-  return res.json({ isSuccess: true, data: country });
+  return res.status(StatusCodes.OK).json({ isSuccess: true, data: country });
 };
 
 const createCountry = async (req, res, next) => {
@@ -40,54 +47,49 @@ const createCountry = async (req, res, next) => {
       countryIsoCode: countryIsoCode,
     },
   });
-  console.log("ghrhrh ");
-
   console.log(createdCountry);
 
   return res
     .status(StatusCodes.CREATED)
-    .json({ isSuccess: true, country: createdCountry });
+    .json({ isSuccess: true, data: createdCountry });
 };
 
 const updateCountry = async (req, res, next) => {
-  //   let isCompleted = false;
-  //   const { id: CountryId } = req.params;
-  //   const { name, completed } = req.body;
-  //   if (completed) {
-  //     isCompleted = completed;
-  //   }
-  //   const zodModel = CountryZodMode.safeParse({
-  //     name: name,
-  //     completed: isCompleted,
-  //   });
-  //   if (!zodModel.success) {
-  //     return next(createCustomAPIError(zodModel.error.errors[0].message, 400));
-  //   }
-  //   const Country = await prisma.Country.update({
-  //     where: { id: parseInt(CountryId) },
-  //     data: { name, completed },
-  //   });
-  //   if (!Country) {
-  //     return next(createCustomAPIError("Country not found", 404));
-  //     // return res
-  //     //   .status(404)
-  //     //   .json({ isSuccess: false, message: "Country not found" });
-  //   }
-  //   return res.json({ isSuccess: true, data: Country });
+  const { id } = req.params;
+  const { countryName, currencyCode, countryIsoCode } = req.body;
+
+  if (!id) {
+    throw new BadRequestError("Please send an ID");
+  }
+  const updatedCountry = await prisma.country.update({
+    where: { id: id },
+    data: {
+      countryName: countryName || undefined,
+      currencyCode: currencyCode || undefined,
+      countryIsoCode: countryIsoCode || undefined,
+    },
+  });
+  console.log(updatedCountry);
+
+  return res
+    .status(StatusCodes.CREATED)
+    .json({ isSuccess: true, data: updatedCountry });
 };
 
 const deleteCountry = async (req, res, next) => {
-  //   const { id: CountryId } = req.params;
-  //   const Country = await prisma.Country.delete({
-  //     where: { id: parseInt(CountryId) },
-  //   });
-  //   if (!Country) {
-  //     return next(createCustomAPIError("Country not found", 404));
-  //     // return res
-  //     //   .status(404)
-  //     //   .json({ isSuccess: false, message: "Country not found" });
-  //   }
-  //   return res.json({ isSuccess: true, data: Country });
+  const { id: CountryId } = req.params;
+  const Country = await prisma.country.delete({
+    where: { id: CountryId },
+  });
+  if (!Country) {
+    return next(createCustomAPIError("Country not found", 404));
+    // return res
+    //   .status(404)
+    //   .json({ isSuccess: false, message: "Country not found" });
+  }
+  return res
+    .status(StatusCodes.OK)
+    .json({ isSuccess: true, message: "Country deleted successfully" });
 };
 
 module.exports = {

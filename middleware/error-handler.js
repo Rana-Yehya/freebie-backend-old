@@ -55,6 +55,11 @@ const errorHandler = (err, req, res, next) => {
   //   )}`;
   //   customError.statusCode = StatusCodes.BAD_REQUEST;
   // }
+  console.log(err.meta);
+  if (err.meta && err.meta.cause) {
+    customError.message = err.meta.cause;
+    customError.statusCode = StatusCodes.BAD_REQUEST;
+  }
   if (err.name && err.name === "ValidationError") {
     customError.message = err.message;
     customError.statusCode = StatusCodes.BAD_REQUEST;
