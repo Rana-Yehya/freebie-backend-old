@@ -19,10 +19,6 @@ const getCountry = async (req, res, next) => {
   });
   if (!country) {
     throw new BadRequestError("Country not found");
-
-    // return res
-    //   .status(404)
-    //   .json({ isSuccess: false, message: "Country not found" });
   }
   return res.status(StatusCodes.OK).json({ isSuccess: true, data: country });
 };
@@ -78,14 +74,11 @@ const updateCountry = async (req, res, next) => {
 
 const deleteCountry = async (req, res, next) => {
   const { id: CountryId } = req.params;
-  const Country = await prisma.country.delete({
+  const country = await prisma.country.delete({
     where: { id: CountryId },
   });
-  if (!Country) {
-    return next(createCustomAPIError("Country not found", 404));
-    // return res
-    //   .status(404)
-    //   .json({ isSuccess: false, message: "Country not found" });
+  if (!country) {
+    throw new BadRequestError("Country not found");
   }
   return res
     .status(StatusCodes.OK)

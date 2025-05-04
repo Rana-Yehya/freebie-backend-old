@@ -1,5 +1,5 @@
 const admin = "admin";
 const user = "user";
 const guest = "guest";
-
-module.exports = { admin, user, guest };
+const store = "store";
+module.exports = { store, admin, user, guest };

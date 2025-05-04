@@ -30,7 +30,7 @@ model user {
   countryId          String
   userCountry        country       @relation(fields: [countryId], references: [id])
   phone              String        @unique
-  email              String?
+  email              String?       @unique @default("")
   password           String?
   role               String        @default("user")
   isVerified         Boolean       @default(false)
@@ -62,7 +62,7 @@ model branches {
   address   String
   country   country     @relation(fields: [countryId], references: [id])
   countryId String
-  phone     String
+  phone     String?
   isFreezed Boolean     @default(false)
   workHours workHours[]
   createdAt DateTime    @default(now())
@@ -108,7 +108,7 @@ model store {
   refreshTokenSecret String?
   accessTokenSecret  String?
   // store - restaurant - place for weddings
-  type               String        @default("store")
+  role               String        @default("store")
   isApprovedByAdmin  Boolean       @default(false)
   isFreezed          Boolean       @default(false)
   isBanned           Boolean       @default(false)

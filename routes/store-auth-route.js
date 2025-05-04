@@ -8,7 +8,9 @@ const {
   forgotPassword,
   logout,
 } = require("../controllers/store-auth-controller");
-const { authenticateMiddleware } = require("../middleware/auth-middleware");
+const {
+  authenticateMiddleware,
+} = require("../middleware/authentication-middleware");
 const {
   adminInvalidRegisterationMiddleware,
 } = require("../middleware/admin-invalid-registeration-middleware");

@@ -23,13 +23,16 @@ const login = async (req, res) => {
       "Please provide email or phone number and password"
     );
   }
-  const user = phoneNumber
-    ? await prisma.store.findUnique({
-        where: { phone: phoneNumber }, // email: email,
-      })
-    : await prisma.store.findUnique({
-        where: { email: email }, // email: email,
-      });
+  const user = await prisma.store.findFirst({
+    where: { OR: [{ email: email }, { phone: phoneNumber }] },
+  });
+  // const user = phoneNumber
+  //   ? await prisma.store.findUnique({
+  //       where: { phone: phoneNumber }, // email: email,
+  //     })
+  //   : await prisma.store.findUnique({
+  //       where: { email: email }, // email: email,
+  //     });
   if (!user) {
     throw new UnauthenticatedError("Invalid Credentials");
   }
@@ -104,15 +107,19 @@ const register = async (req, res, next) => {
   if (isPhoneValid.isValid != true) {
     throw new BadRequestError("The phone number is not correct");
   }
-  const storeInDB = await prisma.store.findUnique({
-    where: { email: email, phone: phoneNumber },
+  // const storeInDB = await prisma.store.findUnique({
+  //   where: { email: email, phone: phoneNumber },
+  // });
+
+  const storeInDB = await prisma.store.findFirst({
+    where: { OR: [{ email: email }, { phone: phoneNumber }] },
   });
-  const userInDB = await prisma.user.findUnique({
-    where: { email: email, phone: phoneNumber },
+  const userInDB = await prisma.user.findFirst({
+    where: { OR: [{ email: email }, { phone: phoneNumber }] },
   });
   if (storeInDB || userInDB) {
     throw new BadRequestError(
-      "Email already in use or has an individal account"
+      "Account already in use or has an individal account"
     );
   }
   const passwordHash = await passwordEncrypt(password);

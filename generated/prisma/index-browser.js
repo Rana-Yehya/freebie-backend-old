@@ -183,7 +183,7 @@ exports.Prisma.StoreScalarFieldEnum = {
   paymentId: 'paymentId',
   refreshTokenSecret: 'refreshTokenSecret',
   accessTokenSecret: 'accessTokenSecret',
-  type: 'type',
+  role: 'role',
   isApprovedByAdmin: 'isApprovedByAdmin',
   isFreezed: 'isFreezed',
   isBanned: 'isBanned',

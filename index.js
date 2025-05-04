@@ -16,6 +16,7 @@ const adminRouter = require("./routes/admin-route");
 const storeAuthRouter = require("./routes/store-auth-route");
 const userAuthRouter = require("./routes/user-auth-route");
 const countryRouter = require("./routes/country-route");
+const storeBranchesRouter = require("./routes/branch-route");
 
 const notFound = require("./middleware/not-found");
 const errorHandler = require("./middleware/error-handler");
@@ -77,7 +78,7 @@ app.use("/api/v1/users/auth", userAuthRouter);
 app.use("/api/v1/admin/auth", adminAuthRouter);
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/stores/auth", storeAuthRouter);
-
+app.use("/api/v1/store/branches", storeBranchesRouter);
 app.use("/api/v1/country", countryRouter);
 
 app.use(notFound);

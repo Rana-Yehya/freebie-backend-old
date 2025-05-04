@@ -5,8 +5,11 @@ const {
 } = require("../controllers/admin-controller");
 const {
   authenticateMiddleware,
+} = require("../middleware/authentication-middleware");
+const {
   authorizeMiddleware,
-} = require("../middleware/auth-middleware");
+} = require("../middleware/authorization-middleware");
+
 const { admin } = require("../config/constants");
 
 const router = express.Router();

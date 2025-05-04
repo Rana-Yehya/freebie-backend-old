@@ -77,15 +77,20 @@ const register = async (req, res, next) => {
   if (isPhoneValid.isValid != true) {
     throw new BadRequestError("The phone number is not correct");
   }
-  const storeInDB = await prisma.store.findUnique({
-    where: { email: email, phone: phoneNumber },
+  const userInDB = await prisma.user.findFirst({
+    where: {
+      OR: [{ email }, { phone: phoneNumber }],
+    },
   });
-  const userInDB = await prisma.user.findUnique({
-    where: { email: email, phone: phoneNumber },
+  const storeInDB = await prisma.store.findFirst({
+    where: {
+      OR: [{ email }, { phone: phoneNumber }],
+    },
   });
+
   if (storeInDB || userInDB) {
     throw new BadRequestError(
-      "Email already in use or has an individal account"
+      "Account already in use or has an individal account"
     );
   }
   const country = await prisma.country.findUnique({

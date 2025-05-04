@@ -5119,7 +5119,7 @@ export namespace Prisma {
     storeId: string
     address: string
     countryId: string
-    phone: string
+    phone: string | null
     isFreezed: boolean
     createdAt: Date
     updatedAt: Date
@@ -5222,7 +5222,7 @@ export namespace Prisma {
       storeId: string
       address: string
       countryId: string
-      phone: string
+      phone: string | null
       isFreezed: boolean
       createdAt: Date
       updatedAt: Date
@@ -7239,7 +7239,7 @@ export namespace Prisma {
     paymentId: string | null
     refreshTokenSecret: string | null
     accessTokenSecret: string | null
-    type: string | null
+    role: string | null
     isApprovedByAdmin: boolean | null
     isFreezed: boolean | null
     isBanned: boolean | null
@@ -7261,7 +7261,7 @@ export namespace Prisma {
     paymentId: string | null
     refreshTokenSecret: string | null
     accessTokenSecret: string | null
-    type: string | null
+    role: string | null
     isApprovedByAdmin: boolean | null
     isFreezed: boolean | null
     isBanned: boolean | null
@@ -7283,7 +7283,7 @@ export namespace Prisma {
     paymentId: number
     refreshTokenSecret: number
     accessTokenSecret: number
-    type: number
+    role: number
     isApprovedByAdmin: number
     isFreezed: number
     isBanned: number
@@ -7307,7 +7307,7 @@ export namespace Prisma {
     paymentId?: true
     refreshTokenSecret?: true
     accessTokenSecret?: true
-    type?: true
+    role?: true
     isApprovedByAdmin?: true
     isFreezed?: true
     isBanned?: true
@@ -7329,7 +7329,7 @@ export namespace Prisma {
     paymentId?: true
     refreshTokenSecret?: true
     accessTokenSecret?: true
-    type?: true
+    role?: true
     isApprovedByAdmin?: true
     isFreezed?: true
     isBanned?: true
@@ -7351,7 +7351,7 @@ export namespace Prisma {
     paymentId?: true
     refreshTokenSecret?: true
     accessTokenSecret?: true
-    type?: true
+    role?: true
     isApprovedByAdmin?: true
     isFreezed?: true
     isBanned?: true
@@ -7446,7 +7446,7 @@ export namespace Prisma {
     paymentId: string | null
     refreshTokenSecret: string | null
     accessTokenSecret: string | null
-    type: string
+    role: string
     isApprovedByAdmin: boolean
     isFreezed: boolean
     isBanned: boolean
@@ -7485,7 +7485,7 @@ export namespace Prisma {
     paymentId?: boolean
     refreshTokenSecret?: boolean
     accessTokenSecret?: boolean
-    type?: boolean
+    role?: boolean
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
     isBanned?: boolean
@@ -7511,7 +7511,7 @@ export namespace Prisma {
     paymentId?: boolean
     refreshTokenSecret?: boolean
     accessTokenSecret?: boolean
-    type?: boolean
+    role?: boolean
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
     isBanned?: boolean
@@ -7534,7 +7534,7 @@ export namespace Prisma {
     paymentId?: boolean
     refreshTokenSecret?: boolean
     accessTokenSecret?: boolean
-    type?: boolean
+    role?: boolean
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
     isBanned?: boolean
@@ -7557,7 +7557,7 @@ export namespace Prisma {
     paymentId?: boolean
     refreshTokenSecret?: boolean
     accessTokenSecret?: boolean
-    type?: boolean
+    role?: boolean
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
     isBanned?: boolean
@@ -7566,7 +7566,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type storeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "bio" | "logo" | "banner" | "phone" | "email" | "password" | "socialLinksId" | "paymentId" | "refreshTokenSecret" | "accessTokenSecret" | "type" | "isApprovedByAdmin" | "isFreezed" | "isBanned" | "isDeleted" | "createdAt" | "updatedAt", ExtArgs["result"]["store"]>
+  export type storeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "bio" | "logo" | "banner" | "phone" | "email" | "password" | "socialLinksId" | "paymentId" | "refreshTokenSecret" | "accessTokenSecret" | "role" | "isApprovedByAdmin" | "isFreezed" | "isBanned" | "isDeleted" | "createdAt" | "updatedAt", ExtArgs["result"]["store"]>
   export type storeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     socialLinks?: boolean | socialLinksDefaultArgs<ExtArgs>
     branches?: boolean | store$branchesArgs<ExtArgs>
@@ -7600,7 +7600,7 @@ export namespace Prisma {
       paymentId: string | null
       refreshTokenSecret: string | null
       accessTokenSecret: string | null
-      type: string
+      role: string
       isApprovedByAdmin: boolean
       isFreezed: boolean
       isBanned: boolean
@@ -8045,7 +8045,7 @@ export namespace Prisma {
     readonly paymentId: FieldRef<"store", 'String'>
     readonly refreshTokenSecret: FieldRef<"store", 'String'>
     readonly accessTokenSecret: FieldRef<"store", 'String'>
-    readonly type: FieldRef<"store", 'String'>
+    readonly role: FieldRef<"store", 'String'>
     readonly isApprovedByAdmin: FieldRef<"store", 'Boolean'>
     readonly isFreezed: FieldRef<"store", 'Boolean'>
     readonly isBanned: FieldRef<"store", 'Boolean'>
@@ -10835,7 +10835,7 @@ export namespace Prisma {
     paymentId: 'paymentId',
     refreshTokenSecret: 'refreshTokenSecret',
     accessTokenSecret: 'accessTokenSecret',
-    type: 'type',
+    role: 'role',
     isApprovedByAdmin: 'isApprovedByAdmin',
     isFreezed: 'isFreezed',
     isBanned: 'isBanned',
@@ -11054,6 +11054,7 @@ export namespace Prisma {
   export type userWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     phone?: string
+    email?: string
     AND?: userWhereInput | userWhereInput[]
     OR?: userWhereInput[]
     NOT?: userWhereInput | userWhereInput[]
@@ -11061,7 +11062,6 @@ export namespace Prisma {
     dateOfBirth?: DateTimeNullableFilter<"user"> | Date | string | null
     gender?: StringNullableFilter<"user"> | string | null
     countryId?: StringFilter<"user"> | string
-    email?: StringNullableFilter<"user"> | string | null
     password?: StringNullableFilter<"user"> | string | null
     role?: StringFilter<"user"> | string
     isVerified?: BoolFilter<"user"> | boolean
@@ -11071,7 +11071,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"user"> | Date | string
     userCountry?: XOR<CountryScalarRelationFilter, countryWhereInput>
     transaction?: TransactionListRelationFilter
-  }, "id" | "id" | "phone">
+  }, "id" | "id" | "phone" | "email">
 
   export type userOrderByWithAggregationInput = {
     id?: SortOrder
@@ -11184,7 +11184,7 @@ export namespace Prisma {
     storeId?: StringFilter<"branches"> | string
     address?: StringFilter<"branches"> | string
     countryId?: StringFilter<"branches"> | string
-    phone?: StringFilter<"branches"> | string
+    phone?: StringNullableFilter<"branches"> | string | null
     isFreezed?: BoolFilter<"branches"> | boolean
     createdAt?: DateTimeFilter<"branches"> | Date | string
     updatedAt?: DateTimeFilter<"branches"> | Date | string
@@ -11198,7 +11198,7 @@ export namespace Prisma {
     storeId?: SortOrder
     address?: SortOrder
     countryId?: SortOrder
-    phone?: SortOrder
+    phone?: SortOrderInput | SortOrder
     isFreezed?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11215,7 +11215,7 @@ export namespace Prisma {
     storeId?: StringFilter<"branches"> | string
     address?: StringFilter<"branches"> | string
     countryId?: StringFilter<"branches"> | string
-    phone?: StringFilter<"branches"> | string
+    phone?: StringNullableFilter<"branches"> | string | null
     isFreezed?: BoolFilter<"branches"> | boolean
     createdAt?: DateTimeFilter<"branches"> | Date | string
     updatedAt?: DateTimeFilter<"branches"> | Date | string
@@ -11229,7 +11229,7 @@ export namespace Prisma {
     storeId?: SortOrder
     address?: SortOrder
     countryId?: SortOrder
-    phone?: SortOrder
+    phone?: SortOrderInput | SortOrder
     isFreezed?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11246,7 +11246,7 @@ export namespace Prisma {
     storeId?: StringWithAggregatesFilter<"branches"> | string
     address?: StringWithAggregatesFilter<"branches"> | string
     countryId?: StringWithAggregatesFilter<"branches"> | string
-    phone?: StringWithAggregatesFilter<"branches"> | string
+    phone?: StringNullableWithAggregatesFilter<"branches"> | string | null
     isFreezed?: BoolWithAggregatesFilter<"branches"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"branches"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"branches"> | Date | string
@@ -11335,7 +11335,7 @@ export namespace Prisma {
     paymentId?: StringNullableFilter<"store"> | string | null
     refreshTokenSecret?: StringNullableFilter<"store"> | string | null
     accessTokenSecret?: StringNullableFilter<"store"> | string | null
-    type?: StringFilter<"store"> | string
+    role?: StringFilter<"store"> | string
     isApprovedByAdmin?: BoolFilter<"store"> | boolean
     isFreezed?: BoolFilter<"store"> | boolean
     isBanned?: BoolFilter<"store"> | boolean
@@ -11360,7 +11360,7 @@ export namespace Prisma {
     paymentId?: SortOrderInput | SortOrder
     refreshTokenSecret?: SortOrderInput | SortOrder
     accessTokenSecret?: SortOrderInput | SortOrder
-    type?: SortOrder
+    role?: SortOrder
     isApprovedByAdmin?: SortOrder
     isFreezed?: SortOrder
     isBanned?: SortOrder
@@ -11388,7 +11388,7 @@ export namespace Prisma {
     paymentId?: StringNullableFilter<"store"> | string | null
     refreshTokenSecret?: StringNullableFilter<"store"> | string | null
     accessTokenSecret?: StringNullableFilter<"store"> | string | null
-    type?: StringFilter<"store"> | string
+    role?: StringFilter<"store"> | string
     isApprovedByAdmin?: BoolFilter<"store"> | boolean
     isFreezed?: BoolFilter<"store"> | boolean
     isBanned?: BoolFilter<"store"> | boolean
@@ -11413,7 +11413,7 @@ export namespace Prisma {
     paymentId?: SortOrderInput | SortOrder
     refreshTokenSecret?: SortOrderInput | SortOrder
     accessTokenSecret?: SortOrderInput | SortOrder
-    type?: SortOrder
+    role?: SortOrder
     isApprovedByAdmin?: SortOrder
     isFreezed?: SortOrder
     isBanned?: SortOrder
@@ -11441,7 +11441,7 @@ export namespace Prisma {
     paymentId?: StringNullableWithAggregatesFilter<"store"> | string | null
     refreshTokenSecret?: StringNullableWithAggregatesFilter<"store"> | string | null
     accessTokenSecret?: StringNullableWithAggregatesFilter<"store"> | string | null
-    type?: StringWithAggregatesFilter<"store"> | string
+    role?: StringWithAggregatesFilter<"store"> | string
     isApprovedByAdmin?: BoolWithAggregatesFilter<"store"> | boolean
     isFreezed?: BoolWithAggregatesFilter<"store"> | boolean
     isBanned?: BoolWithAggregatesFilter<"store"> | boolean
@@ -11821,7 +11821,7 @@ export namespace Prisma {
   export type branchesCreateInput = {
     id?: string
     address: string
-    phone: string
+    phone?: string | null
     isFreezed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11835,7 +11835,7 @@ export namespace Prisma {
     storeId: string
     address: string
     countryId: string
-    phone: string
+    phone?: string | null
     isFreezed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11845,7 +11845,7 @@ export namespace Prisma {
   export type branchesUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11859,7 +11859,7 @@ export namespace Prisma {
     storeId?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     countryId?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11871,7 +11871,7 @@ export namespace Prisma {
     storeId: string
     address: string
     countryId: string
-    phone: string
+    phone?: string | null
     isFreezed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11880,7 +11880,7 @@ export namespace Prisma {
   export type branchesUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11891,7 +11891,7 @@ export namespace Prisma {
     storeId?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     countryId?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11978,7 +11978,7 @@ export namespace Prisma {
     paymentId?: string | null
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
-    type?: string
+    role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
     isBanned?: boolean
@@ -12003,7 +12003,7 @@ export namespace Prisma {
     paymentId?: string | null
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
-    type?: string
+    role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
     isBanned?: boolean
@@ -12026,7 +12026,7 @@ export namespace Prisma {
     paymentId?: NullableStringFieldUpdateOperationsInput | string | null
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
@@ -12051,7 +12051,7 @@ export namespace Prisma {
     paymentId?: NullableStringFieldUpdateOperationsInput | string | null
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
@@ -12075,7 +12075,7 @@ export namespace Prisma {
     paymentId?: string | null
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
-    type?: string
+    role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
     isBanned?: boolean
@@ -12096,7 +12096,7 @@ export namespace Prisma {
     paymentId?: NullableStringFieldUpdateOperationsInput | string | null
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
@@ -12118,7 +12118,7 @@ export namespace Prisma {
     paymentId?: NullableStringFieldUpdateOperationsInput | string | null
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
@@ -12670,7 +12670,7 @@ export namespace Prisma {
     paymentId?: SortOrder
     refreshTokenSecret?: SortOrder
     accessTokenSecret?: SortOrder
-    type?: SortOrder
+    role?: SortOrder
     isApprovedByAdmin?: SortOrder
     isFreezed?: SortOrder
     isBanned?: SortOrder
@@ -12692,7 +12692,7 @@ export namespace Prisma {
     paymentId?: SortOrder
     refreshTokenSecret?: SortOrder
     accessTokenSecret?: SortOrder
-    type?: SortOrder
+    role?: SortOrder
     isApprovedByAdmin?: SortOrder
     isFreezed?: SortOrder
     isBanned?: SortOrder
@@ -12714,7 +12714,7 @@ export namespace Prisma {
     paymentId?: SortOrder
     refreshTokenSecret?: SortOrder
     accessTokenSecret?: SortOrder
-    type?: SortOrder
+    role?: SortOrder
     isApprovedByAdmin?: SortOrder
     isFreezed?: SortOrder
     isBanned?: SortOrder
@@ -13558,7 +13558,7 @@ export namespace Prisma {
   export type branchesCreateWithoutCountryInput = {
     id?: string
     address: string
-    phone: string
+    phone?: string | null
     isFreezed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13570,7 +13570,7 @@ export namespace Prisma {
     id?: string
     storeId: string
     address: string
-    phone: string
+    phone?: string | null
     isFreezed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13647,7 +13647,7 @@ export namespace Prisma {
     storeId?: StringFilter<"branches"> | string
     address?: StringFilter<"branches"> | string
     countryId?: StringFilter<"branches"> | string
-    phone?: StringFilter<"branches"> | string
+    phone?: StringNullableFilter<"branches"> | string | null
     isFreezed?: BoolFilter<"branches"> | boolean
     createdAt?: DateTimeFilter<"branches"> | Date | string
     updatedAt?: DateTimeFilter<"branches"> | Date | string
@@ -13665,7 +13665,7 @@ export namespace Prisma {
     paymentId?: string | null
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
-    type?: string
+    role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
     isBanned?: boolean
@@ -13689,7 +13689,7 @@ export namespace Prisma {
     paymentId?: string | null
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
-    type?: string
+    role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
     isBanned?: boolean
@@ -13780,7 +13780,7 @@ export namespace Prisma {
     paymentId?: NullableStringFieldUpdateOperationsInput | string | null
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
@@ -13804,7 +13804,7 @@ export namespace Prisma {
     paymentId?: NullableStringFieldUpdateOperationsInput | string | null
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
@@ -13877,7 +13877,7 @@ export namespace Prisma {
   export type branchesCreateWithoutWorkHoursInput = {
     id?: string
     address: string
-    phone: string
+    phone?: string | null
     isFreezed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13890,7 +13890,7 @@ export namespace Prisma {
     storeId: string
     address: string
     countryId: string
-    phone: string
+    phone?: string | null
     isFreezed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13915,7 +13915,7 @@ export namespace Prisma {
   export type branchesUpdateWithoutWorkHoursInput = {
     id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13928,7 +13928,7 @@ export namespace Prisma {
     storeId?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     countryId?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13964,7 +13964,7 @@ export namespace Prisma {
   export type branchesCreateWithoutStoreInput = {
     id?: string
     address: string
-    phone: string
+    phone?: string | null
     isFreezed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13976,7 +13976,7 @@ export namespace Prisma {
     id?: string
     address: string
     countryId: string
-    phone: string
+    phone?: string | null
     isFreezed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14135,7 +14135,7 @@ export namespace Prisma {
     paymentId?: string | null
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
-    type?: string
+    role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
     isBanned?: boolean
@@ -14159,7 +14159,7 @@ export namespace Prisma {
     paymentId?: string | null
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
-    type?: string
+    role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
     isBanned?: boolean
@@ -14242,7 +14242,7 @@ export namespace Prisma {
     paymentId?: NullableStringFieldUpdateOperationsInput | string | null
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
@@ -14266,7 +14266,7 @@ export namespace Prisma {
     paymentId?: NullableStringFieldUpdateOperationsInput | string | null
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
@@ -14288,7 +14288,7 @@ export namespace Prisma {
     paymentId?: string | null
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
-    type?: string
+    role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
     isBanned?: boolean
@@ -14311,7 +14311,7 @@ export namespace Prisma {
     paymentId?: string | null
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
-    type?: string
+    role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
     isBanned?: boolean
@@ -14364,7 +14364,7 @@ export namespace Prisma {
     paymentId?: StringNullableFilter<"store"> | string | null
     refreshTokenSecret?: StringNullableFilter<"store"> | string | null
     accessTokenSecret?: StringNullableFilter<"store"> | string | null
-    type?: StringFilter<"store"> | string
+    role?: StringFilter<"store"> | string
     isApprovedByAdmin?: BoolFilter<"store"> | boolean
     isFreezed?: BoolFilter<"store"> | boolean
     isBanned?: BoolFilter<"store"> | boolean
@@ -14425,7 +14425,7 @@ export namespace Prisma {
     id?: string
     storeId: string
     address: string
-    phone: string
+    phone?: string | null
     isFreezed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14484,7 +14484,7 @@ export namespace Prisma {
   export type branchesUpdateWithoutCountryInput = {
     id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14496,7 +14496,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     storeId?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14507,7 +14507,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     storeId?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14553,7 +14553,7 @@ export namespace Prisma {
     id?: string
     address: string
     countryId: string
-    phone: string
+    phone?: string | null
     isFreezed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14570,7 +14570,7 @@ export namespace Prisma {
   export type branchesUpdateWithoutStoreInput = {
     id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14582,7 +14582,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     countryId?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14593,7 +14593,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     countryId?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14635,7 +14635,7 @@ export namespace Prisma {
     paymentId?: string | null
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
-    type?: string
+    role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
     isBanned?: boolean
@@ -14656,7 +14656,7 @@ export namespace Prisma {
     paymentId?: NullableStringFieldUpdateOperationsInput | string | null
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
@@ -14679,7 +14679,7 @@ export namespace Prisma {
     paymentId?: NullableStringFieldUpdateOperationsInput | string | null
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
@@ -14702,7 +14702,7 @@ export namespace Prisma {
     paymentId?: NullableStringFieldUpdateOperationsInput | string | null
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
     isBanned?: BoolFieldUpdateOperationsInput | boolean
