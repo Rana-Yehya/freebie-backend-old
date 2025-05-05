@@ -8,15 +8,26 @@ const {
   BadRequestError,
   UnauthenticatedError,
 } = require("../errors");
-const { store } = require("../config/constants");
+const { storeConstant } = require("../config/constants");
 const getAllStoreBranches = async (req, res, next) => {
-  const { id } = req.query;
-  if (!(id || req.user)) {
-    throw new BadRequestError("Please provide store id");
+  const id = req.query.id;
+  console.log(id);
+  console.log(req.query);
+  console.log(req.user);
+
+  if (!(req.user != undefined && req.user.role === storeConstant)) {
+    if (!id) {
+      console.log("here");
+      throw new BadRequestError("Please provide store id");
+    }
+    // console.log(req.user.role === storeConstant);
+    // console.log(req.user != undefined);
+    // console.log("There");
+    // throw new BadRequestError("Please provide store id");
   }
-  if (!(req.user && req.user.role === store)) {
-    throw new BadRequestError("Please provide store id");
-  }
+  // store -> id
+  // others -> id in query
+
   // console.log(req.user);
   const branches = await prisma.branch.findMany({
     where: {
@@ -40,17 +51,21 @@ const getBranch = async (req, res, next) => {
 
 const createBranch = async (req, res, next) => {
   const { id } = req.query;
-  if (!(id || req.user)) {
+  if (!id && !(req.user.role === storeConstant)) {
     throw new BadRequestError("Please provide store id");
   }
-  if (!(req.user && req.user.role === store)) {
-    throw new BadRequestError("Please provide store id");
-  }
-  const { address, countryId, phone: phoneNumber } = req.body;
+  // if (!(req.user && req.user.role === store)) {
+  //   throw new BadRequestError("Please provide store id");
+  // } else {
+  // 4025e15e-d6ce-4a6b-8afa-8cf9fdf06d1c
+
+  // }
+  const { address, phone: phoneNumber, stateId } = req.body;
   const zodModel = BranchZodModel.safeParse({
     address: address,
-    countryId: countryId,
+    // countryId: countryId,
     phone: phoneNumber,
+    stateId: stateId,
   });
 
   if (!zodModel.success) {
@@ -61,12 +76,29 @@ const createBranch = async (req, res, next) => {
   if (isPhoneValid.isValid != true) {
     throw new BadRequestError("The phone number is not correct");
   }
+  if (req.user.role !== storeConstant) {
+    const store = await prisma.store.findUnique({
+      where: { id: id || req.user.id },
+    });
+    if (!store) {
+      throw new BadRequestError("Store not found");
+    }
+  }
+  const state = await prisma.state.findUnique({
+    where: { id: stateId },
+  });
+  if (!state) {
+    throw new BadRequestError("State not found");
+  }
+
   const createdBranch = await prisma.branch.create({
     data: {
       address: address,
-      countryId: countryId,
+      // countryId: countryId,
       phone: phoneNumber,
       storeId: id || req.user.id,
+      stateId: stateId,
+      // workHours: [],
     },
   });
 
@@ -77,7 +109,7 @@ const createBranch = async (req, res, next) => {
 
 const updateBranch = async (req, res, next) => {
   const { id } = req.params;
-  const { address, countryId, phone: phoneNumber } = req.body;
+  const { address, phone: phoneNumber, stateId } = req.body;
 
   if (!id) {
     throw new BadRequestError("Please send an ID");
@@ -86,7 +118,7 @@ const updateBranch = async (req, res, next) => {
     where: { id: id },
     data: {
       address: address || undefined,
-      countryId: countryId || undefined,
+      stateId: stateId || undefined,
       phone: phoneNumber || undefined,
       // storeId: id || req.user.id,
     },

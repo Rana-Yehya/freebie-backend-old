@@ -12,18 +12,30 @@ const {
 const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
-const { admin } = require("../config/constants");
+const { adminConstant } = require("../config/constants");
 
 const router = express.Router();
 //
 router
   .route("/")
   .get(getAllOccasions)
-  .post(authenticateMiddleware, authorizeMiddleware(admin), createOccasion);
+  .post(
+    authenticateMiddleware,
+    authorizeMiddleware(adminConstant),
+    createOccasion
+  );
 router
   .route("/:id")
   .get(getOccasion)
-  .patch(authenticateMiddleware, authorizeMiddleware(admin), updateOccasion)
-  .delete(authenticateMiddleware, authorizeMiddleware(admin), deleteOccasion);
+  .patch(
+    authenticateMiddleware,
+    authorizeMiddleware(adminConstant),
+    updateOccasion
+  )
+  .delete(
+    authenticateMiddleware,
+    authorizeMiddleware(adminConstant),
+    deleteOccasion
+  );
 
 module.exports = router;

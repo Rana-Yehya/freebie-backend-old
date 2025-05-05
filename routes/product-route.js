@@ -1,51 +1,45 @@
 const express = require("express");
 const {
-  getAllStoreBranches,
-  getBranch,
-  createBranch,
-  updateBranch,
-  deleteBranch,
-} = require("../controllers/branch-controller");
-const {
-  authorizeMiddleware,
-} = require("../middleware/authorization-middleware");
-const {
-  // authenticateStoreMiddleware,
-  optionAuthenticateStoreMiddleware,
-} = require("../middleware/store-auth-middleware");
-
-const { storeConstant, adminConstant } = require("../config/constants");
+  getAllProductsPerCategories,
+  getAllProductsPerOccasions,
+  getProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} = require("../controllers/product-controller");
 const {
   authenticateMiddleware,
 } = require("../middleware/authentication-middleware");
+const {
+  authorizeMiddleware,
+} = require("../middleware/authorization-middleware");
+const { storeConstant, adminConstant } = require("../config/constants");
+const { route } = require("./country-route");
 
 const router = express.Router();
-
+//
 router
   .route("/")
-  .get(
-    optionAuthenticateStoreMiddleware,
-    // authenticateStoreMiddleware,
-    // authorizeMiddleware(admin, store),
-    getAllStoreBranches
-  )
   .post(
     authenticateMiddleware,
     authorizeMiddleware(adminConstant, storeConstant),
-    createBranch
+    createProduct
   );
+router.route("/per-categories").get(getAllProductsPerCategories);
+router.route("/per-occasions").get(getAllProductsPerOccasions);
+
 router
   .route("/:id")
-  .get(getBranch)
+  .get(getProduct)
   .patch(
     authenticateMiddleware,
     authorizeMiddleware(adminConstant, storeConstant),
-    updateBranch
+    updateProduct
   )
   .delete(
     authenticateMiddleware,
     authorizeMiddleware(adminConstant, storeConstant),
-    deleteBranch
+    deleteProduct
   );
 
 module.exports = router;

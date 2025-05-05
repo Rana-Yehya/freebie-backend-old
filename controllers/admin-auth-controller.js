@@ -4,7 +4,7 @@ const crypto = require("crypto");
 
 const { createAccessJWT, createRefreshJWT } = require("../utils/jwt-utils");
 const { passwordEncrypt, passwordCompare } = require("../utils/password-utils");
-const { admin } = require("../config/constants");
+const { adminConstant } = require("../config/constants");
 
 const { phone } = require("phone");
 
@@ -42,10 +42,10 @@ const login = async (req, res) => {
   const refreshTokenSecret = crypto.randomBytes(40).toString("hex");
   const accessTokenSecret = crypto.randomBytes(40).toString("hex");
   const accessTokenJWT = createAccessJWT({
-    payload: { userId: user.id, accessTokenSecret },
+    payload: { userId: user.id, accessTokenSecret, role: adminConstant },
   });
   const refreshTokenJWT = createRefreshJWT({
-    payload: { userId: user.id, refreshTokenSecret },
+    payload: { userId: user.id, refreshTokenSecret, role: adminConstant },
   });
 
   await prisma.user.update({
@@ -124,7 +124,7 @@ const register = async (req, res, next) => {
       email: email,
       phone: phoneNumber,
       countryId: country.id,
-      role: admin,
+      role: adminConstant,
       isVerified: true,
       password: passwordHash,
     },

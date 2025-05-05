@@ -1,17 +1,11 @@
-const { admin } = require("../config/constants");
+const { adminConstant } = require("../config/constants");
 
 const adminInvalidRegisterationMiddleware = async (req, res, next) => {
-  console.log("role");
-
   const { role } = req.body;
-  console.log(role);
-  console.log(admin);
-  console.log(role === admin);
 
-  if (role === admin) {
-    console.log("admin");
+  if (role === adminConstant) {
     const userInDB = await prisma.user.findUnique({
-      where: { role: admin },
+      where: { role: adminConstant },
     });
     if (!userInDB) {
       next();

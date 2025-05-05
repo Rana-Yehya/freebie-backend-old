@@ -51,17 +51,18 @@ model user {
 }
 
 model branch {
-  id        String     @id @unique @default(uuid())
-  storeId   String
-  store     store      @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  address   String
-  state     state      @relation(fields: [stateId], references: [id], onDelete: Cascade)
-  stateId   String
-  phone     String?
-  isFreezed Boolean    @default(false)
-  workHours workHour[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id           String         @id @unique @default(uuid())
+  storeId      String
+  store        store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  address      String
+  state        state          @relation(fields: [stateId], references: [id], onDelete: Cascade)
+  stateId      String
+  phone        String?
+  isFreezed    Boolean        @default(false)
+  workHours    workHour[]
+  productStock productStock[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
   // branchCity        String
   // branchState       String
   // branchZip         String
@@ -91,14 +92,14 @@ model store {
   phone              String        @unique
   email              String        @unique
   password           String
-  socialLinksId      String        @unique 
+  socialLinksId      String        @unique
   socialLinks        socialLink    @relation(fields: [socialLinksId], references: [id], onDelete: Cascade)
   branches           branch[]
   paymentId          String?
   transactions       transaction[]
   refreshTokenSecret String?
   accessTokenSecret  String?
-  product            product[]
+  // product            product[]
   // store - restaurant - place for weddings
   role               String        @default("store")
   isApprovedByAdmin  Boolean       @default(false)
@@ -165,47 +166,71 @@ model category {
 }
 
 model occasion {
-  id        String    @id @unique @default(uuid())
-  name      String
-  image     String
-  products  product[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id              String            @id @unique @default(uuid())
+  name            String
+  image           String
+  productOccasion productOccasion[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
 }
 
 model product {
-  id                       String    @id @unique @default(uuid())
+  id                       String            @id @unique @default(uuid())
   name                     String
   image                    String[]
   description              String
   detailedDescription      String
-  store                    store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  storeId                  String
-  user                     user?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  // store                    store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  // storeId                  String
+  user                     user?             @relation(fields: [userId], references: [id], onDelete: SetNull)
   userId                   String?
-  price                    Float     @default(1)
-  doesNeedPreparation      Boolean   @default(false)
-  isAcceptedByAdmin        Boolean   @default(false)
-  isAvailable              Boolean   @default(true)
-  isFeatured               Boolean   @default(false)
-  isPopular                Boolean   @default(false)
-  preparationTimeInMinutes Int       @default(1)
-  discountPrecent          Float?    @default(0)
-  discountTime             DateTime?
-  color                    Int[]
-  stock                    Int       @default(1)
-  category                 category  @relation(fields: [categoryId], references: [id], onDelete: SetDefault)
-  categoryId               String    @default("no_val")
-  occasions                occasion  @relation(fields: [occasionsId], references: [id], onDelete: SetDefault)
-  occasionsId              String    @default("no_val")
+  price                    Float             @default(1)
+  doesNeedPreparation      Boolean           @default(false)
+  isAcceptedByAdmin        Boolean           @default(false)
+  isAvailable              Boolean           @default(true)
+  isFeatured               Boolean           @default(false)
+  isPopular                Boolean           @default(false)
+  preparationTimeInMinutes Int               @default(1)
+  discountPrecent          Float?            @default(0)
+  discountStartTime        DateTime?
+  discountEndTime          DateTime?
+  color                    String[]
+  productStock             productStock[]   
+  category                 category          @relation(fields: [categoryId], references: [id], onDelete: SetDefault)
+  categoryId               String            @default("no_val")
   // branch                   branches  @relation(fields: [branchId], references: [id], onDelete: SetDefault)
   // branchId                 String    @default("no_val")
+  productOccasion          productOccasion[]
   reviews                  review[]
-  dimensionsWCm            Float     @default(1)
-  dimensionsHCm            Float     @default(1)
-  dimensionsLCm            Float     @default(1)
-  createdAt                DateTime  @default(now())
-  updatedAt                DateTime  @updatedAt
+  dimensionsWCm            Float             @default(1)
+  dimensionsHCm            Float             @default(1)
+  dimensionsLCm            Float             @default(1)
+  createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
+}
+
+model productOccasion {
+  occasions   occasion @relation(fields: [occasionsId], references: [id], onDelete: Cascade)
+  occasionsId String
+  product     product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@id([occasionsId, productId])
+}
+
+model productStock {
+  // id                       String    @id @unique @default(uuid())
+  product   product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  branch    branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  branchId  String
+  stock     Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([productId, branchId])
 }
 
 model review {

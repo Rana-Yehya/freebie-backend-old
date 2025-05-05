@@ -244,7 +244,6 @@ exports.Prisma.ProductScalarFieldEnum = {
   image: 'image',
   description: 'description',
   detailedDescription: 'detailedDescription',
-  storeId: 'storeId',
   userId: 'userId',
   price: 'price',
   doesNeedPreparation: 'doesNeedPreparation',
@@ -254,14 +253,28 @@ exports.Prisma.ProductScalarFieldEnum = {
   isPopular: 'isPopular',
   preparationTimeInMinutes: 'preparationTimeInMinutes',
   discountPrecent: 'discountPrecent',
-  discountTime: 'discountTime',
+  discountStartTime: 'discountStartTime',
+  discountEndTime: 'discountEndTime',
   color: 'color',
-  stock: 'stock',
   categoryId: 'categoryId',
-  occasionsId: 'occasionsId',
   dimensionsWCm: 'dimensionsWCm',
   dimensionsHCm: 'dimensionsHCm',
   dimensionsLCm: 'dimensionsLCm',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProductOccasionScalarFieldEnum = {
+  occasionsId: 'occasionsId',
+  productId: 'productId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProductStockScalarFieldEnum = {
+  productId: 'productId',
+  branchId: 'branchId',
+  stock: 'stock',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -331,6 +344,8 @@ exports.Prisma.ModelName = {
   category: 'category',
   occasion: 'occasion',
   product: 'product',
+  productOccasion: 'productOccasion',
+  productStock: 'productStock',
   review: 'review',
   wishList: 'wishList',
   productUser: 'productUser',

@@ -23,6 +23,7 @@ const {
   spamOtpRequestHelper,
 } = require("../helpers/redis");
 const { sendOtpHelper } = require("../helpers/redis/send-otp-helper");
+const { userConstant } = require("../config/constants");
 //TODO AM I IN NEED TO LOGIN
 
 const login = async (req, res) => {
@@ -165,10 +166,10 @@ const verifyEmail = async (req, res) => {
   });
   // send the jwt
   const accessTokenJWT = createAccessJWT({
-    payload: { userId: user.id, accessTokenSecret },
+    payload: { userId: user.id, accessTokenSecret, role: userConstant },
   });
   const refreshTokenJWT = createRefreshJWT({
-    payload: { userId: user.id, refreshTokenSecret },
+    payload: { userId: user.id, refreshTokenSecret, role: userConstant },
   });
 
   return res.status(StatusCodes.OK).json({

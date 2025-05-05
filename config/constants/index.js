@@ -1,5 +1,11 @@
-const admin = "admin";
-const user = "user";
-const guest = "guest";
-const store = "store";
-module.exports = { store, admin, user, guest };
+const adminConstant = "admin";
+const userConstant = "user";
+const guestConstant = "guest";
+const storeConstant = "store";
+
+module.exports = {
+  storeConstant,
+  adminConstant,
+  userConstant,
+  guestConstant,
+};

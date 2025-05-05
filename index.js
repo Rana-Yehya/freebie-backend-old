@@ -20,7 +20,7 @@ const stateRouter = require("./routes/state-route");
 const citiesRouter = require("./routes/city-route");
 const categoryRouter = require("./routes/category-route");
 const occasionRouter = require("./routes/occasion-route");
-
+const productsRouter = require("./routes/product-route");
 const storeBranchesRouter = require("./routes/branch-route");
 
 const notFound = require("./middleware/not-found");
@@ -89,6 +89,7 @@ app.use("/api/v1/states", stateRouter);
 app.use("/api/v1/cities", citiesRouter);
 app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/occasions", occasionRouter);
+app.use("/api/v1/products", productsRouter);
 
 app.use(notFound);
 app.use(errorHandler);

@@ -10,14 +10,22 @@ const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
 
-const { admin } = require("../config/constants");
+const { adminConstant } = require("../config/constants");
 
 const router = express.Router();
 
 router
   .route("/approve-store")
-  .post(authenticateMiddleware, authorizeMiddleware(admin), approveStore);
+  .post(
+    authenticateMiddleware,
+    authorizeMiddleware(adminConstant),
+    approveStore
+  );
 router
   .route("/stores")
-  .get(authenticateMiddleware, authorizeMiddleware(admin), getAllStores);
+  .get(
+    authenticateMiddleware,
+    authorizeMiddleware(adminConstant),
+    getAllStores
+  );
 module.exports = router;

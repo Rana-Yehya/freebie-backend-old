@@ -6,11 +6,6 @@ const {
   BadRequestError,
   UnauthenticatedError,
 } = require("../errors");
-const { StoreZodModel } = require("../models/store-zod-model");
-
-const { createAccessJWT, createRefreshJWT } = require("../utils/jwt-utils");
-const { passwordEncrypt, passwordCompare } = require("../utils/password-utils");
-const { admin } = require("../config/constants");
 const approveStore = async (req, res) => {
   const { storeId } = req.body;
   //TODO AM I IN NEED TO CHECK EMAIL

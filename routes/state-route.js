@@ -12,18 +12,30 @@ const {
 const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
-const { admin } = require("../config/constants");
+const { adminConstant } = require("../config/constants");
 
 const router = express.Router();
 //
 router
   .route("/")
   .get(getAllCountryStates)
-  .post(authenticateMiddleware, authorizeMiddleware(admin), createState);
+  .post(
+    authenticateMiddleware,
+    authorizeMiddleware(adminConstant),
+    createState
+  );
 router
   .route("/:id")
   .get(getState)
-  .patch(authenticateMiddleware, authorizeMiddleware(admin), updateState)
-  .delete(authenticateMiddleware, authorizeMiddleware(admin), deleteState);
+  .patch(
+    authenticateMiddleware,
+    authorizeMiddleware(adminConstant),
+    updateState
+  )
+  .delete(
+    authenticateMiddleware,
+    authorizeMiddleware(adminConstant),
+    deleteState
+  );
 
 module.exports = router;

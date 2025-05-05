@@ -13,8 +13,7 @@ const { StoreZodModel } = require("../models/store-zod-model");
 
 const { createAccessJWT, createRefreshJWT } = require("../utils/jwt-utils");
 const { passwordEncrypt, passwordCompare } = require("../utils/password-utils");
-const { verifyOtpHelper } = require("../helpers/redis");
-const { sendOtpHelper } = require("../helpers/redis/send-otp-helper");
+const { userConstant, storeConstant } = require("../config/constants");
 
 const login = async (req, res) => {
   const { email, phoneNumber, password } = req.body;
@@ -51,10 +50,10 @@ const login = async (req, res) => {
   const refreshTokenSecret = crypto.randomBytes(40).toString("hex");
   const accessTokenSecret = crypto.randomBytes(40).toString("hex");
   const accessTokenJWT = createAccessJWT({
-    payload: { userId: user.id, accessTokenSecret },
+    payload: { userId: user.id, accessTokenSecret, role: storeConstant },
   });
   const refreshTokenJWT = createRefreshJWT({
-    payload: { userId: user.id, refreshTokenSecret },
+    payload: { userId: user.id, refreshTokenSecret, role: storeConstant },
   });
 
   await prisma.store.update({
@@ -123,7 +122,7 @@ const register = async (req, res, next) => {
     );
   }
   const passwordHash = await passwordEncrypt(password);
-  const socialLinksDb = await prisma.socialLinks.create({
+  const socialLinksDb = await prisma.socialLink.create({
     data: {
       tiktok: socialLinks.tiktok || undefined,
       youtube: socialLinks.youtube || undefined,
