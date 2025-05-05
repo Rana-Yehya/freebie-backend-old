@@ -18,7 +18,7 @@ const getAllStoreBranches = async (req, res, next) => {
     throw new BadRequestError("Please provide store id");
   }
   // console.log(req.user);
-  const branches = await prisma.branches.findMany({
+  const branches = await prisma.branch.findMany({
     where: {
       storeId: id || req.user.id,
     },
@@ -29,7 +29,7 @@ const getAllStoreBranches = async (req, res, next) => {
 };
 const getBranch = async (req, res, next) => {
   const { id: branchId } = req.params;
-  const branch = await prisma.branches.findUnique({
+  const branch = await prisma.branch.findUnique({
     where: { id: branchId },
   });
   if (!branch) {
@@ -61,7 +61,7 @@ const createBranch = async (req, res, next) => {
   if (isPhoneValid.isValid != true) {
     throw new BadRequestError("The phone number is not correct");
   }
-  const createdBranch = await prisma.branches.create({
+  const createdBranch = await prisma.branch.create({
     data: {
       address: address,
       countryId: countryId,
@@ -82,7 +82,7 @@ const updateBranch = async (req, res, next) => {
   if (!id) {
     throw new BadRequestError("Please send an ID");
   }
-  const updatedBranch = await prisma.branches.update({
+  const updatedBranch = await prisma.branch.update({
     where: { id: id },
     data: {
       address: address || undefined,
@@ -99,7 +99,7 @@ const updateBranch = async (req, res, next) => {
 
 const deleteBranch = async (req, res, next) => {
   const { id: branchId } = req.params;
-  const branch = await prisma.branches.delete({
+  const branch = await prisma.branch.delete({
     where: { id: branchId },
   });
   if (!branch) {

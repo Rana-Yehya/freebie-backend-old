@@ -16,6 +16,11 @@ const adminRouter = require("./routes/admin-route");
 const storeAuthRouter = require("./routes/store-auth-route");
 const userAuthRouter = require("./routes/user-auth-route");
 const countryRouter = require("./routes/country-route");
+const stateRouter = require("./routes/state-route");
+const citiesRouter = require("./routes/city-route");
+const categoryRouter = require("./routes/category-route");
+const occasionRouter = require("./routes/occasion-route");
+
 const storeBranchesRouter = require("./routes/branch-route");
 
 const notFound = require("./middleware/not-found");
@@ -80,6 +85,10 @@ app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/stores/auth", storeAuthRouter);
 app.use("/api/v1/store/branches", storeBranchesRouter);
 app.use("/api/v1/country", countryRouter);
+app.use("/api/v1/states", stateRouter);
+app.use("/api/v1/cities", citiesRouter);
+app.use("/api/v1/categories", categoryRouter);
+app.use("/api/v1/occasions", occasionRouter);
 
 app.use(notFound);
 app.use(errorHandler);

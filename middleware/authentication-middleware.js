@@ -11,10 +11,17 @@ const authenticateMiddleware = async (req, res, next) => {
   // const { accessToken, refreshToken } = req.signedCookies;
 
   if (accessToken) {
+    console.log("accessToken", accessToken);
+    console.log(
+      " process.env.ACCESS_JWT_SECRET",
+      process.env.ACCESS_JWT_SECRET
+    );
     const decoded = isTokenValid({
       token: accessToken,
       secret: process.env.ACCESS_JWT_SECRET,
     });
+    console.log("decoded", decoded);
+
     if (decoded) {
       const user = await prisma.user.findUnique({
         where: { id: decoded.userId },

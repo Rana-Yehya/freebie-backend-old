@@ -23,12 +23,15 @@ model image {
 }
 
 model user {
-  id                 String        @id @unique @default(uuid())
-  name               String
-  dateOfBirth        DateTime?
-  gender             String?
-  countryId          String
-  userCountry        country       @relation(fields: [countryId], references: [id])
+  id          String    @id @unique @default(uuid())
+  name        String
+  dateOfBirth DateTime?
+  gender      String?
+
+  // is the country is deleted, the user country will be set to null
+  // what is the action after this?
+  countryId          String?
+  userCountry        country?      @relation(fields: [countryId], references: [id], onDelete: SetNull)
   phone              String        @unique
   email              String?       @unique @default("")
   password           String?
@@ -37,59 +40,47 @@ model user {
   refreshTokenSecret String?
   accessTokenSecret  String?
   transaction        transaction[]
+  products           product[]
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
 
   // imageId     String?  
   // avatar      image?    @relation(fields: [imageId], references: [id])
+  wishList wishList[]
+  review   review[]
 }
 
-model country {
-  id             String     @id @unique @default(uuid())
-  countryName    String
-  currencyCode   String
-  countryIsoCode String     @unique
-  user           user[]
-  branches       branches[]
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @updatedAt
-}
-
-model branches {
-  id        String      @id @unique @default(uuid())
+model branch {
+  id        String     @id @unique @default(uuid())
   storeId   String
-  store     store       @relation(fields: [storeId], references: [id])
+  store     store      @relation(fields: [storeId], references: [id], onDelete: Cascade)
   address   String
-  country   country     @relation(fields: [countryId], references: [id])
-  countryId String
+  state     state      @relation(fields: [stateId], references: [id], onDelete: Cascade)
+  stateId   String
   phone     String?
-  isFreezed Boolean     @default(false)
-  workHours workHours[]
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  isFreezed Boolean    @default(false)
+  workHours workHour[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   // branchCity        String
   // branchState       String
   // branchZip         String
   // branchLat         Float
   // branchLng         Float
+  // country   country?    @relation(fields: [countryId], references: [id])
+  // countryId String?
 }
 
-model workHours {
+model workHour {
   id        String   @id @unique @default(uuid())
   branchId  String   @unique
-  branch    branches @relation(fields: [branchId], references: [id])
+  branch    branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
   startTime DateTime
   endTime   DateTime
   day       Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
-// model storeAddress {
-//   id      String @id @unique @default(uuid())
-//   storeId String
-//   store   store  @relation(fields: [storeId], references: [id])
-// }
 
 model store {
   id                 String        @id @unique @default(uuid())
@@ -101,12 +92,13 @@ model store {
   email              String        @unique
   password           String
   socialLinksId      String        @unique
-  socialLinks        socialLinks   @relation(fields: [socialLinksId], references: [id])
-  branches           branches[]
+  socialLinks        socialLink    @relation(fields: [socialLinksId], references: [id], onDelete: Cascade)
+  branches           branch[]
   paymentId          String?
   transactions       transaction[]
   refreshTokenSecret String?
   accessTokenSecret  String?
+  product            product[]
   // store - restaurant - place for weddings
   role               String        @default("store")
   isApprovedByAdmin  Boolean       @default(false)
@@ -115,25 +107,10 @@ model store {
   isDeleted          Boolean       @default(false)
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
-
   // storeAddress storeAddress[]
 }
 
-model transaction {
-  id   String  @id @unique @default(uuid())
-  // buy something or take money from wallet -> false = buy, true = take
-  type Boolean @default(false)
-
-  user   user?   @relation(fields: [userId], references: [id])
-  userId String?
-
-  store     store?   @relation(fields: [storeId], references: [id])
-  storeId   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model socialLinks {
+model socialLink {
   id        String  @id @unique @default(uuid())
   tiktok    String?
   youtube   String?
@@ -143,6 +120,141 @@ model socialLinks {
   // twitter    String
 
   store     store[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model country {
+  id             String   @id @unique @default(uuid())
+  countryName    String
+  currencyCode   String
+  countryIsoCode String   @unique
+  user           user[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  state          state[]
+}
+
+model state {
+  id        String   @id @unique @default(uuid())
+  name      String
+  country   country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  countryId String
+  city      city[]
+  branches  branch[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model city {
+  id        String   @id @unique @default(uuid())
+  name      String
+  state     state    @relation(fields: [stateId], references: [id], onDelete: Cascade)
+  stateId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model category {
+  id        String    @id @unique @default(uuid())
+  name      String
+  image     String
+  product   product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model occasion {
+  id        String    @id @unique @default(uuid())
+  name      String
+  image     String
+  products  product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model product {
+  id                       String    @id @unique @default(uuid())
+  name                     String
+  image                    String[]
+  description              String
+  detailedDescription      String
+  store                    store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  storeId                  String
+  user                     user?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId                   String?
+  price                    Float     @default(1)
+  doesNeedPreparation      Boolean   @default(false)
+  isAcceptedByAdmin        Boolean   @default(false)
+  isAvailable              Boolean   @default(true)
+  isFeatured               Boolean   @default(false)
+  isPopular                Boolean   @default(false)
+  preparationTimeInMinutes Int       @default(1)
+  discountPrecent          Float?    @default(0)
+  discountTime             DateTime?
+  color                    Int[]
+  stock                    Int       @default(1)
+  category                 category  @relation(fields: [categoryId], references: [id], onDelete: SetDefault)
+  categoryId               String    @default("no_val")
+  occasions                occasion  @relation(fields: [occasionsId], references: [id], onDelete: SetDefault)
+  occasionsId              String    @default("no_val")
+  // branch                   branches  @relation(fields: [branchId], references: [id], onDelete: SetDefault)
+  // branchId                 String    @default("no_val")
+  reviews                  review[]
+  dimensionsWCm            Float     @default(1)
+  dimensionsHCm            Float     @default(1)
+  dimensionsLCm            Float     @default(1)
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
+}
+
+model review {
+  // id                       String    @id @unique @default(uuid())
+  user      user     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @unique
+  product   product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, productId])
+}
+
+model wishList {
+  id        String        @id @default(cuid())
+  userId    String
+  user      user          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   productUser[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  // @@id([userId, productId])
+  // product   product? @relation(fields: [productId], references: [id])
+  // productId String?
+}
+
+model productUser {
+  id              String    @id @default(cuid())
+  name            String
+  image           String
+  color           Int[]     @default([])
+  price           Float     @default(1)
+  discountPrecent Float?    @default(0)
+  discountTime    DateTime?
+  wishList        wishList  @relation(fields: [wishListId], references: [id])
+  wishListId      String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model transaction {
+  id        String   @id @unique @default(uuid())
+  // buy something or take money from wallet -> false = buy, true = take
+  type      Boolean  @default(false)
+  user      user?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String?
+  store     store?   @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  storeId   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
