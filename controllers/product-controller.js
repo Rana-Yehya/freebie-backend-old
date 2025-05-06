@@ -195,6 +195,9 @@ const searchAllProducts = async (req, res, next) => {
         ? { gte: priceSmallFloat, lte: priceHighFloat }
         : { gte: priceSmallFloat },
     },
+    include: {
+      productStock: true,
+    },
   });
   return res
     .status(StatusCodes.OK)
@@ -205,16 +208,17 @@ const getProduct = async (req, res, next) => {
   const { id: productId } = req.params;
   const product = await prisma.product.findUnique({
     where: { id: productId },
+    include: {
+      productStock: true,
+    },
   });
-  const productStock = await prisma.productStock.findMany({
-    where: { productId: productId },
-  });
+  // const productStock = await prisma.productStock.findMany({
+  //   where: { productId: productId },
+  // });
   if (!product) {
     throw new BadRequestError("Product not found");
   }
-  return res
-    .status(StatusCodes.OK)
-    .json({ isSuccess: true, data: product, productStock });
+  return res.status(StatusCodes.OK).json({ isSuccess: true, data: product });
 };
 
 module.exports = {

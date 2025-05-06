@@ -24563,7 +24563,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"review"> | Date | string
     user?: XOR<UserScalarRelationFilter, userWhereInput>
     product?: XOR<ProductScalarRelationFilter, productWhereInput>
-  }, "userId_productId" | "userId" | "productId">
+  }, "userId" | "productId" | "userId_productId">
 
   export type reviewOrderByWithAggregationInput = {
     userId?: SortOrder
@@ -24608,15 +24608,15 @@ export namespace Prisma {
 
   export type userCartWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    userId?: string
     AND?: userCartWhereInput | userCartWhereInput[]
     OR?: userCartWhereInput[]
     NOT?: userCartWhereInput | userCartWhereInput[]
-    userId?: StringFilter<"userCart"> | string
     createdAt?: DateTimeFilter<"userCart"> | Date | string
     updatedAt?: DateTimeFilter<"userCart"> | Date | string
     user?: XOR<UserScalarRelationFilter, userWhereInput>
     product?: ProductUserListRelationFilter
-  }, "id">
+  }, "id" | "userId">
 
   export type userCartOrderByWithAggregationInput = {
     id?: SortOrder

@@ -10,12 +10,12 @@ const getAllStateCities = async (req, res, next) => {
   if (!req.query.id) {
     throw new BadRequestError("Please provide state id");
   }
-  const citys = await prisma.city.findMany({
+  const cities = await prisma.city.findMany({
     where: { stateId: req.query.id },
   });
   return res
     .status(StatusCodes.OK)
-    .json({ isSuccess: true, count: citys.length, data: citys });
+    .json({ isSuccess: true, count: cities.length, data: cities });
 };
 const getCity = async (req, res, next) => {
   const { id: cityId } = req.params;

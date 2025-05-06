@@ -17,7 +17,6 @@ const createProduct = async (req, res, next) => {
     discountPrecent,
     discountStartTime,
     discountEndTime,
-    color,
     categoryId,
     productStock,
     occasionId,
@@ -38,7 +37,7 @@ const createProduct = async (req, res, next) => {
     discountPrecent: discountPrecent,
     discountStartTime: discountStartTime,
     discountEndTime: discountEndTime,
-    color: color,
+    // color: color,
     categoryId: categoryId,
     occasionId: occasionId,
     productStock: productStock,
@@ -94,7 +93,6 @@ const createProduct = async (req, res, next) => {
       discountPrecent: discountPrecent,
       discountStartTime: discountStartTime,
       discountEndTime: discountEndTime,
-      color: color,
       categoryId: categoryId,
       occasionId: occasionId,
       productStock: {
@@ -272,6 +270,7 @@ const updateProduct = async (req, res, next) => {
         // branchId: productStock[productStockIndex].branchId,
         stock: productStock[productStockIndex].stock || undefined,
         // color: productStock[productStockIndex].color || undefined,
+        // color: productStock[productStockIndex].color,
 
         // productId: id,
       },

@@ -22,6 +22,7 @@ const categoryRouter = require("./routes/category-route");
 const occasionRouter = require("./routes/occasion-route");
 const productsRouter = require("./routes/product-route");
 const storeBranchesRouter = require("./routes/branch-route");
+const cartRouter = require("./routes/cart-route");
 
 const notFound = require("./middleware/not-found");
 const errorHandler = require("./middleware/error-handler");
@@ -90,6 +91,7 @@ app.use("/api/v1/cities", citiesRouter);
 app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/occasions", occasionRouter);
 app.use("/api/v1/products", productsRouter);
+app.use("/api/v1/carts", cartRouter);
 
 app.use(notFound);
 app.use(errorHandler);

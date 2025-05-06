@@ -217,7 +217,7 @@ model productOccasion {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  @@id([occasionsId, productId])
+  @@unique([occasionsId, productId])
 }
 
 model productStock {
@@ -231,7 +231,7 @@ model productStock {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@id([productId, branchId, color])
+  @@unique([productId, branchId, color])
 }
 
 model review {
@@ -243,12 +243,12 @@ model review {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@id([userId, productId])
+  @@unique([userId, productId])
 }
 
 model userCart {
-  id        String        @id @default(cuid())
-  userId    String
+  id        String        @id @default(uuid())
+  userId    String        @unique
   user      user          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   product   productUser[]
   createdAt DateTime      @default(now())
@@ -260,16 +260,17 @@ model userCart {
 }
 
 model productUser {
-  cart       userCart @relation(fields: [userCartId], references: [id])
+  // id         String   @id @unique @default(uuid())
+  cart       userCart @relation(fields: [userCartId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userCartId String
-  product    product  @relation(fields: [productId], references: [id])
+  product    product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   productId  String
   color      String
   quantity   Int      @default(1)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  @@id([userCartId, productId, color])
+  @@unique([userCartId, productId, color])
 }
 
 model transaction {

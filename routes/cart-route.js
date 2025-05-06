@@ -2,7 +2,7 @@ const express = require("express");
 const {
   getAllCartItems,
   deleteCartItem,
-  createCart,
+  createCartItem,
   updateCartQuantity,
   // deleteCity,
 } = require("../controllers/cart-controller");
@@ -23,7 +23,11 @@ router
     authorizeMiddleware(userConstant),
     getAllCartItems
   )
-  .post(authenticateMiddleware, authorizeMiddleware(userConstant), createCart);
+  .post(
+    authenticateMiddleware,
+    authorizeMiddleware(userConstant),
+    createCartItem
+  );
 router
   .route("/:id")
   .patch(

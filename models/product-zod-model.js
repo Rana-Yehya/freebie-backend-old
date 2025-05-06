@@ -7,9 +7,13 @@ const ProductZodModel = z
     // isFeatured               Boolean   @default(false)
     // isPopular                Boolean   @default(false)
     name: z.string({ message: "Name is required" }),
-    image: z.array(z.string({ message: "Image is required" })).nonempty({
-      message: "Images can't be empty!",
-    }),
+    image: z
+      .array(z.string({ message: "Image is required" }), {
+        message: "Images can't be empty!",
+      })
+      .nonempty({
+        message: "Images can't be empty!",
+      }),
     description: z.string({ message: "Description is required" }),
     detailedDescription: z.string({
       message: "Detailed Description is required",
@@ -49,16 +53,20 @@ const ProductZodModel = z
     // stock: z.number().optional(),
     categoryId: z.string({ message: "Category Id is required" }),
     occasionId: z
-      .array(
-        z.string({ message: "Occasion Id must be a string" })
-        // {
-        //   message: "Occasions can't be empty!",
-        // },
-      )
+      .array(z.string({ message: "Occasion Id must be a string" }), {
+        message: "Occasions can't be empty!",
+      })
+      .nonempty({
+        message: "Occasions can't be empty!",
+      })
       .optional(),
-    productStock: z.array(ProductStockZodModel, {
-      message: "Branches can't be empty!",
-    }),
+    productStock: z
+      .array(ProductStockZodModel, {
+        message: "Branches can't be empty!",
+      })
+      .nonempty({
+        message: "Branches can't be empty!",
+      }),
     dimensionsWCm: z.number({ message: "Dimensions Width is required" }),
     dimensionsHCm: z.number({ message: "Dimensions Height is required" }),
     dimensionsLCm: z.number({ message: "Dimensions Length is required" }),
