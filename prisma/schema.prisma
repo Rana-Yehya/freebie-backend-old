@@ -31,7 +31,7 @@ model user {
   // is the country is deleted, the user country will be set to null
   // what is the action after this?
   countryId          String?
-  userCountry        country?      @relation(fields: [countryId], references: [id], onDelete: SetNull)
+  userCountry        country?      @relation(fields: [countryId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   phone              String        @unique
   email              String?       @unique @default("")
   password           String?
@@ -53,9 +53,9 @@ model user {
 model branch {
   id           String         @id @unique @default(uuid())
   storeId      String
-  store        store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  store        store          @relation(fields: [storeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   address      String
-  state        state          @relation(fields: [stateId], references: [id], onDelete: Cascade)
+  state        state          @relation(fields: [stateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   stateId      String
   phone        String?
   isFreezed    Boolean        @default(false)
@@ -75,7 +75,7 @@ model branch {
 model workHour {
   id        String   @id @unique @default(uuid())
   branchId  String   @unique
-  branch    branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  branch    branch   @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   startTime DateTime
   endTime   DateTime
   day       Int
@@ -93,7 +93,7 @@ model store {
   email              String        @unique
   password           String
   socialLinksId      String        @unique
-  socialLinks        socialLink    @relation(fields: [socialLinksId], references: [id], onDelete: Cascade)
+  socialLinks        socialLink    @relation(fields: [socialLinksId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   branches           branch[]
   paymentId          String?
   transactions       transaction[]
@@ -139,7 +139,7 @@ model country {
 model state {
   id        String   @id @unique @default(uuid())
   name      String
-  country   country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  country   country  @relation(fields: [countryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   countryId String
   city      city[]
   branches  branch[]
@@ -150,7 +150,7 @@ model state {
 model city {
   id        String   @id @unique @default(uuid())
   name      String
-  state     state    @relation(fields: [stateId], references: [id], onDelete: Cascade)
+  state     state    @relation(fields: [stateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   stateId   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -182,7 +182,7 @@ model product {
   detailedDescription      String
   // store                    store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
   // storeId                  String
-  user                     user?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  user                     user?             @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   userId                   String?
   price                    Float             @default(1)
   doesNeedPreparation      Boolean           @default(false)
@@ -195,10 +195,10 @@ model product {
   discountStartTime        DateTime?
   discountEndTime          DateTime?
   color                    String[]
-  productStock             productStock[]   
-  category                 category          @relation(fields: [categoryId], references: [id], onDelete: SetDefault)
+  productStock             productStock[]
+  category                 category          @relation(fields: [categoryId], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
   categoryId               String            @default("no_val")
-  // branch                   branches  @relation(fields: [branchId], references: [id], onDelete: SetDefault)
+  // branch                   branches  @relation(fields: [branchId], references: [id], onDelete: SetDefault, onUpdate: SerDefault)
   // branchId                 String    @default("no_val")
   productOccasion          productOccasion[]
   reviews                  review[]
@@ -210,9 +210,9 @@ model product {
 }
 
 model productOccasion {
-  occasions   occasion @relation(fields: [occasionsId], references: [id], onDelete: Cascade)
+  occasions   occasion @relation(fields: [occasionsId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   occasionsId String
-  product     product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product     product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   productId   String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -222,9 +222,9 @@ model productOccasion {
 
 model productStock {
   // id                       String    @id @unique @default(uuid())
-  product   product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product   product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   productId String
-  branch    branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  branch    branch   @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   branchId  String
   stock     Int?
   createdAt DateTime @default(now())
@@ -235,9 +235,9 @@ model productStock {
 
 model review {
   // id                       String    @id @unique @default(uuid())
-  user      user     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId    String   @unique
-  product   product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product   product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   productId String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -248,7 +248,7 @@ model review {
 model wishList {
   id        String        @id @default(cuid())
   userId    String
-  user      user          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      user          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   product   productUser[]
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
@@ -266,7 +266,7 @@ model productUser {
   price           Float     @default(1)
   discountPrecent Float?    @default(0)
   discountTime    DateTime?
-  wishList        wishList  @relation(fields: [wishListId], references: [id])
+  wishList        wishList  @relation(fields: [wishListId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   wishListId      String
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
@@ -276,9 +276,9 @@ model transaction {
   id        String   @id @unique @default(uuid())
   // buy something or take money from wallet -> false = buy, true = take
   type      Boolean  @default(false)
-  user      user?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      user?    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId    String?
-  store     store?   @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  store     store?   @relation(fields: [storeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   storeId   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

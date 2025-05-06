@@ -21,7 +21,15 @@ const approveStore = async (req, res) => {
   });
 };
 const getAllStores = async (req, res, next) => {
-  const stores = await prisma.store.findMany();
+  const stores = await prisma.store.findMany({
+    select: {
+      password: false,
+      paymentId: false,
+      transactions: false,
+      refreshTokenSecret: false,
+      accessTokenSecret: false,
+    },
+  });
   return res
     .status(StatusCodes.OK)
     .json({ isSuccess: true, count: stores.length, data: stores });

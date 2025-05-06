@@ -1,37 +1,44 @@
 const { z } = require("zod");
 const { ProductStockZodModel } = require("./product-stock-zod-model");
 
-const ProductZodModel = z
+const UpdateProductZodModel = z
   .object({
     // isAvailable              Boolean   @default(true)
     // isFeatured               Boolean   @default(false)
     // isPopular                Boolean   @default(false)
-    name: z.string({ message: "Name is required" }),
-    image: z.array(z.string({ message: "Image is required" })).nonempty({
-      message: "Images can't be empty!",
-    }),
-    description: z.string({ message: "Description is required" }),
-    detailedDescription: z.string({
-      message: "Detailed Description is required",
-    }),
-    price: z.number({ message: "Price is required" }),
+    name: z.string().optional(),
+    image: z
+      .array(z.string({ message: "Image is required" }))
+      .nonempty({
+        message: "Images can't be empty!",
+      })
+      .optional(),
+    description: z.string({ message: "Description is required" }).optional(),
+    detailedDescription: z
+      .string({
+        message: "Detailed Description is required",
+      })
+      .optional(),
+    price: z.number({ message: "Price is required" }).optional(),
     //{ message: "Does need preparation is required" }
-    doesNeedPreparation: z.boolean().default(false),
+    doesNeedPreparation: z.boolean().default(false).optional(),
     //{ message: "Is available is required" }
-    isAvailable: z.boolean().default(true),
-    preparationTimeInMinutes: z.number().default(0),
-    discountPrecent: z.number().default(0),
+    isAvailable: z.boolean().default(true).optional(),
+    preparationTimeInMinutes: z.number().default(0).optional(),
+    discountPrecent: z.number().default(0).optional(),
     discountStartTime: z.string().date().optional(),
     discountEndTime: z.string().date().optional(),
-    color: z.array(
-      z
-        .string()
-        .min(6, { message: "Color should be a 6 octal hex digit" })
-        .max(6, { message: "Color should be a 6 octal hex digit" }),
-      {
-        message: "Product must be in at least one color",
-      }
-    ),
+    color: z
+      .array(
+        z
+          .string()
+          .min(6, { message: "Color should be a 6 octal hex digit" })
+          .max(6, { message: "Color should be a 6 octal hex digit" }),
+        {
+          message: "Product must be in at least one color",
+        }
+      )
+      .optional(),
 
     // .superRefine((data, ctx) => {
     //   if (
@@ -47,7 +54,7 @@ const ProductZodModel = z
     //   }
     // }),
     // stock: z.number().optional(),
-    categoryId: z.string({ message: "Category Id is required" }),
+    categoryId: z.string({ message: "Category Id is required" }).optional(),
     occasionId: z
       .array(
         z.string({ message: "Occasion Id must be a string" })
@@ -56,12 +63,20 @@ const ProductZodModel = z
         // },
       )
       .optional(),
-    productStock: z.array(ProductStockZodModel, {
-      message: "Branches can't be empty!",
-    }),
-    dimensionsWCm: z.number({ message: "Dimensions Width is required" }),
-    dimensionsHCm: z.number({ message: "Dimensions Height is required" }),
-    dimensionsLCm: z.number({ message: "Dimensions Length is required" }),
+    productStock: z
+      .array(ProductStockZodModel, {
+        message: "Branches can't be empty!",
+      })
+      .optional(),
+    dimensionsWCm: z
+      .number({ message: "Dimensions Width is required" })
+      .optional(),
+    dimensionsHCm: z
+      .number({ message: "Dimensions Height is required" })
+      .optional(),
+    dimensionsLCm: z
+      .number({ message: "Dimensions Length is required" })
+      .optional(),
     //{ message: "Is deleted is required" }
     // isDeleted: z.boolean().default(false),
     //{ message: "Is deleted is required" }
@@ -191,4 +206,4 @@ const ProductZodModel = z
     }
   });
 // type UserModel = z.infer<typeof UserZodModel>;
-module.exports = { ProductZodModel };
+module.exports = { UpdateProductZodModel };
