@@ -1,12 +1,18 @@
 const express = require("express");
 const {
-  getAllProductsPerCategories,
-  getAllProductsPerOccasions,
-  getProduct,
   createProduct,
   updateProduct,
   deleteProduct,
+} = require("../controllers/product-management-controller");
+
+const {
+  getAllProductsPerState,
+  getAllProductsPerOccasions,
+  getAllProductsPerCategories,
+  getProduct,
+  searchAllProducts,
 } = require("../controllers/product-controller");
+
 const {
   authenticateMiddleware,
 } = require("../middleware/authentication-middleware");
@@ -27,6 +33,8 @@ router
   );
 router.route("/per-categories").get(getAllProductsPerCategories);
 router.route("/per-occasions").get(getAllProductsPerOccasions);
+router.route("/per-states").get(getAllProductsPerState);
+router.route("/search").get(searchAllProducts);
 
 router
   .route("/:id")

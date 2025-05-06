@@ -40,7 +40,7 @@ model user {
   refreshTokenSecret String?
   accessTokenSecret  String?
   transaction        transaction[]
-  products           product[]
+  // products           product[]
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
 
@@ -182,8 +182,8 @@ model product {
   detailedDescription      String
   // store                    store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
   // storeId                  String
-  user                     user?             @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: SetNull)
-  userId                   String?
+  // user                     user?             @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  // userId                   String?
   price                    Float             @default(1)
   doesNeedPreparation      Boolean           @default(false)
   isAcceptedByAdmin        Boolean           @default(false)
