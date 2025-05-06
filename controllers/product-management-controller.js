@@ -159,7 +159,6 @@ const updateProduct = async (req, res, next) => {
     discountPrecent,
     discountStartTime,
     discountEndTime,
-    color,
     categoryId,
     productStock,
     occasionId,
@@ -180,7 +179,6 @@ const updateProduct = async (req, res, next) => {
     discountPrecent: discountPrecent,
     discountStartTime: discountStartTime,
     discountEndTime: discountEndTime,
-    color: color,
     categoryId: categoryId,
     occasionId: occasionId,
     productStock: productStock,
@@ -243,7 +241,6 @@ const updateProduct = async (req, res, next) => {
       discountPrecent: discountPrecent || undefined,
       discountStartTime: discountStartTime || undefined,
       discountEndTime: discountEndTime || undefined,
-      color: color || undefined,
       categoryId: categoryId || undefined,
       occasionId: occasionId || undefined,
       // productStock: || undefined productStockDb,
@@ -265,19 +262,23 @@ const updateProduct = async (req, res, next) => {
     // ) {
     await prisma.productStock.upsert({
       where: {
-        productId_branchId: {
+        productId_branchId_color: {
           productId: id,
           branchId: productStock[productStockIndex].branchId,
+          color: productStock[productStockIndex].color,
         },
       },
       update: {
         // branchId: productStock[productStockIndex].branchId,
         stock: productStock[productStockIndex].stock || undefined,
+        // color: productStock[productStockIndex].color || undefined,
+
         // productId: id,
       },
       create: {
         branchId: productStock[productStockIndex].branchId,
-        stock: productStock[productStockIndex].stock || undefined,
+        stock: productStock[productStockIndex].stock,
+        color: productStock[productStockIndex].color,
         productId: id,
       },
     });

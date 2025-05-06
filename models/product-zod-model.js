@@ -23,15 +23,15 @@ const ProductZodModel = z
     discountPrecent: z.number().default(0),
     discountStartTime: z.string().date().optional(),
     discountEndTime: z.string().date().optional(),
-    color: z.array(
-      z
-        .string()
-        .min(6, { message: "Color should be a 6 octal hex digit" })
-        .max(6, { message: "Color should be a 6 octal hex digit" }),
-      {
-        message: "Product must be in at least one color",
-      }
-    ),
+    // color: z.array(
+    //   z
+    //     .string()
+    //     .min(6, { message: "Color should be a 6 octal hex digit" })
+    //     .max(6, { message: "Color should be a 6 octal hex digit" }),
+    //   {
+    //     message: "Product must be in at least one color",
+    //   }
+    // ),
 
     // .superRefine((data, ctx) => {
     //   if (

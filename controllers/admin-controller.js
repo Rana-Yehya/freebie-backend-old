@@ -23,7 +23,20 @@ const approveStore = async (req, res) => {
 const getAllStores = async (req, res, next) => {
   const stores = await prisma.store.findMany({
     select: {
-      password: false,
+      id: true,
+      name: true,
+      bio: false,
+      logo: true,
+      banner: false,
+      phone: true,
+      email: true,
+      role: true,
+      isApprovedByAdmin: true,
+      isFreezed: true,
+      isBanned: true,
+      isDeleted: true,
+      createdAt: true,
+      updatedAt: true,
       paymentId: false,
       transactions: false,
       refreshTokenSecret: false,

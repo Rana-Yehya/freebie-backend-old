@@ -244,7 +244,6 @@ exports.Prisma.ProductScalarFieldEnum = {
   image: 'image',
   description: 'description',
   detailedDescription: 'detailedDescription',
-  userId: 'userId',
   price: 'price',
   doesNeedPreparation: 'doesNeedPreparation',
   isAcceptedByAdmin: 'isAcceptedByAdmin',
@@ -255,7 +254,6 @@ exports.Prisma.ProductScalarFieldEnum = {
   discountPrecent: 'discountPrecent',
   discountStartTime: 'discountStartTime',
   discountEndTime: 'discountEndTime',
-  color: 'color',
   categoryId: 'categoryId',
   dimensionsWCm: 'dimensionsWCm',
   dimensionsHCm: 'dimensionsHCm',
@@ -275,6 +273,7 @@ exports.Prisma.ProductStockScalarFieldEnum = {
   productId: 'productId',
   branchId: 'branchId',
   stock: 'stock',
+  color: 'color',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -286,7 +285,7 @@ exports.Prisma.ReviewScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.WishListScalarFieldEnum = {
+exports.Prisma.UserCartScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   createdAt: 'createdAt',
@@ -294,14 +293,10 @@ exports.Prisma.WishListScalarFieldEnum = {
 };
 
 exports.Prisma.ProductUserScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  image: 'image',
+  userCartId: 'userCartId',
+  productId: 'productId',
   color: 'color',
-  price: 'price',
-  discountPrecent: 'discountPrecent',
-  discountTime: 'discountTime',
-  wishListId: 'wishListId',
+  quantity: 'quantity',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -347,7 +342,7 @@ exports.Prisma.ModelName = {
   productOccasion: 'productOccasion',
   productStock: 'productStock',
   review: 'review',
-  wishList: 'wishList',
+  userCart: 'userCart',
   productUser: 'productUser',
   transaction: 'transaction'
 };
