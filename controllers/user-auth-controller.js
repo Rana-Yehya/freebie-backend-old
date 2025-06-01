@@ -48,20 +48,75 @@ const login = async (req, res) => {
   // });
   // return res.status(StatusCodes.OK).json({
   //   isSuccess: true,
-  //   access_token: accessTokenJWT,
-  //   refresh_token: refreshTokenJWT,
+  //   accessToken: accessTokenJWT,
+  //   refreshToken: refreshTokenJWT,
   //   user: user,
   // });
 };
 
+const sendCode = async (req, res, next) => {
+  const { phoneNumber } = req.body;
+
+  const isPhoneValid = phone(phoneNumber.toString());
+
+  console.log(isPhoneValid);
+  console.log(phoneNumber);
+
+  if (isPhoneValid.isValid != true) {
+    throw new BadRequestError("The phone number is not correct");
+  }
+  const userInDB = await prisma.user.findFirst({
+    where: { phone: phoneNumber },
+  });
+  const storeInDB = await prisma.store.findFirst({
+    where: { phone: phoneNumber },
+  });
+
+  if (storeInDB) {
+    throw new BadRequestError(
+      "Account already in use or has an individal account"
+    );
+  }
+  console.log(userInDB);
+  /*
+  ELSE SEND OTP AND CREATE USER DATA
+  */
+  await checkOtpRestirictionsHelper({ phone: phoneNumber, next });
+  //  await prisma.user.findUnique({
+  //   where: { phone: phoneNuumber },
+  // });
+  await spamOtpRequestHelper({ phone: phoneNumber, next });
+  await sendOtpHelper({
+    name: "name",
+    phone: phoneNumber,
+    email: "el_rana111@yahoo.com",
+  });
+  const isAlreadyExist = userInDB ? true : false;
+  console.log(isAlreadyExist);
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "OTP sent. Please check your phone",
+    isAlreadyExist: userInDB ? true : false,
+  });
+};
+
 const register = async (req, res, next) => {
-  const { name, phoneNumber, userCountry, dateOfBirth, gender, email, role } =
-    req.body;
+  const {
+    name,
+    phoneNumber,
+    userState,
+    userCountry,
+    dateOfBirth,
+    gender,
+    email,
+    role,
+  } = req.body;
   const zodModel = UserZodModel.safeParse({
     name: name,
     dateOfBirth: dateOfBirth,
     gender: gender,
     email: email,
+    userState: userState,
     userCountry: userCountry,
     phone: phoneNumber,
     role: role,
@@ -88,7 +143,8 @@ const register = async (req, res, next) => {
       OR: [{ email }, { phone: phoneNumber }],
     },
   });
-
+  console.log(userInDB);
+  console.log(storeInDB);
   if (storeInDB || userInDB) {
     throw new BadRequestError(
       "Account already in use or has an individal account"
@@ -97,13 +153,23 @@ const register = async (req, res, next) => {
   const country = await prisma.country.findUnique({
     where: { countryIsoCode: userCountry },
   });
+  const state = await prisma.state.findUnique({
+    where: { countryId: country.id, id: userState },
+  });
   if (!country) {
     throw new BadRequestError("Country not found");
+  }
+  if (!state) {
+    throw new BadRequestError(
+      "State not found or does not belong to this country"
+    );
   }
   const parse = Date.parse(dateOfBirth);
 
   const date = new Date(parse);
-  await prisma.user.create({
+  const refreshTokenSecret = crypto.randomBytes(40).toString("hex");
+  const accessTokenSecret = crypto.randomBytes(40).toString("hex");
+  const user = await prisma.user.create({
     data: {
       name: name,
       dateOfBirth: date,
@@ -112,32 +178,41 @@ const register = async (req, res, next) => {
       phone: phoneNumber,
       countryId: country.id,
       role: role,
+      //TODO CAN ADD AN EXTRA LEVEL OF CHECK AND INTEGRATE THE VEERIFICATION WITH IOREEDIS
+      isVerified: true,
+      stateId: userState,
+      refreshTokenSecret: refreshTokenSecret,
+      accessTokenSecret: accessTokenSecret,
     },
   });
-
+  const accessTokenJWT = createAccessJWT({
+    payload: { userId: user.id, accessTokenSecret, role: userConstant },
+  });
+  const refreshTokenJWT = createRefreshJWT({
+    payload: { userId: user.id, refreshTokenSecret, role: userConstant },
+  });
   /*
   ELSE SEND OTP AND CREATE USER DATA
   */
-  await checkOtpRestirictionsHelper({ phone: phoneNumber, next });
-  //  await prisma.user.findUnique({
-  //   where: { phone: phoneNuumber },
-  // });
-  await spamOtpRequestHelper({ phone: phoneNumber, next });
-  await sendOtpHelper({ name, phone: phoneNumber, email });
+  // await checkOtpRestirictionsHelper({ phone: phoneNumber, next });
+  // //  await prisma.user.findUnique({
+  // //   where: { phone: phoneNuumber },
+  // // });
+  // await spamOtpRequestHelper({ phone: phoneNumber, next });
+  // await sendOtpHelper({ name, phone: phoneNumber, email });
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
-    message: "OTP sent. Please check your phone",
+    message: "Account Created Successfully",
+    accessToken: accessTokenJWT,
+    refreshToken: refreshTokenJWT,
+    user: user,
   });
 };
 
-const verifyEmail = async (req, res) => {
-  const { email, phoneNumber, verificationCode } = req.body;
-  if (
-    !email ||
-    !phoneNumber ||
-    !verificationCode ||
-    verificationCode.length != 4
-  ) {
+const verifyCode = async (req, res) => {
+  const { isAlreadyExist, phoneNumber, verificationCode } = req.body;
+
+  if (!phoneNumber || !verificationCode || verificationCode.length != 4) {
     throw new BadRequestError("Please enter all data correctly");
   }
   const isPhoneValid = phone(phoneNumber);
@@ -145,41 +220,52 @@ const verifyEmail = async (req, res) => {
   if (isPhoneValid.isValid != true) {
     throw new BadRequestError("The phone number is not correct");
   }
-  const user = await prisma.user.findUnique({
-    where: { email: email, phone: phoneNumber },
-  });
-  if (!user) {
-    throw new NotFoundError("User not found");
-  }
+
   await verifyOtpHelper({ phone: phoneNumber, userOtp: verificationCode });
   // user.isVerified = true;
-  const refreshTokenSecret = crypto.randomBytes(40).toString("hex");
-  const accessTokenSecret = crypto.randomBytes(40).toString("hex");
+  if (isAlreadyExist) {
+    const user = await prisma.user.findUnique({
+      where: { phone: phoneNumber },
+    });
+    if (!user) {
+      throw new NotFoundError("User not found");
+    }
+    const refreshTokenSecret = crypto.randomBytes(40).toString("hex");
+    const accessTokenSecret = crypto.randomBytes(40).toString("hex");
 
-  await prisma.user.update({
-    where: { id: user.id },
-    data: {
-      isVerified: true,
-      refreshTokenSecret: refreshTokenSecret,
-      accessTokenSecret: accessTokenSecret,
-    },
-  });
-  // send the jwt
-  const accessTokenJWT = createAccessJWT({
-    payload: { userId: user.id, accessTokenSecret, role: userConstant },
-  });
-  const refreshTokenJWT = createRefreshJWT({
-    payload: { userId: user.id, refreshTokenSecret, role: userConstant },
-  });
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        isVerified: true,
+        refreshTokenSecret: refreshTokenSecret,
+        accessTokenSecret: accessTokenSecret,
+      },
+    });
+    // send the jwt
+    const accessTokenJWT = createAccessJWT({
+      payload: { userId: user.id, accessTokenSecret, role: userConstant },
+    });
+    const refreshTokenJWT = createRefreshJWT({
+      payload: { userId: user.id, refreshTokenSecret, role: userConstant },
+    });
 
-  return res.status(StatusCodes.OK).json({
-    isSuccess: true,
-    message: "Account verified successfully",
+    return res.status(StatusCodes.OK).json({
+      isSuccess: true,
+      message: "Account verified successfully",
+      accessToken: accessTokenJWT,
+      refreshToken: refreshTokenJWT,
+      user: user,
+    });
+  } else {
+    return res.status(StatusCodes.OK).json({
+      isSuccess: true,
+      message: "Account verified successfully",
 
-    access_token: accessTokenJWT,
-    refresh_token: refreshTokenJWT,
-    user: user,
-  });
+      // accessToken: accessTokenJWT,
+      // refreshToken: refreshTokenJWT,
+      // user: user,
+    });
+  }
 };
 
 const logout = async (req, res) => {
@@ -309,9 +395,10 @@ module.exports = {
   login,
   register,
   logout,
-  verifyEmail,
+  verifyCode,
   updateProfile,
   showMe,
   resetPassword,
   forgotPassword,
+  sendCode,
 };

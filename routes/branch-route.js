@@ -11,26 +11,26 @@ const {
 } = require("../middleware/authorization-middleware");
 const {
   // authenticateStoreMiddleware,
-  optionAuthenticateStoreMiddleware,
-} = require("../middleware/store-auth-middleware");
+  optionalAuthenticateUserMiddleware,
+} = require("../middleware/user-auth-middleware");
 
 const { storeConstant, adminConstant } = require("../config/constants");
 const {
-  authenticateMiddleware,
-} = require("../middleware/authentication-middleware");
+  authenticateUserMiddleware,
+} = require("../middleware/user-auth-middleware");
 
 const router = express.Router();
 
 router
   .route("/")
   .get(
-    optionAuthenticateStoreMiddleware,
+    optionalAuthenticateUserMiddleware,
     // authenticateStoreMiddleware,
     // authorizeMiddleware(admin, store),
     getAllStoreBranches
   )
   .post(
-    authenticateMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(adminConstant, storeConstant),
     createBranch
   );
@@ -38,12 +38,12 @@ router
   .route("/:id")
   .get(getBranch)
   .patch(
-    authenticateMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(adminConstant, storeConstant),
     updateBranch
   )
   .delete(
-    authenticateMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(adminConstant, storeConstant),
     deleteBranch
   );

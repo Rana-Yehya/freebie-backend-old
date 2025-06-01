@@ -32,6 +32,8 @@ model user {
   // what is the action after this?
   countryId          String?
   userCountry        country?      @relation(fields: [countryId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  stateId            String?
+  userState          state?        @relation(fields: [stateId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   phone              String        @unique
   email              String?       @unique @default("")
   password           String?
@@ -48,21 +50,22 @@ model user {
 
   // imageId     String?  
   // avatar      image?    @relation(fields: [imageId], references: [id])
+  order order[]
 }
 
 model branch {
-  id           String         @id @unique @default(uuid())
-  storeId      String
-  store        store          @relation(fields: [storeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  address      String
-  state        state          @relation(fields: [stateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  stateId      String
-  phone        String?
-  isFreezed    Boolean        @default(false)
-  workHours    workHour[]
-  productStock productStock[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  id            String          @id @unique @default(uuid())
+  storeId       String
+  store         store           @relation(fields: [storeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  address       String
+  state         state           @relation(fields: [stateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  stateId       String
+  phone         String?
+  isFreezed     Boolean         @default(false)
+  workHours     workHour[]
+  productStock  productStock[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
   // branchCity        String
   // branchState       String
   // branchZip         String
@@ -70,6 +73,7 @@ model branch {
   // branchLng         Float
   // country   country?    @relation(fields: [countryId], references: [id])
   // countryId String?
+  productsOrder productsOrder[]
 }
 
 model workHour {
@@ -137,14 +141,17 @@ model country {
 }
 
 model state {
-  id        String   @id @unique @default(uuid())
-  name      String
-  country   country  @relation(fields: [countryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  countryId String
-  city      city[]
-  branches  branch[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                       String          @id @unique @default(uuid())
+  name                     String
+  country                  country         @relation(fields: [countryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  countryId                String
+  city                     city[]
+  branches                 branch[]
+  createdAt                DateTime        @default(now())
+  updatedAt                DateTime        @updatedAt
+  originDeliveryTaxes      deliveryTaxes[] @relation("OriginStateFees")
+  destinationDeliveryTaxes deliveryTaxes[] @relation("DestinationStateFees")
+  user                     user[]
 }
 
 model city {
@@ -154,6 +161,25 @@ model city {
   stateId   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model deliveryTaxes {
+  id                 String    @id @unique @default(uuid())
+  name               String
+  originState        state     @relation("OriginStateFees", fields: [originStateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  originStateId      String
+  destinationState   state     @relation("DestinationStateFees", fields: [destinationStateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  destinationStateId String
+  baseFee            Float
+  feePerKg           Float
+  estimatedDays      Int?
+  effectiveDate      DateTime  @default(now())
+  expiryDate         DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("delivery_taxes")
 }
 
 model category {
@@ -208,6 +234,7 @@ model product {
   productUser                productUser[]
   createdAt                  DateTime          @default(now())
   updatedAt                  DateTime          @updatedAt
+  productsOrder              productsOrder[]
 }
 
 model productOccasion {
@@ -284,4 +311,51 @@ model transaction {
   storeId   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model info {
+  id        String   @id @unique @default(uuid())
+  // buy something or take money from wallet -> false = buy, true = take
+  slug      String   @unique
+  data      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model inbox {
+  id        String   @id @unique @default(uuid())
+  // buy something or take money from wallet -> false = buy, true = take
+  email     String
+  name      String
+  message   String
+  slug      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model order {
+  id            String          @id @unique @default(uuid())
+  // buy something or take money from wallet -> false = buy, true = take
+  userId        String
+  user          user            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  status        String
+  productsOrder productsOrder[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model productsOrder {
+  order     order    @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  orderId   String
+  product   product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productId String
+  branch    branch   @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  branchId  String
+  color     String
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([orderId])
 }

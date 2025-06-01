@@ -1,12 +1,13 @@
-const { UnauthorizatedError, UnauthenticatedError } = require("../errors");
+const { UnauthenticatedError } = require("../errors");
 const { isTokenValid } = require("../utils/jwt-utils");
 const { prisma } = require("../config/prisma");
-const { storeConstant } = require("../config/constants");
+const {
+  storeConstant,
+  userConstant,
+  adminConstant,
+} = require("../config/constants");
 
-// const { sendTokenToCookies } = require("../utils/jwt-utils");
-
-// const UserToken = require("../models/user-token-model");
-const authenticateStoreMiddleware = async (req, res, next) => {
+const authenticateUserMiddleware = async (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization || !authorization.startsWith("Bearer ")) {
     throw new UnauthenticatedError("Unauthorizated");
@@ -15,25 +16,32 @@ const authenticateStoreMiddleware = async (req, res, next) => {
   // const { accessToken, refreshToken } = req.signedCookies;
 
   if (accessToken) {
-    console.log(accessToken);
-
     const decoded = isTokenValid({
       token: accessToken,
       secret: process.env.ACCESS_JWT_SECRET,
     });
-    console.log(decoded);
+    // console.log("decoded", decoded);
 
     if (decoded) {
-      const user = await prisma.store.findUnique({
-        where: { id: decoded.userId },
-      });
-      console.log(user);
+      const user =
+        decoded.role === storeConstant
+          ? await prisma.store.findUnique({
+              where: { id: decoded.userId },
+            })
+          : await prisma.user.findUnique({
+              where: { id: decoded.userId },
+            });
+      // console.log("user.accessTokenSecret", user.accessTokenSecret);
+      // console.log("user", user);
 
       if (user.accessTokenSecret !== decoded.accessTokenSecret) {
         throw new UnauthenticatedError("Unauthorizated");
       }
       // const { userId, email } = decoded;
+
       req.user = user;
+      decoded.role === storeConstant ? req.user.role === storeConstant : null;
+
       return next();
     } else {
       throw new UnauthenticatedError("Unauthorizated");
@@ -42,7 +50,8 @@ const authenticateStoreMiddleware = async (req, res, next) => {
     throw new UnauthenticatedError("Unauthorizated");
   }
 };
-const optionAuthenticateStoreMiddleware = async (req, res, next) => {
+
+const optionalAuthenticateUserMiddleware = async (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization || authorization.startsWith("Bearer ") == false) {
     return next();
@@ -71,7 +80,17 @@ const optionAuthenticateStoreMiddleware = async (req, res, next) => {
       // const { userId, email } = decoded;
 
       req.user = user;
-      decoded.role === storeConstant ? req.user.role === storeConstant : null;
+      console.log("user ", user);
+      // if (decoded.role === storeConstant) {
+      //   req.user.role = storeConstant;
+      // } else if (decoded.role === adminConstant) {
+      //   req.user.role = adminConstant;
+      // } else {
+      //           req.user.role = userConstant;
+
+      // }
+      // decoded.role === userConstant ? (req.user.role = userConstant) : null;
+      // decoded.role === userConstant ? (req.user.role = userConstant) : null;
 
       return next();
     } else {
@@ -82,6 +101,6 @@ const optionAuthenticateStoreMiddleware = async (req, res, next) => {
   }
 };
 module.exports = {
-  authenticateStoreMiddleware,
-  optionAuthenticateStoreMiddleware,
+  optionalAuthenticateUserMiddleware,
+  authenticateUserMiddleware,
 };

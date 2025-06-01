@@ -9,8 +9,8 @@ const {
   logout,
 } = require("../controllers/admin-auth-controller");
 const {
-  authenticateMiddleware,
-} = require("../middleware/authentication-middleware");
+  authenticateUserMiddleware,
+} = require("../middleware/user-auth-middleware");
 const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
@@ -26,7 +26,7 @@ router.route("/login").post(login);
 // router.route("/forgot-password").post(forgotPassword);
 
 // router.route("/reset-password").post(resetPassword);
-router.route("/user-info").get(authenticateMiddleware, showMe);
-router.route("/logout").get(authenticateMiddleware, logout);
-// router.route("/updateUser").patch(authenticateMiddleware, updateProfile);
+router.route("/user-info").get(authenticateUserMiddleware, showMe);
+router.route("/logout").get(authenticateUserMiddleware, logout);
+// router.route("/updateUser").patch(authenticateUserMiddleware, updateProfile);
 module.exports = router;

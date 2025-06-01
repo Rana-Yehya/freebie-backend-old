@@ -11,7 +11,7 @@ const StoreZodModel = z.object({
   phone: z.string({ message: "Please enter a phone number" }),
   email: z.string({ message: "Please enter am email" }),
   password: z.string({ message: "Please enter a password" }),
-  socialLinks: SocialMediaZodModel,
+  // socialLinks: SocialMediaZodModel,
   // socialLinks: z
   //   .object({
   //     tiktok: z

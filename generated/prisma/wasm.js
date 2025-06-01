@@ -132,6 +132,7 @@ exports.Prisma.UserScalarFieldEnum = {
   dateOfBirth: 'dateOfBirth',
   gender: 'gender',
   countryId: 'countryId',
+  stateId: 'stateId',
   phone: 'phone',
   email: 'email',
   password: 'password',
@@ -222,6 +223,20 @@ exports.Prisma.CityScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.DeliveryTaxesScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  originStateId: 'originStateId',
+  destinationStateId: 'destinationStateId',
+  baseFee: 'baseFee',
+  feePerKg: 'feePerKg',
+  estimatedDays: 'estimatedDays',
+  effectiveDate: 'effectiveDate',
+  expiryDate: 'expiryDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -254,6 +269,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   discountPrecent: 'discountPrecent',
   discountStartTime: 'discountStartTime',
   discountEndTime: 'discountEndTime',
+  canBeDeliveredOutsideState: 'canBeDeliveredOutsideState',
   categoryId: 'categoryId',
   dimensionsWCm: 'dimensionsWCm',
   dimensionsHCm: 'dimensionsHCm',
@@ -310,6 +326,42 @@ exports.Prisma.TransactionScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.InfoScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  data: 'data',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.InboxScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  name: 'name',
+  message: 'message',
+  slug: 'slug',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.OrderScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProductsOrderScalarFieldEnum = {
+  orderId: 'orderId',
+  productId: 'productId',
+  branchId: 'branchId',
+  color: 'color',
+  quantity: 'quantity',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -336,6 +388,7 @@ exports.Prisma.ModelName = {
   country: 'country',
   state: 'state',
   city: 'city',
+  deliveryTaxes: 'deliveryTaxes',
   category: 'category',
   occasion: 'occasion',
   product: 'product',
@@ -344,7 +397,11 @@ exports.Prisma.ModelName = {
   review: 'review',
   userCart: 'userCart',
   productUser: 'productUser',
-  transaction: 'transaction'
+  transaction: 'transaction',
+  info: 'info',
+  inbox: 'inbox',
+  order: 'order',
+  productsOrder: 'productsOrder'
 };
 
 /**

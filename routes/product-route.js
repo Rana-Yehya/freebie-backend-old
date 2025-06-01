@@ -11,11 +11,13 @@ const {
   getAllProductsPerCategories,
   getProduct,
   searchAllProducts,
-} = require("../controllers/product-controller");
+  getAllProductsPerStoreBranch,
+} = require("../controllers/product-search-controller");
 
 const {
-  authenticateMiddleware,
-} = require("../middleware/authentication-middleware");
+  authenticateUserMiddleware,
+  optionalAuthenticateUserMiddleware,
+} = require("../middleware/user-auth-middleware");
 const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
@@ -27,25 +29,36 @@ const router = express.Router();
 router
   .route("/")
   .post(
-    authenticateMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(adminConstant, storeConstant),
     createProduct
   );
-router.route("/per-categories").get(getAllProductsPerCategories);
-router.route("/per-occasions").get(getAllProductsPerOccasions);
-router.route("/per-states").get(getAllProductsPerState);
-router.route("/search").get(searchAllProducts);
+router
+  .route("/per-categories")
+  .get(optionalAuthenticateUserMiddleware, getAllProductsPerCategories);
+router
+  .route("/per-occasions")
+  .get(optionalAuthenticateUserMiddleware, getAllProductsPerOccasions);
+router
+  .route("/per-states")
+  .get(optionalAuthenticateUserMiddleware, getAllProductsPerState);
+router
+  .route("/search")
+  .get(optionalAuthenticateUserMiddleware, searchAllProducts);
+router
+  .route("/per-branches")
+  .get(optionalAuthenticateUserMiddleware, getAllProductsPerStoreBranch);
 
 router
   .route("/:id")
   .get(getProduct)
   .patch(
-    authenticateMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(adminConstant, storeConstant),
     updateProduct
   )
   .delete(
-    authenticateMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(adminConstant, storeConstant),
     deleteProduct
   );

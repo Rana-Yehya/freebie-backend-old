@@ -58,8 +58,8 @@ const login = async (req, res) => {
   });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    access_token: accessTokenJWT,
-    refresh_token: refreshTokenJWT,
+    accessToken: accessTokenJWT,
+    refreshToken: refreshTokenJWT,
     user: user,
   });
 };

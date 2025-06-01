@@ -11,6 +11,8 @@ const cors = require("cors");
 const xss = require("xss-clean");
 require("dotenv").config();
 require("express-async-errors");
+require("./config/notification/notifications-init");
+
 const adminAuthRouter = require("./routes/admin-auth-route");
 const adminRouter = require("./routes/admin-route");
 const storeAuthRouter = require("./routes/store-auth-route");
@@ -23,13 +25,15 @@ const occasionRouter = require("./routes/occasion-route");
 const productsRouter = require("./routes/product-route");
 const storeBranchesRouter = require("./routes/branch-route");
 const cartRouter = require("./routes/cart-route");
+const infoRouter = require("./routes/info-route");
+const supportRouter = require("./routes/support-route");
+const notificationsRouter = require("./routes/notifications-route");
 
 const notFound = require("./middleware/not-found");
 const errorHandler = require("./middleware/error-handler");
 
 const app = express();
 
-app.use(morgan("tiny"));
 // app.use(express.json());
 // app.use(fileUpload());
 // app.set("trust proxy", "192.168.1.135");
@@ -44,7 +48,7 @@ app.use(morgan("tiny"));
 //   })
 // );
 
-// app.use(cors());
+app.use(cors());
 app.use(helmet());
 app.use(xss());
 // app.use(mongoSanitize());
@@ -85,13 +89,16 @@ app.use("/api/v1/admin/auth", adminAuthRouter);
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/stores/auth", storeAuthRouter);
 app.use("/api/v1/store/branches", storeBranchesRouter);
-app.use("/api/v1/country", countryRouter);
+app.use("/api/v1/countries", countryRouter);
 app.use("/api/v1/states", stateRouter);
 app.use("/api/v1/cities", citiesRouter);
 app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/occasions", occasionRouter);
 app.use("/api/v1/products", productsRouter);
 app.use("/api/v1/carts", cartRouter);
+app.use("/api/v1/info", infoRouter);
+app.use("/api/v1/support", supportRouter);
+app.use("/api/v1/notifications", notificationsRouter);
 
 app.use(notFound);
 app.use(errorHandler);

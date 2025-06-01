@@ -7,12 +7,18 @@ const {
   UnauthenticatedError,
 } = require("../errors");
 const { UpdateProductZodModel } = require("../models/update-product-zod-model");
+const { userConstant, adminConstant } = require("../config/constants");
 const getAllProductsPerOccasions = async (req, res, next) => {
+  // let isAcceptedByAdmin = true;
+  // if (req.user.role === adminConstant) {
+  //   isAcceptedByAdmin = null;
+  // }
   const occasionsIds = req.query.ids;
   if (occasionsIds == undefined || occasionsIds.length === 0) {
     throw new BadRequestError("Invalid occasions IDs");
   }
   const occasionsIdsList = JSON.parse(occasionsIds);
+
   const productIds = await prisma.productOccasion.findMany({
     where: {
       occasionsId: { in: occasionsIdsList },
@@ -27,10 +33,18 @@ const getAllProductsPerOccasions = async (req, res, next) => {
     },
   });
   console.log(productIds);
+
+  let productQuerySearch = {
+    AND: [{ id: { in: productIds } }, { isAcceptedByAdmin: true }],
+  };
+
+  // if (req.user && req.user.role === adminConstant) {
+  //   productQuerySearch = {
+  //     id: { in: productIds },
+  //   };
+  // }
   const product = await prisma.product.findMany({
-    where: {
-      id: { in: productIds },
-    },
+    where: productQuerySearch,
   });
   return res
     .status(StatusCodes.OK)
@@ -43,10 +57,19 @@ const getAllProductsPerCategories = async (req, res, next) => {
   }
   const categoryIdsList = JSON.parse(categoryIds);
   console.log(categoryIdsList);
-  const product = await prisma.product.findMany({
-    where: {
+
+  let productQuerySearch = {
+    AND: [{ categoryId: { in: categoryIdsList } }, { isAcceptedByAdmin: true }],
+  };
+  //   console.log(req.user);
+
+  if (req.user && req.user.role === adminConstant) {
+    productQuerySearch = {
       categoryId: { in: categoryIdsList },
-    },
+    };
+  }
+  const product = await prisma.product.findMany({
+    where: productQuerySearch,
   });
   return res
     .status(StatusCodes.OK)
@@ -94,10 +117,18 @@ const getAllProductsPerState = async (req, res, next) => {
 
   const productIdsList = productIds.map((item) => item.productId);
 
-  const product = await prisma.product.findMany({
-    where: {
+  let productQuerySearch = {
+    AND: [{ id: { in: productIdsList } }, { isAcceptedByAdmin: true }],
+  };
+  //   console.log(req.user);
+
+  if (req.user && req.user.role === adminConstant) {
+    productQuerySearch = {
       id: { in: productIdsList },
-    },
+    };
+  }
+  const product = await prisma.product.findMany({
+    where: productQuerySearch,
   });
   return res
     .status(StatusCodes.OK)
@@ -182,19 +213,45 @@ const searchAllProducts = async (req, res, next) => {
   const productOccsionsIdsList = productOccsionsIds.map(
     (item) => item.productId
   );
+  // let productQuerySearch = {
+  //   AND: [{ id: { in: productIdsList } }, { isAcceptedByAdmin: true }],
+  // };
 
+  let productQuerySearch = {
+    AND: [
+      {
+        name: name ? { contains: name.trim() } : undefined,
+        id: { in: [...productIdsList, ...productOccsionsIdsList] },
+        // occasionsId: { in: occasionsIdsList },
+        categoryId: categoryIdsList ? { in: categoryIdsList } : undefined,
+        //color: { in: colorList },
+
+        price: priceHighFloat
+          ? { gte: priceSmallFloat, lte: priceHighFloat }
+          : { gte: priceSmallFloat },
+      },
+      { isAcceptedByAdmin: true },
+    ],
+  };
+  //   console.log(req.user);
+
+  if (req.user && req.user.role === adminConstant) {
+    productQuerySearch = {
+      id: {
+        name: name ? { contains: name.trim() } : undefined,
+        id: { in: [...productIdsList, ...productOccsionsIdsList] },
+        // occasionsId: { in: occasionsIdsList },
+        categoryId: categoryIdsList ? { in: categoryIdsList } : undefined,
+        //color: { in: colorList },
+
+        price: priceHighFloat
+          ? { gte: priceSmallFloat, lte: priceHighFloat }
+          : { gte: priceSmallFloat },
+      },
+    };
+  }
   const product = await prisma.product.findMany({
-    where: {
-      name: name ? { contains: name.trim() } : undefined,
-      id: { in: [...productIdsList, ...productOccsionsIdsList] },
-      // occasionsId: { in: occasionsIdsList },
-      categoryId: categoryIdsList ? { in: categoryIdsList } : undefined,
-      //color: { in: colorList },
-
-      price: priceHighFloat
-        ? { gte: priceSmallFloat, lte: priceHighFloat }
-        : { gte: priceSmallFloat },
-    },
+    where: productQuerySearch,
     include: {
       productStock: true,
     },
@@ -204,14 +261,52 @@ const searchAllProducts = async (req, res, next) => {
     .json({ isSuccess: true, count: product.length, data: product });
 };
 
+//TODO add user role (isAcceptedByAdmin) to this query
+const getAllProductsPerStoreBranch = async (req, res, next) => {
+  const branchId = req.query.branchId;
+  //
+  const productInBranch = await prisma.productStock.findMany({
+    where: {
+      branchId: branchId,
+    },
+    select: {
+      product: true,
+      productId: false,
+      branchId: false,
+      branch: false,
+      stock: false,
+      color: false,
+    },
+  });
+  const productList = productInBranch.map((product) => product.product);
+  // console.log(productList);
+  // console.log(productInBranch.product);
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    count: productList.length,
+    data: productList,
+  });
+};
+
 const getProduct = async (req, res, next) => {
   const { id: productId } = req.params;
+  // const searchInCart =
+  //   req.user != null && req.user.role === userConstant ? true : false;
   const product = await prisma.product.findUnique({
     where: { id: productId },
     include: {
       productStock: true,
     },
   });
+
+  //  const productUser =  searchInCart ?
+  // await prisma.userCart.findMany({
+  //     where: {
+  //       userId: req.user.id,
+  //       productId: productId,
+  //     },
+  //   }) : undefined;
+
   // const productStock = await prisma.productStock.findMany({
   //   where: { productId: productId },
   // });
@@ -227,4 +322,5 @@ module.exports = {
   getProduct,
   getAllProductsPerState,
   searchAllProducts,
+  getAllProductsPerStoreBranch,
 };

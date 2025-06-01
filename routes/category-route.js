@@ -7,8 +7,8 @@ const {
   deleteCategory,
 } = require("../controllers/category-controller");
 const {
-  authenticateMiddleware,
-} = require("../middleware/authentication-middleware");
+  authenticateUserMiddleware,
+} = require("../middleware/user-auth-middleware");
 const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
@@ -20,7 +20,7 @@ router
   .route("/")
   .get(getAllCategories)
   .post(
-    authenticateMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(adminConstant),
     createCategory
   );
@@ -28,12 +28,12 @@ router
   .route("/:id")
   .get(getCategory)
   .patch(
-    authenticateMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(adminConstant),
     updateCategory
   )
   .delete(
-    authenticateMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(adminConstant),
     deleteCategory
   );

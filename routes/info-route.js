@@ -1,8 +1,13 @@
 const express = require("express");
 const {
-  approveStore,
-  getAllStores,
-} = require("../controllers/admin-controller");
+  aboutApp,
+  privacyPolicy,
+  refundPolicy,
+  createInfo,
+  // deleteCity,
+} = require("../controllers/info-controller");
+
+const { userConstant, adminConstant } = require("../config/constants");
 const {
   authenticateUserMiddleware,
 } = require("../middleware/user-auth-middleware");
@@ -10,23 +15,25 @@ const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
 
-const { adminConstant } = require("../config/constants");
-
 const router = express.Router();
+//
+router.route("/about-app").get(aboutApp);
+router.route("/privacy-and-policy").get(privacyPolicy);
+router.route("/refund-policy").get(refundPolicy);
 
 router
-  .route("/approve-store")
+  .route("/create-info")
   .post(
     authenticateUserMiddleware,
     authorizeMiddleware(adminConstant),
-    approveStore
+    createInfo
   );
-
 router
-  .route("/stores")
-  .get(
+  .route("/update-info")
+  .patch(
     authenticateUserMiddleware,
     authorizeMiddleware(adminConstant),
-    getAllStores
+    createInfo
   );
+
 module.exports = router;

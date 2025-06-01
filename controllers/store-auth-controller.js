@@ -14,16 +14,15 @@ const { StoreZodModel } = require("../models/store-zod-model");
 const { createAccessJWT, createRefreshJWT } = require("../utils/jwt-utils");
 const { passwordEncrypt, passwordCompare } = require("../utils/password-utils");
 const { userConstant, storeConstant } = require("../config/constants");
+const { SocialMediaZodModel } = require("../models/social-media-zod-model");
 
 const login = async (req, res) => {
-  const { email, phoneNumber, password } = req.body;
-  if (!(email || phoneNumber) && !password) {
-    throw new BadRequestError(
-      "Please provide email or phone number and password"
-    );
+  const { email, password } = req.body;
+  if (!email && !password) {
+    throw new BadRequestError("Please provide email and password");
   }
   const user = await prisma.store.findFirst({
-    where: { OR: [{ email: email }, { phone: phoneNumber }] },
+    where: { email: email },
   });
   // const user = phoneNumber
   //   ? await prisma.store.findUnique({
@@ -65,24 +64,42 @@ const login = async (req, res) => {
   });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    access_token: accessTokenJWT,
-    refresh_token: refreshTokenJWT,
+    accessToken: accessTokenJWT,
+    refreshToken: refreshTokenJWT,
     user: user,
   });
 };
 
 const register = async (req, res, next) => {
+  console.log(req.body);
   const {
-    name,
+    username: name,
     bio,
     logo,
     banner,
-    phoneNumber,
+    phone: phoneNumber,
     email,
     password,
-    socialLinks,
+    tiktok,
+    youtube,
+    facebook,
+    x,
+    instagram,
+    // socialLinks,
     type,
   } = req.body;
+  const socialLinksZodModel = SocialMediaZodModel.safeParse({
+    tiktok: tiktok,
+    youtube: youtube,
+    facebook: facebook,
+    x: x,
+    instagram: instagram,
+  });
+
+  if (!socialLinksZodModel.success) {
+    throw new BadRequestError(socialLinksZodModel.error.errors[0].message);
+  }
+
   const storeZodModel = StoreZodModel.safeParse({
     name: name,
     bio: bio,
@@ -92,7 +109,14 @@ const register = async (req, res, next) => {
     email: email,
     password: password,
     type: type,
-    socialLinks: socialLinks,
+    // socialLinks: socialLinksZodModel,
+    /*
+      tiktok,
+      youtube,
+      facebook,
+      x,
+      instagram,
+    */
   });
   const isPhoneValid = phone(phoneNumber.toString());
 
@@ -116,6 +140,8 @@ const register = async (req, res, next) => {
   const userInDB = await prisma.user.findFirst({
     where: { OR: [{ email: email }, { phone: phoneNumber }] },
   });
+  console.log(storeInDB);
+  console.log(userInDB);
   if (storeInDB || userInDB) {
     throw new BadRequestError(
       "Account already in use or has an individal account"
@@ -124,11 +150,11 @@ const register = async (req, res, next) => {
   const passwordHash = await passwordEncrypt(password);
   const socialLinksDb = await prisma.socialLink.create({
     data: {
-      tiktok: socialLinks.tiktok || undefined,
-      youtube: socialLinks.youtube || undefined,
-      facebook: socialLinks.facebook || undefined,
-      x: socialLinks.x || undefined,
-      instagram: socialLinks.instagram || undefined,
+      tiktok: tiktok || undefined,
+      youtube: youtube || undefined,
+      facebook: facebook || undefined,
+      x: x || undefined,
+      instagram: instagram || undefined,
       // store: store.id,
     },
   });
@@ -166,7 +192,7 @@ const register = async (req, res, next) => {
 };
 
 const logout = async (req, res) => {
-  await prisma.user.update({
+  await prisma.store.update({
     where: { id: req.user.id },
     data: {
       refreshTokenSecret: null,
@@ -193,6 +219,16 @@ const logout = async (req, res) => {
   });
 };
 
+const deleteStore = async (req, res) => {
+  const storeId = req.user.role === storeConstant ? req.user.id : req.query.id;
+  await prisma.store.delete({
+    where: { id: storeId },
+  });
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "Store Deleted successfully",
+  });
+};
 const updateProfile = async (req, res) => {
   // const { email, name } = req.body;
   // if (!email || !name) {
@@ -296,4 +332,5 @@ module.exports = {
   showMe,
   resetPassword,
   forgotPassword,
+  deleteStore,
 };

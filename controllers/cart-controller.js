@@ -8,19 +8,48 @@ const {
 } = require("../errors");
 const { UserProductZodModel } = require("../models/user-product-zod-model");
 const getAllCartItems = async (req, res, next) => {
-  const userCarts = await prisma.userCart.findMany({
+  const userCartId = await prisma.userCart.findUnique({
+    where: { userId: req.user.id },
     include: {
-      product: true,
+      product: false,
+      // id: true,
+      userId: false,
+      user: false,
+      createdAt: false,
+      updatedAt: false,
     },
   });
-  // const productUser = await prisma.productUser.findMany({
-  //   where: { userCartId: { in: userCarts.map((cart) => cart.id) } },
-  // });
-  return res.status(StatusCodes.OK).json({
-    isSuccess: true,
-    count: userCarts.length,
-    data: userCarts,
-  });
+  if (userCartId) {
+    const productsList = await prisma.productUser.findMany({
+      where: { userCartId: userCartId.id },
+      include: {
+        product: true,
+        userCartId: false,
+        productId: false,
+        createdAt: false,
+        updatedAt: false,
+      },
+    });
+    // const productsList = userCarts.map((item) => item.product);
+    // console.log(productsList);
+    // const productUser = await prisma.productUser.findMany({
+    //   where: { userCartId: { in: userCarts.map((cart) => cart.id) } },
+    // });
+    return res.status(StatusCodes.OK).json({
+      isSuccess: true,
+      cartId: userCartId.id,
+      count: productsList.length,
+      data: productsList,
+    });
+  } else {
+    return res.status(StatusCodes.OK).json({
+      isSuccess: true,
+      message: "Cart is empty",
+      // cartId: userCartId.id,
+      // count: productsList.length,
+      // data: productsList,
+    });
+  }
 };
 // const deleteCartItem = async (req, res, next) => {
 //   const {
@@ -62,7 +91,7 @@ const createCartItem = async (req, res, next) => {
     select: { id: true },
   });
   if (
-    productUser.canBeDeliveredOutsideState == false &&
+    product.canBeDeliveredOutsideState == false &&
     (branchIds == undefined || branchIds.length == 0)
   ) {
     throw new BadRequestError(

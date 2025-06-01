@@ -7,8 +7,8 @@ const {
   deleteCity,
 } = require("../controllers/city-controller");
 const {
-  authenticateMiddleware,
-} = require("../middleware/authentication-middleware");
+  authenticateUserMiddleware,
+} = require("../middleware/user-auth-middleware");
 const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
@@ -19,13 +19,21 @@ const router = express.Router();
 router
   .route("/")
   .get(getAllStateCities)
-  .post(authenticateMiddleware, authorizeMiddleware(adminConstant), createCity);
+  .post(
+    authenticateUserMiddleware,
+    authorizeMiddleware(adminConstant),
+    createCity
+  );
 router
   .route("/:id")
   .get(getCity)
-  .patch(authenticateMiddleware, authorizeMiddleware(adminConstant), updateCity)
+  .patch(
+    authenticateUserMiddleware,
+    authorizeMiddleware(adminConstant),
+    updateCity
+  )
   .delete(
-    authenticateMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(adminConstant),
     deleteCity
   );

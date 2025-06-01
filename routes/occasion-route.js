@@ -7,8 +7,8 @@ const {
   deleteOccasion,
 } = require("../controllers/occasion-controller");
 const {
-  authenticateMiddleware,
-} = require("../middleware/authentication-middleware");
+  authenticateUserMiddleware,
+} = require("../middleware/user-auth-middleware");
 const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
@@ -20,7 +20,7 @@ router
   .route("/")
   .get(getAllOccasions)
   .post(
-    authenticateMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(adminConstant),
     createOccasion
   );
@@ -28,12 +28,12 @@ router
   .route("/:id")
   .get(getOccasion)
   .patch(
-    authenticateMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(adminConstant),
     updateOccasion
   )
   .delete(
-    authenticateMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(adminConstant),
     deleteOccasion
   );

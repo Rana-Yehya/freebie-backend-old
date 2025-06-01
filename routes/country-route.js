@@ -7,8 +7,8 @@ const {
   deleteCountry,
 } = require("../controllers/country-controller");
 const {
-  authenticateMiddleware,
-} = require("../middleware/authentication-middleware");
+  authenticateUserMiddleware,
+} = require("../middleware/user-auth-middleware");
 const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
@@ -20,7 +20,7 @@ router
   .route("/")
   .get(getAllCountries)
   .post(
-    authenticateMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(adminConstant),
     createCountry
   );
@@ -28,12 +28,12 @@ router
   .route("/:id")
   .get(getCountry)
   .patch(
-    authenticateMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(adminConstant),
     updateCountry
   )
   .delete(
-    authenticateMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(adminConstant),
     deleteCountry
   );
