@@ -15,6 +15,7 @@ const { createAccessJWT, createRefreshJWT } = require("../utils/jwt-utils");
 const { passwordEncrypt, passwordCompare } = require("../utils/password-utils");
 const { userConstant, storeConstant } = require("../config/constants");
 const { SocialMediaZodModel } = require("../models/social-media-zod-model");
+const { uploadImage } = require("../helpers/cloudinary/upload-image");
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -24,13 +25,6 @@ const login = async (req, res) => {
   const user = await prisma.store.findFirst({
     where: { email: email },
   });
-  // const user = phoneNumber
-  //   ? await prisma.store.findUnique({
-  //       where: { phone: phoneNumber }, // email: email,
-  //     })
-  //   : await prisma.store.findUnique({
-  //       where: { email: email }, // email: email,
-  //     });
   if (!user) {
     throw new UnauthenticatedError("Invalid Credentials");
   }
@@ -71,12 +65,9 @@ const login = async (req, res) => {
 };
 
 const register = async (req, res, next) => {
-  console.log(req.body);
   const {
     username: name,
     bio,
-    logo,
-    banner,
     phone: phoneNumber,
     email,
     password,
@@ -100,6 +91,10 @@ const register = async (req, res, next) => {
     throw new BadRequestError(socialLinksZodModel.error.errors[0].message);
   }
 
+  const logo = req.files.logo;
+  const banner = req.files.banner;
+
+  // console.log(logo);
   const storeZodModel = StoreZodModel.safeParse({
     name: name,
     bio: bio,
@@ -118,10 +113,10 @@ const register = async (req, res, next) => {
       instagram,
     */
   });
+  // console.log(phoneNumber);
   const isPhoneValid = phone(phoneNumber.toString());
 
-  console.log(isPhoneValid);
-  console.log(phoneNumber);
+  // console.log(isPhoneValid);
 
   if (!storeZodModel.success) {
     throw new BadRequestError(storeZodModel.error.errors[0].message);
@@ -140,45 +135,49 @@ const register = async (req, res, next) => {
   const userInDB = await prisma.user.findFirst({
     where: { OR: [{ email: email }, { phone: phoneNumber }] },
   });
-  console.log(storeInDB);
-  console.log(userInDB);
   if (storeInDB || userInDB) {
     throw new BadRequestError(
       "Account already in use or has an individal account"
     );
   }
-  const passwordHash = await passwordEncrypt(password);
-  const socialLinksDb = await prisma.socialLink.create({
-    data: {
-      tiktok: tiktok || undefined,
-      youtube: youtube || undefined,
-      facebook: facebook || undefined,
-      x: x || undefined,
-      instagram: instagram || undefined,
-      // store: store.id,
-    },
+  const [logoUploadedSecureUrl, logoUploadedPublicId] = await uploadImage({
+    image: logo,
   });
 
+  const [bannerUploadedSecureUrl, bannerUploadedPublicId] = await uploadImage({
+    image: banner,
+  });
+  const passwordHash = await passwordEncrypt(password);
   const store = await prisma.store.create({
     data: {
       name: name,
       bio: bio,
-      logo: logo,
-      banner: banner,
+      logo: {
+        create: {
+          publicId: logoUploadedPublicId,
+          secureUrl: logoUploadedSecureUrl,
+        },
+      },
+      banner: {
+        create: {
+          publicId: bannerUploadedPublicId,
+          secureUrl: bannerUploadedSecureUrl,
+        },
+      },
       phone: phoneNumber,
       email: email,
       password: passwordHash,
-      socialLinksId: socialLinksDb.id,
+      // socialLinksId: socialLinksDb.id,
       // socialLinks: {},
-      // socialLinks: {
-      //   data: {
-      //     tiktok: socialLinks.tiktok || undefined,
-      //     youtube: socialLinks.youtube || undefined,
-      //     facebook: socialLinks.facebook || undefined,
-      //     x: socialLinks.x || undefined,
-      //     instagram: socialLinks.instagram || undefined,
-      //   },
-      // },
+      socialLinks: {
+        create: {
+          tiktok: tiktok || undefined,
+          youtube: youtube || undefined,
+          facebook: facebook || undefined,
+          x: x || undefined,
+          instagram: instagram || undefined,
+        },
+      },
       type: type || undefined,
     },
   });
@@ -186,7 +185,6 @@ const register = async (req, res, next) => {
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
     store,
-    socialLinksDb,
     message: "Store created. Please wait for admin's approval",
   });
 };
@@ -200,18 +198,18 @@ const logout = async (req, res) => {
     },
   });
   // res.cookie("accessToken", null, {
-  //   expires: new Date(Date.now()),
+  //   expires: new Date(Date()),
   //   httpOnly: true,
   //   secure: process.env.NODE_ENV === "production",
   //   signed: true,
-  //   // maxAge: new Date(Date.now()),
+  //   // maxAge: new Date(Date()),
   // });
   // res.cookie("refreshToken", null, {
-  //   expires: new Date(Date.now()),
+  //   expires: new Date(Date()),
   //   httpOnly: true,
   //   secure: process.env.NODE_ENV === "production",
   //   signed: true,
-  //   // maxAge: new Date(Date.now()),
+  //   // maxAge: new Date(Date()),
   // });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
@@ -260,12 +258,12 @@ const resetPassword = async (req, res) => {
   // if (!userInDB) {
   //   throw new BadRequestError("This user in not in the database");
   // }
-  // console.log(userInDB.passwordTokenExpiresAt - Date.now());
-  // console.log(userInDB.passwordTokenExpiresAt - Date.now() < 1000 * 60 * 10);
+  // console.log(userInDB.passwordTokenExpiresAt - Date());
+  // console.log(userInDB.passwordTokenExpiresAt - Date() < 1000 * 60 * 10);
   // if (
   //   !(
   //     userInDB.passwordToken === token &&
-  //     userInDB.passwordTokenExpiresAt - Date.now() < 1000 * 60 * 10
+  //     userInDB.passwordTokenExpiresAt - Date() < 1000 * 60 * 10
   //   )
   // ) {
   //   throw new BadRequestError("The password validation time is expired");
@@ -290,7 +288,7 @@ const forgotPassword = async (req, res) => {
   // }
   // if (
   //   userInDB.passwordToken &&
-  //   Date.now() - userInDB.passwordTokenExpiresAt < 1000 * 60 * 10
+  //   Date() - userInDB.passwordTokenExpiresAt < 1000 * 60 * 10
   // ) {
   //   return res.status(StatusCodes.OK).json({
   //     isSuccess: true,
@@ -299,7 +297,7 @@ const forgotPassword = async (req, res) => {
   // }
   // const passwordToken = crypto.randomBytes(70).toString("hex");
   // userInDB.passwordToken = passwordToken;
-  // userInDB.passwordTokenExpiresAt = new Date(Date.now() + 1000 * 60 * 10); // ten mins
+  // userInDB.passwordTokenExpiresAt = new Date(Date() + 1000 * 60 * 10); // ten mins
   // await userInDB.save();
   // const protocol = req.protocol;
   // const host = req.get("host");

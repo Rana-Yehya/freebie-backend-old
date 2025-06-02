@@ -73,6 +73,7 @@ const register = async (req, res, next) => {
     email,
     role,
     password,
+    userState,
   } = req.body;
   if (!password) {
     throw new BadRequestError("Password is required");
@@ -86,6 +87,7 @@ const register = async (req, res, next) => {
     phone: phoneNumber,
     role: role,
     password: password,
+    userState: userState,
   });
   const isPhoneValid = phone(phoneNumber.toString());
 
@@ -106,11 +108,19 @@ const register = async (req, res, next) => {
   //   where: { email: email, phone: phoneNumber, role: admin },
   // });
   // if (!userInDB) {
-  const country = await prisma.country.findUnique({
-    where: { countryIsoCode: userCountry },
+  // const country = await prisma.country.findUnique({
+  //   where: { countryIsoCode: userCountry },
+  // });
+  const state = await prisma.state.findUnique({
+    where: { countryId: userCountry, id: userState },
   });
-  if (!country) {
-    throw new BadRequestError("Country not found");
+  // if (!country) {
+  //   throw new BadRequestError("Country not found");
+  // }
+  if (!state) {
+    throw new BadRequestError(
+      "State not found or does not belong to this country"
+    );
   }
   const parse = Date.parse(dateOfBirth);
   const passwordHash = await passwordEncrypt(password);
@@ -123,7 +133,8 @@ const register = async (req, res, next) => {
       gender: gender,
       email: email,
       phone: phoneNumber,
-      countryId: country.id,
+      countryId: userCountry,
+      stateId: userState,
       role: adminConstant,
       isVerified: true,
       password: passwordHash,

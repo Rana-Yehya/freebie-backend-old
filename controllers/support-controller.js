@@ -68,7 +68,9 @@ const sendInbox = async (req, res, next) => {
     },
   });
 
-  return res.status(StatusCodes.CREATED).json({ isSuccess: true, data: inbox });
+  return res
+    .status(StatusCodes.CREATED)
+    .json({ isSuccess: true, message: "Support Ticket Sent Successfully" });
 };
 
 const deleteInbox = async (req, res, next) => {

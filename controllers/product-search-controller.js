@@ -1,4 +1,4 @@
-const { ProductZodModel } = require("../models/product-zod-model");
+const { CreateProductZodModel } = require("../models/create-product-zod-model");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
 const {
@@ -14,6 +14,8 @@ const getAllProductsPerOccasions = async (req, res, next) => {
   //   isAcceptedByAdmin = null;
   // }
   const occasionsIds = req.query.ids;
+  const { page = 1, limit = 10 } = req.query;
+
   if (occasionsIds == undefined || occasionsIds.length === 0) {
     throw new BadRequestError("Invalid occasions IDs");
   }
@@ -44,6 +46,8 @@ const getAllProductsPerOccasions = async (req, res, next) => {
   //   };
   // }
   const product = await prisma.product.findMany({
+    take: limit,
+    skip: (page - 1) * limit,
     where: productQuerySearch,
   });
   return res
@@ -52,6 +56,8 @@ const getAllProductsPerOccasions = async (req, res, next) => {
 };
 const getAllProductsPerCategories = async (req, res, next) => {
   const categoryIds = req.query.ids;
+  const { page = 1, limit = 10 } = req.query;
+
   if (categoryIds == undefined || categoryIds.length === 0) {
     throw new BadRequestError("Invalid category IDs");
   }
@@ -69,6 +75,8 @@ const getAllProductsPerCategories = async (req, res, next) => {
     };
   }
   const product = await prisma.product.findMany({
+    take: limit,
+    skip: (page - 1) * limit,
     where: productQuerySearch,
   });
   return res
@@ -76,7 +84,174 @@ const getAllProductsPerCategories = async (req, res, next) => {
     .json({ isSuccess: true, count: product.length, data: product });
 };
 
+const getFeaturedProducts = async (req, res, next) => {
+  const { page = 1, limit = 10 } = req.query;
+
+  let productQuerySearch = {
+    AND: [{ isFeatured: true }, { isAcceptedByAdmin: true }],
+  };
+  //   console.log(req.user);
+
+  if (req.user && req.user.role === adminConstant) {
+    productQuerySearch = {
+      isFeatured: true,
+    };
+  }
+  const product = await prisma.product.findMany({
+    take: limit,
+    skip: (page - 1) * limit,
+    where: productQuerySearch,
+  });
+  return res
+    .status(StatusCodes.OK)
+    .json({ isSuccess: true, count: product.length, data: product });
+};
+
+const getPopularProducts = async (req, res, next) => {
+  const { page = 1, limit = 10 } = req.query;
+
+  let productQuerySearch = {
+    AND: [{ isPopular: true }, { isAcceptedByAdmin: true }],
+  };
+  //   console.log(req.user);
+
+  if (req.user && req.user.role === adminConstant) {
+    productQuerySearch = {
+      isPopular: true,
+    };
+  }
+  const product = await prisma.product.findMany({
+    take: limit,
+    skip: (page - 1) * limit,
+    where: productQuerySearch,
+  });
+  return res
+    .status(StatusCodes.OK)
+    .json({ isSuccess: true, count: product.length, data: product });
+};
+const getBigSaleProducts = async (req, res, next) => {
+  const { page = 1, limit = 10 } = req.query;
+  let productQuerySearch = {
+    AND: [
+      {
+        discountEndTime: {
+          lte: new Date().toISOString(),
+        },
+      },
+      {
+        discountStartTime: {
+          gte: new Date().toISOString(),
+        },
+      },
+      { isAcceptedByAdmin: true },
+    ],
+  };
+  //   console.log(req.user);
+
+  if (req.user && req.user.role === adminConstant) {
+    productQuerySearch = {
+      AND: [
+        {
+          discountEndTime: {
+            lte: new Date().toISOString(),
+          },
+        },
+        {
+          discountStartTime: {
+            gte: new Date().toISOString(),
+          },
+        },
+      ],
+    };
+  }
+  const product = await prisma.product.findMany({
+    take: limit,
+    skip: (page - 1) * limit,
+    where: productQuerySearch,
+  });
+  return res
+    .status(StatusCodes.OK)
+    .json({ isSuccess: true, count: product.length, data: product });
+};
+///canBeDeliveredOutsideState
+
+const getAllProductsCanBeDeliveredOutsideStates = async (req, res, next) => {
+  const { page = 1, limit = 10 } = req.query;
+
+  const stateIds = req.query.ids;
+  if (stateIds == undefined || stateIds.length === 0) {
+    throw new BadRequestError("Invalid state IDs");
+  }
+  //TODO IS THERE A BETTER IMPL
+  const stateIdsList = JSON.parse(stateIds);
+  // const branchIds = await prisma.branch.findMany({
+  //   where: {
+  //     stateId: { not: { in: stateIdsList } },
+  //     // stateId: { in: stateIdsList },
+  //   },
+  //   select: {
+  //     id: true,
+  //     address: false,
+  //     phone: false,
+  //     isFreezed: false,
+  //     workHours: false,
+  //     productStock: false,
+  //     createdAt: false,
+  //     updatedAt: false,
+  //   },
+  // });
+  // { productStock : { branch: {      stateId: { not: { in: stateIdsList } }, },
+  //  }}
+  // const branchIdsList = branchIds.map((item) => item.id);
+  console.log(stateIdsList);
+
+  const productIds = await prisma.productStock.findMany({
+    where: {
+      branch: { stateId: { not: { in: stateIdsList } } },
+      // branchId: { in: branchIdsList },
+    },
+    select: {
+      product: false,
+      productId: true,
+      branch: false,
+      branchId: false,
+      stock: false,
+      createdAt: false,
+      updatedAt: false,
+    },
+  });
+  console.log(productIds);
+
+  const productIdsList = productIds.map((item) => item.productId);
+  console.log(productIdsList);
+
+  let productQuerySearch = {
+    AND: [
+      { id: { in: productIdsList } },
+      { canBeDeliveredOutsideState: true },
+      { isAcceptedByAdmin: true },
+    ],
+  };
+  //   console.log(req.user);
+
+  if (req.user && req.user.role === adminConstant) {
+    productQuerySearch = {
+      id: { in: productIdsList },
+      canBeDeliveredOutsideState: true,
+    };
+  }
+  const product = await prisma.product.findMany({
+    take: limit,
+    skip: (page - 1) * limit,
+    where: productQuerySearch,
+  });
+  return res
+    .status(StatusCodes.OK)
+    .json({ isSuccess: true, count: product.length, data: product });
+};
 const getAllProductsPerState = async (req, res, next) => {
+  const { page = 1, limit = 10 } = req.query;
+
   const stateIds = req.query.ids;
   if (stateIds == undefined || stateIds.length === 0) {
     throw new BadRequestError("Invalid state IDs");
@@ -128,6 +303,8 @@ const getAllProductsPerState = async (req, res, next) => {
     };
   }
   const product = await prisma.product.findMany({
+    take: limit,
+    skip: (page - 1) * limit,
     where: productQuerySearch,
   });
   return res
@@ -138,7 +315,7 @@ const searchAllProducts = async (req, res, next) => {
   const stateIds = req.query.stateIds;
   const categoryIds = req.query.categoryIds;
   const occasionIds = req.query.occasionIds;
-
+  const { page = 1, limit = 10 } = req.query;
   const { priceSmall, priceHigh, name } = req.query;
   const priceSmallFloat = priceSmall ? parseFloat(priceSmall) : 0.0;
   const priceHighFloat = priceHigh ? parseFloat(priceHigh) : undefined;
@@ -251,6 +428,8 @@ const searchAllProducts = async (req, res, next) => {
     };
   }
   const product = await prisma.product.findMany({
+    take: limit,
+    skip: (page - 1) * limit,
     where: productQuerySearch,
     include: {
       productStock: true,
@@ -264,8 +443,10 @@ const searchAllProducts = async (req, res, next) => {
 //TODO add user role (isAcceptedByAdmin) to this query
 const getAllProductsPerStoreBranch = async (req, res, next) => {
   const branchId = req.query.branchId;
-  //
+  const { page = 1, limit = 10 } = req.query;
   const productInBranch = await prisma.productStock.findMany({
+    take: limit,
+    skip: (page - 1) * limit,
     where: {
       branchId: branchId,
     },
@@ -319,8 +500,12 @@ const getProduct = async (req, res, next) => {
 module.exports = {
   getAllProductsPerOccasions,
   getAllProductsPerCategories,
+  getFeaturedProducts,
+  getBigSaleProducts,
   getProduct,
   getAllProductsPerState,
   searchAllProducts,
   getAllProductsPerStoreBranch,
+  getPopularProducts,
+  getAllProductsCanBeDeliveredOutsideStates,
 };

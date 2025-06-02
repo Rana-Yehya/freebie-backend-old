@@ -6,8 +6,39 @@ const StoreZodModel = z.object({
 
   name: z.string({ message: "Please enter a name" }),
   bio: z.string({ message: "Please enter a description" }),
-  logo: z.string({ message: "Please enter a logo" }),
-  banner: z.string({ message: "Please enter a banner" }),
+  logo: z
+    .any()
+    .refine(
+      (file) =>
+        [
+          "image/png",
+          "image/jpeg",
+          "image/jpg",
+          // "image/svg+xml",
+          // "image/gif",
+        ].includes(file.mimetype),
+      { message: "Logo is Invalid image file type" }
+    )
+    .refine((file) => file.size <= 1024 * 1024, {
+      message: "Logo image is too large",
+    }),
+  // logo: z.string({ message: "Please enter a logo" }),
+  banner: z
+    .any()
+    .refine(
+      (file) =>
+        [
+          "image/png",
+          "image/jpeg",
+          "image/jpg",
+          // "image/svg+xml",
+          // "image/gif",
+        ].includes(file.mimetype),
+      { message: "Banner is Invalid image file type" }
+    )
+    .refine((file) => file.size <= 1024 * 1024, {
+      message: "Banner image is too large",
+    }),
   phone: z.string({ message: "Please enter a phone number" }),
   email: z.string({ message: "Please enter am email" }),
   password: z.string({ message: "Please enter a password" }),

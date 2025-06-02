@@ -1,6 +1,14 @@
 const express = require("express");
 const admin = require("firebase-admin");
 const { getMessaging } = require("firebase-admin/messaging");
+const {
+  uploadImage,
+  uploadMultipleImages,
+} = require("../helpers/cloudinary/upload-image");
+const {
+  destroyImage,
+  destroyMultipleImages,
+} = require("../helpers/cloudinary/delete-image");
 
 const router = express.Router();
 
@@ -52,7 +60,10 @@ const sendToDevice = async (req, res) => {
 };
 
 router.route("/send-to-device").post(sendToDevice);
-
+router.route("/upload-images").post(uploadMultipleImages);
+router.route("/destroy-images").post(destroyMultipleImages);
+router.route("/upload-image").post(uploadImage);
+router.route("/destroy-image").post(destroyImage);
 module.exports = router;
 
 /*

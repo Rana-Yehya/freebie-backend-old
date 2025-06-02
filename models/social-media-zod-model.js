@@ -37,11 +37,11 @@ const SocialMediaZodModel = z
   })
   .refine(
     ({ tiktok, youtube, facebook, x, instagram }) =>
-      tiktok !== undefined ||
-      youtube !== undefined ||
-      facebook !== undefined ||
-      x !== undefined ||
-      instagram !== undefined,
+      tiktok === undefined &&
+      youtube === undefined &&
+      facebook === undefined &&
+      x === undefined &&
+      instagram === undefined,
     { message: "One of the social media links must be provided" }
   );
 // type UserModel = z.infer<typeof UserZodModel>;

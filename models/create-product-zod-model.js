@@ -1,16 +1,34 @@
 const { z } = require("zod");
 const { ProductStockZodModel } = require("./product-stock-zod-model");
 
-const ProductZodModel = z
+const CreateProductZodModel = z
   .object({
     // isAvailable              Boolean   @default(true)
     // isFeatured               Boolean   @default(false)
     // isPopular                Boolean   @default(false)
     name: z.string({ message: "Name is required" }),
     image: z
-      .array(z.string({ message: "Image is required" }), {
-        message: "Images can't be empty!",
-      })
+      .array(
+        z
+          .any()
+          .refine(
+            (file) =>
+              [
+                "image/png",
+                "image/jpeg",
+                "image/jpg",
+                // "image/svg+xml",
+                // "image/gif",
+              ].includes(file.mimetype),
+            { message: "Banner is Invalid image file type" }
+          )
+          .refine((file) => file.size <= 1024 * 1024, {
+            message: "Banner image is too large",
+          }),
+        {
+          message: "Images can't be empty!",
+        }
+      )
       .nonempty({
         message: "Images can't be empty!",
       }),
@@ -18,7 +36,12 @@ const ProductZodModel = z
     detailedDescription: z.string({
       message: "Detailed Description is required",
     }),
-    price: z.number({ message: "Price is required" }),
+    price: z
+      .string({ message: "Price is required" })
+      .refine((price) => parseFloat(price) > 0, {
+        message: "Price is not a number or it is less than zero",
+      }),
+    //      .number({ message: "Price is required" })
     //{ message: "Does need preparation is required" }
     doesNeedPreparation: z.boolean().default(false),
     //{ message: "Is available is required" }
@@ -67,9 +90,23 @@ const ProductZodModel = z
       .nonempty({
         message: "Branches can't be empty!",
       }),
-    dimensionsWCm: z.number({ message: "Dimensions Width is required" }),
-    dimensionsHCm: z.number({ message: "Dimensions Height is required" }),
-    dimensionsLCm: z.number({ message: "Dimensions Length is required" }),
+    dimensionsWCm: z
+      .string({ message: "Dimensions Width is required" })
+      .refine((price) => parseFloat(price) > 0, {
+        message: "Dimensions Width is not a number or it is less than zero",
+      }),
+    dimensionsHCm: z
+      .string({ message: "Dimensions Height is required" })
+      .refine((price) => parseFloat(price) > 0, {
+        message: "Dimensions Height is not a number or it is less than zero",
+      }),
+    //z.number({ message: "Dimensions Height is required" }),
+    dimensionsLCm: z
+      .string({ message: "Dimensions Length is required" })
+      .refine((price) => parseFloat(price) > 0, {
+        message: "Dimensions Length is not a number or it is less than zero",
+      }),
+    // z.number({ message: "Dimensions Length is required" }),
     //{ message: "Is deleted is required" }
     // isDeleted: z.boolean().default(false),
     //{ message: "Is deleted is required" }
@@ -83,18 +120,18 @@ const ProductZodModel = z
         path: ["stock", "isAvailable"],
       });
     }
-    if (
-      data.dimensionsWCm <= 1 ||
-      data.dimensionsHCm <= 1 ||
-      data.dimensionsLCm <= 1
-    ) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message:
-          "Dimensions must be greater than 1. Please add estimated value(s)",
-        path: ["dimensionsWCm", "dimensionsHCm", "dimensionsLCm"],
-      });
-    }
+    // if (
+    //   data.dimensionsWCm <= 1 ||
+    //   data.dimensionsHCm <= 1 ||
+    //   data.dimensionsLCm <= 1
+    // ) {
+    //   ctx.addIssue({
+    //     code: z.ZodIssueCode.custom,
+    //     message:
+    //       "Dimensions must be greater than 1. Please add estimated value(s)",
+    //     path: ["dimensionsWCm", "dimensionsHCm", "dimensionsLCm"],
+    //   });
+    // }
 
     for (
       let productStockIndex = 0;
@@ -114,7 +151,7 @@ const ProductZodModel = z
       }
     }
 
-    if (data.discountPrecent >= 0 && data.discountPrecent >= 100) {
+    if (data.discountPrecent < 0 || data.discountPrecent >= 100) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Discount must be between 0 and 100",
@@ -144,14 +181,14 @@ const ProductZodModel = z
           path: ["discountStartTime", "discountEndTime"],
         });
       }
-      if (discountStartTime < new Date.now()) {
+      if (discountStartTime < new Date()) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: "Discount start time must be in the future",
           path: ["discountStartTime"],
         });
       }
-      if (discountEndTime < new Date.now()) {
+      if (discountEndTime < new Date()) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: "Discount end time must be in the future",
@@ -199,4 +236,4 @@ const ProductZodModel = z
     }
   });
 // type UserModel = z.infer<typeof UserZodModel>;
-module.exports = { ProductZodModel };
+module.exports = { CreateProductZodModel };

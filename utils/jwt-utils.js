@@ -25,8 +25,8 @@ const isTokenValid = function ({ token, secret }) {
 };
 
 // const sendTokenToCookies = function ({ res, user, refreshToken }) {
-//   console.log(new Date(Date.now() + parseInt(process.env.ACCESS_JWT_LIFETIME)));
-//   console.log(Date.now());
+//   console.log(new Date(Date() + parseInt(process.env.ACCESS_JWT_LIFETIME)));
+//   console.log(Date());
 //   console.log(parseInt(process.env.ACCESS_JWT_LIFETIME));
 //   const accessTokenJWT = createAccessJWT({ payload: { userId: user._id } });
 //   const refreshTokenJWT = createRefreshJWT({
@@ -34,18 +34,18 @@ const isTokenValid = function ({ token, secret }) {
 //   });
 
 //   res.cookie("accessToken", accessTokenJWT, {
-//     expires: new Date(Date.now() + parseInt(process.env.ACCESS_JWT_LIFETIME)),
+//     expires: new Date(Date() + parseInt(process.env.ACCESS_JWT_LIFETIME)),
 //     httpOnly: true,
 //     secure: process.env.NODE_ENV === "production",
 //     signed: true,
-//     // maxAge: new Date(Date.now() + 1000),
+//     // maxAge: new Date(Date() + 1000),
 //   });
 //   res.cookie("refreshToken", refreshTokenJWT, {
-//     expires: new Date(Date.now() + parseInt(process.env.REFRESH_JWT_LIFETIME)),
+//     expires: new Date(Date() + parseInt(process.env.REFRESH_JWT_LIFETIME)),
 //     httpOnly: true,
 //     secure: process.env.NODE_ENV === "production",
 //     signed: true,
-//     // maxAge: new Date(Date.now() + parseInt(process.env.REFRESH_JWT_LIFETIME)),
+//     // maxAge: new Date(Date() + parseInt(process.env.REFRESH_JWT_LIFETIME)),
 //   });
 // };
 
@@ -53,9 +53,9 @@ const isTokenValid = function ({ token, secret }) {
 
 const sendTokenToCookies = function ({ res, user,  }) {
   const token = createJWT({ payload: { userId: user._id, email: user.email } });
-  // console.log(new Date(Date.now() + parseInt(process.env.JWT_LIFETIME)));
+  // console.log(new Date(Date() + parseInt(process.env.JWT_LIFETIME)));
   res.cookie("token", token, {
-    expires: new Date(Date.now() + parseInt(process.env.JWT_LIFETIME)),
+    expires: new Date(Date() + parseInt(process.env.JWT_LIFETIME)),
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     signed: true,

@@ -150,15 +150,15 @@ const register = async (req, res, next) => {
       "Account already in use or has an individal account"
     );
   }
-  const country = await prisma.country.findUnique({
-    where: { countryIsoCode: userCountry },
-  });
+  // const country = await prisma.country.findUnique({
+  //   where: { countryIsoCode: userCountry },
+  // });
   const state = await prisma.state.findUnique({
-    where: { countryId: country.id, id: userState },
+    where: { countryId: userCountry, id: userState },
   });
-  if (!country) {
-    throw new BadRequestError("Country not found");
-  }
+  // if (!country) {
+  //   throw new BadRequestError("Country not found");
+  // }
   if (!state) {
     throw new BadRequestError(
       "State not found or does not belong to this country"
@@ -176,7 +176,7 @@ const register = async (req, res, next) => {
       gender: gender,
       email: email,
       phone: phoneNumber,
-      countryId: country.id,
+      countryId: userCountry,
       role: role,
       //TODO CAN ADD AN EXTRA LEVEL OF CHECK AND INTEGRATE THE VEERIFICATION WITH IOREEDIS
       isVerified: true,
@@ -277,18 +277,18 @@ const logout = async (req, res) => {
     },
   });
   // res.cookie("accessToken", null, {
-  //   expires: new Date(Date.now()),
+  //   expires: new Date(Date()),
   //   httpOnly: true,
   //   secure: process.env.NODE_ENV === "production",
   //   signed: true,
-  //   // maxAge: new Date(Date.now()),
+  //   // maxAge: new Date(Date()),
   // });
   // res.cookie("refreshToken", null, {
-  //   expires: new Date(Date.now()),
+  //   expires: new Date(Date()),
   //   httpOnly: true,
   //   secure: process.env.NODE_ENV === "production",
   //   signed: true,
-  //   // maxAge: new Date(Date.now()),
+  //   // maxAge: new Date(Date()),
   // });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
@@ -327,12 +327,12 @@ const resetPassword = async (req, res) => {
   // if (!userInDB) {
   //   throw new BadRequestError("This user in not in the database");
   // }
-  // console.log(userInDB.passwordTokenExpiresAt - Date.now());
-  // console.log(userInDB.passwordTokenExpiresAt - Date.now() < 1000 * 60 * 10);
+  // console.log(userInDB.passwordTokenExpiresAt - Date());
+  // console.log(userInDB.passwordTokenExpiresAt - Date() < 1000 * 60 * 10);
   // if (
   //   !(
   //     userInDB.passwordToken === token &&
-  //     userInDB.passwordTokenExpiresAt - Date.now() < 1000 * 60 * 10
+  //     userInDB.passwordTokenExpiresAt - Date() < 1000 * 60 * 10
   //   )
   // ) {
   //   throw new BadRequestError("The password validation time is expired");
@@ -357,7 +357,7 @@ const forgotPassword = async (req, res) => {
   // }
   // if (
   //   userInDB.passwordToken &&
-  //   Date.now() - userInDB.passwordTokenExpiresAt < 1000 * 60 * 10
+  //   Date() - userInDB.passwordTokenExpiresAt < 1000 * 60 * 10
   // ) {
   //   return res.status(StatusCodes.OK).json({
   //     isSuccess: true,
@@ -366,7 +366,7 @@ const forgotPassword = async (req, res) => {
   // }
   // const passwordToken = crypto.randomBytes(70).toString("hex");
   // userInDB.passwordToken = passwordToken;
-  // userInDB.passwordTokenExpiresAt = new Date(Date.now() + 1000 * 60 * 10); // ten mins
+  // userInDB.passwordTokenExpiresAt = new Date(Date() + 1000 * 60 * 10); // ten mins
   // await userInDB.save();
   // const protocol = req.protocol;
   // const host = req.get("host");

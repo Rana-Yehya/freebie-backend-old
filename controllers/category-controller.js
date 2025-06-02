@@ -6,6 +6,7 @@ const {
   BadRequestError,
   UnauthenticatedError,
 } = require("../errors");
+const { uploadImage } = require("../helpers/cloudinary/upload-image");
 const getAllCategories = async (req, res, next) => {
   const category = await prisma.category.findMany();
   return res
@@ -24,21 +25,29 @@ const getCategory = async (req, res, next) => {
 };
 
 const createCategory = async (req, res, next) => {
-  const { name, image } = req.body;
+  const { name } = req.body;
+  const image = req.files.image;
+
   const zodModel = CategoryZodModel.safeParse({
     name: name,
     image: image,
   });
-
   console.log(zodModel);
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
-
+  const [imageUploadedSecureUrl, imageUploadedPublicId] = await uploadImage({
+    image: image,
+  });
   const createdCategory = await prisma.category.create({
     data: {
       name: name,
-      image: image,
+      image: {
+        create: {
+          secureUrl: imageUploadedSecureUrl,
+          publicId: imageUploadedPublicId,
+        },
+      },
     },
   });
   console.log(createdCategory);

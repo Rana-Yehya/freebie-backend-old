@@ -2,6 +2,8 @@ const express = require("express");
 const path = require("path");
 // const connectDB = require("./db/connect");
 const morgan = require("morgan");
+const fileUpload = require("express-fileupload");
+
 // const cookieParser = require("cookie-parser");
 // const fileUpload = require("express-fileupload");
 // const mongoSanitize = require("express-mongo-sanitize");
@@ -11,7 +13,8 @@ const cors = require("cors");
 const xss = require("xss-clean");
 require("dotenv").config();
 require("express-async-errors");
-require("./config/notification/notifications-init");
+require("./config/notification");
+require("./config/cloudinary");
 
 const adminAuthRouter = require("./routes/admin-auth-route");
 const adminRouter = require("./routes/admin-route");
@@ -70,6 +73,13 @@ app.use(express.json({ limit: "100mb" }));
 app.use(express.urlencoded({ limit: "100mb", extended: true }));
 // app.use(cookieParser());
 app.use("/assets", express.static(path.join(__dirname, "assets")));
+app.use(
+  fileUpload({
+    // limits: { fileSize: 3 * 1024 * 1024 },
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+  })
+);
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,

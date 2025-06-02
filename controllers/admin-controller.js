@@ -6,6 +6,7 @@ const {
   BadRequestError,
   UnauthenticatedError,
 } = require("../errors");
+
 const approveStore = async (req, res) => {
   const { storeId } = req.body;
   //TODO AM I IN NEED TO CHECK EMAIL
@@ -20,8 +21,41 @@ const approveStore = async (req, res) => {
     message: "Store approved successfully",
   });
 };
+
+const approveProduct = async (req, res) => {
+  const { productId } = req.body;
+
+  await prisma.product.update({
+    where: { id: productId },
+    data: { isAcceptedByAdmin: true },
+  });
+
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "Product approved successfully",
+  });
+};
+const getAllProducts = async (req, res, next) => {
+  // let isAcceptedByAdmin = true;
+  // if (req.user.role === adminConstant) {
+  //   isAcceptedByAdmin = null;
+  // }
+  const { page = 1, limit = 10 } = req.query;
+
+  const product = await prisma.product.findMany({
+    take: limit,
+    skip: (page - 1) * limit,
+  });
+  return res
+    .status(StatusCodes.OK)
+    .json({ isSuccess: true, count: product.length, data: product });
+};
 const getAllStores = async (req, res, next) => {
+  const { page = 1, limit = 10 } = req.query;
+
   const stores = await prisma.store.findMany({
+    take: limit,
+    skip: (page - 1) * limit,
     select: {
       id: true,
       name: true,
@@ -49,5 +83,7 @@ const getAllStores = async (req, res, next) => {
 };
 module.exports = {
   approveStore,
+  approveProduct,
   getAllStores,
+  getAllProducts,
 };

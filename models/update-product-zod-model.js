@@ -107,22 +107,23 @@ const UpdateProductZodModel = z
         path: ["dimensionsWCm", "dimensionsHCm", "dimensionsLCm"],
       });
     }
-
-    for (
-      let productStockIndex = 0;
-      productStockIndex < data.productStock.length;
-      productStockIndex++
-    ) {
-      if (
-        (data.productStock[productStockIndex].stock <= 0 ||
-          data.productStock[productStockIndex].stock === undefined) &&
-        data.doesNeedPreparation == false
+    if (data.productStock) {
+      for (
+        let productStockIndex = 0;
+        productStockIndex < data.productStock.length;
+        productStockIndex++
       ) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Stock must be greater than 0",
-          path: ["stock"],
-        });
+        if (
+          (data.productStock[productStockIndex].stock <= 0 ||
+            data.productStock[productStockIndex].stock === undefined) &&
+          data.doesNeedPreparation == false
+        ) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Stock must be greater than 0",
+            path: ["stock"],
+          });
+        }
       }
     }
 
@@ -156,14 +157,14 @@ const UpdateProductZodModel = z
           path: ["discountStartTime", "discountEndTime"],
         });
       }
-      if (discountStartTime < new Date.now()) {
+      if (discountStartTime < new Date()) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: "Discount start time must be in the future",
           path: ["discountStartTime"],
         });
       }
-      if (discountEndTime < new Date.now()) {
+      if (discountEndTime < new Date()) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: "Discount end time must be in the future",
