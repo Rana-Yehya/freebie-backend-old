@@ -30464,6 +30464,8 @@ export namespace Prisma {
 
   export type storeWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    logoId?: string
+    bannerId?: string
     phone?: string
     email?: string
     socialLinksId?: string
@@ -30472,8 +30474,6 @@ export namespace Prisma {
     NOT?: storeWhereInput | storeWhereInput[]
     name?: StringFilter<"store"> | string
     bio?: StringFilter<"store"> | string
-    logoId?: StringFilter<"store"> | string
-    bannerId?: StringFilter<"store"> | string
     password?: StringFilter<"store"> | string
     paymentId?: StringNullableFilter<"store"> | string | null
     refreshTokenSecret?: StringNullableFilter<"store"> | string | null
@@ -30490,7 +30490,7 @@ export namespace Prisma {
     socialLinks?: XOR<SocialLinkScalarRelationFilter, socialLinkWhereInput>
     branches?: BranchListRelationFilter
     transactions?: TransactionListRelationFilter
-  }, "id" | "id" | "phone" | "email" | "socialLinksId">
+  }, "id" | "id" | "logoId" | "bannerId" | "phone" | "email" | "socialLinksId">
 
   export type storeOrderByWithAggregationInput = {
     id?: SortOrder

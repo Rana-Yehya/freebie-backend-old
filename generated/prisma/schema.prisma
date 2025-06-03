@@ -100,9 +100,9 @@ model store {
   id                 String        @id @unique @default(uuid())
   name               String
   bio                String
-  logoId             String
+  logoId             String        @unique
   logo               image         @relation("storeLogo", fields: [logoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  bannerId           String
+  bannerId           String        @unique
   banner             image         @relation("storeBanner", fields: [bannerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   phone              String        @unique
   email              String        @unique

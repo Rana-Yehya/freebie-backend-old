@@ -5,6 +5,7 @@ const {
   createOccasion,
   updateOccasion,
   deleteOccasion,
+  deleteOccasionImage,
 } = require("../controllers/occasion-controller");
 const {
   authenticateUserMiddleware,
@@ -37,5 +38,13 @@ router
     authorizeMiddleware(adminConstant),
     deleteOccasion
   );
+
+// router
+//   .route("/delete-occasion-image/:id")
+//   .delete(
+//     authenticateUserMiddleware,
+//     authorizeMiddleware(adminConstant),
+//     deleteOccasionImage
+//   );
 
 module.exports = router;

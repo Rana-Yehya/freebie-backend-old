@@ -4,7 +4,13 @@ const { StatusCodes } = require("http-status-codes");
 const { BadRequestError } = require("../errors");
 const { UpdateProductZodModel } = require("../models/update-product-zod-model");
 const { uploadMultipleImages } = require("../helpers/cloudinary/upload-image");
-
+const { destroyMultipleImages } = require("../helpers/cloudinary/delete-image");
+const getAllProducts = async (req, res, next) => {
+  const products = await prisma.product.findMany();
+  return res
+    .status(StatusCodes.OK)
+    .json({ isSuccess: true, count: products.length, data: products });
+};
 const createProduct = async (req, res, next) => {
   const {
     name,
@@ -113,11 +119,11 @@ const createProduct = async (req, res, next) => {
       },
       description: description,
       detailedDescription: detailedDescription,
-      price: parseInt(price),
+      price: parseFloat(price),
       doesNeedPreparation: doesNeedPreparation,
       isAvailable: isAvailable,
       preparationTimeInMinutes: preparationTimeInMinutes,
-      discountPrecent: discountPrecent,
+      discountPrecent: parseFloat(discountPrecent),
       discountStartTime: dateDiscountStartTime,
       discountEndTime: dateDiscountEndTime,
       categoryId: categoryId,
@@ -127,9 +133,9 @@ const createProduct = async (req, res, next) => {
           data: productStockJson,
         },
       },
-      dimensionsWCm: parseInt(dimensionsWCm),
-      dimensionsHCm: parseInt(dimensionsHCm),
-      dimensionsLCm: parseInt(dimensionsLCm),
+      dimensionsWCm: parseFloat(dimensionsWCm),
+      dimensionsHCm: parseFloat(dimensionsHCm),
+      dimensionsLCm: parseFloat(dimensionsLCm),
     },
     include: {
       productStock: true,
@@ -175,7 +181,6 @@ const updateProduct = async (req, res, next) => {
   }
   const {
     name,
-    image,
     description,
     detailedDescription,
     price,
@@ -194,7 +199,9 @@ const updateProduct = async (req, res, next) => {
     dimensionsHCm,
     dimensionsLCm,
   } = req.body;
-  // console.log(productStock);
+  const image = req.files == undefined ? undefined : req.files.images;
+  const productStockJson =
+    productStock == undefined ? [] : JSON.parse(productStock);
   const zodModel = UpdateProductZodModel.safeParse({
     name: name,
     image: image,
@@ -209,15 +216,13 @@ const updateProduct = async (req, res, next) => {
     discountEndTime: discountEndTime,
     categoryId: categoryId,
     occasionId: occasionId,
-    productStock: productStock,
+    productStock: productStockJson,
     dimensionsWCm: dimensionsWCm,
     dimensionsHCm: dimensionsHCm,
     dimensionsLCm: dimensionsLCm,
   });
 
   if (!zodModel.success) {
-    console.log(zodModel.error.errors[0]);
-
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
   // const productToUpdate = await prisma.product.findUnique({
@@ -245,14 +250,14 @@ const updateProduct = async (req, res, next) => {
       }
     }
   }
-  if (productStock) {
+  if (productStockJson) {
     for (
       let productStockIndex = 0;
-      productStockIndex < productStock.length;
+      productStockIndex < productStockJson.length;
       productStockIndex++
     ) {
       const branch = await prisma.branch.findUnique({
-        where: { id: productStock[productStockIndex].branchId },
+        where: { id: productStockJson[productStockIndex].branchId },
       });
       if (!branch) {
         throw new BadRequestError("Branch not found");
@@ -272,34 +277,79 @@ const updateProduct = async (req, res, next) => {
 
     dateDiscountEndTime = new Date(parseDiscountEndTime);
   }
+  let product = undefined;
+  let imageToStore = [];
+
+  if (image) {
+    product = await prisma.product.findUnique({
+      where: { id: id },
+      include: {
+        image: true,
+      },
+    });
+    if (!product) {
+      throw new BadRequestError("Category not found");
+    }
+    const [imageUrlsToStore, imagePublicIdsToStore] =
+      await uploadMultipleImages({
+        images: image,
+      });
+    for (
+      let imageIndex = 0;
+      imageIndex < imageUrlsToStore.length;
+      imageIndex++
+    ) {
+      imageToStore.push({
+        secureUrl: imageUrlsToStore[imageIndex],
+        publicId: imagePublicIdsToStore[imageIndex],
+      });
+    }
+  }
+
   const updatedProduct = await prisma.product.update({
     where: { id: id },
     data: {
       name: name || undefined,
-      image: image || undefined,
+      image:
+        image == undefined
+          ? undefined
+          : {
+              createMany: { data: imageToStore },
+            },
       description: description || undefined,
       detailedDescription: detailedDescription || undefined,
-      price: price || undefined,
+      price: price == undefined ? undefined : parseFloat(price),
       doesNeedPreparation: doesNeedPreparation || undefined,
       isAvailable: isAvailable || undefined,
       isFeatured: isFeatured || undefined,
       isPopular: isPopular || undefined,
       preparationTimeInMinutes: preparationTimeInMinutes || undefined,
-      discountPrecent: discountPrecent || undefined,
+      discountPrecent:
+        discountPrecent == undefined ? undefined : parseFloat(discountPrecent),
       discountStartTime: dateDiscountStartTime || undefined,
       discountEndTime: dateDiscountEndTime || undefined,
       categoryId: categoryId || undefined,
       occasionId: occasionId || undefined,
       // productStock: || undefined productStockDb,
-      dimensionsWCm: dimensionsWCm || undefined,
-      dimensionsHCm: dimensionsHCm || undefined,
-      dimensionsLCm: dimensionsLCm || undefined,
+      dimensionsWCm:
+        dimensionsWCm == undefined ? undefined : parseFloat(dimensionsWCm),
+      dimensionsHCm:
+        dimensionsHCm == undefined ? undefined : parseFloat(dimensionsHCm),
+      dimensionsLCm:
+        dimensionsLCm == undefined ? undefined : parseFloat(dimensionsLCm),
     },
   });
-  if (productStock) {
+  if (image) {
+    console.log(product.image);
+    const publicIds = product.image.map((image) => image.publicId);
+    console.log(publicIds);
+
+    await destroyMultipleImages({ imagesPublicIds: publicIds });
+  }
+  if (productStockJson) {
     for (
       let productStockIndex = 0;
-      productStockIndex < productStock.length;
+      productStockIndex < productStockJson.length;
       productStockIndex++
     ) {
       // if (
@@ -311,22 +361,22 @@ const updateProduct = async (req, res, next) => {
         where: {
           productId_branchId_color: {
             productId: id,
-            branchId: productStock[productStockIndex].branchId,
-            color: productStock[productStockIndex].color,
+            branchId: productStockJson[productStockIndex].branchId,
+            color: productStockJson[productStockIndex].color,
           },
         },
         update: {
           // branchId: productStock[productStockIndex].branchId,
-          stock: productStock[productStockIndex].stock || undefined,
+          stock: productStockJson[productStockIndex].stock || undefined,
           // color: productStock[productStockIndex].color || undefined,
           // color: productStock[productStockIndex].color,
 
           // productId: id,
         },
         create: {
-          branchId: productStock[productStockIndex].branchId,
-          stock: productStock[productStockIndex].stock,
-          color: productStock[productStockIndex].color,
+          branchId: productStockJson[productStockIndex].branchId,
+          stock: productStockJson[productStockIndex].stock,
+          color: productStockJson[productStockIndex].color,
           productId: id,
         },
       });
@@ -360,6 +410,7 @@ const deleteProduct = async (req, res, next) => {
 };
 
 module.exports = {
+  getAllProducts,
   createProduct,
   updateProduct,
   deleteProduct,

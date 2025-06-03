@@ -7,8 +7,13 @@ const {
   UnauthenticatedError,
 } = require("../errors");
 const { uploadImage } = require("../helpers/cloudinary/upload-image");
+const { destroyImage } = require("../helpers/cloudinary/delete-image");
 const getAllCategories = async (req, res, next) => {
-  const category = await prisma.category.findMany();
+  const category = await prisma.category.findMany({
+    include: {
+      image: true,
+    },
+  });
   return res
     .status(StatusCodes.OK)
     .json({ isSuccess: true, count: category.length, data: category });
@@ -17,6 +22,9 @@ const getCategory = async (req, res, next) => {
   const { id: categoryId } = req.params;
   const category = await prisma.category.findUnique({
     where: { id: categoryId },
+    include: {
+      image: true,
+    },
   });
   if (!category) {
     throw new BadRequestError("Category not found");
@@ -32,7 +40,6 @@ const createCategory = async (req, res, next) => {
     name: name,
     image: image,
   });
-  console.log(zodModel);
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
@@ -59,22 +66,50 @@ const createCategory = async (req, res, next) => {
 
 const updateCategory = async (req, res, next) => {
   const { id } = req.params;
-  const { name, image } = req.body;
+  const { name } = req.body;
+  const image = req.files == undefined ? undefined : req.files.image;
 
   if (!id) {
     throw new BadRequestError("Please send an ID");
+  }
+  let imageUploadedSecureUrl = undefined;
+  let imageUploadedPublicId = undefined;
+  let category = undefined;
+  if (image) {
+    category = await prisma.category.findUnique({
+      where: { id: id },
+      include: {
+        image: true,
+      },
+    });
+    if (!category) {
+      throw new BadRequestError("Category not found");
+    }
+    [imageUploadedSecureUrl, imageUploadedPublicId] = await uploadImage({
+      image: image,
+    });
   }
   const updatedCategory = await prisma.category.update({
     where: { id: id },
     data: {
       name: name || undefined,
-      image: image || undefined,
+      image: {
+        // where: { occasionId: id },
+        update: {
+          secureUrl: imageUploadedSecureUrl || undefined,
+          publicId: imageUploadedPublicId || undefined,
+        },
+      },
+    },
+    include: {
+      image: true, // Include the image in the return object
     },
   });
-  console.log(updatedCategory);
-
+  if (image) {
+    await destroyImage({ imagePublicId: category.image.publicId });
+  }
   return res
-    .status(StatusCodes.CREATED)
+    .status(StatusCodes.OK)
     .json({ isSuccess: true, data: updatedCategory });
 };
 
@@ -82,10 +117,15 @@ const deleteCategory = async (req, res, next) => {
   const { id: CategoryId } = req.params;
   const category = await prisma.category.delete({
     where: { id: CategoryId },
+    include: {
+      image: true,
+    },
   });
   if (!category) {
     throw new BadRequestError("Category not found");
   }
+  await destroyImage({ imagePublicId: category.image.publicId });
+
   return res
     .status(StatusCodes.OK)
     .json({ isSuccess: true, message: "Category deleted successfully" });

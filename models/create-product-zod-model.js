@@ -47,7 +47,7 @@ const CreateProductZodModel = z
     //{ message: "Is available is required" }
     isAvailable: z.boolean().default(true),
     preparationTimeInMinutes: z.number().default(0),
-    discountPrecent: z.number().default(0),
+    discountPrecent: z.string().default(0),
     discountStartTime: z.string().date().optional(),
     discountEndTime: z.string().date().optional(),
     // color: z.array(
@@ -151,14 +151,17 @@ const CreateProductZodModel = z
       }
     }
 
-    if (data.discountPrecent < 0 || data.discountPrecent >= 100) {
+    if (
+      parseFloat(data.discountPrecent) < 0 ||
+      parseFloat(data.discountPrecent) >= 100
+    ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Discount must be between 0 and 100",
         path: ["discountPrecent"],
       });
     }
-    if (data.discountPrecent > 0) {
+    if (parseFloat(data.discountPrecent) > 0) {
       if (
         data.discountStartTime === undefined ||
         data.discountEndTime === undefined ||

@@ -34,7 +34,12 @@ const authenticateUserMiddleware = async (req, res, next) => {
       // console.log("user.accessTokenSecret", user.accessTokenSecret);
       // console.log("user", user);
 
-      if (user.accessTokenSecret !== decoded.accessTokenSecret) {
+      if (
+        !user ||
+        !user.accessTokenSecret ||
+        !decoded.accessTokenSecret ||
+        user.accessTokenSecret !== decoded.accessTokenSecret
+      ) {
         throw new UnauthenticatedError("Unauthorizated");
       }
       // const { userId, email } = decoded;

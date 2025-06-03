@@ -1,5 +1,6 @@
 const express = require("express");
 const {
+  getAllProducts,
   createProduct,
   updateProduct,
   deleteProduct,
@@ -60,6 +61,13 @@ router
   .get(
     optionalAuthenticateUserMiddleware,
     getAllProductsCanBeDeliveredOutsideStates
+  );
+router
+  .route("/")
+  .get(
+    authenticateUserMiddleware,
+    authorizeMiddleware(adminConstant),
+    getAllProducts
   );
 
 router

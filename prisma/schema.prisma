@@ -100,9 +100,9 @@ model store {
   id                 String        @id @unique @default(uuid())
   name               String
   bio                String
-  logoId             String
+  logoId             String        @unique
   logo               image         @relation("storeLogo", fields: [logoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  bannerId           String
+  bannerId           String        @unique
   banner             image         @relation("storeBanner", fields: [bannerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   phone              String        @unique
   email              String        @unique
@@ -196,7 +196,7 @@ model deliveryTaxes {
 model category {
   id        String    @id @unique @default(uuid())
   name      String
-  imageId   String
+  imageId   String    
   image     image     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   product   product[]
   // userId    String
@@ -208,7 +208,7 @@ model category {
 model occasion {
   id              String            @id @unique @default(uuid())
   name            String
-  imageId         String
+  imageId         String            
   image           image             @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   productOccasion productOccasion[]
   // userId          String
