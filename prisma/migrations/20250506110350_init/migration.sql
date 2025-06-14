@@ -5,7 +5,7 @@
   - You are about to drop the column `userId` on the `product` table. All the data in the column will be lost.
   - The primary key for the `productStock` table will be changed. If it partially fails, the table could be left without primary key constraint.
   - The primary key for the `productUser` table will be changed. If it partially fails, the table could be left without primary key constraint.
-  - You are about to drop the column `discountPrecent` on the `productUser` table. All the data in the column will be lost.
+  - You are about to drop the column `discountPercent` on the `productUser` table. All the data in the column will be lost.
   - You are about to drop the column `discountTime` on the `productUser` table. All the data in the column will be lost.
   - You are about to drop the column `id` on the `productUser` table. All the data in the column will be lost.
   - You are about to drop the column `image` on the `productUser` table. All the data in the column will be lost.
@@ -44,7 +44,7 @@ ADD CONSTRAINT "productStock_pkey" PRIMARY KEY ("productId", "branchId", "color"
 
 -- AlterTable
 ALTER TABLE "productUser" DROP CONSTRAINT "productUser_pkey",
-DROP COLUMN "discountPrecent",
+DROP COLUMN "discountPercent",
 DROP COLUMN "discountTime",
 DROP COLUMN "id",
 DROP COLUMN "image",

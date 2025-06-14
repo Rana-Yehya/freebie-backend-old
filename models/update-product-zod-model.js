@@ -46,11 +46,44 @@ const UpdateProductZodModel = z
       })
       .optional(),
     //{ message: "Does need preparation is required" }
-    doesNeedPreparation: z.boolean().default(false).optional(),
+    doesNeedPreparation: z
+      .string()
+      .refine(
+        (doesNeedPreparation) =>
+          doesNeedPreparation === "true" || doesNeedPreparation === "false",
+        {
+          message: "Need Preparation property does not equal to true or false",
+        }
+      )
+      .default(false)
+      .optional(),
     //{ message: "Is available is required" }
-    isAvailable: z.boolean().default(true).optional(),
+    isAvailable: z
+      .string()
+      .refine(
+        (isAvailable) => isAvailable === "true" || isAvailable === "false",
+        {
+          message: "Available property does not equal to true or false",
+        }
+      )
+      .default("true")
+      .optional(),
+    isFeatured: z
+      .string()
+      .refine((isFeatured) => isFeatured === "true" || isFeatured === "false", {
+        message: "Featured property does not equal to true or false",
+      })
+      .default("false")
+      .optional(),
+    isPopular: z
+      .string()
+      .refine((isPopular) => isPopular === "true" || isPopular === "false", {
+        message: "Popular property does not equal to true or false",
+      })
+      .default("false")
+      .optional(),
     preparationTimeInMinutes: z.string().optional(),
-    discountPrecent: z.string().optional(),
+    discountPercent: z.string().optional(),
     discountStartTime: z.string().date().optional(),
     discountEndTime: z.string().date().optional(),
     // color: z
@@ -166,16 +199,16 @@ const UpdateProductZodModel = z
     }
 
     if (
-      parseFloat(data.discountPrecent) >= 0 &&
-      parseFloat(data.discountPrecent) >= 100
+      parseFloat(data.discountPercent) >= 0 &&
+      parseFloat(data.discountPercent) >= 100
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Discount must be between 0 and 100",
-        path: ["discountPrecent"],
+        path: ["discountPercent"],
       });
     }
-    if (parseFloat(data.discountPrecent) > 0) {
+    if (parseFloat(data.discountPercent) > 0) {
       if (
         data.discountStartTime === undefined ||
         data.discountEndTime === undefined ||

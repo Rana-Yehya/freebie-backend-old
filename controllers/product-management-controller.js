@@ -21,7 +21,7 @@ const createProduct = async (req, res, next) => {
     doesNeedPreparation,
     isAvailable,
     preparationTimeInMinutes,
-    discountPrecent,
+    discountPercent,
     discountStartTime,
     discountEndTime,
     categoryId,
@@ -43,7 +43,7 @@ const createProduct = async (req, res, next) => {
     doesNeedPreparation: doesNeedPreparation,
     isAvailable: isAvailable,
     preparationTimeInMinutes: preparationTimeInMinutes,
-    discountPrecent: discountPrecent,
+    discountPercent: discountPercent,
     discountStartTime: discountStartTime,
     discountEndTime: discountEndTime,
     // color: color,
@@ -120,10 +120,15 @@ const createProduct = async (req, res, next) => {
       description: description,
       detailedDescription: detailedDescription,
       price: parseFloat(price),
-      doesNeedPreparation: doesNeedPreparation,
-      isAvailable: isAvailable,
+      actualPrice:
+        discountPercent == undefined || discountPercent == 0
+          ? parseFloat(price)
+          : parseFloat(price) -
+            (parseFloat(price) * parseFloat(discountPercent)) / 100,
+      doesNeedPreparation: Boolean(doesNeedPreparation),
+      isAvailable: Boolean(isAvailable),
       preparationTimeInMinutes: preparationTimeInMinutes,
-      discountPrecent: parseFloat(discountPrecent),
+      discountPercent: parseFloat(discountPercent),
       discountStartTime: dateDiscountStartTime,
       discountEndTime: dateDiscountEndTime,
       categoryId: categoryId,
@@ -189,7 +194,7 @@ const updateProduct = async (req, res, next) => {
     isFeatured,
     isPopular,
     preparationTimeInMinutes,
-    discountPrecent,
+    discountPercent,
     discountStartTime,
     discountEndTime,
     categoryId,
@@ -208,10 +213,12 @@ const updateProduct = async (req, res, next) => {
     description: description,
     detailedDescription: detailedDescription,
     price: price,
+    isFeatured: isFeatured,
+    isPopular: isPopular,
     doesNeedPreparation: doesNeedPreparation,
     isAvailable: isAvailable,
     preparationTimeInMinutes: preparationTimeInMinutes,
-    discountPrecent: discountPrecent,
+    discountPercent: discountPercent,
     discountStartTime: discountStartTime,
     discountEndTime: discountEndTime,
     categoryId: categoryId,
@@ -279,7 +286,17 @@ const updateProduct = async (req, res, next) => {
   }
   let product = undefined;
   let imageToStore = [];
-
+  if (discountPercent) {
+    product = await prisma.product.findUnique({
+      where: { id: id },
+      include: {
+        image: true,
+      },
+    });
+    if (!product) {
+      throw new BadRequestError("Category not found");
+    }
+  }
   if (image) {
     product = await prisma.product.findUnique({
       where: { id: id },
@@ -319,13 +336,24 @@ const updateProduct = async (req, res, next) => {
       description: description || undefined,
       detailedDescription: detailedDescription || undefined,
       price: price == undefined ? undefined : parseFloat(price),
-      doesNeedPreparation: doesNeedPreparation || undefined,
-      isAvailable: isAvailable || undefined,
-      isFeatured: isFeatured || undefined,
-      isPopular: isPopular || undefined,
+      actualPrice:
+        discountPercent == undefined || discountPercent == 0
+          ? undefined
+          : parseFloat(product.price) -
+            (parseFloat(product.price) * parseFloat(discountPercent)) / 100,
+      doesNeedPreparation:
+        doesNeedPreparation == undefined
+          ? undefined
+          : Boolean(doesNeedPreparation),
+      isAvailable: isAvailable == undefined ? undefined : Boolean(isAvailable),
+      isPopular: isPopular == undefined ? undefined : Boolean(isPopular),
+      isFeatured: isFeatured == undefined ? undefined : Boolean(isFeatured),
+
+      // isFeatured: isFeatured || undefined,
+      // isPopular: isPopular || undefined,
       preparationTimeInMinutes: preparationTimeInMinutes || undefined,
-      discountPrecent:
-        discountPrecent == undefined ? undefined : parseFloat(discountPrecent),
+      discountPercent:
+        discountPercent == undefined ? undefined : parseFloat(discountPercent),
       discountStartTime: dateDiscountStartTime || undefined,
       discountEndTime: dateDiscountEndTime || undefined,
       categoryId: categoryId || undefined,

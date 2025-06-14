@@ -8,6 +8,87 @@ const {
 } = require("../errors");
 const { UpdateProductZodModel } = require("../models/update-product-zod-model");
 const { userConstant, adminConstant } = require("../config/constants");
+
+const selectedQuery = {
+  id: true,
+  name: true,
+  // description: true,
+  price: true,
+  actualPrice: true,
+  doesNeedPreparation: true,
+  isAvailable: true,
+  isFeatured: true,
+  isPopular: true,
+  discountPercent: true,
+  image: {
+    select: { publicId: true, secureUrl: true },
+  },
+
+  category: {
+    select: {
+      id: true,
+      name: true,
+      image: {
+        select: { publicId: true, secureUrl: true },
+      },
+    },
+  },
+  productOccasion: {
+    select: {
+      occasions: {
+        select: {
+          id: true,
+          name: true,
+          image: {
+            select: { publicId: true, secureUrl: true },
+          },
+        },
+      },
+    },
+  },
+  productStock: {
+    // color: true,
+    // stock: true,
+    select: {
+      branch: {
+        select: {
+          store: {
+            select: {
+              id: true,
+              name: true,
+              logo: {
+                select: { publicId: true, secureUrl: true },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+const getProductsQuery = async (req, res, next) => {
+  const groupPrices = await prisma.product.aggregate({
+    _max: {
+      actualPrice: true, // Gets the highest price
+    },
+    _min: {
+      actualPrice: true, // Gets the lowest price
+    },
+  });
+  const groupColors = await prisma.productStock.groupBy({
+    by: "color",
+  });
+
+  const categories = await prisma.category.findMany({});
+  const occasions = await prisma.occasion.findMany({});
+
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    data: { groupPrices, groupColors },
+    categories,
+    occasions,
+  });
+};
 const getAllProductsPerOccasions = async (req, res, next) => {
   // let isAcceptedByAdmin = true;
   // if (req.user.role === adminConstant) {
@@ -46,9 +127,10 @@ const getAllProductsPerOccasions = async (req, res, next) => {
   //   };
   // }
   const product = await prisma.product.findMany({
-    take: limit,
-    skip: (page - 1) * limit,
+    take: parseInt(limit) || 10,
+    skip: ((parseInt(page) || 1) - 1) * (parseInt(limit) || 10),
     where: productQuerySearch,
+    select: selectedQuery,
   });
   return res
     .status(StatusCodes.OK)
@@ -75,9 +157,10 @@ const getAllProductsPerCategories = async (req, res, next) => {
     };
   }
   const product = await prisma.product.findMany({
-    take: limit,
-    skip: (page - 1) * limit,
+    take: parseInt(limit) || 10,
+    skip: ((parseInt(page) || 1) - 1) * (parseInt(limit) || 10),
     where: productQuerySearch,
+    select: selectedQuery,
   });
   return res
     .status(StatusCodes.OK)
@@ -98,9 +181,10 @@ const getFeaturedProducts = async (req, res, next) => {
     };
   }
   const product = await prisma.product.findMany({
-    take: limit,
-    skip: (page - 1) * limit,
+    take: parseInt(limit) || 10,
+    skip: ((parseInt(page) || 1) - 1) * (parseInt(limit) || 10),
     where: productQuerySearch,
+    select: selectedQuery,
   });
   return res
     .status(StatusCodes.OK)
@@ -121,9 +205,10 @@ const getPopularProducts = async (req, res, next) => {
     };
   }
   const product = await prisma.product.findMany({
-    take: limit,
-    skip: (page - 1) * limit,
+    take: parseInt(limit) || 10,
+    skip: ((parseInt(page) || 1) - 1) * (parseInt(limit) || 10),
     where: productQuerySearch,
+    select: selectedQuery,
   });
   return res
     .status(StatusCodes.OK)
@@ -165,9 +250,10 @@ const getBigSaleProducts = async (req, res, next) => {
     };
   }
   const product = await prisma.product.findMany({
-    take: limit,
-    skip: (page - 1) * limit,
+    take: parseInt(limit) || 10,
+    skip: ((parseInt(page) || 1) - 1) * (parseInt(limit) || 10),
     where: productQuerySearch,
+    select: selectedQuery,
   });
   return res
     .status(StatusCodes.OK)
@@ -211,13 +297,7 @@ const getAllProductsCanBeDeliveredOutsideStates = async (req, res, next) => {
       // branchId: { in: branchIdsList },
     },
     select: {
-      product: false,
       productId: true,
-      branch: false,
-      branchId: false,
-      stock: false,
-      createdAt: false,
-      updatedAt: false,
     },
   });
   console.log(productIds);
@@ -241,9 +321,10 @@ const getAllProductsCanBeDeliveredOutsideStates = async (req, res, next) => {
     };
   }
   const product = await prisma.product.findMany({
-    take: limit,
-    skip: (page - 1) * limit,
+    take: parseInt(limit) || 10,
+    skip: ((parseInt(page) || 1) - 1) * (parseInt(limit) || 10),
     where: productQuerySearch,
+    select: selectedQuery,
   });
   return res
     .status(StatusCodes.OK)
@@ -264,13 +345,6 @@ const getAllProductsPerState = async (req, res, next) => {
     },
     select: {
       id: true,
-      address: false,
-      phone: false,
-      isFreezed: false,
-      workHours: false,
-      productStock: false,
-      createdAt: false,
-      updatedAt: false,
     },
   });
   const branchIdsList = branchIds.map((item) => item.id);
@@ -280,13 +354,7 @@ const getAllProductsPerState = async (req, res, next) => {
       branchId: { in: branchIdsList },
     },
     select: {
-      product: false,
       productId: true,
-      branch: false,
-      branchId: false,
-      stock: false,
-      createdAt: false,
-      updatedAt: false,
     },
   });
 
@@ -303,9 +371,10 @@ const getAllProductsPerState = async (req, res, next) => {
     };
   }
   const product = await prisma.product.findMany({
-    take: limit,
-    skip: (page - 1) * limit,
+    take: parseInt(limit) || 10,
+    skip: ((parseInt(page) || 1) - 1) * (parseInt(limit) || 10),
     where: productQuerySearch,
+    select: selectedQuery,
   });
   return res
     .status(StatusCodes.OK)
@@ -315,25 +384,12 @@ const searchAllProducts = async (req, res, next) => {
   const stateIds = req.query.stateIds;
   const categoryIds = req.query.categoryIds;
   const occasionIds = req.query.occasionIds;
+  const colors = req.query.colors;
   const { page = 1, limit = 10 } = req.query;
   const { priceSmall, priceHigh, name } = req.query;
   const priceSmallFloat = priceSmall ? parseFloat(priceSmall) : 0.0;
   const priceHighFloat = priceHigh ? parseFloat(priceHigh) : undefined;
-  // if (stateIds == undefined || stateIds.length === 0) {
-  //   throw new BadRequestError("Invalid state IDs");
-  // }
-  // if (categoryIds == undefined || categoryIds.length === 0) {
-  //   throw new BadRequestError("Invalid category IDs");
-  // }
-  // if (occasionIds == undefined || occasionIds.length === 0) {
-  //   throw new BadRequestError("Invalid occasion IDs");
-  // }
-  // if( priceSmall  priceHigh, )
-  //TODO IS THERE A BETTER IMPL
-  const stateIdsList =
-    stateIds == undefined || stateIds.length === 0
-      ? undefined
-      : JSON.parse(stateIds);
+
   const occasionsIdsList =
     occasionIds == undefined || occasionIds.length === 0
       ? undefined
@@ -342,70 +398,26 @@ const searchAllProducts = async (req, res, next) => {
     categoryIds == undefined || categoryIds.length === 0
       ? undefined
       : JSON.parse(categoryIds);
+  const colorList =
+    colors == undefined || colors.length === 0 ? undefined : JSON.parse(colors);
 
-  const branchIds = await prisma.branch.findMany({
-    where: {
-      stateId: stateIdsList ? { in: stateIdsList } : undefined,
-    },
-    select: {
-      id: true,
-      address: false,
-      phone: false,
-      isFreezed: false,
-      workHours: false,
-      productStock: false,
-      createdAt: false,
-      updatedAt: false,
-    },
-  });
-  const branchIdsList = branchIds.map((item) => item.id);
-
-  const productIds = await prisma.productStock.findMany({
-    where: {
-      branchId: { in: branchIdsList },
-    },
-    select: {
-      product: false,
-      productId: true,
-      branch: false,
-      branchId: false,
-      stock: false,
-      createdAt: false,
-      updatedAt: false,
-    },
-  });
-
-  const productIdsList = productIds.map((item) => item.productId);
-  const productOccsionsIds = await prisma.productOccasion.findMany({
-    where: {
-      occasionsId: occasionsIdsList ? { in: occasionsIdsList } : undefined,
-    },
-    select: {
-      occasionsId: false,
-      productId: true,
-      createdAt: false,
-      updatedAt: false,
-    },
-  });
-  const productOccsionsIdsList = productOccsionsIds.map(
-    (item) => item.productId
-  );
   // let productQuerySearch = {
   //   AND: [{ id: { in: productIdsList } }, { isAcceptedByAdmin: true }],
   // };
-
+  //TODO DISCOUNT IS NOT ACCOUNTED FOR
   let productQuerySearch = {
     AND: [
       {
         name: name ? { contains: name.trim() } : undefined,
-        id: { in: [...productIdsList, ...productOccsionsIdsList] },
-        // occasionsId: { in: occasionsIdsList },
+        // id: { in: [...productIdsList, ...productOccsionsIdsList] },
+        occasionsId: occasionsIdsList ? { in: occasionsIdsList } : undefined,
         categoryId: categoryIdsList ? { in: categoryIdsList } : undefined,
-        //color: { in: colorList },
-
-        price: priceHighFloat
-          ? { gte: priceSmallFloat, lte: priceHighFloat }
-          : { gte: priceSmallFloat },
+        productStock: {
+          some: {
+            color: colorList ? { in: colorList } : undefined,
+          },
+        },
+        actualPrice: { gte: priceSmallFloat, lte: priceHighFloat },
       },
       { isAcceptedByAdmin: true },
     ],
@@ -414,49 +426,172 @@ const searchAllProducts = async (req, res, next) => {
 
   if (req.user && req.user.role === adminConstant) {
     productQuerySearch = {
-      id: {
-        name: name ? { contains: name.trim() } : undefined,
-        id: { in: [...productIdsList, ...productOccsionsIdsList] },
-        // occasionsId: { in: occasionsIdsList },
-        categoryId: categoryIdsList ? { in: categoryIdsList } : undefined,
-        //color: { in: colorList },
-
-        price: priceHighFloat
-          ? { gte: priceSmallFloat, lte: priceHighFloat }
-          : { gte: priceSmallFloat },
+      name: name ? { contains: name.trim() } : undefined,
+      // id: { in: [...productIdsList, ...productOccsionsIdsList] },
+      occasionsId: occasionsIdsList ? { in: occasionsIdsList } : undefined,
+      categoryId: categoryIdsList ? { in: categoryIdsList } : undefined,
+      //color: { in: colorList },
+      productStock: {
+        some: {
+          color: colorList ? { in: colorList } : undefined,
+        },
       },
+      actualPrice: { gte: priceSmallFloat, lte: priceHighFloat },
     };
   }
   const product = await prisma.product.findMany({
-    take: limit,
-    skip: (page - 1) * limit,
+    take: parseInt(limit) || 10,
+    skip: ((parseInt(page) || 1) - 1) * (parseInt(limit) || 10),
     where: productQuerySearch,
-    include: {
-      productStock: true,
-    },
+    select: selectedQuery,
   });
   return res
     .status(StatusCodes.OK)
     .json({ isSuccess: true, count: product.length, data: product });
 };
+// const searchAllProducts = async (req, res, next) => {
+//   const stateIds = req.query.stateIds;
+//   const categoryIds = req.query.categoryIds;
+//   const occasionIds = req.query.occasionIds;
+//   const { page = 1, limit = 10 } = req.query;
+//   const { priceSmall, priceHigh, name } = req.query;
+//   const priceSmallFloat = priceSmall ? parseFloat(priceSmall) : 0.0;
+//   const priceHighFloat = priceHigh ? parseFloat(priceHigh) : undefined;
+//   // if (stateIds == undefined || stateIds.length === 0) {
+//   //   throw new BadRequestError("Invalid state IDs");
+//   // }
+//   // if (categoryIds == undefined || categoryIds.length === 0) {
+//   //   throw new BadRequestError("Invalid category IDs");
+//   // }
+//   // if (occasionIds == undefined || occasionIds.length === 0) {
+//   //   throw new BadRequestError("Invalid occasion IDs");
+//   // }
+//   // if( priceSmall  priceHigh, )
+//   //TODO IS THERE A BETTER IMPL
+//   const stateIdsList =
+//     stateIds == undefined || stateIds.length === 0
+//       ? undefined
+//       : JSON.parse(stateIds);
+//   const occasionsIdsList =
+//     occasionIds == undefined || occasionIds.length === 0
+//       ? undefined
+//       : JSON.parse(occasionIds);
+//   const categoryIdsList =
+//     categoryIds == undefined || categoryIds.length === 0
+//       ? undefined
+//       : JSON.parse(categoryIds);
+
+//   const branchIds = await prisma.branch.findMany({
+//     where: {
+//       stateId: stateIdsList ? { in: stateIdsList } : undefined,
+//     },
+//     select: {
+//       id: true,
+//       address: false,
+//       phone: false,
+//       isFreezed: false,
+//       workHours: false,
+//       productStock: false,
+//       createdAt: false,
+//       updatedAt: false,
+//     },
+//   });
+//   const branchIdsList = branchIds.map((item) => item.id);
+
+//   const productIds = await prisma.productStock.findMany({
+//     where: {
+//       branchId: { in: branchIdsList },
+//     },
+//     select: {
+//       product: false,
+//       productId: true,
+//       branch: false,
+//       branchId: false,
+//       stock: false,
+//       createdAt: false,
+//       updatedAt: false,
+//     },
+//   });
+
+//   const productIdsList = productIds.map((item) => item.productId);
+//   const productOccsionsIds = await prisma.productOccasion.findMany({
+//     where: {
+//       occasionsId: occasionsIdsList ? { in: occasionsIdsList } : undefined,
+//     },
+//     select: {
+//       occasionsId: false,
+//       productId: true,
+//       createdAt: false,
+//       updatedAt: false,
+//     },
+//   });
+//   const productOccsionsIdsList = productOccsionsIds.map(
+//     (item) => item.productId
+//   );
+//   // let productQuerySearch = {
+//   //   AND: [{ id: { in: productIdsList } }, { isAcceptedByAdmin: true }],
+//   // };
+
+//   let productQuerySearch = {
+//     AND: [
+//       {
+//         name: name ? { contains: name.trim() } : undefined,
+//         id: { in: [...productIdsList, ...productOccsionsIdsList] },
+//         // occasionsId: { in: occasionsIdsList },
+//         categoryId: categoryIdsList ? { in: categoryIdsList } : undefined,
+//         //color: { in: colorList },
+
+//         price: priceHighFloat
+//           ? { gte: priceSmallFloat, lte: priceHighFloat }
+//           : { gte: priceSmallFloat },
+//       },
+//       { isAcceptedByAdmin: true },
+//     ],
+//   };
+//   //   console.log(req.user);
+
+//   if (req.user && req.user.role === adminConstant) {
+//     productQuerySearch = {
+//       id: {
+//         name: name ? { contains: name.trim() } : undefined,
+//         id: { in: [...productIdsList, ...productOccsionsIdsList] },
+//         // occasionsId: { in: occasionsIdsList },
+//         categoryId: categoryIdsList ? { in: categoryIdsList } : undefined,
+//         //color: { in: colorList },
+
+//         price: priceHighFloat
+//           ? { gte: priceSmallFloat, lte: priceHighFloat }
+//           : { gte: priceSmallFloat },
+//       },
+//     };
+//   }
+//   const product = await prisma.product.findMany({
+//     take: parseInt(limit) || 10,
+//     skip: ((parseInt(page) || 1) - 1) * (parseInt(limit) || 10),
+//     where: productQuerySearch,
+//     include: {
+//       productStock: true,
+//     },
+//   });
+//   return res
+//     .status(StatusCodes.OK)
+//     .json({ isSuccess: true, count: product.length, data: product });
+// };
 
 //TODO add user role (isAcceptedByAdmin) to this query
 const getAllProductsPerStoreBranch = async (req, res, next) => {
   const branchId = req.query.branchId;
   const { page = 1, limit = 10 } = req.query;
   const productInBranch = await prisma.productStock.findMany({
-    take: limit,
-    skip: (page - 1) * limit,
+    take: parseInt(limit) || 10,
+    skip: ((parseInt(page) || 1) - 1) * (parseInt(limit) || 10),
     where: {
       branchId: branchId,
     },
     select: {
-      product: true,
-      productId: false,
-      branchId: false,
-      branch: false,
-      stock: false,
-      color: false,
+      product: {
+        select: selectedQuery,
+      },
     },
   });
   const productList = productInBranch.map((product) => product.product);
@@ -476,7 +611,26 @@ const getProduct = async (req, res, next) => {
   const product = await prisma.product.findUnique({
     where: { id: productId },
     include: {
+      category: {
+        include: {
+          image: true,
+        },
+      },
+      productOccasion: {
+        select: {
+          occasions: {
+            select: {
+              id: true,
+              name: true,
+              image: {
+                select: { publicId: true, secureUrl: true },
+              },
+            },
+          },
+        },
+      },
       productStock: true,
+      image: true,
     },
   });
 
@@ -508,4 +662,5 @@ module.exports = {
   getAllProductsPerStoreBranch,
   getPopularProducts,
   getAllProductsCanBeDeliveredOutsideStates,
+  getProductsQuery,
 };

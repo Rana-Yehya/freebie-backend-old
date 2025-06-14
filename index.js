@@ -11,6 +11,7 @@ const { rateLimit } = require("express-rate-limit");
 const helmet = require("helmet");
 const cors = require("cors");
 const xss = require("xss-clean");
+
 require("dotenv").config();
 require("express-async-errors");
 require("./config/notification");
@@ -31,6 +32,7 @@ const cartRouter = require("./routes/cart-route");
 const infoRouter = require("./routes/info-route");
 const supportRouter = require("./routes/support-route");
 const notificationsRouter = require("./routes/notifications-route");
+const deliveryTaxesRouter = require("./routes/delivery-taxes-route");
 
 const notFound = require("./middleware/not-found");
 const errorHandler = require("./middleware/error-handler");
@@ -64,6 +66,7 @@ app.use(
       "Content-Type",
       "x-localization",
       "user-agent",
+      "x-forwarded-for",
     ],
     credentials: true,
   })
@@ -90,10 +93,67 @@ const limiter = rateLimit({
   keyGenerator: (req) => req.ip,
 });
 app.use(limiter);
-
+var now = new Date();
+var night = new Date(
+  now.getFullYear(),
+  now.getMonth(),
+  now.getDate() + 1, // the next day, ...
+  0,
+  0,
+  0 // ...at 00:00:00 hours
+);
+var msTillMidnight = night.getTime() - now.getTime();
+setTimeout(function () {
+  reset(); //      <-- This is the function being called at midnight.
+  now = new Date();
+  night = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() + 1, // the next day, ...
+    0,
+    0,
+    0 // ...at 00:00:00 hours
+  );
+}, msTillMidnight);
+async function reset() {
+  console.log(
+    "This function will check for the prices in products and update them every 24 hours based on the discount percentage"
+  );
+}
 // app.use(cookieParser(process.env.JWT_SECRET));
 // app.use(express.static("./public"));
+app.get("/", (req, res) => {
+  const deviceInfo = req.device; // 'phone', 'tablet', 'desktop', 'tv', 'bot'
+  // isMobile: req.device.isMobile,
+  // isTablet: req.device.isTablet,
+  // isDesktop: req.device.isDesktop,
+  // isTV: req.device.isTV,
+  // isBot: req.device.isBot,
+  // browser: req.headers["user-agent"],
+  req.clientIp =
+    req.headers["x-forwarded-for"] ||
+    req.connection.remoteAddress ||
+    req.socket.remoteAddress ||
+    req.connection.socket.remoteAddress;
+  const deviceData = {
+    ip: req.clientIp,
+    userAgent: req.headers["user-agent"],
+    acceptLanguage: req.headers["accept-language"],
+    connection: {
+      secure: req.secure,
+      httpVersion: req.httpVersion,
+    },
+  };
 
+  console.log("Device request data:", deviceInfo);
+
+  console.log("Device request data:", deviceData);
+  console.log("Device request data:", req.headers["x-forwarded-for"]);
+  console.log("Device request data:", req.connection.remoteAddress);
+
+  console.log("Device request data:", req.socket.remoteAddress);
+  res.json(deviceData);
+});
 app.use("/api/v1/users/auth", userAuthRouter);
 app.use("/api/v1/admin/auth", adminAuthRouter);
 app.use("/api/v1/admin", adminRouter);
@@ -109,6 +169,7 @@ app.use("/api/v1/carts", cartRouter);
 app.use("/api/v1/info", infoRouter);
 app.use("/api/v1/support", supportRouter);
 app.use("/api/v1/notifications", notificationsRouter);
+app.use("/api/v1/delivery-taxes", deliveryTaxesRouter);
 
 app.use(notFound);
 app.use(errorHandler);

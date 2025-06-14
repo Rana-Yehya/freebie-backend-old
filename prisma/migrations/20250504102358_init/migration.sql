@@ -92,7 +92,7 @@ CREATE TABLE "product" (
     "isFeatured" BOOLEAN NOT NULL DEFAULT false,
     "isPopular" BOOLEAN NOT NULL DEFAULT false,
     "preparationTimeInMinutes" INTEGER NOT NULL DEFAULT 1,
-    "discountPrecent" DOUBLE PRECISION DEFAULT 0,
+    "discountPercent" DOUBLE PRECISION DEFAULT 0,
     "discountTime" TIMESTAMP(3),
     "stock" INTEGER NOT NULL DEFAULT 1,
     "categoryId" TEXT NOT NULL DEFAULT 'no_val',

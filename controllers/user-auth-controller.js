@@ -167,6 +167,7 @@ const register = async (req, res, next) => {
   const parse = Date.parse(dateOfBirth);
 
   const date = new Date(parse);
+  //this is for detecting the user login from another device
   const refreshTokenSecret = crypto.randomBytes(40).toString("hex");
   const accessTokenSecret = crypto.randomBytes(40).toString("hex");
   const user = await prisma.user.create({

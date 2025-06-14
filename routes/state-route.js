@@ -16,14 +16,11 @@ const { adminConstant } = require("../config/constants");
 
 const router = express.Router();
 //
-router
-  .route("/")
-  .get(getAllCountryStates)
-  .post(
-    authenticateUserMiddleware,
-    authorizeMiddleware(adminConstant),
-    createState
-  );
+router.route("/").get(getAllCountryStates).post(
+  // authenticateUserMiddleware,
+  // authorizeMiddleware(adminConstant),
+  createState
+);
 router
   .route("/:id")
   .get(getState)

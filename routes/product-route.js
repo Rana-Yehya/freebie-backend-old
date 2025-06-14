@@ -16,6 +16,7 @@ const {
   getFeaturedProducts,
   getBigSaleProducts,
   getPopularProducts,
+  getProductsQuery,
   getAllProductsPerStoreBranch,
 } = require("../controllers/product-search-controller");
 
@@ -34,6 +35,9 @@ const router = express.Router();
 router
   .route("/per-categories")
   .get(optionalAuthenticateUserMiddleware, getAllProductsPerCategories);
+router
+  .route("/query")
+  .get(optionalAuthenticateUserMiddleware, getProductsQuery);
 router
   .route("/per-occasions")
   .get(optionalAuthenticateUserMiddleware, getAllProductsPerOccasions);

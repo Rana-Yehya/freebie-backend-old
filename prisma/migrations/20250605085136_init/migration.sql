@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "product" ADD COLUMN     "actualPrice" DOUBLE PRECISION NOT NULL DEFAULT 1;

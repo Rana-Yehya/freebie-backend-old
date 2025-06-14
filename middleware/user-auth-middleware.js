@@ -33,12 +33,21 @@ const authenticateUserMiddleware = async (req, res, next) => {
             });
       // console.log("user.accessTokenSecret", user.accessTokenSecret);
       // console.log("user", user);
-
+      // console.log("decoded", decoded);
+      // console.log("decoded.accessTokenSecret", decoded.accessTokenSecret);
+      // console.log(
+      //   "user.accessTokenSecret",
+      //   user.accessTokenSecret.toString() !=
+      //     decoded.accessTokenSecret.toString()
+      // );
+      // faf71e28742a0167a26f;
+      // faf71e28742a0167a26f;
       if (
         !user ||
         !user.accessTokenSecret ||
         !decoded.accessTokenSecret ||
-        user.accessTokenSecret !== decoded.accessTokenSecret
+        user.accessTokenSecret.toString() !=
+          decoded.accessTokenSecret.toString()
       ) {
         throw new UnauthenticatedError("Unauthorizated");
       }

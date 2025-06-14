@@ -1,7 +1,7 @@
 const { CustomAPIError } = require("./custom-api-error");
 const { StatusCodes } = require("http-status-codes");
 
-class UnauthorizatedError extends CustomAPIError {
+class UnauthorizedError extends CustomAPIError {
   constructor(
     message = "Forbidden to access this resource",
     isOperational = true,
@@ -11,4 +11,4 @@ class UnauthorizatedError extends CustomAPIError {
   }
 }
 
-module.exports = { UnauthorizatedError };
+module.exports = { UnauthorizedError };

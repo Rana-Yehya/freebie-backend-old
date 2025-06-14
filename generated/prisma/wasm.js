@@ -226,7 +226,6 @@ exports.Prisma.CityScalarFieldEnum = {
 
 exports.Prisma.DeliveryTaxesScalarFieldEnum = {
   id: 'id',
-  name: 'name',
   originStateId: 'originStateId',
   destinationStateId: 'destinationStateId',
   baseFee: 'baseFee',
@@ -260,17 +259,20 @@ exports.Prisma.ProductScalarFieldEnum = {
   description: 'description',
   detailedDescription: 'detailedDescription',
   price: 'price',
+  actualPrice: 'actualPrice',
   doesNeedPreparation: 'doesNeedPreparation',
   isAcceptedByAdmin: 'isAcceptedByAdmin',
   isAvailable: 'isAvailable',
   isFeatured: 'isFeatured',
   isPopular: 'isPopular',
   preparationTimeInMinutes: 'preparationTimeInMinutes',
-  discountPrecent: 'discountPrecent',
+  discountPercent: 'discountPercent',
   discountStartTime: 'discountStartTime',
   discountEndTime: 'discountEndTime',
   canBeDeliveredOutsideState: 'canBeDeliveredOutsideState',
   categoryId: 'categoryId',
+  avgRating: 'avgRating',
+  reviewsCount: 'reviewsCount',
   dimensionsWCm: 'dimensionsWCm',
   dimensionsHCm: 'dimensionsHCm',
   dimensionsLCm: 'dimensionsLCm',
@@ -304,6 +306,9 @@ exports.Prisma.ReviewScalarFieldEnum = {
 exports.Prisma.UserCartScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  subtotal: 'subtotal',
+  taxAmount: 'taxAmount',
+  deliveryFee: 'deliveryFee',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -311,6 +316,8 @@ exports.Prisma.UserCartScalarFieldEnum = {
 exports.Prisma.ProductUserScalarFieldEnum = {
   userCartId: 'userCartId',
   productId: 'productId',
+  branchId: 'branchId',
+  deliveryTaxesId: 'deliveryTaxesId',
   color: 'color',
   quantity: 'quantity',
   createdAt: 'createdAt',

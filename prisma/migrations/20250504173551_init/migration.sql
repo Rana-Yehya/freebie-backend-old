@@ -33,7 +33,7 @@ CREATE TABLE "productUser" (
     "image" TEXT NOT NULL,
     "color" INTEGER[] DEFAULT ARRAY[]::INTEGER[],
     "price" DOUBLE PRECISION NOT NULL DEFAULT 1,
-    "discountPrecent" DOUBLE PRECISION DEFAULT 0,
+    "discountPercent" DOUBLE PRECISION DEFAULT 0,
     "discountTime" TIMESTAMP(3),
     "wishListId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

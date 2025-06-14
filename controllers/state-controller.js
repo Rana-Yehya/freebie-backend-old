@@ -21,6 +21,9 @@ const getState = async (req, res, next) => {
   const { id: stateId } = req.params;
   const state = await prisma.state.findUnique({
     where: { id: stateId },
+    include: {
+      country: true,
+    },
   });
   if (!state) {
     throw new BadRequestError("State not found");

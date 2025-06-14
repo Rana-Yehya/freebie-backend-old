@@ -83,6 +83,7 @@ model branch {
   // country   country?    @relation(fields: [countryId], references: [id])
   // countryId String?
   productsOrder productsOrder[]
+  productUser   productUser[]
 }
 
 model workHour {
@@ -175,20 +176,20 @@ model city {
 }
 
 model deliveryTaxes {
-  id                 String    @id @unique @default(uuid())
-  name               String
-  originState        state     @relation("OriginStateFees", fields: [originStateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id                 String        @id @unique @default(uuid())
+  // name               String
+  originState        state         @relation("OriginStateFees", fields: [originStateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   originStateId      String
-  destinationState   state     @relation("DestinationStateFees", fields: [destinationStateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  destinationState   state         @relation("DestinationStateFees", fields: [destinationStateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   destinationStateId String
   baseFee            Float
-  feePerKg           Float
+  feePerKg           Float         @default(0)
   estimatedDays      Int?
-  effectiveDate      DateTime  @default(now())
+  effectiveDate      DateTime      @default(now())
   expiryDate         DateTime?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  productUser        productUser[]
 
   @@map("delivery_taxes")
 }
@@ -229,13 +230,14 @@ model product {
   // user                     user?             @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   // userId                   String?
   price                      Float             @default(1)
+  actualPrice                Float             @default(1)
   doesNeedPreparation        Boolean           @default(false)
   isAcceptedByAdmin          Boolean           @default(false)
   isAvailable                Boolean           @default(true)
   isFeatured                 Boolean           @default(false)
   isPopular                  Boolean           @default(false)
   preparationTimeInMinutes   Int               @default(1)
-  discountPrecent            Float?            @default(0)
+  discountPercent            Float?            @default(0)
   discountStartTime          DateTime?
   discountEndTime            DateTime?
   canBeDeliveredOutsideState Boolean           @default(true)
@@ -245,14 +247,16 @@ model product {
   // branch                   branches  @relation(fields: [branchId], references: [id], onDelete: SetDefault, onUpdate: SerDefault)
   // branchId                 String    @default("no_val")
   productOccasion            productOccasion[]
+  avgRating                  Float             @default(0)
+  reviewsCount               Int               @default(0)
   reviews                    review[]
+  productsOrder              productsOrder[]
   dimensionsWCm              Float             @default(1)
   dimensionsHCm              Float             @default(1)
   dimensionsLCm              Float             @default(1)
   productUser                productUser[]
   createdAt                  DateTime          @default(now())
   updatedAt                  DateTime          @updatedAt
-  productsOrder              productsOrder[]
 }
 
 model productOccasion {
@@ -293,12 +297,15 @@ model review {
 }
 
 model userCart {
-  id        String        @id @default(uuid())
-  userId    String        @unique
-  user      user          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  product   productUser[]
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  id          String        @id @default(uuid())
+  userId      String        @unique
+  user        user          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  product     productUser[]
+  subtotal    Float         @default(0)
+  taxAmount   Float         @default(0)
+  deliveryFee Float         @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 
   // @@id([userId, productId])
   // product   product? @relation(fields: [productId], references: [id])
@@ -307,16 +314,20 @@ model userCart {
 
 model productUser {
   // id         String   @id @unique @default(uuid())
-  cart       userCart @relation(fields: [userCartId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userCartId String
-  product    product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  productId  String
-  color      String
-  quantity   Int      @default(1)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  cart            userCart      @relation(fields: [userCartId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userCartId      String
+  product         product       @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productId       String
+  branch          branch        @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  branchId        String
+  deliveryTaxes   deliveryTaxes @relation(fields: [deliveryTaxesId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  deliveryTaxesId String
+  color           String
+  quantity        Int           @default(1)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 
-  @@unique([userCartId, productId, color])
+  @@unique([userCartId, productId, color, branchId])
 }
 
 model transaction {
