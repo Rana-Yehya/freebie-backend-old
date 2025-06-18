@@ -17,7 +17,7 @@ const getAllStoreBranches = async (req, res, next) => {
 
   if (!(req.user != undefined && req.user.role === storeConstant)) {
     if (!id) {
-      console.log("here");
+      // console.log("here");
       throw new BadRequestError("Please provide store id");
     }
     // console.log(req.user.role === storeConstant);
@@ -50,9 +50,11 @@ const getBranch = async (req, res, next) => {
 };
 
 const createBranch = async (req, res, next) => {
-  const { id } = req.query;
-  if (!id && !(req.user.role === storeConstant)) {
-    throw new BadRequestError("Please provide store id");
+  const id = req.query.id;
+  if (!(req.user != undefined && req.user.role === storeConstant)) {
+    if (!id) {
+      throw new BadRequestError("Please provide store id");
+    }
   }
   // if (!(req.user && req.user.role === store)) {
   //   throw new BadRequestError("Please provide store id");

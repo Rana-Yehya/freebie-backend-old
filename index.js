@@ -33,6 +33,9 @@ const infoRouter = require("./routes/info-route");
 const supportRouter = require("./routes/support-route");
 const notificationsRouter = require("./routes/notifications-route");
 const deliveryTaxesRouter = require("./routes/delivery-taxes-route");
+const ordersRouter = require("./routes/order-route");
+const transactionsRouter = require("./routes/transaction-route");
+const reviewsRouter = require("./routes/review-route");
 
 const notFound = require("./middleware/not-found");
 const errorHandler = require("./middleware/error-handler");
@@ -170,6 +173,9 @@ app.use("/api/v1/info", infoRouter);
 app.use("/api/v1/support", supportRouter);
 app.use("/api/v1/notifications", notificationsRouter);
 app.use("/api/v1/delivery-taxes", deliveryTaxesRouter);
+app.use("/api/v1/orders", ordersRouter);
+app.use("/api/v1/transactions", transactionsRouter);
+app.use("/api/v1/reviews", reviewsRouter);
 
 app.use(notFound);
 app.use(errorHandler);

@@ -427,12 +427,28 @@ const deleteCartItem = async (req, res, next) => {
   // });
   return res
     .status(StatusCodes.OK)
-    .json({ isSuccess: true, message: "UserCart deleted successfully" });
+    .json({ isSuccess: true, message: "User Cart Item deleted successfully" });
 };
 
+const deleteCart = async (req, res, next) => {
+  const userId = req.user.id;
+  await prisma.userCart.delete({
+    where: {
+      userId: userId,
+    },
+  });
+
+  // await prisma.userCart.delete({
+  //   where: { id: userCartId },
+  // });
+  return res
+    .status(StatusCodes.OK)
+    .json({ isSuccess: true, message: "User Cart deleted successfully" });
+};
 module.exports = {
   getAllCartItems,
   deleteCartItem,
   createCartItem,
   updateCartQuantity,
+  deleteCart,
 };

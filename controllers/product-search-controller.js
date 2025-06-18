@@ -94,14 +94,13 @@ const getAllProductsPerOccasions = async (req, res, next) => {
   // if (req.user.role === adminConstant) {
   //   isAcceptedByAdmin = null;
   // }
-  const occasionsIds = req.query.ids;
   const { page = 1, limit = 10 } = req.query;
+  const occasionsIds = decodeURIComponent(req.query.ids);
 
-  if (occasionsIds == undefined || occasionsIds.length === 0) {
+  const occasionsIdsList = occasionsIds.replace(/[\[\] ]/g, "").split(",");
+  if (occasionsIdsList == undefined || occasionsIdsList.length === 0) {
     throw new BadRequestError("Invalid occasions IDs");
   }
-  const occasionsIdsList = JSON.parse(occasionsIds);
-
   const productIds = await prisma.productOccasion.findMany({
     where: {
       occasionsId: { in: occasionsIdsList },
@@ -137,15 +136,15 @@ const getAllProductsPerOccasions = async (req, res, next) => {
     .json({ isSuccess: true, count: product.length, data: product });
 };
 const getAllProductsPerCategories = async (req, res, next) => {
-  const categoryIds = req.query.ids;
   const { page = 1, limit = 10 } = req.query;
+  const categoryIds = decodeURIComponent(req.query.ids);
 
-  if (categoryIds == undefined || categoryIds.length === 0) {
-    throw new BadRequestError("Invalid category IDs");
-  }
-  const categoryIdsList = JSON.parse(categoryIds);
+  const categoryIdsList = categoryIds.replace(/[\[\] ]/g, "").split(",");
   console.log(categoryIdsList);
 
+  if (categoryIdsList == undefined || categoryIdsList.length === 0) {
+    throw new BadRequestError("Invalid category IDs");
+  }
   let productQuerySearch = {
     AND: [{ categoryId: { in: categoryIdsList } }, { isAcceptedByAdmin: true }],
   };
@@ -264,12 +263,12 @@ const getBigSaleProducts = async (req, res, next) => {
 const getAllProductsCanBeDeliveredOutsideStates = async (req, res, next) => {
   const { page = 1, limit = 10 } = req.query;
 
-  const stateIds = req.query.ids;
-  if (stateIds == undefined || stateIds.length === 0) {
+  const stateIds = decodeURIComponent(req.query.ids);
+
+  const stateIdsList = stateIds.replace(/[\[\] ]/g, "").split(",");
+  if (stateIdsList == undefined || stateIdsList.length === 0) {
     throw new BadRequestError("Invalid state IDs");
   }
-  //TODO IS THERE A BETTER IMPL
-  const stateIdsList = JSON.parse(stateIds);
   // const branchIds = await prisma.branch.findMany({
   //   where: {
   //     stateId: { not: { in: stateIdsList } },
@@ -291,23 +290,27 @@ const getAllProductsCanBeDeliveredOutsideStates = async (req, res, next) => {
   // const branchIdsList = branchIds.map((item) => item.id);
   console.log(stateIdsList);
 
-  const productIds = await prisma.productStock.findMany({
-    where: {
-      branch: { stateId: { not: { in: stateIdsList } } },
-      // branchId: { in: branchIdsList },
-    },
-    select: {
-      productId: true,
-    },
-  });
-  console.log(productIds);
+  // const productIds = await prisma.productStock.findMany({
+  //   where: {
+  //     branch: { stateId: { not: { in: stateIdsList } } },
+  //     // branchId: { in: branchIdsList },
+  //   },
+  //   select: {
+  //     productId: true,
+  //   },
+  // });
+  // console.log(productIds);
 
-  const productIdsList = productIds.map((item) => item.productId);
-  console.log(productIdsList);
+  // const productIdsList = productIds.map((item) => item.productId);
+  // console.log(productIdsList);
 
   let productQuerySearch = {
     AND: [
-      { id: { in: productIdsList } },
+      {
+        productStock: {
+          every: { branch: { stateId: { not: { in: stateIdsList } } } },
+        },
+      },
       { canBeDeliveredOutsideState: true },
       { isAcceptedByAdmin: true },
     ],
@@ -316,8 +319,15 @@ const getAllProductsCanBeDeliveredOutsideStates = async (req, res, next) => {
 
   if (req.user && req.user.role === adminConstant) {
     productQuerySearch = {
-      id: { in: productIdsList },
-      canBeDeliveredOutsideState: true,
+      AND: [
+        {
+          productStock: {
+            every: { branch: { stateId: { not: { in: stateIdsList } } } },
+          },
+        },
+        { canBeDeliveredOutsideState: true },
+        // { isAcceptedByAdmin: true },
+      ],
     };
   }
   const product = await prisma.product.findMany({
@@ -332,44 +342,40 @@ const getAllProductsCanBeDeliveredOutsideStates = async (req, res, next) => {
 };
 const getAllProductsPerState = async (req, res, next) => {
   const { page = 1, limit = 10 } = req.query;
+  // const stateIdsList = JSON.stringify(req.query.ids);
+  // console.log(stateIdsList);
+  const stateIdsList = decodeURIComponent(req.query.ids)
+    .replace(/[\[\] ]/g, "")
+    .split(",");
 
-  const stateIds = req.query.ids;
-  if (stateIds == undefined || stateIds.length === 0) {
+  console.log(stateIdsList);
+  if (stateIdsList == undefined || stateIdsList.length === 0) {
     throw new BadRequestError("Invalid state IDs");
   }
-  //TODO IS THERE A BETTER IMPL
-  const stateIdsList = JSON.parse(stateIds);
-  const branchIds = await prisma.branch.findMany({
-    where: {
-      stateId: { in: stateIdsList },
-    },
-    select: {
-      id: true,
-    },
-  });
-  const branchIdsList = branchIds.map((item) => item.id);
-
-  const productIds = await prisma.productStock.findMany({
-    where: {
-      branchId: { in: branchIdsList },
-    },
-    select: {
-      productId: true,
-    },
-  });
-
-  const productIdsList = productIds.map((item) => item.productId);
-
   let productQuerySearch = {
-    AND: [{ id: { in: productIdsList } }, { isAcceptedByAdmin: true }],
+    AND: [
+      {
+        productStock: {
+          every: {
+            branch: { stateId: { in: stateIdsList } },
+          },
+        },
+      },
+      { isAcceptedByAdmin: true },
+    ],
   };
   //   console.log(req.user);
 
   if (req.user && req.user.role === adminConstant) {
     productQuerySearch = {
-      id: { in: productIdsList },
+      productStock: {
+        every: {
+          branch: { stateId: { in: stateIdsList } },
+        },
+      },
     };
   }
+  //
   const product = await prisma.product.findMany({
     take: parseInt(limit) || 10,
     skip: ((parseInt(page) || 1) - 1) * (parseInt(limit) || 10),
@@ -382,13 +388,17 @@ const getAllProductsPerState = async (req, res, next) => {
 };
 const searchAllProducts = async (req, res, next) => {
   const stateIds = req.query.stateIds;
-  const categoryIds = req.query.categoryIds;
-  const occasionIds = req.query.occasionIds;
   const colors = req.query.colors;
   const { page = 1, limit = 10 } = req.query;
   const { priceSmall, priceHigh, name } = req.query;
   const priceSmallFloat = priceSmall ? parseFloat(priceSmall) : 0.0;
   const priceHighFloat = priceHigh ? parseFloat(priceHigh) : undefined;
+  const categoryIds = decodeURIComponent(req.query.categoryIds)
+    .replace(/[\[\] ]/g, "")
+    .split(",");
+  const occasionIds = decodeURIComponent(req.query.occasionIds)
+    .replace(/[\[\] ]/g, "")
+    .split(",");
 
   const occasionsIdsList =
     occasionIds == undefined || occasionIds.length === 0
@@ -580,27 +590,25 @@ const searchAllProducts = async (req, res, next) => {
 
 //TODO add user role (isAcceptedByAdmin) to this query
 const getAllProductsPerStoreBranch = async (req, res, next) => {
-  const branchId = req.query.branchId;
   const { page = 1, limit = 10 } = req.query;
-  const productInBranch = await prisma.productStock.findMany({
+  const branchId = decodeURIComponent(req.query.branchId)
+    .replace(/[\[\] ]/g, "")
+    .split(",");
+
+  const products = await prisma.product.findMany({
     take: parseInt(limit) || 10,
     skip: ((parseInt(page) || 1) - 1) * (parseInt(limit) || 10),
     where: {
-      branchId: branchId,
+      productStock: { every: { branchId: { in: branchId } } },
     },
-    select: {
-      product: {
-        select: selectedQuery,
-      },
-    },
+    select: selectedQuery,
   });
-  const productList = productInBranch.map((product) => product.product);
   // console.log(productList);
   // console.log(productInBranch.product);
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    count: productList.length,
-    data: productList,
+    count: products.length,
+    data: products,
   });
 };
 

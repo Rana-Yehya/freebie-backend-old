@@ -1,50 +1,37 @@
 const express = require("express");
 const {
-  getAllCartItems,
-  deleteCartItem,
-  createCartItem,
-  updateCartQuantity,
-  deleteCart,
-  // deleteCity,
-} = require("../controllers/cart-controller");
+  getAllProductReviews,
+  createReview,
+  updateReview,
+  deleteReview,
+} = require("../controllers/review-controller");
 const {
   authenticateUserMiddleware,
 } = require("../middleware/user-auth-middleware");
 const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
-const { userConstant } = require("../config/constants");
+const { adminConstant, userConstant } = require("../config/constants");
 
 const router = express.Router();
 //
 router
-  .route("/")
-  .get(
-    authenticateUserMiddleware,
-    authorizeMiddleware(userConstant),
-    getAllCartItems
-  )
+  .route("/:id")
+  .get(getAllProductReviews)
   .post(
     authenticateUserMiddleware,
     authorizeMiddleware(userConstant),
-    createCartItem
+    createReview
   )
-  .delete(
-    authenticateUserMiddleware,
-    authorizeMiddleware(userConstant),
-    deleteCart
-  );
-router
-  .route("/:id")
   .patch(
     authenticateUserMiddleware,
     authorizeMiddleware(userConstant),
-    updateCartQuantity
+    updateReview
   )
   .delete(
     authenticateUserMiddleware,
     authorizeMiddleware(userConstant),
-    deleteCartItem
+    deleteReview
   );
 
 module.exports = router;
