@@ -376,7 +376,6 @@ const showMe = async (req, res) => {
     user: req.user,
   });
 };
-
 module.exports = {
   login,
   register,

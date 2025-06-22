@@ -4,6 +4,7 @@ const {
   approveStore,
   getAllStores,
   approveProduct,
+  sendNotificationToAllUsers,
 } = require("../controllers/admin-controller");
 const {
   authenticateUserMiddleware,
@@ -37,6 +38,13 @@ router
     authenticateUserMiddleware,
     authorizeMiddleware(adminConstant),
     getAllStores
+  );
+router
+  .route("/send-notification-to-all-users")
+  .post(
+    authenticateUserMiddleware,
+    authorizeMiddleware(adminConstant),
+    sendNotificationToAllUsers
   );
 router
   .route("/products")

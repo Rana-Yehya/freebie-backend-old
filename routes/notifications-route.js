@@ -13,53 +13,7 @@ const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
 
 const router = express.Router();
-
-const sendToDevice = async (req, res) => {
-  const notification = {
-    title: "A Push Notification Test",
-    body: "Test Body",
-  };
-  const data = {
-    key1: "value1",
-    key2: "value2",
-  };
-  const fcmToken =
-    "c7SGXJf0QMC0biYtBPifMG:APA91bGGhijlH04xrx4sEf9oco8SoJHrDz9ZtLQkGZ5Nw_2DVDFgzD4iZRku4720et8S2t85nlfLZczW_QPKHVADxIttajWEJ_BOHNtTsOKtQF_Qxl7vIjM";
-  const type = "notification";
-  let notificationPayload;
-
-  notificationPayload = {
-    data: data,
-    token: fcmToken,
-  };
-  // } else if (type === "data") {
-  //   notificationPayload = {
-  //     data: data,
-  //     token: [fcmToken],
-  //   };
-  // } else {
-  //   notificationPayload = {
-  //     notification: notification,
-  //     data: data,
-  //     token: [fcmToken],
-  //   };
-  // }
-
-  var notificationOptions = {
-    priority: "high",
-  };
-  console.log(notificationPayload);
-  getMessaging()
-    .send(notificationPayload)
-    .then(function (response) {
-      console.log("Successfully sent notification:", response);
-      res.json({ Message: "Successfully sent notification" });
-    })
-    .catch(function (error) {
-      console.log("Error sending notification:", error);
-      res.json({ Message: "Error sending notification" });
-    });
-};
+//egR_fzaMRZ2V8RgFdDkPFU:APA91bGb9kcPUzh9PBVsQaVlLIvfYXsZYy6ymjrCBOMhtKDPUuBYSeHsbJosBiMb-CpW7B3RYIzk_Z3YYBJfFg2x1l0EyanfHDfLH5qi85K_Lzg6ValL5hY
 
 const getAllImages = async (req, res) => {
   const occasion = await prisma.image.findMany({
@@ -76,7 +30,7 @@ const getAllImages = async (req, res) => {
     .json({ isSuccess: true, count: occasion.length, data: occasion });
 };
 
-router.route("/send-to-device").post(sendToDevice);
+// router.route("/send-to-device").post(sendToDevice);
 router.route("/upload-images").post(uploadMultipleImages);
 router.route("/destroy-images").post(destroyMultipleImages);
 router.route("/upload-image").post(uploadImage);

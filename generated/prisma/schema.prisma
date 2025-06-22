@@ -47,6 +47,7 @@ model user {
   isVerified         Boolean       @default(false)
   refreshTokenSecret String?
   accessTokenSecret  String?
+  fcmToken           String?
   transaction        transaction[]
   userCart           userCart[]
   review             review[]

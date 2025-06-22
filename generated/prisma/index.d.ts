@@ -4593,6 +4593,7 @@ export namespace Prisma {
     isVerified: boolean | null
     refreshTokenSecret: string | null
     accessTokenSecret: string | null
+    fcmToken: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4612,6 +4613,7 @@ export namespace Prisma {
     isVerified: boolean | null
     refreshTokenSecret: string | null
     accessTokenSecret: string | null
+    fcmToken: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4631,6 +4633,7 @@ export namespace Prisma {
     isVerified: number
     refreshTokenSecret: number
     accessTokenSecret: number
+    fcmToken: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4660,6 +4663,7 @@ export namespace Prisma {
     isVerified?: true
     refreshTokenSecret?: true
     accessTokenSecret?: true
+    fcmToken?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4679,6 +4683,7 @@ export namespace Prisma {
     isVerified?: true
     refreshTokenSecret?: true
     accessTokenSecret?: true
+    fcmToken?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4698,6 +4703,7 @@ export namespace Prisma {
     isVerified?: true
     refreshTokenSecret?: true
     accessTokenSecret?: true
+    fcmToken?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4804,6 +4810,7 @@ export namespace Prisma {
     isVerified: boolean
     refreshTokenSecret: string | null
     accessTokenSecret: string | null
+    fcmToken: string | null
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -4842,6 +4849,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: boolean
     accessTokenSecret?: boolean
+    fcmToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userCountry?: boolean | user$userCountryArgs<ExtArgs>
@@ -4868,6 +4876,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: boolean
     accessTokenSecret?: boolean
+    fcmToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userCountry?: boolean | user$userCountryArgs<ExtArgs>
@@ -4889,6 +4898,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: boolean
     accessTokenSecret?: boolean
+    fcmToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userCountry?: boolean | user$userCountryArgs<ExtArgs>
@@ -4910,11 +4920,12 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: boolean
     accessTokenSecret?: boolean
+    fcmToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type userOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "dateOfBirth" | "gender" | "moneyInPocket" | "countryId" | "stateId" | "phone" | "email" | "password" | "role" | "isVerified" | "refreshTokenSecret" | "accessTokenSecret" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type userOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "dateOfBirth" | "gender" | "moneyInPocket" | "countryId" | "stateId" | "phone" | "email" | "password" | "role" | "isVerified" | "refreshTokenSecret" | "accessTokenSecret" | "fcmToken" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type userInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     userCountry?: boolean | user$userCountryArgs<ExtArgs>
     userState?: boolean | user$userStateArgs<ExtArgs>
@@ -4958,6 +4969,7 @@ export namespace Prisma {
       isVerified: boolean
       refreshTokenSecret: string | null
       accessTokenSecret: string | null
+      fcmToken: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -5403,6 +5415,7 @@ export namespace Prisma {
     readonly isVerified: FieldRef<"user", 'Boolean'>
     readonly refreshTokenSecret: FieldRef<"user", 'String'>
     readonly accessTokenSecret: FieldRef<"user", 'String'>
+    readonly fcmToken: FieldRef<"user", 'String'>
     readonly createdAt: FieldRef<"user", 'DateTime'>
     readonly updatedAt: FieldRef<"user", 'DateTime'>
   }
@@ -29408,6 +29421,7 @@ export namespace Prisma {
     isVerified: 'isVerified',
     refreshTokenSecret: 'refreshTokenSecret',
     accessTokenSecret: 'accessTokenSecret',
+    fcmToken: 'fcmToken',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -29890,6 +29904,7 @@ export namespace Prisma {
     isVerified?: BoolFilter<"user"> | boolean
     refreshTokenSecret?: StringNullableFilter<"user"> | string | null
     accessTokenSecret?: StringNullableFilter<"user"> | string | null
+    fcmToken?: StringNullableFilter<"user"> | string | null
     createdAt?: DateTimeFilter<"user"> | Date | string
     updatedAt?: DateTimeFilter<"user"> | Date | string
     userCountry?: XOR<CountryNullableScalarRelationFilter, countryWhereInput> | null
@@ -29915,6 +29930,7 @@ export namespace Prisma {
     isVerified?: SortOrder
     refreshTokenSecret?: SortOrderInput | SortOrder
     accessTokenSecret?: SortOrderInput | SortOrder
+    fcmToken?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userCountry?: countryOrderByWithRelationInput
@@ -29943,6 +29959,7 @@ export namespace Prisma {
     isVerified?: BoolFilter<"user"> | boolean
     refreshTokenSecret?: StringNullableFilter<"user"> | string | null
     accessTokenSecret?: StringNullableFilter<"user"> | string | null
+    fcmToken?: StringNullableFilter<"user"> | string | null
     createdAt?: DateTimeFilter<"user"> | Date | string
     updatedAt?: DateTimeFilter<"user"> | Date | string
     userCountry?: XOR<CountryNullableScalarRelationFilter, countryWhereInput> | null
@@ -29968,6 +29985,7 @@ export namespace Prisma {
     isVerified?: SortOrder
     refreshTokenSecret?: SortOrderInput | SortOrder
     accessTokenSecret?: SortOrderInput | SortOrder
+    fcmToken?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: userCountOrderByAggregateInput
@@ -29995,6 +30013,7 @@ export namespace Prisma {
     isVerified?: BoolWithAggregatesFilter<"user"> | boolean
     refreshTokenSecret?: StringNullableWithAggregatesFilter<"user"> | string | null
     accessTokenSecret?: StringNullableWithAggregatesFilter<"user"> | string | null
+    fcmToken?: StringNullableWithAggregatesFilter<"user"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"user"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"user"> | Date | string
   }
@@ -31713,6 +31732,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userCountry?: countryCreateNestedOneWithoutUserInput
@@ -31738,6 +31758,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     transaction?: transactionUncheckedCreateNestedManyWithoutUserInput
@@ -31759,6 +31780,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userCountry?: countryUpdateOneWithoutUserNestedInput
@@ -31784,6 +31806,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transaction?: transactionUncheckedUpdateManyWithoutUserNestedInput
@@ -31807,6 +31830,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -31824,6 +31848,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -31843,6 +31868,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -33835,6 +33861,7 @@ export namespace Prisma {
     isVerified?: SortOrder
     refreshTokenSecret?: SortOrder
     accessTokenSecret?: SortOrder
+    fcmToken?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -33858,6 +33885,7 @@ export namespace Prisma {
     isVerified?: SortOrder
     refreshTokenSecret?: SortOrder
     accessTokenSecret?: SortOrder
+    fcmToken?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -33877,6 +33905,7 @@ export namespace Prisma {
     isVerified?: SortOrder
     refreshTokenSecret?: SortOrder
     accessTokenSecret?: SortOrder
+    fcmToken?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -38975,6 +39004,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userState?: stateCreateNestedOneWithoutUserInput
@@ -38998,6 +39028,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     transaction?: transactionUncheckedCreateNestedManyWithoutUserInput
@@ -39140,6 +39171,7 @@ export namespace Prisma {
     isVerified?: BoolFilter<"user"> | boolean
     refreshTokenSecret?: StringNullableFilter<"user"> | string | null
     accessTokenSecret?: StringNullableFilter<"user"> | string | null
+    fcmToken?: StringNullableFilter<"user"> | string | null
     createdAt?: DateTimeFilter<"user"> | Date | string
     updatedAt?: DateTimeFilter<"user"> | Date | string
   }
@@ -39361,6 +39393,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userCountry?: countryCreateNestedOneWithoutUserInput
@@ -39384,6 +39417,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     transaction?: transactionUncheckedCreateNestedManyWithoutUserInput
@@ -40729,6 +40763,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userCountry?: countryCreateNestedOneWithoutUserInput
@@ -40753,6 +40788,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     transaction?: transactionUncheckedCreateNestedManyWithoutUserInput
@@ -40858,6 +40894,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userCountry?: countryUpdateOneWithoutUserNestedInput
@@ -40882,6 +40919,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transaction?: transactionUncheckedUpdateManyWithoutUserNestedInput
@@ -40977,6 +41015,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userCountry?: countryCreateNestedOneWithoutUserInput
@@ -41001,6 +41040,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     transaction?: transactionUncheckedCreateNestedManyWithoutUserInput
@@ -41067,6 +41107,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userCountry?: countryUpdateOneWithoutUserNestedInput
@@ -41091,6 +41132,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transaction?: transactionUncheckedUpdateManyWithoutUserNestedInput
@@ -41467,6 +41509,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userCountry?: countryCreateNestedOneWithoutUserInput
@@ -41491,6 +41534,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     transaction?: transactionUncheckedCreateNestedManyWithoutUserInput
@@ -41619,6 +41663,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userCountry?: countryUpdateOneWithoutUserNestedInput
@@ -41643,6 +41688,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transaction?: transactionUncheckedUpdateManyWithoutUserNestedInput
@@ -42069,6 +42115,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userCountry?: countryCreateNestedOneWithoutUserInput
@@ -42093,6 +42140,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userCart?: userCartUncheckedCreateNestedManyWithoutUserInput
@@ -42182,6 +42230,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userCountry?: countryUpdateOneWithoutUserNestedInput
@@ -42206,6 +42255,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userCart?: userCartUncheckedUpdateManyWithoutUserNestedInput
@@ -43070,6 +43120,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -43115,6 +43166,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userState?: stateUpdateOneWithoutUserNestedInput
@@ -43138,6 +43190,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transaction?: transactionUncheckedUpdateManyWithoutUserNestedInput
@@ -43160,6 +43213,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -43317,6 +43371,7 @@ export namespace Prisma {
     isVerified?: boolean
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
+    fcmToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -43490,6 +43545,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userCountry?: countryUpdateOneWithoutUserNestedInput
@@ -43513,6 +43569,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transaction?: transactionUncheckedUpdateManyWithoutUserNestedInput
@@ -43535,6 +43592,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

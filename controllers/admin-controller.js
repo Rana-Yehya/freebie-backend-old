@@ -6,6 +6,9 @@ const {
   BadRequestError,
   UnauthenticatedError,
 } = require("../errors");
+const {
+  sendNotificationToAllUsersHelper,
+} = require("../helpers/notifications/send-notificaton-to-all-users-helper");
 
 const approveStore = async (req, res) => {
   const { storeId } = req.body;
@@ -81,9 +84,36 @@ const getAllStores = async (req, res, next) => {
     .status(StatusCodes.OK)
     .json({ isSuccess: true, count: stores.length, data: stores });
 };
+const sendNotificationToAllUsers = async (req, res, next) => {
+  const { title, body } = req.body;
+  if (title == null || body == null) {
+    throw new BadRequestError("title and body are required");
+  }
+  const userTokens = await prisma.user.findMany({
+    select: { fcmToken: true },
+  });
+  const token = userTokens.map((user) => user.fcmToken);
+  // console.log(x);
+  // console.log(userTokens);
+  // const token = [
+  //   "egR_fzaMRZ2V8RgFdDkPFU:APA91bGb9kcPUzh9PBVsQaVlLIvfYXsZYy6ymjrCBOMhtKDPUuBYSeHsbJosBiMb-CpW7B3RYIzk_Z3YYBJfFg2x1l0EyanfHDfLH5qi85K_Lzg6ValL5hY",
+  //   "c7SGXJf0QMC0biYtBPifMG:APA91bF_N4m1jFEEyByx_0_0cnCsCSI8mQXsMQRyQRdMoQ1jJW4NiSa0My16RThSDga2_gFENDUqu82_auZxpqjClBy5dXHKd7PYLVkfKtKMOhRirkUQd90",
+  // ];
+  await sendNotificationToAllUsersHelper({
+    title: title,
+    body: body,
+    fcmTokens: token,
+  });
+
+  // return res.status(StatusCodes.OK).json({ isSuccess: true });
+  return res
+    .status(StatusCodes.OK)
+    .json({ isSuccess: true, message: "Notifications sent successfully" });
+};
 module.exports = {
   approveStore,
   approveProduct,
   getAllStores,
   getAllProducts,
+  sendNotificationToAllUsers,
 };

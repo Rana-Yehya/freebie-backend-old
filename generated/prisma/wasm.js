@@ -142,6 +142,7 @@ exports.Prisma.UserScalarFieldEnum = {
   isVerified: 'isVerified',
   refreshTokenSecret: 'refreshTokenSecret',
   accessTokenSecret: 'accessTokenSecret',
+  fcmToken: 'fcmToken',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
