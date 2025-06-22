@@ -104,14 +104,32 @@ const getOrder = async (req, res, next) => {
   const order = await prisma.order.findUnique({
     where: { id: orderId },
     include: {
+      userId: false,
+      stateId: false,
+      countryId: false,
+      state: true,
+      country: true,
       productOrder: {
         include: {
+          orderId: false,
+          productId: false,
+          branchId: false,
+
           product: {
-            include: true,
+            select: { id: true, name: true, image: true },
           },
+
           branch: {
-            include: {
-              store: true,
+            select: {
+              id: true,
+              store: {
+                select: {
+                  id: true,
+                  name: true,
+
+                  logo: true,
+                },
+              },
             },
           },
         },

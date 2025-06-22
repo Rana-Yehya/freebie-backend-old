@@ -219,6 +219,20 @@ const logout = async (req, res) => {
 
 const deleteStore = async (req, res) => {
   const storeId = req.user.role === storeConstant ? req.user.id : req.query.id;
+  const ordersInStore = await prisma.order.findFirst({
+    where: {
+      AND: [
+        { productOrder: { every: { branch: { storeId: storeId } } } },
+        { productOrder: { every: { status: "confirmed" } } },
+        // { productOrder: { every: { status: { not: "pending" } } } },
+      ],
+    },
+  });
+  if (ordersInStore) {
+    throw new BadRequestError({
+      message: "Store has orders in progress",
+    });
+  }
   await prisma.store.delete({
     where: { id: storeId },
   });

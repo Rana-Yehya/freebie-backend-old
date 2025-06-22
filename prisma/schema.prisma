@@ -47,6 +47,7 @@ model user {
   isVerified         Boolean       @default(false)
   refreshTokenSecret String?
   accessTokenSecret  String?
+  fcmToken           String?
   transaction        transaction[]
   userCart           userCart[]
   review             review[]
@@ -212,19 +213,20 @@ model category {
 }
 
 model occasion {
-  id              String            @id @unique @default(uuid())
-  name            String
-  imageId         String
-  image           image             @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  productOccasion productOccasion[]
+  id        String    @id @unique @default(uuid())
+  name      String
+  imageId   String
+  image     image     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // productOccasion productOccasion[]
   // userId          String
   // user            user              @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
+  products  product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model product {
-  id                         String            @id @unique @default(uuid())
+  id                         String         @id @unique @default(uuid())
   name                       String
   // image                      String[]
   image                      image[]
@@ -234,46 +236,46 @@ model product {
   // storeId                  String
   // user                     user?             @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   // userId                   String?
-  price                      Float             @default(1)
-  actualPrice                Float             @default(1)
-  doesNeedPreparation        Boolean           @default(false)
-  isAcceptedByAdmin          Boolean           @default(false)
-  isAvailable                Boolean           @default(true)
-  isFeatured                 Boolean           @default(false)
-  isPopular                  Boolean           @default(false)
-  preparationTimeInMinutes   Int               @default(1)
-  discountPercent            Float?            @default(0)
+  price                      Float          @default(1)
+  actualPrice                Float          @default(1)
+  doesNeedPreparation        Boolean        @default(false)
+  isAcceptedByAdmin          Boolean        @default(false)
+  isAvailable                Boolean        @default(true)
+  isFeatured                 Boolean        @default(false)
+  isPopular                  Boolean        @default(false)
+  preparationTimeInMinutes   Int            @default(1)
+  discountPercent            Float?         @default(0)
   discountStartTime          DateTime?
   discountEndTime            DateTime?
-  canBeDeliveredOutsideState Boolean           @default(true)
+  canBeDeliveredOutsideState Boolean        @default(true)
   productStock               productStock[]
-  category                   category          @relation(fields: [categoryId], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
-  categoryId                 String            @default("no_val")
+  category                   category       @relation(fields: [categoryId], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
+  categoryId                 String         @default("no_val")
   // branch                   branches  @relation(fields: [branchId], references: [id], onDelete: SetDefault, onUpdate: SerDefault)
   // branchId                 String    @default("no_val")
-  productOccasion            productOccasion[]
-  avgRating                  Float             @default(0)
-  reviewsCount               Int               @default(0)
+  occasions                  occasion[]
+  avgRating                  Float          @default(0)
+  reviewsCount               Int            @default(0)
   reviews                    review[]
-  dimensionsWCm              Float             @default(1)
-  dimensionsHCm              Float             @default(1)
-  dimensionsLCm              Float             @default(1)
+  dimensionsWCm              Float          @default(1)
+  dimensionsHCm              Float          @default(1)
+  dimensionsLCm              Float          @default(1)
   productUser                productCart[]
-  createdAt                  DateTime          @default(now())
-  updatedAt                  DateTime          @updatedAt
+  createdAt                  DateTime       @default(now())
+  updatedAt                  DateTime       @updatedAt
   productOrder               productOrder[]
 }
 
-model productOccasion {
-  occasions   occasion @relation(fields: [occasionsId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  occasionsId String
-  product     product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  productId   String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+// model productOccasion {
+//   occasions   occasion @relation(fields: [occasionsId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+//   occasionsId String
+//   product     product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+//   productId   String
+//   createdAt   DateTime @default(now())
+//   updatedAt   DateTime @updatedAt
 
-  @@unique([occasionsId, productId])
-}
+//   @@unique([occasionsId, productId])
+// }
 
 model productStock {
   // id                       String    @id @unique @default(uuid())

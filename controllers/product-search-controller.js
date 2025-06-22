@@ -19,6 +19,8 @@ const selectedQuery = {
   isAvailable: true,
   isFeatured: true,
   isPopular: true,
+  avgRating: true,
+  reviewsCount: true,
   discountPercent: true,
   image: {
     select: { publicId: true, secureUrl: true },
@@ -33,16 +35,13 @@ const selectedQuery = {
       },
     },
   },
-  productOccasion: {
+
+  occasions: {
     select: {
-      occasions: {
-        select: {
-          id: true,
-          name: true,
-          image: {
-            select: { publicId: true, secureUrl: true },
-          },
-        },
+      id: true,
+      name: true,
+      image: {
+        select: { publicId: true, secureUrl: true },
       },
     },
   },
@@ -75,18 +74,22 @@ const getProductsQuery = async (req, res, next) => {
       actualPrice: true, // Gets the lowest price
     },
   });
+  const maxPrice = groupPrices._max.actualPrice;
+  const minPrice = groupPrices._min.actualPrice;
   const groupColors = await prisma.productStock.groupBy({
     by: "color",
   });
-
+  const colors = groupColors.map((color) => color.color);
   const categories = await prisma.category.findMany({});
   const occasions = await prisma.occasion.findMany({});
 
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    data: { groupPrices, groupColors },
-    categories,
-    occasions,
+    maxPrice: maxPrice,
+    minPrice: minPrice,
+    colors: colors,
+    categories: categories,
+    occasions: occasions,
   });
 };
 const getAllProductsPerOccasions = async (req, res, next) => {
@@ -101,34 +104,12 @@ const getAllProductsPerOccasions = async (req, res, next) => {
   if (occasionsIdsList == undefined || occasionsIdsList.length === 0) {
     throw new BadRequestError("Invalid occasions IDs");
   }
-  const productIds = await prisma.productOccasion.findMany({
-    where: {
-      occasionsId: { in: occasionsIdsList },
-    },
-    select: {
-      occasions: false,
-      occasionsId: false,
-      product: false,
-      productId: true,
-      createdAt: false,
-      updatedAt: false,
-    },
-  });
-  console.log(productIds);
-
-  let productQuerySearch = {
-    AND: [{ id: { in: productIds } }, { isAcceptedByAdmin: true }],
-  };
-
-  // if (req.user && req.user.role === adminConstant) {
-  //   productQuerySearch = {
-  //     id: { in: productIds },
-  //   };
-  // }
   const product = await prisma.product.findMany({
     take: parseInt(limit) || 10,
     skip: ((parseInt(page) || 1) - 1) * (parseInt(limit) || 10),
-    where: productQuerySearch,
+    where: {
+      occasions: { every: { id: { in: occasionsIdsList } } },
+    },
     select: selectedQuery,
   });
   return res
@@ -388,28 +369,33 @@ const getAllProductsPerState = async (req, res, next) => {
 };
 const searchAllProducts = async (req, res, next) => {
   const stateIds = req.query.stateIds;
-  const colors = req.query.colors;
   const { page = 1, limit = 10 } = req.query;
   const { priceSmall, priceHigh, name } = req.query;
-  const priceSmallFloat = priceSmall ? parseFloat(priceSmall) : 0.0;
-  const priceHighFloat = priceHigh ? parseFloat(priceHigh) : undefined;
-  const categoryIds = decodeURIComponent(req.query.categoryIds)
-    .replace(/[\[\] ]/g, "")
-    .split(",");
-  const occasionIds = decodeURIComponent(req.query.occasionIds)
-    .replace(/[\[\] ]/g, "")
-    .split(",");
 
-  const occasionsIdsList =
-    occasionIds == undefined || occasionIds.length === 0
-      ? undefined
-      : JSON.parse(occasionIds);
-  const categoryIdsList =
-    categoryIds == undefined || categoryIds.length === 0
-      ? undefined
-      : JSON.parse(categoryIds);
-  const colorList =
-    colors == undefined || colors.length === 0 ? undefined : JSON.parse(colors);
+  let priceSmallFloat = undefined;
+  if (priceSmall && parseFloat(priceSmall) !== NaN) {
+    priceSmallFloat = parseFloat(priceSmall);
+  }
+  let priceHighFloat = undefined;
+  if (priceHigh && parseFloat(priceHigh) !== NaN) {
+    priceHighFloat = parseFloat(priceHigh);
+  }
+
+  const colorList = req.query.colors
+    ? decodeURIComponent(req.query.colors)
+        .replace(/[\[\] ]/g, "")
+        .split(",")
+    : undefined;
+  const categoryIdsList = req.query.categoryIds
+    ? decodeURIComponent(req.query.categoryIds)
+        .replace(/[\[\] ]/g, "")
+        .split(",")
+    : undefined;
+  const occasionsIdsList = req.query.occasionIds
+    ? decodeURIComponent(req.query.occasionIds)
+        .replace(/[\[\] ]/g, "")
+        .split(",")
+    : undefined;
 
   // let productQuerySearch = {
   //   AND: [{ id: { in: productIdsList } }, { isAcceptedByAdmin: true }],
@@ -420,7 +406,9 @@ const searchAllProducts = async (req, res, next) => {
       {
         name: name ? { contains: name.trim() } : undefined,
         // id: { in: [...productIdsList, ...productOccsionsIdsList] },
-        occasionsId: occasionsIdsList ? { in: occasionsIdsList } : undefined,
+        occasions: occasionsIdsList
+          ? { every: { id: { in: occasionsIdsList } } }
+          : undefined,
         categoryId: categoryIdsList ? { in: categoryIdsList } : undefined,
         productStock: {
           some: {
@@ -438,12 +426,18 @@ const searchAllProducts = async (req, res, next) => {
     productQuerySearch = {
       name: name ? { contains: name.trim() } : undefined,
       // id: { in: [...productIdsList, ...productOccsionsIdsList] },
-      occasionsId: occasionsIdsList ? { in: occasionsIdsList } : undefined,
-      categoryId: categoryIdsList ? { in: categoryIdsList } : undefined,
-      //color: { in: colorList },
+      occasions:
+        occasionsIdsList || occasionsIdsList.length != 0
+          ? { every: { id: { in: occasionsIdsList } } }
+          : undefined,
+      categoryId:
+        categoryIdsList || categoryIdsList.length != 0
+          ? { in: categoryIdsList }
+          : undefined,
       productStock: {
         some: {
-          color: colorList ? { in: colorList } : undefined,
+          color:
+            colorList || colorList.length != 0 ? { in: colorList } : undefined,
         },
       },
       actualPrice: { gte: priceSmallFloat, lte: priceHighFloat },
@@ -624,16 +618,12 @@ const getProduct = async (req, res, next) => {
           image: true,
         },
       },
-      productOccasion: {
+      occasions: {
         select: {
-          occasions: {
-            select: {
-              id: true,
-              name: true,
-              image: {
-                select: { publicId: true, secureUrl: true },
-              },
-            },
+          id: true,
+          name: true,
+          image: {
+            select: { publicId: true, secureUrl: true },
           },
         },
       },

@@ -4,8 +4,8 @@ const {
   login,
   updateProfile,
   showMe,
-  resetPassword,
-  forgotPassword,
+  // resetPassword,
+  // forgotPassword,
   logout,
   sendCode,
   verifyCode,
@@ -27,10 +27,12 @@ router.route("/register").post(adminInvalidRegisterationMiddleware, register);
 router.route("/login").post(login);
 router.route("/verify-code").post(verifyCode);
 
-router.route("/forgot-password").post(forgotPassword);
+// router.route("/forgot-password").post(forgotPassword);
 
-router.route("/reset-password").post(resetPassword);
+// router.route("/reset-password").post(resetPassword);
 router.route("/user-info").get(authenticateUserMiddleware, showMe);
 router.route("/logout").get(authenticateUserMiddleware, logout);
-router.route("/updateUser").patch(authenticateUserMiddleware, updateProfile);
+router
+  .route("/update-profile")
+  .patch(authenticateUserMiddleware, updateProfile);
 module.exports = router;

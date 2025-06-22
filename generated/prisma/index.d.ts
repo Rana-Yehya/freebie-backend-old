@@ -79,11 +79,6 @@ export type occasion = $Result.DefaultSelection<Prisma.$occasionPayload>
  */
 export type product = $Result.DefaultSelection<Prisma.$productPayload>
 /**
- * Model productOccasion
- * 
- */
-export type productOccasion = $Result.DefaultSelection<Prisma.$productOccasionPayload>
-/**
  * Model productStock
  * 
  */
@@ -383,16 +378,6 @@ export class PrismaClient<
     * ```
     */
   get product(): Prisma.productDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.productOccasion`: Exposes CRUD operations for the **productOccasion** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more ProductOccasions
-    * const productOccasions = await prisma.productOccasion.findMany()
-    * ```
-    */
-  get productOccasion(): Prisma.productOccasionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.productStock`: Exposes CRUD operations for the **productStock** model.
@@ -936,7 +921,6 @@ export namespace Prisma {
     category: 'category',
     occasion: 'occasion',
     product: 'product',
-    productOccasion: 'productOccasion',
     productStock: 'productStock',
     review: 'review',
     userCart: 'userCart',
@@ -964,7 +948,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "image" | "user" | "branch" | "workHour" | "store" | "socialLink" | "country" | "state" | "city" | "deliveryTaxes" | "category" | "occasion" | "product" | "productOccasion" | "productStock" | "review" | "userCart" | "productCart" | "order" | "productOrder" | "transaction" | "info" | "inbox"
+      modelProps: "image" | "user" | "branch" | "workHour" | "store" | "socialLink" | "country" | "state" | "city" | "deliveryTaxes" | "category" | "occasion" | "product" | "productStock" | "review" | "userCart" | "productCart" | "order" | "productOrder" | "transaction" | "info" | "inbox"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1930,80 +1914,6 @@ export namespace Prisma {
           }
         }
       }
-      productOccasion: {
-        payload: Prisma.$productOccasionPayload<ExtArgs>
-        fields: Prisma.productOccasionFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.productOccasionFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$productOccasionPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.productOccasionFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$productOccasionPayload>
-          }
-          findFirst: {
-            args: Prisma.productOccasionFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$productOccasionPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.productOccasionFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$productOccasionPayload>
-          }
-          findMany: {
-            args: Prisma.productOccasionFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$productOccasionPayload>[]
-          }
-          create: {
-            args: Prisma.productOccasionCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$productOccasionPayload>
-          }
-          createMany: {
-            args: Prisma.productOccasionCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.productOccasionCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$productOccasionPayload>[]
-          }
-          delete: {
-            args: Prisma.productOccasionDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$productOccasionPayload>
-          }
-          update: {
-            args: Prisma.productOccasionUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$productOccasionPayload>
-          }
-          deleteMany: {
-            args: Prisma.productOccasionDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.productOccasionUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.productOccasionUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$productOccasionPayload>[]
-          }
-          upsert: {
-            args: Prisma.productOccasionUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$productOccasionPayload>
-          }
-          aggregate: {
-            args: Prisma.ProductOccasionAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateProductOccasion>
-          }
-          groupBy: {
-            args: Prisma.productOccasionGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ProductOccasionGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.productOccasionCountArgs<ExtArgs>
-            result: $Utils.Optional<ProductOccasionCountAggregateOutputType> | number
-          }
-        }
-      }
       productStock: {
         payload: Prisma.$productStockPayload<ExtArgs>
         fields: Prisma.productStockFieldRefs
@@ -2767,7 +2677,6 @@ export namespace Prisma {
     category?: categoryOmit
     occasion?: occasionOmit
     product?: productOmit
-    productOccasion?: productOccasionOmit
     productStock?: productStockOmit
     review?: reviewOmit
     userCart?: userCartOmit
@@ -3303,11 +3212,11 @@ export namespace Prisma {
    */
 
   export type OccasionCountOutputType = {
-    productOccasion: number
+    products: number
   }
 
   export type OccasionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    productOccasion?: boolean | OccasionCountOutputTypeCountProductOccasionArgs
+    products?: boolean | OccasionCountOutputTypeCountProductsArgs
   }
 
   // Custom InputTypes
@@ -3324,8 +3233,8 @@ export namespace Prisma {
   /**
    * OccasionCountOutputType without action
    */
-  export type OccasionCountOutputTypeCountProductOccasionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: productOccasionWhereInput
+  export type OccasionCountOutputTypeCountProductsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: productWhereInput
   }
 
 
@@ -3336,7 +3245,7 @@ export namespace Prisma {
   export type ProductCountOutputType = {
     image: number
     productStock: number
-    productOccasion: number
+    occasions: number
     reviews: number
     productUser: number
     productOrder: number
@@ -3345,7 +3254,7 @@ export namespace Prisma {
   export type ProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     image?: boolean | ProductCountOutputTypeCountImageArgs
     productStock?: boolean | ProductCountOutputTypeCountProductStockArgs
-    productOccasion?: boolean | ProductCountOutputTypeCountProductOccasionArgs
+    occasions?: boolean | ProductCountOutputTypeCountOccasionsArgs
     reviews?: boolean | ProductCountOutputTypeCountReviewsArgs
     productUser?: boolean | ProductCountOutputTypeCountProductUserArgs
     productOrder?: boolean | ProductCountOutputTypeCountProductOrderArgs
@@ -3379,8 +3288,8 @@ export namespace Prisma {
   /**
    * ProductCountOutputType without action
    */
-  export type ProductCountOutputTypeCountProductOccasionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: productOccasionWhereInput
+  export type ProductCountOutputTypeCountOccasionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: occasionWhereInput
   }
 
   /**
@@ -16732,7 +16641,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     image?: boolean | imageDefaultArgs<ExtArgs>
-    productOccasion?: boolean | occasion$productOccasionArgs<ExtArgs>
+    products?: boolean | occasion$productsArgs<ExtArgs>
     _count?: boolean | OccasionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["occasion"]>
 
@@ -16765,7 +16674,7 @@ export namespace Prisma {
   export type occasionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "imageId" | "createdAt" | "updatedAt", ExtArgs["result"]["occasion"]>
   export type occasionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     image?: boolean | imageDefaultArgs<ExtArgs>
-    productOccasion?: boolean | occasion$productOccasionArgs<ExtArgs>
+    products?: boolean | occasion$productsArgs<ExtArgs>
     _count?: boolean | OccasionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type occasionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16779,7 +16688,7 @@ export namespace Prisma {
     name: "occasion"
     objects: {
       image: Prisma.$imagePayload<ExtArgs>
-      productOccasion: Prisma.$productOccasionPayload<ExtArgs>[]
+      products: Prisma.$productPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -17182,7 +17091,7 @@ export namespace Prisma {
   export interface Prisma__occasionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     image<T extends imageDefaultArgs<ExtArgs> = {}>(args?: Subset<T, imageDefaultArgs<ExtArgs>>): Prisma__imageClient<$Result.GetResult<Prisma.$imagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    productOccasion<T extends occasion$productOccasionArgs<ExtArgs> = {}>(args?: Subset<T, occasion$productOccasionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$productOccasionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    products<T extends occasion$productsArgs<ExtArgs> = {}>(args?: Subset<T, occasion$productsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$productPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -17613,27 +17522,27 @@ export namespace Prisma {
   }
 
   /**
-   * occasion.productOccasion
+   * occasion.products
    */
-  export type occasion$productOccasionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type occasion$productsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the productOccasion
+     * Select specific fields to fetch from the product
      */
-    select?: productOccasionSelect<ExtArgs> | null
+    select?: productSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the productOccasion
+     * Omit specific fields from the product
      */
-    omit?: productOccasionOmit<ExtArgs> | null
+    omit?: productOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: productOccasionInclude<ExtArgs> | null
-    where?: productOccasionWhereInput
-    orderBy?: productOccasionOrderByWithRelationInput | productOccasionOrderByWithRelationInput[]
-    cursor?: productOccasionWhereUniqueInput
+    include?: productInclude<ExtArgs> | null
+    where?: productWhereInput
+    orderBy?: productOrderByWithRelationInput | productOrderByWithRelationInput[]
+    cursor?: productWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: ProductOccasionScalarFieldEnum | ProductOccasionScalarFieldEnum[]
+    distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
   }
 
   /**
@@ -18040,7 +17949,7 @@ export namespace Prisma {
     image?: boolean | product$imageArgs<ExtArgs>
     productStock?: boolean | product$productStockArgs<ExtArgs>
     category?: boolean | categoryDefaultArgs<ExtArgs>
-    productOccasion?: boolean | product$productOccasionArgs<ExtArgs>
+    occasions?: boolean | product$occasionsArgs<ExtArgs>
     reviews?: boolean | product$reviewsArgs<ExtArgs>
     productUser?: boolean | product$productUserArgs<ExtArgs>
     productOrder?: boolean | product$productOrderArgs<ExtArgs>
@@ -18135,7 +18044,7 @@ export namespace Prisma {
     image?: boolean | product$imageArgs<ExtArgs>
     productStock?: boolean | product$productStockArgs<ExtArgs>
     category?: boolean | categoryDefaultArgs<ExtArgs>
-    productOccasion?: boolean | product$productOccasionArgs<ExtArgs>
+    occasions?: boolean | product$occasionsArgs<ExtArgs>
     reviews?: boolean | product$reviewsArgs<ExtArgs>
     productUser?: boolean | product$productUserArgs<ExtArgs>
     productOrder?: boolean | product$productOrderArgs<ExtArgs>
@@ -18154,7 +18063,7 @@ export namespace Prisma {
       image: Prisma.$imagePayload<ExtArgs>[]
       productStock: Prisma.$productStockPayload<ExtArgs>[]
       category: Prisma.$categoryPayload<ExtArgs>
-      productOccasion: Prisma.$productOccasionPayload<ExtArgs>[]
+      occasions: Prisma.$occasionPayload<ExtArgs>[]
       reviews: Prisma.$reviewPayload<ExtArgs>[]
       productUser: Prisma.$productCartPayload<ExtArgs>[]
       productOrder: Prisma.$productOrderPayload<ExtArgs>[]
@@ -18581,7 +18490,7 @@ export namespace Prisma {
     image<T extends product$imageArgs<ExtArgs> = {}>(args?: Subset<T, product$imageArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$imagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     productStock<T extends product$productStockArgs<ExtArgs> = {}>(args?: Subset<T, product$productStockArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$productStockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     category<T extends categoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, categoryDefaultArgs<ExtArgs>>): Prisma__categoryClient<$Result.GetResult<Prisma.$categoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    productOccasion<T extends product$productOccasionArgs<ExtArgs> = {}>(args?: Subset<T, product$productOccasionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$productOccasionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    occasions<T extends product$occasionsArgs<ExtArgs> = {}>(args?: Subset<T, product$occasionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$occasionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reviews<T extends product$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, product$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$reviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     productUser<T extends product$productUserArgs<ExtArgs> = {}>(args?: Subset<T, product$productUserArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$productCartPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     productOrder<T extends product$productOrderArgs<ExtArgs> = {}>(args?: Subset<T, product$productOrderArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$productOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -19082,27 +18991,27 @@ export namespace Prisma {
   }
 
   /**
-   * product.productOccasion
+   * product.occasions
    */
-  export type product$productOccasionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type product$occasionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the productOccasion
+     * Select specific fields to fetch from the occasion
      */
-    select?: productOccasionSelect<ExtArgs> | null
+    select?: occasionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the productOccasion
+     * Omit specific fields from the occasion
      */
-    omit?: productOccasionOmit<ExtArgs> | null
+    omit?: occasionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: productOccasionInclude<ExtArgs> | null
-    where?: productOccasionWhereInput
-    orderBy?: productOccasionOrderByWithRelationInput | productOccasionOrderByWithRelationInput[]
-    cursor?: productOccasionWhereUniqueInput
+    include?: occasionInclude<ExtArgs> | null
+    where?: occasionWhereInput
+    orderBy?: occasionOrderByWithRelationInput | occasionOrderByWithRelationInput[]
+    cursor?: occasionWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: ProductOccasionScalarFieldEnum | ProductOccasionScalarFieldEnum[]
+    distinct?: OccasionScalarFieldEnum | OccasionScalarFieldEnum[]
   }
 
   /**
@@ -19193,1059 +19102,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: productInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model productOccasion
-   */
-
-  export type AggregateProductOccasion = {
-    _count: ProductOccasionCountAggregateOutputType | null
-    _min: ProductOccasionMinAggregateOutputType | null
-    _max: ProductOccasionMaxAggregateOutputType | null
-  }
-
-  export type ProductOccasionMinAggregateOutputType = {
-    occasionsId: string | null
-    productId: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type ProductOccasionMaxAggregateOutputType = {
-    occasionsId: string | null
-    productId: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type ProductOccasionCountAggregateOutputType = {
-    occasionsId: number
-    productId: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type ProductOccasionMinAggregateInputType = {
-    occasionsId?: true
-    productId?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type ProductOccasionMaxAggregateInputType = {
-    occasionsId?: true
-    productId?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type ProductOccasionCountAggregateInputType = {
-    occasionsId?: true
-    productId?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type ProductOccasionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which productOccasion to aggregate.
-     */
-    where?: productOccasionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of productOccasions to fetch.
-     */
-    orderBy?: productOccasionOrderByWithRelationInput | productOccasionOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: productOccasionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` productOccasions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` productOccasions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned productOccasions
-    **/
-    _count?: true | ProductOccasionCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ProductOccasionMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ProductOccasionMaxAggregateInputType
-  }
-
-  export type GetProductOccasionAggregateType<T extends ProductOccasionAggregateArgs> = {
-        [P in keyof T & keyof AggregateProductOccasion]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateProductOccasion[P]>
-      : GetScalarType<T[P], AggregateProductOccasion[P]>
-  }
-
-
-
-
-  export type productOccasionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: productOccasionWhereInput
-    orderBy?: productOccasionOrderByWithAggregationInput | productOccasionOrderByWithAggregationInput[]
-    by: ProductOccasionScalarFieldEnum[] | ProductOccasionScalarFieldEnum
-    having?: productOccasionScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ProductOccasionCountAggregateInputType | true
-    _min?: ProductOccasionMinAggregateInputType
-    _max?: ProductOccasionMaxAggregateInputType
-  }
-
-  export type ProductOccasionGroupByOutputType = {
-    occasionsId: string
-    productId: string
-    createdAt: Date
-    updatedAt: Date
-    _count: ProductOccasionCountAggregateOutputType | null
-    _min: ProductOccasionMinAggregateOutputType | null
-    _max: ProductOccasionMaxAggregateOutputType | null
-  }
-
-  type GetProductOccasionGroupByPayload<T extends productOccasionGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ProductOccasionGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ProductOccasionGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ProductOccasionGroupByOutputType[P]>
-            : GetScalarType<T[P], ProductOccasionGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type productOccasionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    occasionsId?: boolean
-    productId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    occasions?: boolean | occasionDefaultArgs<ExtArgs>
-    product?: boolean | productDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["productOccasion"]>
-
-  export type productOccasionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    occasionsId?: boolean
-    productId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    occasions?: boolean | occasionDefaultArgs<ExtArgs>
-    product?: boolean | productDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["productOccasion"]>
-
-  export type productOccasionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    occasionsId?: boolean
-    productId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    occasions?: boolean | occasionDefaultArgs<ExtArgs>
-    product?: boolean | productDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["productOccasion"]>
-
-  export type productOccasionSelectScalar = {
-    occasionsId?: boolean
-    productId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type productOccasionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"occasionsId" | "productId" | "createdAt" | "updatedAt", ExtArgs["result"]["productOccasion"]>
-  export type productOccasionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    occasions?: boolean | occasionDefaultArgs<ExtArgs>
-    product?: boolean | productDefaultArgs<ExtArgs>
-  }
-  export type productOccasionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    occasions?: boolean | occasionDefaultArgs<ExtArgs>
-    product?: boolean | productDefaultArgs<ExtArgs>
-  }
-  export type productOccasionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    occasions?: boolean | occasionDefaultArgs<ExtArgs>
-    product?: boolean | productDefaultArgs<ExtArgs>
-  }
-
-  export type $productOccasionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "productOccasion"
-    objects: {
-      occasions: Prisma.$occasionPayload<ExtArgs>
-      product: Prisma.$productPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      occasionsId: string
-      productId: string
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["productOccasion"]>
-    composites: {}
-  }
-
-  type productOccasionGetPayload<S extends boolean | null | undefined | productOccasionDefaultArgs> = $Result.GetResult<Prisma.$productOccasionPayload, S>
-
-  type productOccasionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<productOccasionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ProductOccasionCountAggregateInputType | true
-    }
-
-  export interface productOccasionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['productOccasion'], meta: { name: 'productOccasion' } }
-    /**
-     * Find zero or one ProductOccasion that matches the filter.
-     * @param {productOccasionFindUniqueArgs} args - Arguments to find a ProductOccasion
-     * @example
-     * // Get one ProductOccasion
-     * const productOccasion = await prisma.productOccasion.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends productOccasionFindUniqueArgs>(args: SelectSubset<T, productOccasionFindUniqueArgs<ExtArgs>>): Prisma__productOccasionClient<$Result.GetResult<Prisma.$productOccasionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one ProductOccasion that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {productOccasionFindUniqueOrThrowArgs} args - Arguments to find a ProductOccasion
-     * @example
-     * // Get one ProductOccasion
-     * const productOccasion = await prisma.productOccasion.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends productOccasionFindUniqueOrThrowArgs>(args: SelectSubset<T, productOccasionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__productOccasionClient<$Result.GetResult<Prisma.$productOccasionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ProductOccasion that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {productOccasionFindFirstArgs} args - Arguments to find a ProductOccasion
-     * @example
-     * // Get one ProductOccasion
-     * const productOccasion = await prisma.productOccasion.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends productOccasionFindFirstArgs>(args?: SelectSubset<T, productOccasionFindFirstArgs<ExtArgs>>): Prisma__productOccasionClient<$Result.GetResult<Prisma.$productOccasionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ProductOccasion that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {productOccasionFindFirstOrThrowArgs} args - Arguments to find a ProductOccasion
-     * @example
-     * // Get one ProductOccasion
-     * const productOccasion = await prisma.productOccasion.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends productOccasionFindFirstOrThrowArgs>(args?: SelectSubset<T, productOccasionFindFirstOrThrowArgs<ExtArgs>>): Prisma__productOccasionClient<$Result.GetResult<Prisma.$productOccasionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more ProductOccasions that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {productOccasionFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all ProductOccasions
-     * const productOccasions = await prisma.productOccasion.findMany()
-     * 
-     * // Get first 10 ProductOccasions
-     * const productOccasions = await prisma.productOccasion.findMany({ take: 10 })
-     * 
-     * // Only select the `occasionsId`
-     * const productOccasionWithOccasionsIdOnly = await prisma.productOccasion.findMany({ select: { occasionsId: true } })
-     * 
-     */
-    findMany<T extends productOccasionFindManyArgs>(args?: SelectSubset<T, productOccasionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$productOccasionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a ProductOccasion.
-     * @param {productOccasionCreateArgs} args - Arguments to create a ProductOccasion.
-     * @example
-     * // Create one ProductOccasion
-     * const ProductOccasion = await prisma.productOccasion.create({
-     *   data: {
-     *     // ... data to create a ProductOccasion
-     *   }
-     * })
-     * 
-     */
-    create<T extends productOccasionCreateArgs>(args: SelectSubset<T, productOccasionCreateArgs<ExtArgs>>): Prisma__productOccasionClient<$Result.GetResult<Prisma.$productOccasionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many ProductOccasions.
-     * @param {productOccasionCreateManyArgs} args - Arguments to create many ProductOccasions.
-     * @example
-     * // Create many ProductOccasions
-     * const productOccasion = await prisma.productOccasion.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends productOccasionCreateManyArgs>(args?: SelectSubset<T, productOccasionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many ProductOccasions and returns the data saved in the database.
-     * @param {productOccasionCreateManyAndReturnArgs} args - Arguments to create many ProductOccasions.
-     * @example
-     * // Create many ProductOccasions
-     * const productOccasion = await prisma.productOccasion.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many ProductOccasions and only return the `occasionsId`
-     * const productOccasionWithOccasionsIdOnly = await prisma.productOccasion.createManyAndReturn({
-     *   select: { occasionsId: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends productOccasionCreateManyAndReturnArgs>(args?: SelectSubset<T, productOccasionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$productOccasionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a ProductOccasion.
-     * @param {productOccasionDeleteArgs} args - Arguments to delete one ProductOccasion.
-     * @example
-     * // Delete one ProductOccasion
-     * const ProductOccasion = await prisma.productOccasion.delete({
-     *   where: {
-     *     // ... filter to delete one ProductOccasion
-     *   }
-     * })
-     * 
-     */
-    delete<T extends productOccasionDeleteArgs>(args: SelectSubset<T, productOccasionDeleteArgs<ExtArgs>>): Prisma__productOccasionClient<$Result.GetResult<Prisma.$productOccasionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one ProductOccasion.
-     * @param {productOccasionUpdateArgs} args - Arguments to update one ProductOccasion.
-     * @example
-     * // Update one ProductOccasion
-     * const productOccasion = await prisma.productOccasion.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends productOccasionUpdateArgs>(args: SelectSubset<T, productOccasionUpdateArgs<ExtArgs>>): Prisma__productOccasionClient<$Result.GetResult<Prisma.$productOccasionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more ProductOccasions.
-     * @param {productOccasionDeleteManyArgs} args - Arguments to filter ProductOccasions to delete.
-     * @example
-     * // Delete a few ProductOccasions
-     * const { count } = await prisma.productOccasion.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends productOccasionDeleteManyArgs>(args?: SelectSubset<T, productOccasionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ProductOccasions.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {productOccasionUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many ProductOccasions
-     * const productOccasion = await prisma.productOccasion.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends productOccasionUpdateManyArgs>(args: SelectSubset<T, productOccasionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ProductOccasions and returns the data updated in the database.
-     * @param {productOccasionUpdateManyAndReturnArgs} args - Arguments to update many ProductOccasions.
-     * @example
-     * // Update many ProductOccasions
-     * const productOccasion = await prisma.productOccasion.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more ProductOccasions and only return the `occasionsId`
-     * const productOccasionWithOccasionsIdOnly = await prisma.productOccasion.updateManyAndReturn({
-     *   select: { occasionsId: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends productOccasionUpdateManyAndReturnArgs>(args: SelectSubset<T, productOccasionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$productOccasionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one ProductOccasion.
-     * @param {productOccasionUpsertArgs} args - Arguments to update or create a ProductOccasion.
-     * @example
-     * // Update or create a ProductOccasion
-     * const productOccasion = await prisma.productOccasion.upsert({
-     *   create: {
-     *     // ... data to create a ProductOccasion
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the ProductOccasion we want to update
-     *   }
-     * })
-     */
-    upsert<T extends productOccasionUpsertArgs>(args: SelectSubset<T, productOccasionUpsertArgs<ExtArgs>>): Prisma__productOccasionClient<$Result.GetResult<Prisma.$productOccasionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of ProductOccasions.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {productOccasionCountArgs} args - Arguments to filter ProductOccasions to count.
-     * @example
-     * // Count the number of ProductOccasions
-     * const count = await prisma.productOccasion.count({
-     *   where: {
-     *     // ... the filter for the ProductOccasions we want to count
-     *   }
-     * })
-    **/
-    count<T extends productOccasionCountArgs>(
-      args?: Subset<T, productOccasionCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ProductOccasionCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a ProductOccasion.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProductOccasionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ProductOccasionAggregateArgs>(args: Subset<T, ProductOccasionAggregateArgs>): Prisma.PrismaPromise<GetProductOccasionAggregateType<T>>
-
-    /**
-     * Group by ProductOccasion.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {productOccasionGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends productOccasionGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: productOccasionGroupByArgs['orderBy'] }
-        : { orderBy?: productOccasionGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, productOccasionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProductOccasionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the productOccasion model
-   */
-  readonly fields: productOccasionFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for productOccasion.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__productOccasionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    occasions<T extends occasionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, occasionDefaultArgs<ExtArgs>>): Prisma__occasionClient<$Result.GetResult<Prisma.$occasionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    product<T extends productDefaultArgs<ExtArgs> = {}>(args?: Subset<T, productDefaultArgs<ExtArgs>>): Prisma__productClient<$Result.GetResult<Prisma.$productPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the productOccasion model
-   */
-  interface productOccasionFieldRefs {
-    readonly occasionsId: FieldRef<"productOccasion", 'String'>
-    readonly productId: FieldRef<"productOccasion", 'String'>
-    readonly createdAt: FieldRef<"productOccasion", 'DateTime'>
-    readonly updatedAt: FieldRef<"productOccasion", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * productOccasion findUnique
-   */
-  export type productOccasionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the productOccasion
-     */
-    select?: productOccasionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the productOccasion
-     */
-    omit?: productOccasionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: productOccasionInclude<ExtArgs> | null
-    /**
-     * Filter, which productOccasion to fetch.
-     */
-    where: productOccasionWhereUniqueInput
-  }
-
-  /**
-   * productOccasion findUniqueOrThrow
-   */
-  export type productOccasionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the productOccasion
-     */
-    select?: productOccasionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the productOccasion
-     */
-    omit?: productOccasionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: productOccasionInclude<ExtArgs> | null
-    /**
-     * Filter, which productOccasion to fetch.
-     */
-    where: productOccasionWhereUniqueInput
-  }
-
-  /**
-   * productOccasion findFirst
-   */
-  export type productOccasionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the productOccasion
-     */
-    select?: productOccasionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the productOccasion
-     */
-    omit?: productOccasionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: productOccasionInclude<ExtArgs> | null
-    /**
-     * Filter, which productOccasion to fetch.
-     */
-    where?: productOccasionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of productOccasions to fetch.
-     */
-    orderBy?: productOccasionOrderByWithRelationInput | productOccasionOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for productOccasions.
-     */
-    cursor?: productOccasionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` productOccasions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` productOccasions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of productOccasions.
-     */
-    distinct?: ProductOccasionScalarFieldEnum | ProductOccasionScalarFieldEnum[]
-  }
-
-  /**
-   * productOccasion findFirstOrThrow
-   */
-  export type productOccasionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the productOccasion
-     */
-    select?: productOccasionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the productOccasion
-     */
-    omit?: productOccasionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: productOccasionInclude<ExtArgs> | null
-    /**
-     * Filter, which productOccasion to fetch.
-     */
-    where?: productOccasionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of productOccasions to fetch.
-     */
-    orderBy?: productOccasionOrderByWithRelationInput | productOccasionOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for productOccasions.
-     */
-    cursor?: productOccasionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` productOccasions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` productOccasions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of productOccasions.
-     */
-    distinct?: ProductOccasionScalarFieldEnum | ProductOccasionScalarFieldEnum[]
-  }
-
-  /**
-   * productOccasion findMany
-   */
-  export type productOccasionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the productOccasion
-     */
-    select?: productOccasionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the productOccasion
-     */
-    omit?: productOccasionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: productOccasionInclude<ExtArgs> | null
-    /**
-     * Filter, which productOccasions to fetch.
-     */
-    where?: productOccasionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of productOccasions to fetch.
-     */
-    orderBy?: productOccasionOrderByWithRelationInput | productOccasionOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing productOccasions.
-     */
-    cursor?: productOccasionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` productOccasions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` productOccasions.
-     */
-    skip?: number
-    distinct?: ProductOccasionScalarFieldEnum | ProductOccasionScalarFieldEnum[]
-  }
-
-  /**
-   * productOccasion create
-   */
-  export type productOccasionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the productOccasion
-     */
-    select?: productOccasionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the productOccasion
-     */
-    omit?: productOccasionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: productOccasionInclude<ExtArgs> | null
-    /**
-     * The data needed to create a productOccasion.
-     */
-    data: XOR<productOccasionCreateInput, productOccasionUncheckedCreateInput>
-  }
-
-  /**
-   * productOccasion createMany
-   */
-  export type productOccasionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many productOccasions.
-     */
-    data: productOccasionCreateManyInput | productOccasionCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * productOccasion createManyAndReturn
-   */
-  export type productOccasionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the productOccasion
-     */
-    select?: productOccasionSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the productOccasion
-     */
-    omit?: productOccasionOmit<ExtArgs> | null
-    /**
-     * The data used to create many productOccasions.
-     */
-    data: productOccasionCreateManyInput | productOccasionCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: productOccasionIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * productOccasion update
-   */
-  export type productOccasionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the productOccasion
-     */
-    select?: productOccasionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the productOccasion
-     */
-    omit?: productOccasionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: productOccasionInclude<ExtArgs> | null
-    /**
-     * The data needed to update a productOccasion.
-     */
-    data: XOR<productOccasionUpdateInput, productOccasionUncheckedUpdateInput>
-    /**
-     * Choose, which productOccasion to update.
-     */
-    where: productOccasionWhereUniqueInput
-  }
-
-  /**
-   * productOccasion updateMany
-   */
-  export type productOccasionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update productOccasions.
-     */
-    data: XOR<productOccasionUpdateManyMutationInput, productOccasionUncheckedUpdateManyInput>
-    /**
-     * Filter which productOccasions to update
-     */
-    where?: productOccasionWhereInput
-    /**
-     * Limit how many productOccasions to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * productOccasion updateManyAndReturn
-   */
-  export type productOccasionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the productOccasion
-     */
-    select?: productOccasionSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the productOccasion
-     */
-    omit?: productOccasionOmit<ExtArgs> | null
-    /**
-     * The data used to update productOccasions.
-     */
-    data: XOR<productOccasionUpdateManyMutationInput, productOccasionUncheckedUpdateManyInput>
-    /**
-     * Filter which productOccasions to update
-     */
-    where?: productOccasionWhereInput
-    /**
-     * Limit how many productOccasions to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: productOccasionIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * productOccasion upsert
-   */
-  export type productOccasionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the productOccasion
-     */
-    select?: productOccasionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the productOccasion
-     */
-    omit?: productOccasionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: productOccasionInclude<ExtArgs> | null
-    /**
-     * The filter to search for the productOccasion to update in case it exists.
-     */
-    where: productOccasionWhereUniqueInput
-    /**
-     * In case the productOccasion found by the `where` argument doesn't exist, create a new productOccasion with this data.
-     */
-    create: XOR<productOccasionCreateInput, productOccasionUncheckedCreateInput>
-    /**
-     * In case the productOccasion was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<productOccasionUpdateInput, productOccasionUncheckedUpdateInput>
-  }
-
-  /**
-   * productOccasion delete
-   */
-  export type productOccasionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the productOccasion
-     */
-    select?: productOccasionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the productOccasion
-     */
-    omit?: productOccasionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: productOccasionInclude<ExtArgs> | null
-    /**
-     * Filter which productOccasion to delete.
-     */
-    where: productOccasionWhereUniqueInput
-  }
-
-  /**
-   * productOccasion deleteMany
-   */
-  export type productOccasionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which productOccasions to delete
-     */
-    where?: productOccasionWhereInput
-    /**
-     * Limit how many productOccasions to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * productOccasion without action
-   */
-  export type productOccasionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the productOccasion
-     */
-    select?: productOccasionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the productOccasion
-     */
-    omit?: productOccasionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: productOccasionInclude<ExtArgs> | null
   }
 
 
@@ -30728,16 +29584,6 @@ export namespace Prisma {
   export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
 
 
-  export const ProductOccasionScalarFieldEnum: {
-    occasionsId: 'occasionsId',
-    productId: 'productId',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type ProductOccasionScalarFieldEnum = (typeof ProductOccasionScalarFieldEnum)[keyof typeof ProductOccasionScalarFieldEnum]
-
-
   export const ProductStockScalarFieldEnum: {
     productId: 'productId',
     branchId: 'branchId',
@@ -31869,7 +30715,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"occasion"> | Date | string
     updatedAt?: DateTimeFilter<"occasion"> | Date | string
     image?: XOR<ImageScalarRelationFilter, imageWhereInput>
-    productOccasion?: ProductOccasionListRelationFilter
+    products?: ProductListRelationFilter
   }
 
   export type occasionOrderByWithRelationInput = {
@@ -31879,7 +30725,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     image?: imageOrderByWithRelationInput
-    productOccasion?: productOccasionOrderByRelationAggregateInput
+    products?: productOrderByRelationAggregateInput
   }
 
   export type occasionWhereUniqueInput = Prisma.AtLeast<{
@@ -31892,7 +30738,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"occasion"> | Date | string
     updatedAt?: DateTimeFilter<"occasion"> | Date | string
     image?: XOR<ImageScalarRelationFilter, imageWhereInput>
-    productOccasion?: ProductOccasionListRelationFilter
+    products?: ProductListRelationFilter
   }, "id" | "id">
 
   export type occasionOrderByWithAggregationInput = {
@@ -31948,7 +30794,7 @@ export namespace Prisma {
     image?: ImageListRelationFilter
     productStock?: ProductStockListRelationFilter
     category?: XOR<CategoryScalarRelationFilter, categoryWhereInput>
-    productOccasion?: ProductOccasionListRelationFilter
+    occasions?: OccasionListRelationFilter
     reviews?: ReviewListRelationFilter
     productUser?: ProductCartListRelationFilter
     productOrder?: ProductOrderListRelationFilter
@@ -31982,7 +30828,7 @@ export namespace Prisma {
     image?: imageOrderByRelationAggregateInput
     productStock?: productStockOrderByRelationAggregateInput
     category?: categoryOrderByWithRelationInput
-    productOccasion?: productOccasionOrderByRelationAggregateInput
+    occasions?: occasionOrderByRelationAggregateInput
     reviews?: reviewOrderByRelationAggregateInput
     productUser?: productCartOrderByRelationAggregateInput
     productOrder?: productOrderOrderByRelationAggregateInput
@@ -32019,7 +30865,7 @@ export namespace Prisma {
     image?: ImageListRelationFilter
     productStock?: ProductStockListRelationFilter
     category?: XOR<CategoryScalarRelationFilter, categoryWhereInput>
-    productOccasion?: ProductOccasionListRelationFilter
+    occasions?: OccasionListRelationFilter
     reviews?: ReviewListRelationFilter
     productUser?: ProductCartListRelationFilter
     productOrder?: ProductOrderListRelationFilter
@@ -32085,60 +30931,6 @@ export namespace Prisma {
     dimensionsLCm?: FloatWithAggregatesFilter<"product"> | number
     createdAt?: DateTimeWithAggregatesFilter<"product"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"product"> | Date | string
-  }
-
-  export type productOccasionWhereInput = {
-    AND?: productOccasionWhereInput | productOccasionWhereInput[]
-    OR?: productOccasionWhereInput[]
-    NOT?: productOccasionWhereInput | productOccasionWhereInput[]
-    occasionsId?: StringFilter<"productOccasion"> | string
-    productId?: StringFilter<"productOccasion"> | string
-    createdAt?: DateTimeFilter<"productOccasion"> | Date | string
-    updatedAt?: DateTimeFilter<"productOccasion"> | Date | string
-    occasions?: XOR<OccasionScalarRelationFilter, occasionWhereInput>
-    product?: XOR<ProductScalarRelationFilter, productWhereInput>
-  }
-
-  export type productOccasionOrderByWithRelationInput = {
-    occasionsId?: SortOrder
-    productId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    occasions?: occasionOrderByWithRelationInput
-    product?: productOrderByWithRelationInput
-  }
-
-  export type productOccasionWhereUniqueInput = Prisma.AtLeast<{
-    occasionsId_productId?: productOccasionOccasionsIdProductIdCompoundUniqueInput
-    AND?: productOccasionWhereInput | productOccasionWhereInput[]
-    OR?: productOccasionWhereInput[]
-    NOT?: productOccasionWhereInput | productOccasionWhereInput[]
-    occasionsId?: StringFilter<"productOccasion"> | string
-    productId?: StringFilter<"productOccasion"> | string
-    createdAt?: DateTimeFilter<"productOccasion"> | Date | string
-    updatedAt?: DateTimeFilter<"productOccasion"> | Date | string
-    occasions?: XOR<OccasionScalarRelationFilter, occasionWhereInput>
-    product?: XOR<ProductScalarRelationFilter, productWhereInput>
-  }, "occasionsId_productId">
-
-  export type productOccasionOrderByWithAggregationInput = {
-    occasionsId?: SortOrder
-    productId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: productOccasionCountOrderByAggregateInput
-    _max?: productOccasionMaxOrderByAggregateInput
-    _min?: productOccasionMinOrderByAggregateInput
-  }
-
-  export type productOccasionScalarWhereWithAggregatesInput = {
-    AND?: productOccasionScalarWhereWithAggregatesInput | productOccasionScalarWhereWithAggregatesInput[]
-    OR?: productOccasionScalarWhereWithAggregatesInput[]
-    NOT?: productOccasionScalarWhereWithAggregatesInput | productOccasionScalarWhereWithAggregatesInput[]
-    occasionsId?: StringWithAggregatesFilter<"productOccasion"> | string
-    productId?: StringWithAggregatesFilter<"productOccasion"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"productOccasion"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"productOccasion"> | Date | string
   }
 
   export type productStockWhereInput = {
@@ -33829,7 +32621,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     image: imageCreateNestedOneWithoutOccasionInput
-    productOccasion?: productOccasionCreateNestedManyWithoutOccasionsInput
+    products?: productCreateNestedManyWithoutOccasionsInput
   }
 
   export type occasionUncheckedCreateInput = {
@@ -33838,7 +32630,7 @@ export namespace Prisma {
     imageId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    productOccasion?: productOccasionUncheckedCreateNestedManyWithoutOccasionsInput
+    products?: productUncheckedCreateNestedManyWithoutOccasionsInput
   }
 
   export type occasionUpdateInput = {
@@ -33847,7 +32639,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUpdateOneRequiredWithoutOccasionNestedInput
-    productOccasion?: productOccasionUpdateManyWithoutOccasionsNestedInput
+    products?: productUpdateManyWithoutOccasionsNestedInput
   }
 
   export type occasionUncheckedUpdateInput = {
@@ -33856,7 +32648,7 @@ export namespace Prisma {
     imageId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    productOccasion?: productOccasionUncheckedUpdateManyWithoutOccasionsNestedInput
+    products?: productUncheckedUpdateManyWithoutOccasionsNestedInput
   }
 
   export type occasionCreateManyInput = {
@@ -33909,7 +32701,7 @@ export namespace Prisma {
     image?: imageCreateNestedManyWithoutProductInput
     productStock?: productStockCreateNestedManyWithoutProductInput
     category?: categoryCreateNestedOneWithoutProductInput
-    productOccasion?: productOccasionCreateNestedManyWithoutProductInput
+    occasions?: occasionCreateNestedManyWithoutProductsInput
     reviews?: reviewCreateNestedManyWithoutProductInput
     productUser?: productCartCreateNestedManyWithoutProductInput
     productOrder?: productOrderCreateNestedManyWithoutProductInput
@@ -33942,7 +32734,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     image?: imageUncheckedCreateNestedManyWithoutProductInput
     productStock?: productStockUncheckedCreateNestedManyWithoutProductInput
-    productOccasion?: productOccasionUncheckedCreateNestedManyWithoutProductInput
+    occasions?: occasionUncheckedCreateNestedManyWithoutProductsInput
     reviews?: reviewUncheckedCreateNestedManyWithoutProductInput
     productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
     productOrder?: productOrderUncheckedCreateNestedManyWithoutProductInput
@@ -33975,7 +32767,7 @@ export namespace Prisma {
     image?: imageUpdateManyWithoutProductNestedInput
     productStock?: productStockUpdateManyWithoutProductNestedInput
     category?: categoryUpdateOneRequiredWithoutProductNestedInput
-    productOccasion?: productOccasionUpdateManyWithoutProductNestedInput
+    occasions?: occasionUpdateManyWithoutProductsNestedInput
     reviews?: reviewUpdateManyWithoutProductNestedInput
     productUser?: productCartUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUpdateManyWithoutProductNestedInput
@@ -34008,7 +32800,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUncheckedUpdateManyWithoutProductNestedInput
     productStock?: productStockUncheckedUpdateManyWithoutProductNestedInput
-    productOccasion?: productOccasionUncheckedUpdateManyWithoutProductNestedInput
+    occasions?: occasionUncheckedUpdateManyWithoutProductsNestedInput
     reviews?: reviewUncheckedUpdateManyWithoutProductNestedInput
     productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUncheckedUpdateManyWithoutProductNestedInput
@@ -34090,53 +32882,6 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type productOccasionCreateInput = {
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    occasions: occasionCreateNestedOneWithoutProductOccasionInput
-    product: productCreateNestedOneWithoutProductOccasionInput
-  }
-
-  export type productOccasionUncheckedCreateInput = {
-    occasionsId: string
-    productId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type productOccasionUpdateInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    occasions?: occasionUpdateOneRequiredWithoutProductOccasionNestedInput
-    product?: productUpdateOneRequiredWithoutProductOccasionNestedInput
-  }
-
-  export type productOccasionUncheckedUpdateInput = {
-    occasionsId?: StringFieldUpdateOperationsInput | string
-    productId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type productOccasionCreateManyInput = {
-    occasionsId: string
-    productId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type productOccasionUpdateManyMutationInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type productOccasionUncheckedUpdateManyInput = {
-    occasionsId?: StringFieldUpdateOperationsInput | string
-    productId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -35707,16 +34452,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type ProductOccasionListRelationFilter = {
-    every?: productOccasionWhereInput
-    some?: productOccasionWhereInput
-    none?: productOccasionWhereInput
-  }
-
-  export type productOccasionOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type occasionCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -35888,40 +34623,9 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
-  export type OccasionScalarRelationFilter = {
-    is?: occasionWhereInput
-    isNot?: occasionWhereInput
-  }
-
   export type ProductScalarRelationFilter = {
     is?: productWhereInput
     isNot?: productWhereInput
-  }
-
-  export type productOccasionOccasionsIdProductIdCompoundUniqueInput = {
-    occasionsId: string
-    productId: string
-  }
-
-  export type productOccasionCountOrderByAggregateInput = {
-    occasionsId?: SortOrder
-    productId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type productOccasionMaxOrderByAggregateInput = {
-    occasionsId?: SortOrder
-    productId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type productOccasionMinOrderByAggregateInput = {
-    occasionsId?: SortOrder
-    productId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
   }
 
   export type productStockProductIdBranchIdColorCompoundUniqueInput = {
@@ -37709,18 +36413,16 @@ export namespace Prisma {
     connect?: imageWhereUniqueInput
   }
 
-  export type productOccasionCreateNestedManyWithoutOccasionsInput = {
-    create?: XOR<productOccasionCreateWithoutOccasionsInput, productOccasionUncheckedCreateWithoutOccasionsInput> | productOccasionCreateWithoutOccasionsInput[] | productOccasionUncheckedCreateWithoutOccasionsInput[]
-    connectOrCreate?: productOccasionCreateOrConnectWithoutOccasionsInput | productOccasionCreateOrConnectWithoutOccasionsInput[]
-    createMany?: productOccasionCreateManyOccasionsInputEnvelope
-    connect?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
+  export type productCreateNestedManyWithoutOccasionsInput = {
+    create?: XOR<productCreateWithoutOccasionsInput, productUncheckedCreateWithoutOccasionsInput> | productCreateWithoutOccasionsInput[] | productUncheckedCreateWithoutOccasionsInput[]
+    connectOrCreate?: productCreateOrConnectWithoutOccasionsInput | productCreateOrConnectWithoutOccasionsInput[]
+    connect?: productWhereUniqueInput | productWhereUniqueInput[]
   }
 
-  export type productOccasionUncheckedCreateNestedManyWithoutOccasionsInput = {
-    create?: XOR<productOccasionCreateWithoutOccasionsInput, productOccasionUncheckedCreateWithoutOccasionsInput> | productOccasionCreateWithoutOccasionsInput[] | productOccasionUncheckedCreateWithoutOccasionsInput[]
-    connectOrCreate?: productOccasionCreateOrConnectWithoutOccasionsInput | productOccasionCreateOrConnectWithoutOccasionsInput[]
-    createMany?: productOccasionCreateManyOccasionsInputEnvelope
-    connect?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
+  export type productUncheckedCreateNestedManyWithoutOccasionsInput = {
+    create?: XOR<productCreateWithoutOccasionsInput, productUncheckedCreateWithoutOccasionsInput> | productCreateWithoutOccasionsInput[] | productUncheckedCreateWithoutOccasionsInput[]
+    connectOrCreate?: productCreateOrConnectWithoutOccasionsInput | productCreateOrConnectWithoutOccasionsInput[]
+    connect?: productWhereUniqueInput | productWhereUniqueInput[]
   }
 
   export type imageUpdateOneRequiredWithoutOccasionNestedInput = {
@@ -37731,32 +36433,30 @@ export namespace Prisma {
     update?: XOR<XOR<imageUpdateToOneWithWhereWithoutOccasionInput, imageUpdateWithoutOccasionInput>, imageUncheckedUpdateWithoutOccasionInput>
   }
 
-  export type productOccasionUpdateManyWithoutOccasionsNestedInput = {
-    create?: XOR<productOccasionCreateWithoutOccasionsInput, productOccasionUncheckedCreateWithoutOccasionsInput> | productOccasionCreateWithoutOccasionsInput[] | productOccasionUncheckedCreateWithoutOccasionsInput[]
-    connectOrCreate?: productOccasionCreateOrConnectWithoutOccasionsInput | productOccasionCreateOrConnectWithoutOccasionsInput[]
-    upsert?: productOccasionUpsertWithWhereUniqueWithoutOccasionsInput | productOccasionUpsertWithWhereUniqueWithoutOccasionsInput[]
-    createMany?: productOccasionCreateManyOccasionsInputEnvelope
-    set?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
-    disconnect?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
-    delete?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
-    connect?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
-    update?: productOccasionUpdateWithWhereUniqueWithoutOccasionsInput | productOccasionUpdateWithWhereUniqueWithoutOccasionsInput[]
-    updateMany?: productOccasionUpdateManyWithWhereWithoutOccasionsInput | productOccasionUpdateManyWithWhereWithoutOccasionsInput[]
-    deleteMany?: productOccasionScalarWhereInput | productOccasionScalarWhereInput[]
+  export type productUpdateManyWithoutOccasionsNestedInput = {
+    create?: XOR<productCreateWithoutOccasionsInput, productUncheckedCreateWithoutOccasionsInput> | productCreateWithoutOccasionsInput[] | productUncheckedCreateWithoutOccasionsInput[]
+    connectOrCreate?: productCreateOrConnectWithoutOccasionsInput | productCreateOrConnectWithoutOccasionsInput[]
+    upsert?: productUpsertWithWhereUniqueWithoutOccasionsInput | productUpsertWithWhereUniqueWithoutOccasionsInput[]
+    set?: productWhereUniqueInput | productWhereUniqueInput[]
+    disconnect?: productWhereUniqueInput | productWhereUniqueInput[]
+    delete?: productWhereUniqueInput | productWhereUniqueInput[]
+    connect?: productWhereUniqueInput | productWhereUniqueInput[]
+    update?: productUpdateWithWhereUniqueWithoutOccasionsInput | productUpdateWithWhereUniqueWithoutOccasionsInput[]
+    updateMany?: productUpdateManyWithWhereWithoutOccasionsInput | productUpdateManyWithWhereWithoutOccasionsInput[]
+    deleteMany?: productScalarWhereInput | productScalarWhereInput[]
   }
 
-  export type productOccasionUncheckedUpdateManyWithoutOccasionsNestedInput = {
-    create?: XOR<productOccasionCreateWithoutOccasionsInput, productOccasionUncheckedCreateWithoutOccasionsInput> | productOccasionCreateWithoutOccasionsInput[] | productOccasionUncheckedCreateWithoutOccasionsInput[]
-    connectOrCreate?: productOccasionCreateOrConnectWithoutOccasionsInput | productOccasionCreateOrConnectWithoutOccasionsInput[]
-    upsert?: productOccasionUpsertWithWhereUniqueWithoutOccasionsInput | productOccasionUpsertWithWhereUniqueWithoutOccasionsInput[]
-    createMany?: productOccasionCreateManyOccasionsInputEnvelope
-    set?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
-    disconnect?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
-    delete?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
-    connect?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
-    update?: productOccasionUpdateWithWhereUniqueWithoutOccasionsInput | productOccasionUpdateWithWhereUniqueWithoutOccasionsInput[]
-    updateMany?: productOccasionUpdateManyWithWhereWithoutOccasionsInput | productOccasionUpdateManyWithWhereWithoutOccasionsInput[]
-    deleteMany?: productOccasionScalarWhereInput | productOccasionScalarWhereInput[]
+  export type productUncheckedUpdateManyWithoutOccasionsNestedInput = {
+    create?: XOR<productCreateWithoutOccasionsInput, productUncheckedCreateWithoutOccasionsInput> | productCreateWithoutOccasionsInput[] | productUncheckedCreateWithoutOccasionsInput[]
+    connectOrCreate?: productCreateOrConnectWithoutOccasionsInput | productCreateOrConnectWithoutOccasionsInput[]
+    upsert?: productUpsertWithWhereUniqueWithoutOccasionsInput | productUpsertWithWhereUniqueWithoutOccasionsInput[]
+    set?: productWhereUniqueInput | productWhereUniqueInput[]
+    disconnect?: productWhereUniqueInput | productWhereUniqueInput[]
+    delete?: productWhereUniqueInput | productWhereUniqueInput[]
+    connect?: productWhereUniqueInput | productWhereUniqueInput[]
+    update?: productUpdateWithWhereUniqueWithoutOccasionsInput | productUpdateWithWhereUniqueWithoutOccasionsInput[]
+    updateMany?: productUpdateManyWithWhereWithoutOccasionsInput | productUpdateManyWithWhereWithoutOccasionsInput[]
+    deleteMany?: productScalarWhereInput | productScalarWhereInput[]
   }
 
   export type imageCreateNestedManyWithoutProductInput = {
@@ -37779,11 +36479,10 @@ export namespace Prisma {
     connect?: categoryWhereUniqueInput
   }
 
-  export type productOccasionCreateNestedManyWithoutProductInput = {
-    create?: XOR<productOccasionCreateWithoutProductInput, productOccasionUncheckedCreateWithoutProductInput> | productOccasionCreateWithoutProductInput[] | productOccasionUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: productOccasionCreateOrConnectWithoutProductInput | productOccasionCreateOrConnectWithoutProductInput[]
-    createMany?: productOccasionCreateManyProductInputEnvelope
-    connect?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
+  export type occasionCreateNestedManyWithoutProductsInput = {
+    create?: XOR<occasionCreateWithoutProductsInput, occasionUncheckedCreateWithoutProductsInput> | occasionCreateWithoutProductsInput[] | occasionUncheckedCreateWithoutProductsInput[]
+    connectOrCreate?: occasionCreateOrConnectWithoutProductsInput | occasionCreateOrConnectWithoutProductsInput[]
+    connect?: occasionWhereUniqueInput | occasionWhereUniqueInput[]
   }
 
   export type reviewCreateNestedManyWithoutProductInput = {
@@ -37821,11 +36520,10 @@ export namespace Prisma {
     connect?: productStockWhereUniqueInput | productStockWhereUniqueInput[]
   }
 
-  export type productOccasionUncheckedCreateNestedManyWithoutProductInput = {
-    create?: XOR<productOccasionCreateWithoutProductInput, productOccasionUncheckedCreateWithoutProductInput> | productOccasionCreateWithoutProductInput[] | productOccasionUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: productOccasionCreateOrConnectWithoutProductInput | productOccasionCreateOrConnectWithoutProductInput[]
-    createMany?: productOccasionCreateManyProductInputEnvelope
-    connect?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
+  export type occasionUncheckedCreateNestedManyWithoutProductsInput = {
+    create?: XOR<occasionCreateWithoutProductsInput, occasionUncheckedCreateWithoutProductsInput> | occasionCreateWithoutProductsInput[] | occasionUncheckedCreateWithoutProductsInput[]
+    connectOrCreate?: occasionCreateOrConnectWithoutProductsInput | occasionCreateOrConnectWithoutProductsInput[]
+    connect?: occasionWhereUniqueInput | occasionWhereUniqueInput[]
   }
 
   export type reviewUncheckedCreateNestedManyWithoutProductInput = {
@@ -37893,18 +36591,17 @@ export namespace Prisma {
     update?: XOR<XOR<categoryUpdateToOneWithWhereWithoutProductInput, categoryUpdateWithoutProductInput>, categoryUncheckedUpdateWithoutProductInput>
   }
 
-  export type productOccasionUpdateManyWithoutProductNestedInput = {
-    create?: XOR<productOccasionCreateWithoutProductInput, productOccasionUncheckedCreateWithoutProductInput> | productOccasionCreateWithoutProductInput[] | productOccasionUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: productOccasionCreateOrConnectWithoutProductInput | productOccasionCreateOrConnectWithoutProductInput[]
-    upsert?: productOccasionUpsertWithWhereUniqueWithoutProductInput | productOccasionUpsertWithWhereUniqueWithoutProductInput[]
-    createMany?: productOccasionCreateManyProductInputEnvelope
-    set?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
-    disconnect?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
-    delete?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
-    connect?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
-    update?: productOccasionUpdateWithWhereUniqueWithoutProductInput | productOccasionUpdateWithWhereUniqueWithoutProductInput[]
-    updateMany?: productOccasionUpdateManyWithWhereWithoutProductInput | productOccasionUpdateManyWithWhereWithoutProductInput[]
-    deleteMany?: productOccasionScalarWhereInput | productOccasionScalarWhereInput[]
+  export type occasionUpdateManyWithoutProductsNestedInput = {
+    create?: XOR<occasionCreateWithoutProductsInput, occasionUncheckedCreateWithoutProductsInput> | occasionCreateWithoutProductsInput[] | occasionUncheckedCreateWithoutProductsInput[]
+    connectOrCreate?: occasionCreateOrConnectWithoutProductsInput | occasionCreateOrConnectWithoutProductsInput[]
+    upsert?: occasionUpsertWithWhereUniqueWithoutProductsInput | occasionUpsertWithWhereUniqueWithoutProductsInput[]
+    set?: occasionWhereUniqueInput | occasionWhereUniqueInput[]
+    disconnect?: occasionWhereUniqueInput | occasionWhereUniqueInput[]
+    delete?: occasionWhereUniqueInput | occasionWhereUniqueInput[]
+    connect?: occasionWhereUniqueInput | occasionWhereUniqueInput[]
+    update?: occasionUpdateWithWhereUniqueWithoutProductsInput | occasionUpdateWithWhereUniqueWithoutProductsInput[]
+    updateMany?: occasionUpdateManyWithWhereWithoutProductsInput | occasionUpdateManyWithWhereWithoutProductsInput[]
+    deleteMany?: occasionScalarWhereInput | occasionScalarWhereInput[]
   }
 
   export type reviewUpdateManyWithoutProductNestedInput = {
@@ -37977,18 +36674,17 @@ export namespace Prisma {
     deleteMany?: productStockScalarWhereInput | productStockScalarWhereInput[]
   }
 
-  export type productOccasionUncheckedUpdateManyWithoutProductNestedInput = {
-    create?: XOR<productOccasionCreateWithoutProductInput, productOccasionUncheckedCreateWithoutProductInput> | productOccasionCreateWithoutProductInput[] | productOccasionUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: productOccasionCreateOrConnectWithoutProductInput | productOccasionCreateOrConnectWithoutProductInput[]
-    upsert?: productOccasionUpsertWithWhereUniqueWithoutProductInput | productOccasionUpsertWithWhereUniqueWithoutProductInput[]
-    createMany?: productOccasionCreateManyProductInputEnvelope
-    set?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
-    disconnect?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
-    delete?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
-    connect?: productOccasionWhereUniqueInput | productOccasionWhereUniqueInput[]
-    update?: productOccasionUpdateWithWhereUniqueWithoutProductInput | productOccasionUpdateWithWhereUniqueWithoutProductInput[]
-    updateMany?: productOccasionUpdateManyWithWhereWithoutProductInput | productOccasionUpdateManyWithWhereWithoutProductInput[]
-    deleteMany?: productOccasionScalarWhereInput | productOccasionScalarWhereInput[]
+  export type occasionUncheckedUpdateManyWithoutProductsNestedInput = {
+    create?: XOR<occasionCreateWithoutProductsInput, occasionUncheckedCreateWithoutProductsInput> | occasionCreateWithoutProductsInput[] | occasionUncheckedCreateWithoutProductsInput[]
+    connectOrCreate?: occasionCreateOrConnectWithoutProductsInput | occasionCreateOrConnectWithoutProductsInput[]
+    upsert?: occasionUpsertWithWhereUniqueWithoutProductsInput | occasionUpsertWithWhereUniqueWithoutProductsInput[]
+    set?: occasionWhereUniqueInput | occasionWhereUniqueInput[]
+    disconnect?: occasionWhereUniqueInput | occasionWhereUniqueInput[]
+    delete?: occasionWhereUniqueInput | occasionWhereUniqueInput[]
+    connect?: occasionWhereUniqueInput | occasionWhereUniqueInput[]
+    update?: occasionUpdateWithWhereUniqueWithoutProductsInput | occasionUpdateWithWhereUniqueWithoutProductsInput[]
+    updateMany?: occasionUpdateManyWithWhereWithoutProductsInput | occasionUpdateManyWithWhereWithoutProductsInput[]
+    deleteMany?: occasionScalarWhereInput | occasionScalarWhereInput[]
   }
 
   export type reviewUncheckedUpdateManyWithoutProductNestedInput = {
@@ -38031,34 +36727,6 @@ export namespace Prisma {
     update?: productOrderUpdateWithWhereUniqueWithoutProductInput | productOrderUpdateWithWhereUniqueWithoutProductInput[]
     updateMany?: productOrderUpdateManyWithWhereWithoutProductInput | productOrderUpdateManyWithWhereWithoutProductInput[]
     deleteMany?: productOrderScalarWhereInput | productOrderScalarWhereInput[]
-  }
-
-  export type occasionCreateNestedOneWithoutProductOccasionInput = {
-    create?: XOR<occasionCreateWithoutProductOccasionInput, occasionUncheckedCreateWithoutProductOccasionInput>
-    connectOrCreate?: occasionCreateOrConnectWithoutProductOccasionInput
-    connect?: occasionWhereUniqueInput
-  }
-
-  export type productCreateNestedOneWithoutProductOccasionInput = {
-    create?: XOR<productCreateWithoutProductOccasionInput, productUncheckedCreateWithoutProductOccasionInput>
-    connectOrCreate?: productCreateOrConnectWithoutProductOccasionInput
-    connect?: productWhereUniqueInput
-  }
-
-  export type occasionUpdateOneRequiredWithoutProductOccasionNestedInput = {
-    create?: XOR<occasionCreateWithoutProductOccasionInput, occasionUncheckedCreateWithoutProductOccasionInput>
-    connectOrCreate?: occasionCreateOrConnectWithoutProductOccasionInput
-    upsert?: occasionUpsertWithoutProductOccasionInput
-    connect?: occasionWhereUniqueInput
-    update?: XOR<XOR<occasionUpdateToOneWithWhereWithoutProductOccasionInput, occasionUpdateWithoutProductOccasionInput>, occasionUncheckedUpdateWithoutProductOccasionInput>
-  }
-
-  export type productUpdateOneRequiredWithoutProductOccasionNestedInput = {
-    create?: XOR<productCreateWithoutProductOccasionInput, productUncheckedCreateWithoutProductOccasionInput>
-    connectOrCreate?: productCreateOrConnectWithoutProductOccasionInput
-    upsert?: productUpsertWithoutProductOccasionInput
-    connect?: productWhereUniqueInput
-    update?: XOR<XOR<productUpdateToOneWithWhereWithoutProductOccasionInput, productUpdateWithoutProductOccasionInput>, productUncheckedUpdateWithoutProductOccasionInput>
   }
 
   export type productCreateNestedOneWithoutProductStockInput = {
@@ -38651,7 +37319,7 @@ export namespace Prisma {
     name: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    productOccasion?: productOccasionCreateNestedManyWithoutOccasionsInput
+    products?: productCreateNestedManyWithoutOccasionsInput
   }
 
   export type occasionUncheckedCreateWithoutImageInput = {
@@ -38659,7 +37327,7 @@ export namespace Prisma {
     name: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    productOccasion?: productOccasionUncheckedCreateNestedManyWithoutOccasionsInput
+    products?: productUncheckedCreateNestedManyWithoutOccasionsInput
   }
 
   export type occasionCreateOrConnectWithoutImageInput = {
@@ -38698,7 +37366,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     productStock?: productStockCreateNestedManyWithoutProductInput
     category?: categoryCreateNestedOneWithoutProductInput
-    productOccasion?: productOccasionCreateNestedManyWithoutProductInput
+    occasions?: occasionCreateNestedManyWithoutProductsInput
     reviews?: reviewCreateNestedManyWithoutProductInput
     productUser?: productCartCreateNestedManyWithoutProductInput
     productOrder?: productOrderCreateNestedManyWithoutProductInput
@@ -38730,7 +37398,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     productStock?: productStockUncheckedCreateNestedManyWithoutProductInput
-    productOccasion?: productOccasionUncheckedCreateNestedManyWithoutProductInput
+    occasions?: occasionUncheckedCreateNestedManyWithoutProductsInput
     reviews?: reviewUncheckedCreateNestedManyWithoutProductInput
     productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
     productOrder?: productOrderUncheckedCreateNestedManyWithoutProductInput
@@ -38948,7 +37616,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productStock?: productStockUpdateManyWithoutProductNestedInput
     category?: categoryUpdateOneRequiredWithoutProductNestedInput
-    productOccasion?: productOccasionUpdateManyWithoutProductNestedInput
+    occasions?: occasionUpdateManyWithoutProductsNestedInput
     reviews?: reviewUpdateManyWithoutProductNestedInput
     productUser?: productCartUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUpdateManyWithoutProductNestedInput
@@ -38980,7 +37648,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productStock?: productStockUncheckedUpdateManyWithoutProductNestedInput
-    productOccasion?: productOccasionUncheckedUpdateManyWithoutProductNestedInput
+    occasions?: occasionUncheckedUpdateManyWithoutProductsNestedInput
     reviews?: reviewUncheckedUpdateManyWithoutProductNestedInput
     productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUncheckedUpdateManyWithoutProductNestedInput
@@ -41245,7 +39913,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     image?: imageCreateNestedManyWithoutProductInput
     productStock?: productStockCreateNestedManyWithoutProductInput
-    productOccasion?: productOccasionCreateNestedManyWithoutProductInput
+    occasions?: occasionCreateNestedManyWithoutProductsInput
     reviews?: reviewCreateNestedManyWithoutProductInput
     productUser?: productCartCreateNestedManyWithoutProductInput
     productOrder?: productOrderCreateNestedManyWithoutProductInput
@@ -41277,7 +39945,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     image?: imageUncheckedCreateNestedManyWithoutProductInput
     productStock?: productStockUncheckedCreateNestedManyWithoutProductInput
-    productOccasion?: productOccasionUncheckedCreateNestedManyWithoutProductInput
+    occasions?: occasionUncheckedCreateNestedManyWithoutProductsInput
     reviews?: reviewUncheckedCreateNestedManyWithoutProductInput
     productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
     productOrder?: productOrderUncheckedCreateNestedManyWithoutProductInput
@@ -41395,26 +40063,73 @@ export namespace Prisma {
     create: XOR<imageCreateWithoutOccasionInput, imageUncheckedCreateWithoutOccasionInput>
   }
 
-  export type productOccasionCreateWithoutOccasionsInput = {
+  export type productCreateWithoutOccasionsInput = {
+    id?: string
+    name: string
+    description: string
+    detailedDescription: string
+    price?: number
+    actualPrice?: number
+    doesNeedPreparation?: boolean
+    isAcceptedByAdmin?: boolean
+    isAvailable?: boolean
+    isFeatured?: boolean
+    isPopular?: boolean
+    preparationTimeInMinutes?: number
+    discountPercent?: number | null
+    discountStartTime?: Date | string | null
+    discountEndTime?: Date | string | null
+    canBeDeliveredOutsideState?: boolean
+    avgRating?: number
+    reviewsCount?: number
+    dimensionsWCm?: number
+    dimensionsHCm?: number
+    dimensionsLCm?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    product: productCreateNestedOneWithoutProductOccasionInput
+    image?: imageCreateNestedManyWithoutProductInput
+    productStock?: productStockCreateNestedManyWithoutProductInput
+    category?: categoryCreateNestedOneWithoutProductInput
+    reviews?: reviewCreateNestedManyWithoutProductInput
+    productUser?: productCartCreateNestedManyWithoutProductInput
+    productOrder?: productOrderCreateNestedManyWithoutProductInput
   }
 
-  export type productOccasionUncheckedCreateWithoutOccasionsInput = {
-    productId: string
+  export type productUncheckedCreateWithoutOccasionsInput = {
+    id?: string
+    name: string
+    description: string
+    detailedDescription: string
+    price?: number
+    actualPrice?: number
+    doesNeedPreparation?: boolean
+    isAcceptedByAdmin?: boolean
+    isAvailable?: boolean
+    isFeatured?: boolean
+    isPopular?: boolean
+    preparationTimeInMinutes?: number
+    discountPercent?: number | null
+    discountStartTime?: Date | string | null
+    discountEndTime?: Date | string | null
+    canBeDeliveredOutsideState?: boolean
+    categoryId?: string
+    avgRating?: number
+    reviewsCount?: number
+    dimensionsWCm?: number
+    dimensionsHCm?: number
+    dimensionsLCm?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    image?: imageUncheckedCreateNestedManyWithoutProductInput
+    productStock?: productStockUncheckedCreateNestedManyWithoutProductInput
+    reviews?: reviewUncheckedCreateNestedManyWithoutProductInput
+    productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
+    productOrder?: productOrderUncheckedCreateNestedManyWithoutProductInput
   }
 
-  export type productOccasionCreateOrConnectWithoutOccasionsInput = {
-    where: productOccasionWhereUniqueInput
-    create: XOR<productOccasionCreateWithoutOccasionsInput, productOccasionUncheckedCreateWithoutOccasionsInput>
-  }
-
-  export type productOccasionCreateManyOccasionsInputEnvelope = {
-    data: productOccasionCreateManyOccasionsInput | productOccasionCreateManyOccasionsInput[]
-    skipDuplicates?: boolean
+  export type productCreateOrConnectWithoutOccasionsInput = {
+    where: productWhereUniqueInput
+    create: XOR<productCreateWithoutOccasionsInput, productUncheckedCreateWithoutOccasionsInput>
   }
 
   export type imageUpsertWithoutOccasionInput = {
@@ -41448,30 +40163,20 @@ export namespace Prisma {
     storeBanner?: storeUncheckedUpdateManyWithoutBannerNestedInput
   }
 
-  export type productOccasionUpsertWithWhereUniqueWithoutOccasionsInput = {
-    where: productOccasionWhereUniqueInput
-    update: XOR<productOccasionUpdateWithoutOccasionsInput, productOccasionUncheckedUpdateWithoutOccasionsInput>
-    create: XOR<productOccasionCreateWithoutOccasionsInput, productOccasionUncheckedCreateWithoutOccasionsInput>
+  export type productUpsertWithWhereUniqueWithoutOccasionsInput = {
+    where: productWhereUniqueInput
+    update: XOR<productUpdateWithoutOccasionsInput, productUncheckedUpdateWithoutOccasionsInput>
+    create: XOR<productCreateWithoutOccasionsInput, productUncheckedCreateWithoutOccasionsInput>
   }
 
-  export type productOccasionUpdateWithWhereUniqueWithoutOccasionsInput = {
-    where: productOccasionWhereUniqueInput
-    data: XOR<productOccasionUpdateWithoutOccasionsInput, productOccasionUncheckedUpdateWithoutOccasionsInput>
+  export type productUpdateWithWhereUniqueWithoutOccasionsInput = {
+    where: productWhereUniqueInput
+    data: XOR<productUpdateWithoutOccasionsInput, productUncheckedUpdateWithoutOccasionsInput>
   }
 
-  export type productOccasionUpdateManyWithWhereWithoutOccasionsInput = {
-    where: productOccasionScalarWhereInput
-    data: XOR<productOccasionUpdateManyMutationInput, productOccasionUncheckedUpdateManyWithoutOccasionsInput>
-  }
-
-  export type productOccasionScalarWhereInput = {
-    AND?: productOccasionScalarWhereInput | productOccasionScalarWhereInput[]
-    OR?: productOccasionScalarWhereInput[]
-    NOT?: productOccasionScalarWhereInput | productOccasionScalarWhereInput[]
-    occasionsId?: StringFilter<"productOccasion"> | string
-    productId?: StringFilter<"productOccasion"> | string
-    createdAt?: DateTimeFilter<"productOccasion"> | Date | string
-    updatedAt?: DateTimeFilter<"productOccasion"> | Date | string
+  export type productUpdateManyWithWhereWithoutOccasionsInput = {
+    where: productScalarWhereInput
+    data: XOR<productUpdateManyMutationInput, productUncheckedUpdateManyWithoutOccasionsInput>
   }
 
   export type imageCreateWithoutProductInput = {
@@ -41551,26 +40256,25 @@ export namespace Prisma {
     create: XOR<categoryCreateWithoutProductInput, categoryUncheckedCreateWithoutProductInput>
   }
 
-  export type productOccasionCreateWithoutProductInput = {
+  export type occasionCreateWithoutProductsInput = {
+    id?: string
+    name: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    occasions: occasionCreateNestedOneWithoutProductOccasionInput
+    image: imageCreateNestedOneWithoutOccasionInput
   }
 
-  export type productOccasionUncheckedCreateWithoutProductInput = {
-    occasionsId: string
+  export type occasionUncheckedCreateWithoutProductsInput = {
+    id?: string
+    name: string
+    imageId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type productOccasionCreateOrConnectWithoutProductInput = {
-    where: productOccasionWhereUniqueInput
-    create: XOR<productOccasionCreateWithoutProductInput, productOccasionUncheckedCreateWithoutProductInput>
-  }
-
-  export type productOccasionCreateManyProductInputEnvelope = {
-    data: productOccasionCreateManyProductInput | productOccasionCreateManyProductInput[]
-    skipDuplicates?: boolean
+  export type occasionCreateOrConnectWithoutProductsInput = {
+    where: occasionWhereUniqueInput
+    create: XOR<occasionCreateWithoutProductsInput, occasionUncheckedCreateWithoutProductsInput>
   }
 
   export type reviewCreateWithoutProductInput = {
@@ -41732,20 +40436,20 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type productOccasionUpsertWithWhereUniqueWithoutProductInput = {
-    where: productOccasionWhereUniqueInput
-    update: XOR<productOccasionUpdateWithoutProductInput, productOccasionUncheckedUpdateWithoutProductInput>
-    create: XOR<productOccasionCreateWithoutProductInput, productOccasionUncheckedCreateWithoutProductInput>
+  export type occasionUpsertWithWhereUniqueWithoutProductsInput = {
+    where: occasionWhereUniqueInput
+    update: XOR<occasionUpdateWithoutProductsInput, occasionUncheckedUpdateWithoutProductsInput>
+    create: XOR<occasionCreateWithoutProductsInput, occasionUncheckedCreateWithoutProductsInput>
   }
 
-  export type productOccasionUpdateWithWhereUniqueWithoutProductInput = {
-    where: productOccasionWhereUniqueInput
-    data: XOR<productOccasionUpdateWithoutProductInput, productOccasionUncheckedUpdateWithoutProductInput>
+  export type occasionUpdateWithWhereUniqueWithoutProductsInput = {
+    where: occasionWhereUniqueInput
+    data: XOR<occasionUpdateWithoutProductsInput, occasionUncheckedUpdateWithoutProductsInput>
   }
 
-  export type productOccasionUpdateManyWithWhereWithoutProductInput = {
-    where: productOccasionScalarWhereInput
-    data: XOR<productOccasionUpdateManyMutationInput, productOccasionUncheckedUpdateManyWithoutProductInput>
+  export type occasionUpdateManyWithWhereWithoutProductsInput = {
+    where: occasionScalarWhereInput
+    data: XOR<occasionUpdateManyMutationInput, occasionUncheckedUpdateManyWithoutProductsInput>
   }
 
   export type reviewUpsertWithWhereUniqueWithoutProductInput = {
@@ -41796,198 +40500,6 @@ export namespace Prisma {
     data: XOR<productOrderUpdateManyMutationInput, productOrderUncheckedUpdateManyWithoutProductInput>
   }
 
-  export type occasionCreateWithoutProductOccasionInput = {
-    id?: string
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    image: imageCreateNestedOneWithoutOccasionInput
-  }
-
-  export type occasionUncheckedCreateWithoutProductOccasionInput = {
-    id?: string
-    name: string
-    imageId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type occasionCreateOrConnectWithoutProductOccasionInput = {
-    where: occasionWhereUniqueInput
-    create: XOR<occasionCreateWithoutProductOccasionInput, occasionUncheckedCreateWithoutProductOccasionInput>
-  }
-
-  export type productCreateWithoutProductOccasionInput = {
-    id?: string
-    name: string
-    description: string
-    detailedDescription: string
-    price?: number
-    actualPrice?: number
-    doesNeedPreparation?: boolean
-    isAcceptedByAdmin?: boolean
-    isAvailable?: boolean
-    isFeatured?: boolean
-    isPopular?: boolean
-    preparationTimeInMinutes?: number
-    discountPercent?: number | null
-    discountStartTime?: Date | string | null
-    discountEndTime?: Date | string | null
-    canBeDeliveredOutsideState?: boolean
-    avgRating?: number
-    reviewsCount?: number
-    dimensionsWCm?: number
-    dimensionsHCm?: number
-    dimensionsLCm?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    image?: imageCreateNestedManyWithoutProductInput
-    productStock?: productStockCreateNestedManyWithoutProductInput
-    category?: categoryCreateNestedOneWithoutProductInput
-    reviews?: reviewCreateNestedManyWithoutProductInput
-    productUser?: productCartCreateNestedManyWithoutProductInput
-    productOrder?: productOrderCreateNestedManyWithoutProductInput
-  }
-
-  export type productUncheckedCreateWithoutProductOccasionInput = {
-    id?: string
-    name: string
-    description: string
-    detailedDescription: string
-    price?: number
-    actualPrice?: number
-    doesNeedPreparation?: boolean
-    isAcceptedByAdmin?: boolean
-    isAvailable?: boolean
-    isFeatured?: boolean
-    isPopular?: boolean
-    preparationTimeInMinutes?: number
-    discountPercent?: number | null
-    discountStartTime?: Date | string | null
-    discountEndTime?: Date | string | null
-    canBeDeliveredOutsideState?: boolean
-    categoryId?: string
-    avgRating?: number
-    reviewsCount?: number
-    dimensionsWCm?: number
-    dimensionsHCm?: number
-    dimensionsLCm?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    image?: imageUncheckedCreateNestedManyWithoutProductInput
-    productStock?: productStockUncheckedCreateNestedManyWithoutProductInput
-    reviews?: reviewUncheckedCreateNestedManyWithoutProductInput
-    productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
-    productOrder?: productOrderUncheckedCreateNestedManyWithoutProductInput
-  }
-
-  export type productCreateOrConnectWithoutProductOccasionInput = {
-    where: productWhereUniqueInput
-    create: XOR<productCreateWithoutProductOccasionInput, productUncheckedCreateWithoutProductOccasionInput>
-  }
-
-  export type occasionUpsertWithoutProductOccasionInput = {
-    update: XOR<occasionUpdateWithoutProductOccasionInput, occasionUncheckedUpdateWithoutProductOccasionInput>
-    create: XOR<occasionCreateWithoutProductOccasionInput, occasionUncheckedCreateWithoutProductOccasionInput>
-    where?: occasionWhereInput
-  }
-
-  export type occasionUpdateToOneWithWhereWithoutProductOccasionInput = {
-    where?: occasionWhereInput
-    data: XOR<occasionUpdateWithoutProductOccasionInput, occasionUncheckedUpdateWithoutProductOccasionInput>
-  }
-
-  export type occasionUpdateWithoutProductOccasionInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    image?: imageUpdateOneRequiredWithoutOccasionNestedInput
-  }
-
-  export type occasionUncheckedUpdateWithoutProductOccasionInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    imageId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type productUpsertWithoutProductOccasionInput = {
-    update: XOR<productUpdateWithoutProductOccasionInput, productUncheckedUpdateWithoutProductOccasionInput>
-    create: XOR<productCreateWithoutProductOccasionInput, productUncheckedCreateWithoutProductOccasionInput>
-    where?: productWhereInput
-  }
-
-  export type productUpdateToOneWithWhereWithoutProductOccasionInput = {
-    where?: productWhereInput
-    data: XOR<productUpdateWithoutProductOccasionInput, productUncheckedUpdateWithoutProductOccasionInput>
-  }
-
-  export type productUpdateWithoutProductOccasionInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    detailedDescription?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    actualPrice?: FloatFieldUpdateOperationsInput | number
-    doesNeedPreparation?: BoolFieldUpdateOperationsInput | boolean
-    isAcceptedByAdmin?: BoolFieldUpdateOperationsInput | boolean
-    isAvailable?: BoolFieldUpdateOperationsInput | boolean
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isPopular?: BoolFieldUpdateOperationsInput | boolean
-    preparationTimeInMinutes?: IntFieldUpdateOperationsInput | number
-    discountPercent?: NullableFloatFieldUpdateOperationsInput | number | null
-    discountStartTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    discountEndTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    canBeDeliveredOutsideState?: BoolFieldUpdateOperationsInput | boolean
-    avgRating?: FloatFieldUpdateOperationsInput | number
-    reviewsCount?: IntFieldUpdateOperationsInput | number
-    dimensionsWCm?: FloatFieldUpdateOperationsInput | number
-    dimensionsHCm?: FloatFieldUpdateOperationsInput | number
-    dimensionsLCm?: FloatFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    image?: imageUpdateManyWithoutProductNestedInput
-    productStock?: productStockUpdateManyWithoutProductNestedInput
-    category?: categoryUpdateOneRequiredWithoutProductNestedInput
-    reviews?: reviewUpdateManyWithoutProductNestedInput
-    productUser?: productCartUpdateManyWithoutProductNestedInput
-    productOrder?: productOrderUpdateManyWithoutProductNestedInput
-  }
-
-  export type productUncheckedUpdateWithoutProductOccasionInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    detailedDescription?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    actualPrice?: FloatFieldUpdateOperationsInput | number
-    doesNeedPreparation?: BoolFieldUpdateOperationsInput | boolean
-    isAcceptedByAdmin?: BoolFieldUpdateOperationsInput | boolean
-    isAvailable?: BoolFieldUpdateOperationsInput | boolean
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isPopular?: BoolFieldUpdateOperationsInput | boolean
-    preparationTimeInMinutes?: IntFieldUpdateOperationsInput | number
-    discountPercent?: NullableFloatFieldUpdateOperationsInput | number | null
-    discountStartTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    discountEndTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    canBeDeliveredOutsideState?: BoolFieldUpdateOperationsInput | boolean
-    categoryId?: StringFieldUpdateOperationsInput | string
-    avgRating?: FloatFieldUpdateOperationsInput | number
-    reviewsCount?: IntFieldUpdateOperationsInput | number
-    dimensionsWCm?: FloatFieldUpdateOperationsInput | number
-    dimensionsHCm?: FloatFieldUpdateOperationsInput | number
-    dimensionsLCm?: FloatFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    image?: imageUncheckedUpdateManyWithoutProductNestedInput
-    productStock?: productStockUncheckedUpdateManyWithoutProductNestedInput
-    reviews?: reviewUncheckedUpdateManyWithoutProductNestedInput
-    productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
-    productOrder?: productOrderUncheckedUpdateManyWithoutProductNestedInput
-  }
-
   export type productCreateWithoutProductStockInput = {
     id?: string
     name: string
@@ -42014,7 +40526,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     image?: imageCreateNestedManyWithoutProductInput
     category?: categoryCreateNestedOneWithoutProductInput
-    productOccasion?: productOccasionCreateNestedManyWithoutProductInput
+    occasions?: occasionCreateNestedManyWithoutProductsInput
     reviews?: reviewCreateNestedManyWithoutProductInput
     productUser?: productCartCreateNestedManyWithoutProductInput
     productOrder?: productOrderCreateNestedManyWithoutProductInput
@@ -42046,7 +40558,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     image?: imageUncheckedCreateNestedManyWithoutProductInput
-    productOccasion?: productOccasionUncheckedCreateNestedManyWithoutProductInput
+    occasions?: occasionUncheckedCreateNestedManyWithoutProductsInput
     reviews?: reviewUncheckedCreateNestedManyWithoutProductInput
     productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
     productOrder?: productOrderUncheckedCreateNestedManyWithoutProductInput
@@ -42127,7 +40639,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUpdateManyWithoutProductNestedInput
     category?: categoryUpdateOneRequiredWithoutProductNestedInput
-    productOccasion?: productOccasionUpdateManyWithoutProductNestedInput
+    occasions?: occasionUpdateManyWithoutProductsNestedInput
     reviews?: reviewUpdateManyWithoutProductNestedInput
     productUser?: productCartUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUpdateManyWithoutProductNestedInput
@@ -42159,7 +40671,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUncheckedUpdateManyWithoutProductNestedInput
-    productOccasion?: productOccasionUncheckedUpdateManyWithoutProductNestedInput
+    occasions?: occasionUncheckedUpdateManyWithoutProductsNestedInput
     reviews?: reviewUncheckedUpdateManyWithoutProductNestedInput
     productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUncheckedUpdateManyWithoutProductNestedInput
@@ -42280,7 +40792,7 @@ export namespace Prisma {
     image?: imageCreateNestedManyWithoutProductInput
     productStock?: productStockCreateNestedManyWithoutProductInput
     category?: categoryCreateNestedOneWithoutProductInput
-    productOccasion?: productOccasionCreateNestedManyWithoutProductInput
+    occasions?: occasionCreateNestedManyWithoutProductsInput
     productUser?: productCartCreateNestedManyWithoutProductInput
     productOrder?: productOrderCreateNestedManyWithoutProductInput
   }
@@ -42312,7 +40824,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     image?: imageUncheckedCreateNestedManyWithoutProductInput
     productStock?: productStockUncheckedCreateNestedManyWithoutProductInput
-    productOccasion?: productOccasionUncheckedCreateNestedManyWithoutProductInput
+    occasions?: occasionUncheckedCreateNestedManyWithoutProductsInput
     productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
     productOrder?: productOrderUncheckedCreateNestedManyWithoutProductInput
   }
@@ -42415,7 +40927,7 @@ export namespace Prisma {
     image?: imageUpdateManyWithoutProductNestedInput
     productStock?: productStockUpdateManyWithoutProductNestedInput
     category?: categoryUpdateOneRequiredWithoutProductNestedInput
-    productOccasion?: productOccasionUpdateManyWithoutProductNestedInput
+    occasions?: occasionUpdateManyWithoutProductsNestedInput
     productUser?: productCartUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUpdateManyWithoutProductNestedInput
   }
@@ -42447,7 +40959,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUncheckedUpdateManyWithoutProductNestedInput
     productStock?: productStockUncheckedUpdateManyWithoutProductNestedInput
-    productOccasion?: productOccasionUncheckedUpdateManyWithoutProductNestedInput
+    occasions?: occasionUncheckedUpdateManyWithoutProductsNestedInput
     productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUncheckedUpdateManyWithoutProductNestedInput
   }
@@ -42654,7 +41166,7 @@ export namespace Prisma {
     image?: imageCreateNestedManyWithoutProductInput
     productStock?: productStockCreateNestedManyWithoutProductInput
     category?: categoryCreateNestedOneWithoutProductInput
-    productOccasion?: productOccasionCreateNestedManyWithoutProductInput
+    occasions?: occasionCreateNestedManyWithoutProductsInput
     reviews?: reviewCreateNestedManyWithoutProductInput
     productOrder?: productOrderCreateNestedManyWithoutProductInput
   }
@@ -42686,7 +41198,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     image?: imageUncheckedCreateNestedManyWithoutProductInput
     productStock?: productStockUncheckedCreateNestedManyWithoutProductInput
-    productOccasion?: productOccasionUncheckedCreateNestedManyWithoutProductInput
+    occasions?: occasionUncheckedCreateNestedManyWithoutProductsInput
     reviews?: reviewUncheckedCreateNestedManyWithoutProductInput
     productOrder?: productOrderUncheckedCreateNestedManyWithoutProductInput
   }
@@ -42829,7 +41341,7 @@ export namespace Prisma {
     image?: imageUpdateManyWithoutProductNestedInput
     productStock?: productStockUpdateManyWithoutProductNestedInput
     category?: categoryUpdateOneRequiredWithoutProductNestedInput
-    productOccasion?: productOccasionUpdateManyWithoutProductNestedInput
+    occasions?: occasionUpdateManyWithoutProductsNestedInput
     reviews?: reviewUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUpdateManyWithoutProductNestedInput
   }
@@ -42861,7 +41373,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUncheckedUpdateManyWithoutProductNestedInput
     productStock?: productStockUncheckedUpdateManyWithoutProductNestedInput
-    productOccasion?: productOccasionUncheckedUpdateManyWithoutProductNestedInput
+    occasions?: occasionUncheckedUpdateManyWithoutProductsNestedInput
     reviews?: reviewUncheckedUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUncheckedUpdateManyWithoutProductNestedInput
   }
@@ -43300,7 +41812,7 @@ export namespace Prisma {
     image?: imageCreateNestedManyWithoutProductInput
     productStock?: productStockCreateNestedManyWithoutProductInput
     category?: categoryCreateNestedOneWithoutProductInput
-    productOccasion?: productOccasionCreateNestedManyWithoutProductInput
+    occasions?: occasionCreateNestedManyWithoutProductsInput
     reviews?: reviewCreateNestedManyWithoutProductInput
     productUser?: productCartCreateNestedManyWithoutProductInput
   }
@@ -43332,7 +41844,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     image?: imageUncheckedCreateNestedManyWithoutProductInput
     productStock?: productStockUncheckedCreateNestedManyWithoutProductInput
-    productOccasion?: productOccasionUncheckedCreateNestedManyWithoutProductInput
+    occasions?: occasionUncheckedCreateNestedManyWithoutProductsInput
     reviews?: reviewUncheckedCreateNestedManyWithoutProductInput
     productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
   }
@@ -43468,7 +41980,7 @@ export namespace Prisma {
     image?: imageUpdateManyWithoutProductNestedInput
     productStock?: productStockUpdateManyWithoutProductNestedInput
     category?: categoryUpdateOneRequiredWithoutProductNestedInput
-    productOccasion?: productOccasionUpdateManyWithoutProductNestedInput
+    occasions?: occasionUpdateManyWithoutProductsNestedInput
     reviews?: reviewUpdateManyWithoutProductNestedInput
     productUser?: productCartUpdateManyWithoutProductNestedInput
   }
@@ -43500,7 +42012,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUncheckedUpdateManyWithoutProductNestedInput
     productStock?: productStockUncheckedUpdateManyWithoutProductNestedInput
-    productOccasion?: productOccasionUncheckedUpdateManyWithoutProductNestedInput
+    occasions?: occasionUncheckedUpdateManyWithoutProductsNestedInput
     reviews?: reviewUncheckedUpdateManyWithoutProductNestedInput
     productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
   }
@@ -43846,7 +42358,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    productOccasion?: productOccasionUpdateManyWithoutOccasionsNestedInput
+    products?: productUpdateManyWithoutOccasionsNestedInput
   }
 
   export type occasionUncheckedUpdateWithoutImageInput = {
@@ -43854,7 +42366,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    productOccasion?: productOccasionUncheckedUpdateManyWithoutOccasionsNestedInput
+    products?: productUncheckedUpdateManyWithoutOccasionsNestedInput
   }
 
   export type occasionUncheckedUpdateManyWithoutImageInput = {
@@ -45184,7 +43696,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUpdateManyWithoutProductNestedInput
     productStock?: productStockUpdateManyWithoutProductNestedInput
-    productOccasion?: productOccasionUpdateManyWithoutProductNestedInput
+    occasions?: occasionUpdateManyWithoutProductsNestedInput
     reviews?: reviewUpdateManyWithoutProductNestedInput
     productUser?: productCartUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUpdateManyWithoutProductNestedInput
@@ -45216,7 +43728,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUncheckedUpdateManyWithoutProductNestedInput
     productStock?: productStockUncheckedUpdateManyWithoutProductNestedInput
-    productOccasion?: productOccasionUncheckedUpdateManyWithoutProductNestedInput
+    occasions?: occasionUncheckedUpdateManyWithoutProductsNestedInput
     reviews?: reviewUncheckedUpdateManyWithoutProductNestedInput
     productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUncheckedUpdateManyWithoutProductNestedInput
@@ -45248,26 +43760,93 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type productOccasionCreateManyOccasionsInput = {
-    productId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type productOccasionUpdateWithoutOccasionsInput = {
+  export type productUpdateWithoutOccasionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    detailedDescription?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    actualPrice?: FloatFieldUpdateOperationsInput | number
+    doesNeedPreparation?: BoolFieldUpdateOperationsInput | boolean
+    isAcceptedByAdmin?: BoolFieldUpdateOperationsInput | boolean
+    isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: BoolFieldUpdateOperationsInput | boolean
+    isPopular?: BoolFieldUpdateOperationsInput | boolean
+    preparationTimeInMinutes?: IntFieldUpdateOperationsInput | number
+    discountPercent?: NullableFloatFieldUpdateOperationsInput | number | null
+    discountStartTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    discountEndTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canBeDeliveredOutsideState?: BoolFieldUpdateOperationsInput | boolean
+    avgRating?: FloatFieldUpdateOperationsInput | number
+    reviewsCount?: IntFieldUpdateOperationsInput | number
+    dimensionsWCm?: FloatFieldUpdateOperationsInput | number
+    dimensionsHCm?: FloatFieldUpdateOperationsInput | number
+    dimensionsLCm?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    product?: productUpdateOneRequiredWithoutProductOccasionNestedInput
+    image?: imageUpdateManyWithoutProductNestedInput
+    productStock?: productStockUpdateManyWithoutProductNestedInput
+    category?: categoryUpdateOneRequiredWithoutProductNestedInput
+    reviews?: reviewUpdateManyWithoutProductNestedInput
+    productUser?: productCartUpdateManyWithoutProductNestedInput
+    productOrder?: productOrderUpdateManyWithoutProductNestedInput
   }
 
-  export type productOccasionUncheckedUpdateWithoutOccasionsInput = {
-    productId?: StringFieldUpdateOperationsInput | string
+  export type productUncheckedUpdateWithoutOccasionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    detailedDescription?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    actualPrice?: FloatFieldUpdateOperationsInput | number
+    doesNeedPreparation?: BoolFieldUpdateOperationsInput | boolean
+    isAcceptedByAdmin?: BoolFieldUpdateOperationsInput | boolean
+    isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: BoolFieldUpdateOperationsInput | boolean
+    isPopular?: BoolFieldUpdateOperationsInput | boolean
+    preparationTimeInMinutes?: IntFieldUpdateOperationsInput | number
+    discountPercent?: NullableFloatFieldUpdateOperationsInput | number | null
+    discountStartTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    discountEndTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canBeDeliveredOutsideState?: BoolFieldUpdateOperationsInput | boolean
+    categoryId?: StringFieldUpdateOperationsInput | string
+    avgRating?: FloatFieldUpdateOperationsInput | number
+    reviewsCount?: IntFieldUpdateOperationsInput | number
+    dimensionsWCm?: FloatFieldUpdateOperationsInput | number
+    dimensionsHCm?: FloatFieldUpdateOperationsInput | number
+    dimensionsLCm?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    image?: imageUncheckedUpdateManyWithoutProductNestedInput
+    productStock?: productStockUncheckedUpdateManyWithoutProductNestedInput
+    reviews?: reviewUncheckedUpdateManyWithoutProductNestedInput
+    productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
+    productOrder?: productOrderUncheckedUpdateManyWithoutProductNestedInput
   }
 
-  export type productOccasionUncheckedUpdateManyWithoutOccasionsInput = {
-    productId?: StringFieldUpdateOperationsInput | string
+  export type productUncheckedUpdateManyWithoutOccasionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    detailedDescription?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    actualPrice?: FloatFieldUpdateOperationsInput | number
+    doesNeedPreparation?: BoolFieldUpdateOperationsInput | boolean
+    isAcceptedByAdmin?: BoolFieldUpdateOperationsInput | boolean
+    isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: BoolFieldUpdateOperationsInput | boolean
+    isPopular?: BoolFieldUpdateOperationsInput | boolean
+    preparationTimeInMinutes?: IntFieldUpdateOperationsInput | number
+    discountPercent?: NullableFloatFieldUpdateOperationsInput | number | null
+    discountStartTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    discountEndTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canBeDeliveredOutsideState?: BoolFieldUpdateOperationsInput | boolean
+    categoryId?: StringFieldUpdateOperationsInput | string
+    avgRating?: FloatFieldUpdateOperationsInput | number
+    reviewsCount?: IntFieldUpdateOperationsInput | number
+    dimensionsWCm?: FloatFieldUpdateOperationsInput | number
+    dimensionsHCm?: FloatFieldUpdateOperationsInput | number
+    dimensionsLCm?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -45282,12 +43861,6 @@ export namespace Prisma {
     branchId: string
     stock?: number | null
     color: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type productOccasionCreateManyProductInput = {
-    occasionsId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -45372,20 +43945,26 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type productOccasionUpdateWithoutProductInput = {
+  export type occasionUpdateWithoutProductsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    occasions?: occasionUpdateOneRequiredWithoutProductOccasionNestedInput
+    image?: imageUpdateOneRequiredWithoutOccasionNestedInput
   }
 
-  export type productOccasionUncheckedUpdateWithoutProductInput = {
-    occasionsId?: StringFieldUpdateOperationsInput | string
+  export type occasionUncheckedUpdateWithoutProductsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    imageId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type productOccasionUncheckedUpdateManyWithoutProductInput = {
-    occasionsId?: StringFieldUpdateOperationsInput | string
+  export type occasionUncheckedUpdateManyWithoutProductsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    imageId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

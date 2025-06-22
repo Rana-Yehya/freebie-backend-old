@@ -24,6 +24,10 @@ const {
 } = require("../helpers/redis");
 const { sendOtpHelper } = require("../helpers/redis/send-otp-helper");
 const { userConstant } = require("../config/constants");
+const {
+  UpdateUserProfileZodModel,
+} = require("../models/update-user-profile-zod-model");
+const { stat } = require("fs");
 //TODO AM I IN NEED TO LOGIN
 
 const login = async (req, res) => {
@@ -123,9 +127,6 @@ const register = async (req, res, next) => {
   });
   const isPhoneValid = phone(phoneNumber.toString());
 
-  console.log(isPhoneValid);
-  console.log(phoneNumber);
-
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
@@ -143,8 +144,6 @@ const register = async (req, res, next) => {
       OR: [{ email }, { phone: phoneNumber }],
     },
   });
-  console.log(userInDB);
-  console.log(storeInDB);
   if (storeInDB || userInDB) {
     throw new BadRequestError(
       "Account already in use or has an individal account"
@@ -298,7 +297,58 @@ const logout = async (req, res) => {
 };
 
 const updateProfile = async (req, res) => {
-  // const { email, name } = req.body;
+  const { dateOfBirth, gender, countryId, stateId } = req.body;
+  const zodModel = UpdateUserProfileZodModel.safeParse({
+    dateOfBirth: dateOfBirth,
+    gender: gender,
+    userState: stateId,
+    userCountry: countryId,
+  });
+
+  if (!zodModel.success) {
+    throw new BadRequestError(zodModel.error.errors[0].message);
+  }
+  const state = await prisma.state.findFirst({
+    where: { id: stateId, countryId: countryId },
+  });
+  if (!state) {
+    throw new BadRequestError("State not found");
+  }
+  let parse;
+  let date;
+  if (dateOfBirth) {
+    parse = Date.parse(dateOfBirth);
+    date = new Date(parse);
+  }
+  const user = await prisma.user.update({
+    where: {
+      id: req.user.id,
+    },
+    data: {
+      dateOfBirth: date || undefined,
+      gender: gender || undefined,
+      ...(stateId && {
+        userState: {
+          connect: {
+            id: stateId || undefined,
+          },
+        },
+      }),
+      ...(countryId && {
+        userCountry: {
+          connect: {
+            id: countryId || undefined,
+          },
+        },
+      }),
+    },
+  });
+
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "Profile updated successfully",
+    user: user,
+  });
   // if (!email || !name) {
   //   throw new BadRequestError("Please enter all profile data");
   // }
@@ -319,72 +369,7 @@ const updateProfile = async (req, res) => {
   //   token,
   // });
 };
-const resetPassword = async (req, res) => {
-  // const { email, token, password } = req.body;
-  // if (!email || !token || !password) {
-  //   throw new BadRequestError("Please enter valid values");
-  // }
-  // const userInDB = await User.findOne({ email });
-  // if (!userInDB) {
-  //   throw new BadRequestError("This user in not in the database");
-  // }
-  // console.log(userInDB.passwordTokenExpiresAt - Date());
-  // console.log(userInDB.passwordTokenExpiresAt - Date() < 1000 * 60 * 10);
-  // if (
-  //   !(
-  //     userInDB.passwordToken === token &&
-  //     userInDB.passwordTokenExpiresAt - Date() < 1000 * 60 * 10
-  //   )
-  // ) {
-  //   throw new BadRequestError("The password validation time is expired");
-  // }
-  // userInDB.password = password;
-  // userInDB.passwordToken = null;
-  // userInDB.passwordTokenExpiresAt = null;
-  // await userInDB.save();
-  // return res.status(StatusCodes.OK).json({
-  //   isSuccess: true,
-  //   message: "Your password has been reset successfully.",
-  // });
-};
-const forgotPassword = async (req, res) => {
-  // const { email } = req.body;
-  // if (!email) {
-  //   throw new BadRequestError("Please enter a valid email");
-  // }
-  // const userInDB = await User.findOne({ email });
-  // if (!userInDB) {
-  //   throw new BadRequestError("This user in not in the database");
-  // }
-  // if (
-  //   userInDB.passwordToken &&
-  //   Date() - userInDB.passwordTokenExpiresAt < 1000 * 60 * 10
-  // ) {
-  //   return res.status(StatusCodes.OK).json({
-  //     isSuccess: true,
-  //     message: "We have sent you an email. Please check your email",
-  //   });
-  // }
-  // const passwordToken = crypto.randomBytes(70).toString("hex");
-  // userInDB.passwordToken = passwordToken;
-  // userInDB.passwordTokenExpiresAt = new Date(Date() + 1000 * 60 * 10); // ten mins
-  // await userInDB.save();
-  // const protocol = req.protocol;
-  // const host = req.get("host");
-  // // const origin = `http://${req.headers.host}`;
-  // const origin = `${protocol}://${host}`;
-  // // console.log(origin);
-  // await sendResetPasswordEmail({
-  //   email,
-  //   name: userInDB.name,
-  //   passwordToken,
-  //   origin,
-  // });
-  // return res.status(StatusCodes.OK).json({
-  //   isSuccess: true,
-  //   message: "Please check your email",
-  // });
-};
+
 const showMe = async (req, res) => {
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
@@ -399,7 +384,5 @@ module.exports = {
   verifyCode,
   updateProfile,
   showMe,
-  resetPassword,
-  forgotPassword,
   sendCode,
 };

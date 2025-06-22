@@ -88,8 +88,8 @@ app.use(
 );
 
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: (req) => (req?.user ? 1000 : 100),
+  windowMs: 15 * 60 * 1000, //15
+  max: (req) => (req?.user ? 100000000000000 : 100000000), //1000 : 100
   message: { error: "Too many requests" },
   standardHeaders: true,
   legacyHeaders: true,

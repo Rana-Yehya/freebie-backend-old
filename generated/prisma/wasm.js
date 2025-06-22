@@ -282,13 +282,6 @@ exports.Prisma.ProductScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.ProductOccasionScalarFieldEnum = {
-  occasionsId: 'occasionsId',
-  productId: 'productId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.ProductStockScalarFieldEnum = {
   productId: 'productId',
   branchId: 'branchId',
@@ -423,7 +416,6 @@ exports.Prisma.ModelName = {
   category: 'category',
   occasion: 'occasion',
   product: 'product',
-  productOccasion: 'productOccasion',
   productStock: 'productStock',
   review: 'review',
   userCart: 'userCart',
