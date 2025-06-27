@@ -52,9 +52,13 @@ const createWithdrawPayment = async ({
   isUser = true,
   userId,
   amount,
+  userMoneyInPocket,
   purpose,
   currency,
 }) => {
+  if (amount > userMoneyInPocket) {
+    throw new BadRequestError("Not enough money in pocket");
+  }
   const transactionModel =
     isUser == true
       ? {
@@ -71,9 +75,7 @@ const createWithdrawPayment = async ({
           purpose: purpose || undefined,
           currency: currency || undefined,
         };
-  const transaction = await prisma.transaction.create({
-    data: transactionModel,
-  });
+
   if (isUser == true) {
     await prisma.user.update({
       where: { id: userId },
@@ -85,6 +87,9 @@ const createWithdrawPayment = async ({
       data: { moneyInPocket: { decrement: amount } },
     });
   }
+  const transaction = await prisma.transaction.create({
+    data: transactionModel,
+  });
   return transaction;
 };
 
@@ -107,9 +112,54 @@ const getAllTransactions = async (req, res, next) => {
     data: transactions,
   });
 };
+const createWithdrawTransaction = async (req, res, next) => {
+  console.log(req.user);
+  const { amount } = req.body; //purpose, currency
+  if (amount > req.user.moneyInPocket) {
+    throw new BadRequestError("Not enough money in pocket");
+  }
+  const transactionModel =
+    req.user.role == userConstant || req.user.role == adminConstant
+      ? {
+          type: "withdraw",
+          amount: amount,
+          userId: req.user.id,
+          purpose: "withdraw",
+          currency: currency || undefined,
+        }
+      : {
+          type: "withdraw",
+          amount: amount,
+          storeId: req.user.id,
+          purpose: "withdraw",
+          currency: currency || undefined,
+        };
+
+  if (req.user.role == userConstant || req.user.role == adminConstant) {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { moneyInPocket: { decrement: amount } },
+    });
+  } else {
+    await prisma.store.update({
+      where: { id: userId },
+      data: { moneyInPocket: { decrement: amount } },
+    });
+  }
+  const transaction = await prisma.transaction.create({
+    data: transactionModel,
+  });
+  return res.status(StatusCodes.CREATED).json({
+    isSuccess: true,
+    // userCart: userCart,
+    message: "Transaction created successfully",
+    data: transaction,
+  });
+};
 
 module.exports = {
   createDepositPayment,
   createWithdrawPayment,
   getAllTransactions,
+  createWithdrawTransaction,
 };

@@ -297,8 +297,9 @@ const logout = async (req, res) => {
 };
 
 const updateProfile = async (req, res) => {
-  const { dateOfBirth, gender, countryId, stateId } = req.body;
+  const { dateOfBirth, gender, countryId, stateId, name } = req.body;
   const zodModel = UpdateUserProfileZodModel.safeParse({
+    name: name,
     dateOfBirth: dateOfBirth,
     gender: gender,
     userState: stateId,
@@ -325,6 +326,7 @@ const updateProfile = async (req, res) => {
       id: req.user.id,
     },
     data: {
+      name: name || undefined,
       dateOfBirth: date || undefined,
       gender: gender || undefined,
       ...(stateId && {
@@ -376,6 +378,52 @@ const showMe = async (req, res) => {
     user: req.user,
   });
 };
+
+const deleteAccount = async (req, res) => {
+  const email = req.query.email;
+  const phone = req.query.phone;
+
+  if (!(req.user != undefined && req.user.role === userConstant)) {
+    if (!(email || phone)) {
+      throw new BadRequestError("Please provide an email or phone");
+    }
+  }
+
+  const order = await prisma.order.findMany({
+    where: {
+      AND: [
+        {
+          user: {
+            OR: [
+              { email: email || req.user.email },
+              { phone: phone || req.user.phone },
+            ],
+          }, //  email || req.user.id
+        },
+        {
+          productOrder: { every: { status: { not: "delivered" } } },
+        },
+      ],
+    },
+  });
+  if (order) {
+    throw new BadRequestError({
+      message: "User can not be deleted. This user has unfinished orders.",
+    });
+  }
+  await prisma.user.delete({
+    where: {
+      OR: [
+        { email: email || req.user.email },
+        { phone: phone || req.user.phone },
+      ],
+    },
+  });
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "User deleted successfully",
+  });
+};
 module.exports = {
   login,
   register,
@@ -383,5 +431,6 @@ module.exports = {
   verifyCode,
   updateProfile,
   showMe,
+  deleteAccount,
   sendCode,
 };

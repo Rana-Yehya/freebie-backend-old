@@ -58,7 +58,7 @@ const sendInbox = async (req, res, next) => {
 
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
-  console.log(req.user);
+  // console.log(req.user);
   const inbox = await prisma.inbox.create({
     data: {
       slug: slug,

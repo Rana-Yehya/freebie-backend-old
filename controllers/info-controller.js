@@ -59,7 +59,17 @@ const privacyPolicy = async (req, res, next) => {
     .status(StatusCodes.OK)
     .json({ isSuccess: true, data: privacyInfo });
 };
+const termsAndConditions = async (req, res, next) => {
+  // }
+  // productUser[i].userCartId = req.user.id;
+  const terms = await prisma.info.findUnique({
+    where: {
+      slug: "terms",
+    },
+  });
 
+  return res.status(StatusCodes.OK).json({ isSuccess: true, data: terms });
+};
 const refundPolicy = async (req, res, next) => {
   // }
   // productUser[i].userCartId = req.user.id;
@@ -76,5 +86,6 @@ module.exports = {
   aboutApp,
   privacyPolicy,
   refundPolicy,
+  termsAndConditions,
   createInfo,
 };

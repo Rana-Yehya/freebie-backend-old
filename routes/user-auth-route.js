@@ -4,6 +4,7 @@ const {
   login,
   updateProfile,
   showMe,
+  deleteAccount,
   // resetPassword,
   // forgotPassword,
   logout,
@@ -12,6 +13,7 @@ const {
 } = require("../controllers/user-auth-controller");
 const {
   authenticateUserMiddleware,
+  optionalAuthenticateUserMiddleware,
 } = require("../middleware/user-auth-middleware");
 const {
   authorizeMiddleware,
@@ -35,4 +37,8 @@ router.route("/logout").get(authenticateUserMiddleware, logout);
 router
   .route("/update-profile")
   .patch(authenticateUserMiddleware, updateProfile);
+router
+  .route("/delete-user")
+  .delete(optionalAuthenticateUserMiddleware, deleteAccount);
+
 module.exports = router;

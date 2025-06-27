@@ -3,6 +3,7 @@ const {
   aboutApp,
   privacyPolicy,
   refundPolicy,
+  termsAndConditions,
   createInfo,
   // deleteCity,
 } = require("../controllers/info-controller");
@@ -20,6 +21,7 @@ const router = express.Router();
 router.route("/about-app").get(aboutApp);
 router.route("/privacy-and-policy").get(privacyPolicy);
 router.route("/refund-policy").get(refundPolicy);
+router.route("/terms-and-conditions").get(termsAndConditions);
 
 router
   .route("/create-info")
