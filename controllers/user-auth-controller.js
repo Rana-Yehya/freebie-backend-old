@@ -389,7 +389,7 @@ const deleteAccount = async (req, res) => {
     }
   }
 
-  const order = await prisma.order.findMany({
+  const order = await prisma.order.findFirst({
     where: {
       AND: [
         {

@@ -163,9 +163,7 @@ exports.Prisma.WorkHourScalarFieldEnum = {
   branchId: 'branchId',
   startTime: 'startTime',
   endTime: 'endTime',
-  day: 'day',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  day: 'day'
 };
 
 exports.Prisma.StoreScalarFieldEnum = {
@@ -182,6 +180,7 @@ exports.Prisma.StoreScalarFieldEnum = {
   refreshTokenSecret: 'refreshTokenSecret',
   accessTokenSecret: 'accessTokenSecret',
   moneyInPocket: 'moneyInPocket',
+  fcmToken: 'fcmToken',
   role: 'role',
   isApprovedByAdmin: 'isApprovedByAdmin',
   isFreezed: 'isFreezed',
@@ -197,9 +196,7 @@ exports.Prisma.SocialLinkScalarFieldEnum = {
   youtube: 'youtube',
   facebook: 'facebook',
   x: 'x',
-  instagram: 'instagram',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  instagram: 'instagram'
 };
 
 exports.Prisma.CountryScalarFieldEnum = {
@@ -232,6 +229,7 @@ exports.Prisma.DeliveryTaxesScalarFieldEnum = {
   originStateId: 'originStateId',
   destinationStateId: 'destinationStateId',
   baseFee: 'baseFee',
+  additionalFeesAfterKg: 'additionalFeesAfterKg',
   feePerKg: 'feePerKg',
   estimatedDays: 'estimatedDays',
   effectiveDate: 'effectiveDate',
@@ -244,6 +242,7 @@ exports.Prisma.CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
   imageId: 'imageId',
+  canBeDeliveredOutsideState: 'canBeDeliveredOutsideState',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -279,6 +278,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   dimensionsWCm: 'dimensionsWCm',
   dimensionsHCm: 'dimensionsHCm',
   dimensionsLCm: 'dimensionsLCm',
+  weightInKg: 'weightInKg',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

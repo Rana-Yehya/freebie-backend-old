@@ -4,6 +4,7 @@ const {
   createProduct,
   updateProduct,
   deleteProduct,
+  deleteProductImage,
 } = require("../controllers/product-management-controller");
 
 const {
@@ -93,5 +94,13 @@ router
     authenticateUserMiddleware,
     authorizeMiddleware(adminConstant, storeConstant),
     createProduct
+  );
+
+router
+  .route("/images/:id")
+  .delete(
+    authenticateUserMiddleware,
+    authorizeMiddleware(adminConstant, storeConstant),
+    deleteProductImage
   );
 module.exports = router;

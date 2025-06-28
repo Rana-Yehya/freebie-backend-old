@@ -3247,8 +3247,8 @@ export namespace Prisma {
     productStock: number
     occasions: number
     reviews: number
-    productUser: number
     productOrder: number
+    productUser: number
   }
 
   export type ProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3256,8 +3256,8 @@ export namespace Prisma {
     productStock?: boolean | ProductCountOutputTypeCountProductStockArgs
     occasions?: boolean | ProductCountOutputTypeCountOccasionsArgs
     reviews?: boolean | ProductCountOutputTypeCountReviewsArgs
-    productUser?: boolean | ProductCountOutputTypeCountProductUserArgs
     productOrder?: boolean | ProductCountOutputTypeCountProductOrderArgs
+    productUser?: boolean | ProductCountOutputTypeCountProductUserArgs
   }
 
   // Custom InputTypes
@@ -3302,15 +3302,15 @@ export namespace Prisma {
   /**
    * ProductCountOutputType without action
    */
-  export type ProductCountOutputTypeCountProductUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: productCartWhereInput
+  export type ProductCountOutputTypeCountProductOrderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: productOrderWhereInput
   }
 
   /**
    * ProductCountOutputType without action
    */
-  export type ProductCountOutputTypeCountProductOrderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: productOrderWhereInput
+  export type ProductCountOutputTypeCountProductUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: productCartWhereInput
   }
 
 
@@ -7211,8 +7211,6 @@ export namespace Prisma {
     startTime: Date | null
     endTime: Date | null
     day: number | null
-    createdAt: Date | null
-    updatedAt: Date | null
   }
 
   export type WorkHourMaxAggregateOutputType = {
@@ -7221,8 +7219,6 @@ export namespace Prisma {
     startTime: Date | null
     endTime: Date | null
     day: number | null
-    createdAt: Date | null
-    updatedAt: Date | null
   }
 
   export type WorkHourCountAggregateOutputType = {
@@ -7231,8 +7227,6 @@ export namespace Prisma {
     startTime: number
     endTime: number
     day: number
-    createdAt: number
-    updatedAt: number
     _all: number
   }
 
@@ -7251,8 +7245,6 @@ export namespace Prisma {
     startTime?: true
     endTime?: true
     day?: true
-    createdAt?: true
-    updatedAt?: true
   }
 
   export type WorkHourMaxAggregateInputType = {
@@ -7261,8 +7253,6 @@ export namespace Prisma {
     startTime?: true
     endTime?: true
     day?: true
-    createdAt?: true
-    updatedAt?: true
   }
 
   export type WorkHourCountAggregateInputType = {
@@ -7271,8 +7261,6 @@ export namespace Prisma {
     startTime?: true
     endTime?: true
     day?: true
-    createdAt?: true
-    updatedAt?: true
     _all?: true
   }
 
@@ -7368,8 +7356,6 @@ export namespace Prisma {
     startTime: Date
     endTime: Date
     day: number
-    createdAt: Date
-    updatedAt: Date
     _count: WorkHourCountAggregateOutputType | null
     _avg: WorkHourAvgAggregateOutputType | null
     _sum: WorkHourSumAggregateOutputType | null
@@ -7397,8 +7383,6 @@ export namespace Prisma {
     startTime?: boolean
     endTime?: boolean
     day?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
     branch?: boolean | branchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["workHour"]>
 
@@ -7408,8 +7392,6 @@ export namespace Prisma {
     startTime?: boolean
     endTime?: boolean
     day?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
     branch?: boolean | branchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["workHour"]>
 
@@ -7419,8 +7401,6 @@ export namespace Prisma {
     startTime?: boolean
     endTime?: boolean
     day?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
     branch?: boolean | branchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["workHour"]>
 
@@ -7430,11 +7410,9 @@ export namespace Prisma {
     startTime?: boolean
     endTime?: boolean
     day?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
   }
 
-  export type workHourOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "branchId" | "startTime" | "endTime" | "day" | "createdAt" | "updatedAt", ExtArgs["result"]["workHour"]>
+  export type workHourOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "branchId" | "startTime" | "endTime" | "day", ExtArgs["result"]["workHour"]>
   export type workHourInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     branch?: boolean | branchDefaultArgs<ExtArgs>
   }
@@ -7456,8 +7434,6 @@ export namespace Prisma {
       startTime: Date
       endTime: Date
       day: number
-      createdAt: Date
-      updatedAt: Date
     }, ExtArgs["result"]["workHour"]>
     composites: {}
   }
@@ -7887,8 +7863,6 @@ export namespace Prisma {
     readonly startTime: FieldRef<"workHour", 'DateTime'>
     readonly endTime: FieldRef<"workHour", 'DateTime'>
     readonly day: FieldRef<"workHour", 'Int'>
-    readonly createdAt: FieldRef<"workHour", 'DateTime'>
-    readonly updatedAt: FieldRef<"workHour", 'DateTime'>
   }
     
 
@@ -8337,6 +8311,7 @@ export namespace Prisma {
     refreshTokenSecret: string | null
     accessTokenSecret: string | null
     moneyInPocket: number | null
+    fcmToken: string | null
     role: string | null
     isApprovedByAdmin: boolean | null
     isFreezed: boolean | null
@@ -8360,6 +8335,7 @@ export namespace Prisma {
     refreshTokenSecret: string | null
     accessTokenSecret: string | null
     moneyInPocket: number | null
+    fcmToken: string | null
     role: string | null
     isApprovedByAdmin: boolean | null
     isFreezed: boolean | null
@@ -8383,6 +8359,7 @@ export namespace Prisma {
     refreshTokenSecret: number
     accessTokenSecret: number
     moneyInPocket: number
+    fcmToken: number
     role: number
     isApprovedByAdmin: number
     isFreezed: number
@@ -8416,6 +8393,7 @@ export namespace Prisma {
     refreshTokenSecret?: true
     accessTokenSecret?: true
     moneyInPocket?: true
+    fcmToken?: true
     role?: true
     isApprovedByAdmin?: true
     isFreezed?: true
@@ -8439,6 +8417,7 @@ export namespace Prisma {
     refreshTokenSecret?: true
     accessTokenSecret?: true
     moneyInPocket?: true
+    fcmToken?: true
     role?: true
     isApprovedByAdmin?: true
     isFreezed?: true
@@ -8462,6 +8441,7 @@ export namespace Prisma {
     refreshTokenSecret?: true
     accessTokenSecret?: true
     moneyInPocket?: true
+    fcmToken?: true
     role?: true
     isApprovedByAdmin?: true
     isFreezed?: true
@@ -8572,6 +8552,7 @@ export namespace Prisma {
     refreshTokenSecret: string | null
     accessTokenSecret: string | null
     moneyInPocket: number
+    fcmToken: string | null
     role: string
     isApprovedByAdmin: boolean
     isFreezed: boolean
@@ -8614,6 +8595,7 @@ export namespace Prisma {
     refreshTokenSecret?: boolean
     accessTokenSecret?: boolean
     moneyInPocket?: boolean
+    fcmToken?: boolean
     role?: boolean
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -8643,6 +8625,7 @@ export namespace Prisma {
     refreshTokenSecret?: boolean
     accessTokenSecret?: boolean
     moneyInPocket?: boolean
+    fcmToken?: boolean
     role?: boolean
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -8669,6 +8652,7 @@ export namespace Prisma {
     refreshTokenSecret?: boolean
     accessTokenSecret?: boolean
     moneyInPocket?: boolean
+    fcmToken?: boolean
     role?: boolean
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -8695,6 +8679,7 @@ export namespace Prisma {
     refreshTokenSecret?: boolean
     accessTokenSecret?: boolean
     moneyInPocket?: boolean
+    fcmToken?: boolean
     role?: boolean
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -8704,7 +8689,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type storeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "bio" | "logoId" | "bannerId" | "phone" | "email" | "password" | "socialLinksId" | "paymentId" | "refreshTokenSecret" | "accessTokenSecret" | "moneyInPocket" | "role" | "isApprovedByAdmin" | "isFreezed" | "isBanned" | "isDeleted" | "createdAt" | "updatedAt", ExtArgs["result"]["store"]>
+  export type storeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "bio" | "logoId" | "bannerId" | "phone" | "email" | "password" | "socialLinksId" | "paymentId" | "refreshTokenSecret" | "accessTokenSecret" | "moneyInPocket" | "fcmToken" | "role" | "isApprovedByAdmin" | "isFreezed" | "isBanned" | "isDeleted" | "createdAt" | "updatedAt", ExtArgs["result"]["store"]>
   export type storeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     logo?: boolean | imageDefaultArgs<ExtArgs>
     banner?: boolean | imageDefaultArgs<ExtArgs>
@@ -8747,6 +8732,7 @@ export namespace Prisma {
       refreshTokenSecret: string | null
       accessTokenSecret: string | null
       moneyInPocket: number
+      fcmToken: string | null
       role: string
       isApprovedByAdmin: boolean
       isFreezed: boolean
@@ -9195,6 +9181,7 @@ export namespace Prisma {
     readonly refreshTokenSecret: FieldRef<"store", 'String'>
     readonly accessTokenSecret: FieldRef<"store", 'String'>
     readonly moneyInPocket: FieldRef<"store", 'Float'>
+    readonly fcmToken: FieldRef<"store", 'String'>
     readonly role: FieldRef<"store", 'String'>
     readonly isApprovedByAdmin: FieldRef<"store", 'Boolean'>
     readonly isFreezed: FieldRef<"store", 'Boolean'>
@@ -9681,8 +9668,6 @@ export namespace Prisma {
     facebook: string | null
     x: string | null
     instagram: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
   }
 
   export type SocialLinkMaxAggregateOutputType = {
@@ -9692,8 +9677,6 @@ export namespace Prisma {
     facebook: string | null
     x: string | null
     instagram: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
   }
 
   export type SocialLinkCountAggregateOutputType = {
@@ -9703,8 +9686,6 @@ export namespace Prisma {
     facebook: number
     x: number
     instagram: number
-    createdAt: number
-    updatedAt: number
     _all: number
   }
 
@@ -9716,8 +9697,6 @@ export namespace Prisma {
     facebook?: true
     x?: true
     instagram?: true
-    createdAt?: true
-    updatedAt?: true
   }
 
   export type SocialLinkMaxAggregateInputType = {
@@ -9727,8 +9706,6 @@ export namespace Prisma {
     facebook?: true
     x?: true
     instagram?: true
-    createdAt?: true
-    updatedAt?: true
   }
 
   export type SocialLinkCountAggregateInputType = {
@@ -9738,8 +9715,6 @@ export namespace Prisma {
     facebook?: true
     x?: true
     instagram?: true
-    createdAt?: true
-    updatedAt?: true
     _all?: true
   }
 
@@ -9822,8 +9797,6 @@ export namespace Prisma {
     facebook: string | null
     x: string | null
     instagram: string | null
-    createdAt: Date
-    updatedAt: Date
     _count: SocialLinkCountAggregateOutputType | null
     _min: SocialLinkMinAggregateOutputType | null
     _max: SocialLinkMaxAggregateOutputType | null
@@ -9850,8 +9823,6 @@ export namespace Prisma {
     facebook?: boolean
     x?: boolean
     instagram?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
     store?: boolean | socialLink$storeArgs<ExtArgs>
     _count?: boolean | SocialLinkCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["socialLink"]>
@@ -9863,8 +9834,6 @@ export namespace Prisma {
     facebook?: boolean
     x?: boolean
     instagram?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
   }, ExtArgs["result"]["socialLink"]>
 
   export type socialLinkSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -9874,8 +9843,6 @@ export namespace Prisma {
     facebook?: boolean
     x?: boolean
     instagram?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
   }, ExtArgs["result"]["socialLink"]>
 
   export type socialLinkSelectScalar = {
@@ -9885,11 +9852,9 @@ export namespace Prisma {
     facebook?: boolean
     x?: boolean
     instagram?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
   }
 
-  export type socialLinkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tiktok" | "youtube" | "facebook" | "x" | "instagram" | "createdAt" | "updatedAt", ExtArgs["result"]["socialLink"]>
+  export type socialLinkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tiktok" | "youtube" | "facebook" | "x" | "instagram", ExtArgs["result"]["socialLink"]>
   export type socialLinkInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     store?: boolean | socialLink$storeArgs<ExtArgs>
     _count?: boolean | SocialLinkCountOutputTypeDefaultArgs<ExtArgs>
@@ -9909,8 +9874,6 @@ export namespace Prisma {
       facebook: string | null
       x: string | null
       instagram: string | null
-      createdAt: Date
-      updatedAt: Date
     }, ExtArgs["result"]["socialLink"]>
     composites: {}
   }
@@ -10341,8 +10304,6 @@ export namespace Prisma {
     readonly facebook: FieldRef<"socialLink", 'String'>
     readonly x: FieldRef<"socialLink", 'String'>
     readonly instagram: FieldRef<"socialLink", 'String'>
-    readonly createdAt: FieldRef<"socialLink", 'DateTime'>
-    readonly updatedAt: FieldRef<"socialLink", 'DateTime'>
   }
     
 
@@ -10561,7 +10522,7 @@ export namespace Prisma {
     /**
      * The data needed to create a socialLink.
      */
-    data: XOR<socialLinkCreateInput, socialLinkUncheckedCreateInput>
+    data?: XOR<socialLinkCreateInput, socialLinkUncheckedCreateInput>
   }
 
   /**
@@ -14212,12 +14173,14 @@ export namespace Prisma {
 
   export type DeliveryTaxesAvgAggregateOutputType = {
     baseFee: number | null
+    additionalFeesAfterKg: number | null
     feePerKg: number | null
     estimatedDays: number | null
   }
 
   export type DeliveryTaxesSumAggregateOutputType = {
     baseFee: number | null
+    additionalFeesAfterKg: number | null
     feePerKg: number | null
     estimatedDays: number | null
   }
@@ -14227,6 +14190,7 @@ export namespace Prisma {
     originStateId: string | null
     destinationStateId: string | null
     baseFee: number | null
+    additionalFeesAfterKg: number | null
     feePerKg: number | null
     estimatedDays: number | null
     effectiveDate: Date | null
@@ -14240,6 +14204,7 @@ export namespace Prisma {
     originStateId: string | null
     destinationStateId: string | null
     baseFee: number | null
+    additionalFeesAfterKg: number | null
     feePerKg: number | null
     estimatedDays: number | null
     effectiveDate: Date | null
@@ -14253,6 +14218,7 @@ export namespace Prisma {
     originStateId: number
     destinationStateId: number
     baseFee: number
+    additionalFeesAfterKg: number
     feePerKg: number
     estimatedDays: number
     effectiveDate: number
@@ -14265,12 +14231,14 @@ export namespace Prisma {
 
   export type DeliveryTaxesAvgAggregateInputType = {
     baseFee?: true
+    additionalFeesAfterKg?: true
     feePerKg?: true
     estimatedDays?: true
   }
 
   export type DeliveryTaxesSumAggregateInputType = {
     baseFee?: true
+    additionalFeesAfterKg?: true
     feePerKg?: true
     estimatedDays?: true
   }
@@ -14280,6 +14248,7 @@ export namespace Prisma {
     originStateId?: true
     destinationStateId?: true
     baseFee?: true
+    additionalFeesAfterKg?: true
     feePerKg?: true
     estimatedDays?: true
     effectiveDate?: true
@@ -14293,6 +14262,7 @@ export namespace Prisma {
     originStateId?: true
     destinationStateId?: true
     baseFee?: true
+    additionalFeesAfterKg?: true
     feePerKg?: true
     estimatedDays?: true
     effectiveDate?: true
@@ -14306,6 +14276,7 @@ export namespace Prisma {
     originStateId?: true
     destinationStateId?: true
     baseFee?: true
+    additionalFeesAfterKg?: true
     feePerKg?: true
     estimatedDays?: true
     effectiveDate?: true
@@ -14406,6 +14377,7 @@ export namespace Prisma {
     originStateId: string
     destinationStateId: string
     baseFee: number
+    additionalFeesAfterKg: number
     feePerKg: number
     estimatedDays: number | null
     effectiveDate: Date
@@ -14438,6 +14410,7 @@ export namespace Prisma {
     originStateId?: boolean
     destinationStateId?: boolean
     baseFee?: boolean
+    additionalFeesAfterKg?: boolean
     feePerKg?: boolean
     estimatedDays?: boolean
     effectiveDate?: boolean
@@ -14455,6 +14428,7 @@ export namespace Prisma {
     originStateId?: boolean
     destinationStateId?: boolean
     baseFee?: boolean
+    additionalFeesAfterKg?: boolean
     feePerKg?: boolean
     estimatedDays?: boolean
     effectiveDate?: boolean
@@ -14470,6 +14444,7 @@ export namespace Prisma {
     originStateId?: boolean
     destinationStateId?: boolean
     baseFee?: boolean
+    additionalFeesAfterKg?: boolean
     feePerKg?: boolean
     estimatedDays?: boolean
     effectiveDate?: boolean
@@ -14485,6 +14460,7 @@ export namespace Prisma {
     originStateId?: boolean
     destinationStateId?: boolean
     baseFee?: boolean
+    additionalFeesAfterKg?: boolean
     feePerKg?: boolean
     estimatedDays?: boolean
     effectiveDate?: boolean
@@ -14493,7 +14469,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type deliveryTaxesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "originStateId" | "destinationStateId" | "baseFee" | "feePerKg" | "estimatedDays" | "effectiveDate" | "expiryDate" | "createdAt" | "updatedAt", ExtArgs["result"]["deliveryTaxes"]>
+  export type deliveryTaxesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "originStateId" | "destinationStateId" | "baseFee" | "additionalFeesAfterKg" | "feePerKg" | "estimatedDays" | "effectiveDate" | "expiryDate" | "createdAt" | "updatedAt", ExtArgs["result"]["deliveryTaxes"]>
   export type deliveryTaxesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     originState?: boolean | stateDefaultArgs<ExtArgs>
     destinationState?: boolean | stateDefaultArgs<ExtArgs>
@@ -14521,6 +14497,7 @@ export namespace Prisma {
       originStateId: string
       destinationStateId: string
       baseFee: number
+      additionalFeesAfterKg: number
       feePerKg: number
       estimatedDays: number | null
       effectiveDate: Date
@@ -14957,6 +14934,7 @@ export namespace Prisma {
     readonly originStateId: FieldRef<"deliveryTaxes", 'String'>
     readonly destinationStateId: FieldRef<"deliveryTaxes", 'String'>
     readonly baseFee: FieldRef<"deliveryTaxes", 'Float'>
+    readonly additionalFeesAfterKg: FieldRef<"deliveryTaxes", 'Float'>
     readonly feePerKg: FieldRef<"deliveryTaxes", 'Float'>
     readonly estimatedDays: FieldRef<"deliveryTaxes", 'Int'>
     readonly effectiveDate: FieldRef<"deliveryTaxes", 'DateTime'>
@@ -15415,6 +15393,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     imageId: string | null
+    canBeDeliveredOutsideState: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -15423,6 +15402,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     imageId: string | null
+    canBeDeliveredOutsideState: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -15431,6 +15411,7 @@ export namespace Prisma {
     id: number
     name: number
     imageId: number
+    canBeDeliveredOutsideState: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -15441,6 +15422,7 @@ export namespace Prisma {
     id?: true
     name?: true
     imageId?: true
+    canBeDeliveredOutsideState?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -15449,6 +15431,7 @@ export namespace Prisma {
     id?: true
     name?: true
     imageId?: true
+    canBeDeliveredOutsideState?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -15457,6 +15440,7 @@ export namespace Prisma {
     id?: true
     name?: true
     imageId?: true
+    canBeDeliveredOutsideState?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -15538,6 +15522,7 @@ export namespace Prisma {
     id: string
     name: string
     imageId: string
+    canBeDeliveredOutsideState: boolean
     createdAt: Date
     updatedAt: Date
     _count: CategoryCountAggregateOutputType | null
@@ -15563,6 +15548,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     imageId?: boolean
+    canBeDeliveredOutsideState?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     image?: boolean | imageDefaultArgs<ExtArgs>
@@ -15574,6 +15560,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     imageId?: boolean
+    canBeDeliveredOutsideState?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     image?: boolean | imageDefaultArgs<ExtArgs>
@@ -15583,6 +15570,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     imageId?: boolean
+    canBeDeliveredOutsideState?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     image?: boolean | imageDefaultArgs<ExtArgs>
@@ -15592,11 +15580,12 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     imageId?: boolean
+    canBeDeliveredOutsideState?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type categoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "imageId" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
+  export type categoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "imageId" | "canBeDeliveredOutsideState" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
   export type categoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     image?: boolean | imageDefaultArgs<ExtArgs>
     product?: boolean | category$productArgs<ExtArgs>
@@ -15619,6 +15608,7 @@ export namespace Prisma {
       id: string
       name: string
       imageId: string
+      canBeDeliveredOutsideState: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["category"]>
@@ -16049,6 +16039,7 @@ export namespace Prisma {
     readonly id: FieldRef<"category", 'String'>
     readonly name: FieldRef<"category", 'String'>
     readonly imageId: FieldRef<"category", 'String'>
+    readonly canBeDeliveredOutsideState: FieldRef<"category", 'Boolean'>
     readonly createdAt: FieldRef<"category", 'DateTime'>
     readonly updatedAt: FieldRef<"category", 'DateTime'>
   }
@@ -17599,6 +17590,7 @@ export namespace Prisma {
     dimensionsWCm: number | null
     dimensionsHCm: number | null
     dimensionsLCm: number | null
+    weightInKg: number | null
   }
 
   export type ProductSumAggregateOutputType = {
@@ -17611,6 +17603,7 @@ export namespace Prisma {
     dimensionsWCm: number | null
     dimensionsHCm: number | null
     dimensionsLCm: number | null
+    weightInKg: number | null
   }
 
   export type ProductMinAggregateOutputType = {
@@ -17636,6 +17629,7 @@ export namespace Prisma {
     dimensionsWCm: number | null
     dimensionsHCm: number | null
     dimensionsLCm: number | null
+    weightInKg: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -17663,6 +17657,7 @@ export namespace Prisma {
     dimensionsWCm: number | null
     dimensionsHCm: number | null
     dimensionsLCm: number | null
+    weightInKg: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -17690,6 +17685,7 @@ export namespace Prisma {
     dimensionsWCm: number
     dimensionsHCm: number
     dimensionsLCm: number
+    weightInKg: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -17706,6 +17702,7 @@ export namespace Prisma {
     dimensionsWCm?: true
     dimensionsHCm?: true
     dimensionsLCm?: true
+    weightInKg?: true
   }
 
   export type ProductSumAggregateInputType = {
@@ -17718,6 +17715,7 @@ export namespace Prisma {
     dimensionsWCm?: true
     dimensionsHCm?: true
     dimensionsLCm?: true
+    weightInKg?: true
   }
 
   export type ProductMinAggregateInputType = {
@@ -17743,6 +17741,7 @@ export namespace Prisma {
     dimensionsWCm?: true
     dimensionsHCm?: true
     dimensionsLCm?: true
+    weightInKg?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -17770,6 +17769,7 @@ export namespace Prisma {
     dimensionsWCm?: true
     dimensionsHCm?: true
     dimensionsLCm?: true
+    weightInKg?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -17797,6 +17797,7 @@ export namespace Prisma {
     dimensionsWCm?: true
     dimensionsHCm?: true
     dimensionsLCm?: true
+    weightInKg?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -17911,6 +17912,7 @@ export namespace Prisma {
     dimensionsWCm: number
     dimensionsHCm: number
     dimensionsLCm: number
+    weightInKg: number
     createdAt: Date
     updatedAt: Date
     _count: ProductCountAggregateOutputType | null
@@ -17957,6 +17959,7 @@ export namespace Prisma {
     dimensionsWCm?: boolean
     dimensionsHCm?: boolean
     dimensionsLCm?: boolean
+    weightInKg?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     image?: boolean | product$imageArgs<ExtArgs>
@@ -17964,8 +17967,8 @@ export namespace Prisma {
     category?: boolean | categoryDefaultArgs<ExtArgs>
     occasions?: boolean | product$occasionsArgs<ExtArgs>
     reviews?: boolean | product$reviewsArgs<ExtArgs>
-    productUser?: boolean | product$productUserArgs<ExtArgs>
     productOrder?: boolean | product$productOrderArgs<ExtArgs>
+    productUser?: boolean | product$productUserArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
@@ -17992,6 +17995,7 @@ export namespace Prisma {
     dimensionsWCm?: boolean
     dimensionsHCm?: boolean
     dimensionsLCm?: boolean
+    weightInKg?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     category?: boolean | categoryDefaultArgs<ExtArgs>
@@ -18020,6 +18024,7 @@ export namespace Prisma {
     dimensionsWCm?: boolean
     dimensionsHCm?: boolean
     dimensionsLCm?: boolean
+    weightInKg?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     category?: boolean | categoryDefaultArgs<ExtArgs>
@@ -18048,19 +18053,20 @@ export namespace Prisma {
     dimensionsWCm?: boolean
     dimensionsHCm?: boolean
     dimensionsLCm?: boolean
+    weightInKg?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type productOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "detailedDescription" | "price" | "actualPrice" | "doesNeedPreparation" | "isAcceptedByAdmin" | "isAvailable" | "isFeatured" | "isPopular" | "preparationTimeInMinutes" | "discountPercent" | "discountStartTime" | "discountEndTime" | "canBeDeliveredOutsideState" | "categoryId" | "avgRating" | "reviewsCount" | "dimensionsWCm" | "dimensionsHCm" | "dimensionsLCm" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+  export type productOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "detailedDescription" | "price" | "actualPrice" | "doesNeedPreparation" | "isAcceptedByAdmin" | "isAvailable" | "isFeatured" | "isPopular" | "preparationTimeInMinutes" | "discountPercent" | "discountStartTime" | "discountEndTime" | "canBeDeliveredOutsideState" | "categoryId" | "avgRating" | "reviewsCount" | "dimensionsWCm" | "dimensionsHCm" | "dimensionsLCm" | "weightInKg" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
   export type productInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     image?: boolean | product$imageArgs<ExtArgs>
     productStock?: boolean | product$productStockArgs<ExtArgs>
     category?: boolean | categoryDefaultArgs<ExtArgs>
     occasions?: boolean | product$occasionsArgs<ExtArgs>
     reviews?: boolean | product$reviewsArgs<ExtArgs>
-    productUser?: boolean | product$productUserArgs<ExtArgs>
     productOrder?: boolean | product$productOrderArgs<ExtArgs>
+    productUser?: boolean | product$productUserArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type productIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18078,8 +18084,8 @@ export namespace Prisma {
       category: Prisma.$categoryPayload<ExtArgs>
       occasions: Prisma.$occasionPayload<ExtArgs>[]
       reviews: Prisma.$reviewPayload<ExtArgs>[]
-      productUser: Prisma.$productCartPayload<ExtArgs>[]
       productOrder: Prisma.$productOrderPayload<ExtArgs>[]
+      productUser: Prisma.$productCartPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -18104,6 +18110,7 @@ export namespace Prisma {
       dimensionsWCm: number
       dimensionsHCm: number
       dimensionsLCm: number
+      weightInKg: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["product"]>
@@ -18505,8 +18512,8 @@ export namespace Prisma {
     category<T extends categoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, categoryDefaultArgs<ExtArgs>>): Prisma__categoryClient<$Result.GetResult<Prisma.$categoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     occasions<T extends product$occasionsArgs<ExtArgs> = {}>(args?: Subset<T, product$occasionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$occasionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reviews<T extends product$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, product$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$reviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    productUser<T extends product$productUserArgs<ExtArgs> = {}>(args?: Subset<T, product$productUserArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$productCartPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     productOrder<T extends product$productOrderArgs<ExtArgs> = {}>(args?: Subset<T, product$productOrderArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$productOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    productUser<T extends product$productUserArgs<ExtArgs> = {}>(args?: Subset<T, product$productUserArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$productCartPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -18558,6 +18565,7 @@ export namespace Prisma {
     readonly dimensionsWCm: FieldRef<"product", 'Float'>
     readonly dimensionsHCm: FieldRef<"product", 'Float'>
     readonly dimensionsLCm: FieldRef<"product", 'Float'>
+    readonly weightInKg: FieldRef<"product", 'Float'>
     readonly createdAt: FieldRef<"product", 'DateTime'>
     readonly updatedAt: FieldRef<"product", 'DateTime'>
   }
@@ -19052,30 +19060,6 @@ export namespace Prisma {
   }
 
   /**
-   * product.productUser
-   */
-  export type product$productUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the productCart
-     */
-    select?: productCartSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the productCart
-     */
-    omit?: productCartOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: productCartInclude<ExtArgs> | null
-    where?: productCartWhereInput
-    orderBy?: productCartOrderByWithRelationInput | productCartOrderByWithRelationInput[]
-    cursor?: productCartWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ProductCartScalarFieldEnum | ProductCartScalarFieldEnum[]
-  }
-
-  /**
    * product.productOrder
    */
   export type product$productOrderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -19097,6 +19081,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProductOrderScalarFieldEnum | ProductOrderScalarFieldEnum[]
+  }
+
+  /**
+   * product.productUser
+   */
+  export type product$productUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the productCart
+     */
+    select?: productCartSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the productCart
+     */
+    omit?: productCartOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: productCartInclude<ExtArgs> | null
+    where?: productCartWhereInput
+    orderBy?: productCartOrderByWithRelationInput | productCartOrderByWithRelationInput[]
+    cursor?: productCartWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductCartScalarFieldEnum | ProductCartScalarFieldEnum[]
   }
 
   /**
@@ -29448,9 +29456,7 @@ export namespace Prisma {
     branchId: 'branchId',
     startTime: 'startTime',
     endTime: 'endTime',
-    day: 'day',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    day: 'day'
   };
 
   export type WorkHourScalarFieldEnum = (typeof WorkHourScalarFieldEnum)[keyof typeof WorkHourScalarFieldEnum]
@@ -29470,6 +29476,7 @@ export namespace Prisma {
     refreshTokenSecret: 'refreshTokenSecret',
     accessTokenSecret: 'accessTokenSecret',
     moneyInPocket: 'moneyInPocket',
+    fcmToken: 'fcmToken',
     role: 'role',
     isApprovedByAdmin: 'isApprovedByAdmin',
     isFreezed: 'isFreezed',
@@ -29488,9 +29495,7 @@ export namespace Prisma {
     youtube: 'youtube',
     facebook: 'facebook',
     x: 'x',
-    instagram: 'instagram',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    instagram: 'instagram'
   };
 
   export type SocialLinkScalarFieldEnum = (typeof SocialLinkScalarFieldEnum)[keyof typeof SocialLinkScalarFieldEnum]
@@ -29535,6 +29540,7 @@ export namespace Prisma {
     originStateId: 'originStateId',
     destinationStateId: 'destinationStateId',
     baseFee: 'baseFee',
+    additionalFeesAfterKg: 'additionalFeesAfterKg',
     feePerKg: 'feePerKg',
     estimatedDays: 'estimatedDays',
     effectiveDate: 'effectiveDate',
@@ -29550,6 +29556,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     imageId: 'imageId',
+    canBeDeliveredOutsideState: 'canBeDeliveredOutsideState',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -29591,6 +29598,7 @@ export namespace Prisma {
     dimensionsWCm: 'dimensionsWCm',
     dimensionsHCm: 'dimensionsHCm',
     dimensionsLCm: 'dimensionsLCm',
+    weightInKg: 'weightInKg',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -30112,8 +30120,6 @@ export namespace Prisma {
     startTime?: DateTimeFilter<"workHour"> | Date | string
     endTime?: DateTimeFilter<"workHour"> | Date | string
     day?: IntFilter<"workHour"> | number
-    createdAt?: DateTimeFilter<"workHour"> | Date | string
-    updatedAt?: DateTimeFilter<"workHour"> | Date | string
     branch?: XOR<BranchScalarRelationFilter, branchWhereInput>
   }
 
@@ -30123,8 +30129,6 @@ export namespace Prisma {
     startTime?: SortOrder
     endTime?: SortOrder
     day?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
     branch?: branchOrderByWithRelationInput
   }
 
@@ -30137,8 +30141,6 @@ export namespace Prisma {
     startTime?: DateTimeFilter<"workHour"> | Date | string
     endTime?: DateTimeFilter<"workHour"> | Date | string
     day?: IntFilter<"workHour"> | number
-    createdAt?: DateTimeFilter<"workHour"> | Date | string
-    updatedAt?: DateTimeFilter<"workHour"> | Date | string
     branch?: XOR<BranchScalarRelationFilter, branchWhereInput>
   }, "id" | "id" | "branchId">
 
@@ -30148,8 +30150,6 @@ export namespace Prisma {
     startTime?: SortOrder
     endTime?: SortOrder
     day?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
     _count?: workHourCountOrderByAggregateInput
     _avg?: workHourAvgOrderByAggregateInput
     _max?: workHourMaxOrderByAggregateInput
@@ -30166,8 +30166,6 @@ export namespace Prisma {
     startTime?: DateTimeWithAggregatesFilter<"workHour"> | Date | string
     endTime?: DateTimeWithAggregatesFilter<"workHour"> | Date | string
     day?: IntWithAggregatesFilter<"workHour"> | number
-    createdAt?: DateTimeWithAggregatesFilter<"workHour"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"workHour"> | Date | string
   }
 
   export type storeWhereInput = {
@@ -30187,6 +30185,7 @@ export namespace Prisma {
     refreshTokenSecret?: StringNullableFilter<"store"> | string | null
     accessTokenSecret?: StringNullableFilter<"store"> | string | null
     moneyInPocket?: FloatFilter<"store"> | number
+    fcmToken?: StringNullableFilter<"store"> | string | null
     role?: StringFilter<"store"> | string
     isApprovedByAdmin?: BoolFilter<"store"> | boolean
     isFreezed?: BoolFilter<"store"> | boolean
@@ -30215,6 +30214,7 @@ export namespace Prisma {
     refreshTokenSecret?: SortOrderInput | SortOrder
     accessTokenSecret?: SortOrderInput | SortOrder
     moneyInPocket?: SortOrder
+    fcmToken?: SortOrderInput | SortOrder
     role?: SortOrder
     isApprovedByAdmin?: SortOrder
     isFreezed?: SortOrder
@@ -30246,6 +30246,7 @@ export namespace Prisma {
     refreshTokenSecret?: StringNullableFilter<"store"> | string | null
     accessTokenSecret?: StringNullableFilter<"store"> | string | null
     moneyInPocket?: FloatFilter<"store"> | number
+    fcmToken?: StringNullableFilter<"store"> | string | null
     role?: StringFilter<"store"> | string
     isApprovedByAdmin?: BoolFilter<"store"> | boolean
     isFreezed?: BoolFilter<"store"> | boolean
@@ -30274,6 +30275,7 @@ export namespace Prisma {
     refreshTokenSecret?: SortOrderInput | SortOrder
     accessTokenSecret?: SortOrderInput | SortOrder
     moneyInPocket?: SortOrder
+    fcmToken?: SortOrderInput | SortOrder
     role?: SortOrder
     isApprovedByAdmin?: SortOrder
     isFreezed?: SortOrder
@@ -30305,6 +30307,7 @@ export namespace Prisma {
     refreshTokenSecret?: StringNullableWithAggregatesFilter<"store"> | string | null
     accessTokenSecret?: StringNullableWithAggregatesFilter<"store"> | string | null
     moneyInPocket?: FloatWithAggregatesFilter<"store"> | number
+    fcmToken?: StringNullableWithAggregatesFilter<"store"> | string | null
     role?: StringWithAggregatesFilter<"store"> | string
     isApprovedByAdmin?: BoolWithAggregatesFilter<"store"> | boolean
     isFreezed?: BoolWithAggregatesFilter<"store"> | boolean
@@ -30324,8 +30327,6 @@ export namespace Prisma {
     facebook?: StringNullableFilter<"socialLink"> | string | null
     x?: StringNullableFilter<"socialLink"> | string | null
     instagram?: StringNullableFilter<"socialLink"> | string | null
-    createdAt?: DateTimeFilter<"socialLink"> | Date | string
-    updatedAt?: DateTimeFilter<"socialLink"> | Date | string
     store?: StoreListRelationFilter
   }
 
@@ -30336,8 +30337,6 @@ export namespace Prisma {
     facebook?: SortOrderInput | SortOrder
     x?: SortOrderInput | SortOrder
     instagram?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
     store?: storeOrderByRelationAggregateInput
   }
 
@@ -30351,8 +30350,6 @@ export namespace Prisma {
     facebook?: StringNullableFilter<"socialLink"> | string | null
     x?: StringNullableFilter<"socialLink"> | string | null
     instagram?: StringNullableFilter<"socialLink"> | string | null
-    createdAt?: DateTimeFilter<"socialLink"> | Date | string
-    updatedAt?: DateTimeFilter<"socialLink"> | Date | string
     store?: StoreListRelationFilter
   }, "id" | "id">
 
@@ -30363,8 +30360,6 @@ export namespace Prisma {
     facebook?: SortOrderInput | SortOrder
     x?: SortOrderInput | SortOrder
     instagram?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
     _count?: socialLinkCountOrderByAggregateInput
     _max?: socialLinkMaxOrderByAggregateInput
     _min?: socialLinkMinOrderByAggregateInput
@@ -30380,8 +30375,6 @@ export namespace Prisma {
     facebook?: StringNullableWithAggregatesFilter<"socialLink"> | string | null
     x?: StringNullableWithAggregatesFilter<"socialLink"> | string | null
     instagram?: StringNullableWithAggregatesFilter<"socialLink"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"socialLink"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"socialLink"> | Date | string
   }
 
   export type countryWhereInput = {
@@ -30586,6 +30579,7 @@ export namespace Prisma {
     originStateId?: StringFilter<"deliveryTaxes"> | string
     destinationStateId?: StringFilter<"deliveryTaxes"> | string
     baseFee?: FloatFilter<"deliveryTaxes"> | number
+    additionalFeesAfterKg?: FloatFilter<"deliveryTaxes"> | number
     feePerKg?: FloatFilter<"deliveryTaxes"> | number
     estimatedDays?: IntNullableFilter<"deliveryTaxes"> | number | null
     effectiveDate?: DateTimeFilter<"deliveryTaxes"> | Date | string
@@ -30602,6 +30596,7 @@ export namespace Prisma {
     originStateId?: SortOrder
     destinationStateId?: SortOrder
     baseFee?: SortOrder
+    additionalFeesAfterKg?: SortOrder
     feePerKg?: SortOrder
     estimatedDays?: SortOrderInput | SortOrder
     effectiveDate?: SortOrder
@@ -30621,6 +30616,7 @@ export namespace Prisma {
     originStateId?: StringFilter<"deliveryTaxes"> | string
     destinationStateId?: StringFilter<"deliveryTaxes"> | string
     baseFee?: FloatFilter<"deliveryTaxes"> | number
+    additionalFeesAfterKg?: FloatFilter<"deliveryTaxes"> | number
     feePerKg?: FloatFilter<"deliveryTaxes"> | number
     estimatedDays?: IntNullableFilter<"deliveryTaxes"> | number | null
     effectiveDate?: DateTimeFilter<"deliveryTaxes"> | Date | string
@@ -30637,6 +30633,7 @@ export namespace Prisma {
     originStateId?: SortOrder
     destinationStateId?: SortOrder
     baseFee?: SortOrder
+    additionalFeesAfterKg?: SortOrder
     feePerKg?: SortOrder
     estimatedDays?: SortOrderInput | SortOrder
     effectiveDate?: SortOrder
@@ -30658,6 +30655,7 @@ export namespace Prisma {
     originStateId?: StringWithAggregatesFilter<"deliveryTaxes"> | string
     destinationStateId?: StringWithAggregatesFilter<"deliveryTaxes"> | string
     baseFee?: FloatWithAggregatesFilter<"deliveryTaxes"> | number
+    additionalFeesAfterKg?: FloatWithAggregatesFilter<"deliveryTaxes"> | number
     feePerKg?: FloatWithAggregatesFilter<"deliveryTaxes"> | number
     estimatedDays?: IntNullableWithAggregatesFilter<"deliveryTaxes"> | number | null
     effectiveDate?: DateTimeWithAggregatesFilter<"deliveryTaxes"> | Date | string
@@ -30673,6 +30671,7 @@ export namespace Prisma {
     id?: StringFilter<"category"> | string
     name?: StringFilter<"category"> | string
     imageId?: StringFilter<"category"> | string
+    canBeDeliveredOutsideState?: BoolFilter<"category"> | boolean
     createdAt?: DateTimeFilter<"category"> | Date | string
     updatedAt?: DateTimeFilter<"category"> | Date | string
     image?: XOR<ImageScalarRelationFilter, imageWhereInput>
@@ -30683,6 +30682,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     imageId?: SortOrder
+    canBeDeliveredOutsideState?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     image?: imageOrderByWithRelationInput
@@ -30696,6 +30696,7 @@ export namespace Prisma {
     NOT?: categoryWhereInput | categoryWhereInput[]
     name?: StringFilter<"category"> | string
     imageId?: StringFilter<"category"> | string
+    canBeDeliveredOutsideState?: BoolFilter<"category"> | boolean
     createdAt?: DateTimeFilter<"category"> | Date | string
     updatedAt?: DateTimeFilter<"category"> | Date | string
     image?: XOR<ImageScalarRelationFilter, imageWhereInput>
@@ -30706,6 +30707,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     imageId?: SortOrder
+    canBeDeliveredOutsideState?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: categoryCountOrderByAggregateInput
@@ -30720,6 +30722,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"category"> | string
     name?: StringWithAggregatesFilter<"category"> | string
     imageId?: StringWithAggregatesFilter<"category"> | string
+    canBeDeliveredOutsideState?: BoolWithAggregatesFilter<"category"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"category"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"category"> | Date | string
   }
@@ -30808,6 +30811,7 @@ export namespace Prisma {
     dimensionsWCm?: FloatFilter<"product"> | number
     dimensionsHCm?: FloatFilter<"product"> | number
     dimensionsLCm?: FloatFilter<"product"> | number
+    weightInKg?: FloatFilter<"product"> | number
     createdAt?: DateTimeFilter<"product"> | Date | string
     updatedAt?: DateTimeFilter<"product"> | Date | string
     image?: ImageListRelationFilter
@@ -30815,8 +30819,8 @@ export namespace Prisma {
     category?: XOR<CategoryScalarRelationFilter, categoryWhereInput>
     occasions?: OccasionListRelationFilter
     reviews?: ReviewListRelationFilter
-    productUser?: ProductCartListRelationFilter
     productOrder?: ProductOrderListRelationFilter
+    productUser?: ProductCartListRelationFilter
   }
 
   export type productOrderByWithRelationInput = {
@@ -30842,6 +30846,7 @@ export namespace Prisma {
     dimensionsWCm?: SortOrder
     dimensionsHCm?: SortOrder
     dimensionsLCm?: SortOrder
+    weightInKg?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     image?: imageOrderByRelationAggregateInput
@@ -30849,8 +30854,8 @@ export namespace Prisma {
     category?: categoryOrderByWithRelationInput
     occasions?: occasionOrderByRelationAggregateInput
     reviews?: reviewOrderByRelationAggregateInput
-    productUser?: productCartOrderByRelationAggregateInput
     productOrder?: productOrderOrderByRelationAggregateInput
+    productUser?: productCartOrderByRelationAggregateInput
   }
 
   export type productWhereUniqueInput = Prisma.AtLeast<{
@@ -30879,6 +30884,7 @@ export namespace Prisma {
     dimensionsWCm?: FloatFilter<"product"> | number
     dimensionsHCm?: FloatFilter<"product"> | number
     dimensionsLCm?: FloatFilter<"product"> | number
+    weightInKg?: FloatFilter<"product"> | number
     createdAt?: DateTimeFilter<"product"> | Date | string
     updatedAt?: DateTimeFilter<"product"> | Date | string
     image?: ImageListRelationFilter
@@ -30886,8 +30892,8 @@ export namespace Prisma {
     category?: XOR<CategoryScalarRelationFilter, categoryWhereInput>
     occasions?: OccasionListRelationFilter
     reviews?: ReviewListRelationFilter
-    productUser?: ProductCartListRelationFilter
     productOrder?: ProductOrderListRelationFilter
+    productUser?: ProductCartListRelationFilter
   }, "id" | "id">
 
   export type productOrderByWithAggregationInput = {
@@ -30913,6 +30919,7 @@ export namespace Prisma {
     dimensionsWCm?: SortOrder
     dimensionsHCm?: SortOrder
     dimensionsLCm?: SortOrder
+    weightInKg?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: productCountOrderByAggregateInput
@@ -30948,6 +30955,7 @@ export namespace Prisma {
     dimensionsWCm?: FloatWithAggregatesFilter<"product"> | number
     dimensionsHCm?: FloatWithAggregatesFilter<"product"> | number
     dimensionsLCm?: FloatWithAggregatesFilter<"product"> | number
+    weightInKg?: FloatWithAggregatesFilter<"product"> | number
     createdAt?: DateTimeWithAggregatesFilter<"product"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"product"> | Date | string
   }
@@ -31969,8 +31977,6 @@ export namespace Prisma {
     startTime: Date | string
     endTime: Date | string
     day: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
     branch: branchCreateNestedOneWithoutWorkHoursInput
   }
 
@@ -31980,8 +31986,6 @@ export namespace Prisma {
     startTime: Date | string
     endTime: Date | string
     day: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type workHourUpdateInput = {
@@ -31989,8 +31993,6 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     day?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     branch?: branchUpdateOneRequiredWithoutWorkHoursNestedInput
   }
 
@@ -32000,8 +32002,6 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     day?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type workHourCreateManyInput = {
@@ -32010,8 +32010,6 @@ export namespace Prisma {
     startTime: Date | string
     endTime: Date | string
     day: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type workHourUpdateManyMutationInput = {
@@ -32019,8 +32017,6 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     day?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type workHourUncheckedUpdateManyInput = {
@@ -32029,8 +32025,6 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     day?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type storeCreateInput = {
@@ -32044,6 +32038,7 @@ export namespace Prisma {
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
     moneyInPocket?: number
+    fcmToken?: string | null
     role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -32072,6 +32067,7 @@ export namespace Prisma {
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
     moneyInPocket?: number
+    fcmToken?: string | null
     role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -32094,6 +32090,7 @@ export namespace Prisma {
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
@@ -32122,6 +32119,7 @@ export namespace Prisma {
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
@@ -32147,6 +32145,7 @@ export namespace Prisma {
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
     moneyInPocket?: number
+    fcmToken?: string | null
     role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -32167,6 +32166,7 @@ export namespace Prisma {
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
@@ -32190,6 +32190,7 @@ export namespace Prisma {
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
@@ -32206,8 +32207,6 @@ export namespace Prisma {
     facebook?: string | null
     x?: string | null
     instagram?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
     store?: storeCreateNestedManyWithoutSocialLinksInput
   }
 
@@ -32218,8 +32217,6 @@ export namespace Prisma {
     facebook?: string | null
     x?: string | null
     instagram?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
     store?: storeUncheckedCreateNestedManyWithoutSocialLinksInput
   }
 
@@ -32230,8 +32227,6 @@ export namespace Prisma {
     facebook?: NullableStringFieldUpdateOperationsInput | string | null
     x?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     store?: storeUpdateManyWithoutSocialLinksNestedInput
   }
 
@@ -32242,8 +32237,6 @@ export namespace Prisma {
     facebook?: NullableStringFieldUpdateOperationsInput | string | null
     x?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     store?: storeUncheckedUpdateManyWithoutSocialLinksNestedInput
   }
 
@@ -32254,8 +32247,6 @@ export namespace Prisma {
     facebook?: string | null
     x?: string | null
     instagram?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type socialLinkUpdateManyMutationInput = {
@@ -32265,8 +32256,6 @@ export namespace Prisma {
     facebook?: NullableStringFieldUpdateOperationsInput | string | null
     x?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type socialLinkUncheckedUpdateManyInput = {
@@ -32276,8 +32265,6 @@ export namespace Prisma {
     facebook?: NullableStringFieldUpdateOperationsInput | string | null
     x?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type countryCreateInput = {
@@ -32492,6 +32479,7 @@ export namespace Prisma {
   export type deliveryTaxesCreateInput = {
     id?: string
     baseFee: number
+    additionalFeesAfterKg?: number
     feePerKg?: number
     estimatedDays?: number | null
     effectiveDate?: Date | string
@@ -32508,6 +32496,7 @@ export namespace Prisma {
     originStateId: string
     destinationStateId: string
     baseFee: number
+    additionalFeesAfterKg?: number
     feePerKg?: number
     estimatedDays?: number | null
     effectiveDate?: Date | string
@@ -32520,6 +32509,7 @@ export namespace Prisma {
   export type deliveryTaxesUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
+    additionalFeesAfterKg?: FloatFieldUpdateOperationsInput | number
     feePerKg?: FloatFieldUpdateOperationsInput | number
     estimatedDays?: NullableIntFieldUpdateOperationsInput | number | null
     effectiveDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32536,6 +32526,7 @@ export namespace Prisma {
     originStateId?: StringFieldUpdateOperationsInput | string
     destinationStateId?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
+    additionalFeesAfterKg?: FloatFieldUpdateOperationsInput | number
     feePerKg?: FloatFieldUpdateOperationsInput | number
     estimatedDays?: NullableIntFieldUpdateOperationsInput | number | null
     effectiveDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32550,6 +32541,7 @@ export namespace Prisma {
     originStateId: string
     destinationStateId: string
     baseFee: number
+    additionalFeesAfterKg?: number
     feePerKg?: number
     estimatedDays?: number | null
     effectiveDate?: Date | string
@@ -32561,6 +32553,7 @@ export namespace Prisma {
   export type deliveryTaxesUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
+    additionalFeesAfterKg?: FloatFieldUpdateOperationsInput | number
     feePerKg?: FloatFieldUpdateOperationsInput | number
     estimatedDays?: NullableIntFieldUpdateOperationsInput | number | null
     effectiveDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32574,6 +32567,7 @@ export namespace Prisma {
     originStateId?: StringFieldUpdateOperationsInput | string
     destinationStateId?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
+    additionalFeesAfterKg?: FloatFieldUpdateOperationsInput | number
     feePerKg?: FloatFieldUpdateOperationsInput | number
     estimatedDays?: NullableIntFieldUpdateOperationsInput | number | null
     effectiveDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -32585,6 +32579,7 @@ export namespace Prisma {
   export type categoryCreateInput = {
     id?: string
     name: string
+    canBeDeliveredOutsideState?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     image: imageCreateNestedOneWithoutCategoryInput
@@ -32595,6 +32590,7 @@ export namespace Prisma {
     id?: string
     name: string
     imageId: string
+    canBeDeliveredOutsideState?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     product?: productUncheckedCreateNestedManyWithoutCategoryInput
@@ -32603,6 +32599,7 @@ export namespace Prisma {
   export type categoryUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    canBeDeliveredOutsideState?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUpdateOneRequiredWithoutCategoryNestedInput
@@ -32613,6 +32610,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     imageId?: StringFieldUpdateOperationsInput | string
+    canBeDeliveredOutsideState?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: productUncheckedUpdateManyWithoutCategoryNestedInput
@@ -32622,6 +32620,7 @@ export namespace Prisma {
     id?: string
     name: string
     imageId: string
+    canBeDeliveredOutsideState?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -32629,6 +32628,7 @@ export namespace Prisma {
   export type categoryUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    canBeDeliveredOutsideState?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -32637,6 +32637,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     imageId?: StringFieldUpdateOperationsInput | string
+    canBeDeliveredOutsideState?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -32722,6 +32723,7 @@ export namespace Prisma {
     dimensionsWCm?: number
     dimensionsHCm?: number
     dimensionsLCm?: number
+    weightInKg?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     image?: imageCreateNestedManyWithoutProductInput
@@ -32729,8 +32731,8 @@ export namespace Prisma {
     category?: categoryCreateNestedOneWithoutProductInput
     occasions?: occasionCreateNestedManyWithoutProductsInput
     reviews?: reviewCreateNestedManyWithoutProductInput
-    productUser?: productCartCreateNestedManyWithoutProductInput
     productOrder?: productOrderCreateNestedManyWithoutProductInput
+    productUser?: productCartCreateNestedManyWithoutProductInput
   }
 
   export type productUncheckedCreateInput = {
@@ -32756,14 +32758,15 @@ export namespace Prisma {
     dimensionsWCm?: number
     dimensionsHCm?: number
     dimensionsLCm?: number
+    weightInKg?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     image?: imageUncheckedCreateNestedManyWithoutProductInput
     productStock?: productStockUncheckedCreateNestedManyWithoutProductInput
     occasions?: occasionUncheckedCreateNestedManyWithoutProductsInput
     reviews?: reviewUncheckedCreateNestedManyWithoutProductInput
-    productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
     productOrder?: productOrderUncheckedCreateNestedManyWithoutProductInput
+    productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type productUpdateInput = {
@@ -32788,6 +32791,7 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUpdateManyWithoutProductNestedInput
@@ -32795,8 +32799,8 @@ export namespace Prisma {
     category?: categoryUpdateOneRequiredWithoutProductNestedInput
     occasions?: occasionUpdateManyWithoutProductsNestedInput
     reviews?: reviewUpdateManyWithoutProductNestedInput
-    productUser?: productCartUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUpdateManyWithoutProductNestedInput
+    productUser?: productCartUpdateManyWithoutProductNestedInput
   }
 
   export type productUncheckedUpdateInput = {
@@ -32822,14 +32826,15 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUncheckedUpdateManyWithoutProductNestedInput
     productStock?: productStockUncheckedUpdateManyWithoutProductNestedInput
     occasions?: occasionUncheckedUpdateManyWithoutProductsNestedInput
     reviews?: reviewUncheckedUpdateManyWithoutProductNestedInput
-    productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUncheckedUpdateManyWithoutProductNestedInput
+    productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type productCreateManyInput = {
@@ -32855,6 +32860,7 @@ export namespace Prisma {
     dimensionsWCm?: number
     dimensionsHCm?: number
     dimensionsLCm?: number
+    weightInKg?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -32881,6 +32887,7 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -32908,6 +32915,7 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -34071,8 +34079,6 @@ export namespace Prisma {
     startTime?: SortOrder
     endTime?: SortOrder
     day?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
   }
 
   export type workHourAvgOrderByAggregateInput = {
@@ -34085,8 +34091,6 @@ export namespace Prisma {
     startTime?: SortOrder
     endTime?: SortOrder
     day?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
   }
 
   export type workHourMinOrderByAggregateInput = {
@@ -34095,8 +34099,6 @@ export namespace Prisma {
     startTime?: SortOrder
     endTime?: SortOrder
     day?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
   }
 
   export type workHourSumOrderByAggregateInput = {
@@ -34153,6 +34155,7 @@ export namespace Prisma {
     refreshTokenSecret?: SortOrder
     accessTokenSecret?: SortOrder
     moneyInPocket?: SortOrder
+    fcmToken?: SortOrder
     role?: SortOrder
     isApprovedByAdmin?: SortOrder
     isFreezed?: SortOrder
@@ -34180,6 +34183,7 @@ export namespace Prisma {
     refreshTokenSecret?: SortOrder
     accessTokenSecret?: SortOrder
     moneyInPocket?: SortOrder
+    fcmToken?: SortOrder
     role?: SortOrder
     isApprovedByAdmin?: SortOrder
     isFreezed?: SortOrder
@@ -34203,6 +34207,7 @@ export namespace Prisma {
     refreshTokenSecret?: SortOrder
     accessTokenSecret?: SortOrder
     moneyInPocket?: SortOrder
+    fcmToken?: SortOrder
     role?: SortOrder
     isApprovedByAdmin?: SortOrder
     isFreezed?: SortOrder
@@ -34223,8 +34228,6 @@ export namespace Prisma {
     facebook?: SortOrder
     x?: SortOrder
     instagram?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
   }
 
   export type socialLinkMaxOrderByAggregateInput = {
@@ -34234,8 +34237,6 @@ export namespace Prisma {
     facebook?: SortOrder
     x?: SortOrder
     instagram?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
   }
 
   export type socialLinkMinOrderByAggregateInput = {
@@ -34245,8 +34246,6 @@ export namespace Prisma {
     facebook?: SortOrder
     x?: SortOrder
     instagram?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
   }
 
   export type UserListRelationFilter = {
@@ -34385,6 +34384,7 @@ export namespace Prisma {
     originStateId?: SortOrder
     destinationStateId?: SortOrder
     baseFee?: SortOrder
+    additionalFeesAfterKg?: SortOrder
     feePerKg?: SortOrder
     estimatedDays?: SortOrder
     effectiveDate?: SortOrder
@@ -34395,6 +34395,7 @@ export namespace Prisma {
 
   export type deliveryTaxesAvgOrderByAggregateInput = {
     baseFee?: SortOrder
+    additionalFeesAfterKg?: SortOrder
     feePerKg?: SortOrder
     estimatedDays?: SortOrder
   }
@@ -34404,6 +34405,7 @@ export namespace Prisma {
     originStateId?: SortOrder
     destinationStateId?: SortOrder
     baseFee?: SortOrder
+    additionalFeesAfterKg?: SortOrder
     feePerKg?: SortOrder
     estimatedDays?: SortOrder
     effectiveDate?: SortOrder
@@ -34417,6 +34419,7 @@ export namespace Prisma {
     originStateId?: SortOrder
     destinationStateId?: SortOrder
     baseFee?: SortOrder
+    additionalFeesAfterKg?: SortOrder
     feePerKg?: SortOrder
     estimatedDays?: SortOrder
     effectiveDate?: SortOrder
@@ -34427,6 +34430,7 @@ export namespace Prisma {
 
   export type deliveryTaxesSumOrderByAggregateInput = {
     baseFee?: SortOrder
+    additionalFeesAfterKg?: SortOrder
     feePerKg?: SortOrder
     estimatedDays?: SortOrder
   }
@@ -34461,6 +34465,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     imageId?: SortOrder
+    canBeDeliveredOutsideState?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -34469,6 +34474,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     imageId?: SortOrder
+    canBeDeliveredOutsideState?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -34477,6 +34483,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     imageId?: SortOrder
+    canBeDeliveredOutsideState?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -34554,6 +34561,7 @@ export namespace Prisma {
     dimensionsWCm?: SortOrder
     dimensionsHCm?: SortOrder
     dimensionsLCm?: SortOrder
+    weightInKg?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -34568,6 +34576,7 @@ export namespace Prisma {
     dimensionsWCm?: SortOrder
     dimensionsHCm?: SortOrder
     dimensionsLCm?: SortOrder
+    weightInKg?: SortOrder
   }
 
   export type productMaxOrderByAggregateInput = {
@@ -34593,6 +34602,7 @@ export namespace Prisma {
     dimensionsWCm?: SortOrder
     dimensionsHCm?: SortOrder
     dimensionsLCm?: SortOrder
+    weightInKg?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -34620,6 +34630,7 @@ export namespace Prisma {
     dimensionsWCm?: SortOrder
     dimensionsHCm?: SortOrder
     dimensionsLCm?: SortOrder
+    weightInKg?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -34634,6 +34645,7 @@ export namespace Prisma {
     dimensionsWCm?: SortOrder
     dimensionsHCm?: SortOrder
     dimensionsLCm?: SortOrder
+    weightInKg?: SortOrder
   }
 
   export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -36521,18 +36533,18 @@ export namespace Prisma {
     connect?: reviewWhereUniqueInput | reviewWhereUniqueInput[]
   }
 
-  export type productCartCreateNestedManyWithoutProductInput = {
-    create?: XOR<productCartCreateWithoutProductInput, productCartUncheckedCreateWithoutProductInput> | productCartCreateWithoutProductInput[] | productCartUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: productCartCreateOrConnectWithoutProductInput | productCartCreateOrConnectWithoutProductInput[]
-    createMany?: productCartCreateManyProductInputEnvelope
-    connect?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
-  }
-
   export type productOrderCreateNestedManyWithoutProductInput = {
     create?: XOR<productOrderCreateWithoutProductInput, productOrderUncheckedCreateWithoutProductInput> | productOrderCreateWithoutProductInput[] | productOrderUncheckedCreateWithoutProductInput[]
     connectOrCreate?: productOrderCreateOrConnectWithoutProductInput | productOrderCreateOrConnectWithoutProductInput[]
     createMany?: productOrderCreateManyProductInputEnvelope
     connect?: productOrderWhereUniqueInput | productOrderWhereUniqueInput[]
+  }
+
+  export type productCartCreateNestedManyWithoutProductInput = {
+    create?: XOR<productCartCreateWithoutProductInput, productCartUncheckedCreateWithoutProductInput> | productCartCreateWithoutProductInput[] | productCartUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: productCartCreateOrConnectWithoutProductInput | productCartCreateOrConnectWithoutProductInput[]
+    createMany?: productCartCreateManyProductInputEnvelope
+    connect?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
   }
 
   export type imageUncheckedCreateNestedManyWithoutProductInput = {
@@ -36562,18 +36574,18 @@ export namespace Prisma {
     connect?: reviewWhereUniqueInput | reviewWhereUniqueInput[]
   }
 
-  export type productCartUncheckedCreateNestedManyWithoutProductInput = {
-    create?: XOR<productCartCreateWithoutProductInput, productCartUncheckedCreateWithoutProductInput> | productCartCreateWithoutProductInput[] | productCartUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: productCartCreateOrConnectWithoutProductInput | productCartCreateOrConnectWithoutProductInput[]
-    createMany?: productCartCreateManyProductInputEnvelope
-    connect?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
-  }
-
   export type productOrderUncheckedCreateNestedManyWithoutProductInput = {
     create?: XOR<productOrderCreateWithoutProductInput, productOrderUncheckedCreateWithoutProductInput> | productOrderCreateWithoutProductInput[] | productOrderUncheckedCreateWithoutProductInput[]
     connectOrCreate?: productOrderCreateOrConnectWithoutProductInput | productOrderCreateOrConnectWithoutProductInput[]
     createMany?: productOrderCreateManyProductInputEnvelope
     connect?: productOrderWhereUniqueInput | productOrderWhereUniqueInput[]
+  }
+
+  export type productCartUncheckedCreateNestedManyWithoutProductInput = {
+    create?: XOR<productCartCreateWithoutProductInput, productCartUncheckedCreateWithoutProductInput> | productCartCreateWithoutProductInput[] | productCartUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: productCartCreateOrConnectWithoutProductInput | productCartCreateOrConnectWithoutProductInput[]
+    createMany?: productCartCreateManyProductInputEnvelope
+    connect?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
   }
 
   export type NullableFloatFieldUpdateOperationsInput = {
@@ -36647,20 +36659,6 @@ export namespace Prisma {
     deleteMany?: reviewScalarWhereInput | reviewScalarWhereInput[]
   }
 
-  export type productCartUpdateManyWithoutProductNestedInput = {
-    create?: XOR<productCartCreateWithoutProductInput, productCartUncheckedCreateWithoutProductInput> | productCartCreateWithoutProductInput[] | productCartUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: productCartCreateOrConnectWithoutProductInput | productCartCreateOrConnectWithoutProductInput[]
-    upsert?: productCartUpsertWithWhereUniqueWithoutProductInput | productCartUpsertWithWhereUniqueWithoutProductInput[]
-    createMany?: productCartCreateManyProductInputEnvelope
-    set?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
-    disconnect?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
-    delete?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
-    connect?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
-    update?: productCartUpdateWithWhereUniqueWithoutProductInput | productCartUpdateWithWhereUniqueWithoutProductInput[]
-    updateMany?: productCartUpdateManyWithWhereWithoutProductInput | productCartUpdateManyWithWhereWithoutProductInput[]
-    deleteMany?: productCartScalarWhereInput | productCartScalarWhereInput[]
-  }
-
   export type productOrderUpdateManyWithoutProductNestedInput = {
     create?: XOR<productOrderCreateWithoutProductInput, productOrderUncheckedCreateWithoutProductInput> | productOrderCreateWithoutProductInput[] | productOrderUncheckedCreateWithoutProductInput[]
     connectOrCreate?: productOrderCreateOrConnectWithoutProductInput | productOrderCreateOrConnectWithoutProductInput[]
@@ -36673,6 +36671,20 @@ export namespace Prisma {
     update?: productOrderUpdateWithWhereUniqueWithoutProductInput | productOrderUpdateWithWhereUniqueWithoutProductInput[]
     updateMany?: productOrderUpdateManyWithWhereWithoutProductInput | productOrderUpdateManyWithWhereWithoutProductInput[]
     deleteMany?: productOrderScalarWhereInput | productOrderScalarWhereInput[]
+  }
+
+  export type productCartUpdateManyWithoutProductNestedInput = {
+    create?: XOR<productCartCreateWithoutProductInput, productCartUncheckedCreateWithoutProductInput> | productCartCreateWithoutProductInput[] | productCartUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: productCartCreateOrConnectWithoutProductInput | productCartCreateOrConnectWithoutProductInput[]
+    upsert?: productCartUpsertWithWhereUniqueWithoutProductInput | productCartUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: productCartCreateManyProductInputEnvelope
+    set?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
+    disconnect?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
+    delete?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
+    connect?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
+    update?: productCartUpdateWithWhereUniqueWithoutProductInput | productCartUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: productCartUpdateManyWithWhereWithoutProductInput | productCartUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: productCartScalarWhereInput | productCartScalarWhereInput[]
   }
 
   export type imageUncheckedUpdateManyWithoutProductNestedInput = {
@@ -36730,20 +36742,6 @@ export namespace Prisma {
     deleteMany?: reviewScalarWhereInput | reviewScalarWhereInput[]
   }
 
-  export type productCartUncheckedUpdateManyWithoutProductNestedInput = {
-    create?: XOR<productCartCreateWithoutProductInput, productCartUncheckedCreateWithoutProductInput> | productCartCreateWithoutProductInput[] | productCartUncheckedCreateWithoutProductInput[]
-    connectOrCreate?: productCartCreateOrConnectWithoutProductInput | productCartCreateOrConnectWithoutProductInput[]
-    upsert?: productCartUpsertWithWhereUniqueWithoutProductInput | productCartUpsertWithWhereUniqueWithoutProductInput[]
-    createMany?: productCartCreateManyProductInputEnvelope
-    set?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
-    disconnect?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
-    delete?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
-    connect?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
-    update?: productCartUpdateWithWhereUniqueWithoutProductInput | productCartUpdateWithWhereUniqueWithoutProductInput[]
-    updateMany?: productCartUpdateManyWithWhereWithoutProductInput | productCartUpdateManyWithWhereWithoutProductInput[]
-    deleteMany?: productCartScalarWhereInput | productCartScalarWhereInput[]
-  }
-
   export type productOrderUncheckedUpdateManyWithoutProductNestedInput = {
     create?: XOR<productOrderCreateWithoutProductInput, productOrderUncheckedCreateWithoutProductInput> | productOrderCreateWithoutProductInput[] | productOrderUncheckedCreateWithoutProductInput[]
     connectOrCreate?: productOrderCreateOrConnectWithoutProductInput | productOrderCreateOrConnectWithoutProductInput[]
@@ -36756,6 +36754,20 @@ export namespace Prisma {
     update?: productOrderUpdateWithWhereUniqueWithoutProductInput | productOrderUpdateWithWhereUniqueWithoutProductInput[]
     updateMany?: productOrderUpdateManyWithWhereWithoutProductInput | productOrderUpdateManyWithWhereWithoutProductInput[]
     deleteMany?: productOrderScalarWhereInput | productOrderScalarWhereInput[]
+  }
+
+  export type productCartUncheckedUpdateManyWithoutProductNestedInput = {
+    create?: XOR<productCartCreateWithoutProductInput, productCartUncheckedCreateWithoutProductInput> | productCartCreateWithoutProductInput[] | productCartUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: productCartCreateOrConnectWithoutProductInput | productCartCreateOrConnectWithoutProductInput[]
+    upsert?: productCartUpsertWithWhereUniqueWithoutProductInput | productCartUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: productCartCreateManyProductInputEnvelope
+    set?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
+    disconnect?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
+    delete?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
+    connect?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
+    update?: productCartUpdateWithWhereUniqueWithoutProductInput | productCartUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: productCartUpdateManyWithWhereWithoutProductInput | productCartUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: productCartScalarWhereInput | productCartScalarWhereInput[]
   }
 
   export type productCreateNestedOneWithoutProductStockInput = {
@@ -37320,6 +37332,7 @@ export namespace Prisma {
   export type categoryCreateWithoutImageInput = {
     id?: string
     name: string
+    canBeDeliveredOutsideState?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     product?: productCreateNestedManyWithoutCategoryInput
@@ -37328,6 +37341,7 @@ export namespace Prisma {
   export type categoryUncheckedCreateWithoutImageInput = {
     id?: string
     name: string
+    canBeDeliveredOutsideState?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     product?: productUncheckedCreateNestedManyWithoutCategoryInput
@@ -37391,14 +37405,15 @@ export namespace Prisma {
     dimensionsWCm?: number
     dimensionsHCm?: number
     dimensionsLCm?: number
+    weightInKg?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     productStock?: productStockCreateNestedManyWithoutProductInput
     category?: categoryCreateNestedOneWithoutProductInput
     occasions?: occasionCreateNestedManyWithoutProductsInput
     reviews?: reviewCreateNestedManyWithoutProductInput
-    productUser?: productCartCreateNestedManyWithoutProductInput
     productOrder?: productOrderCreateNestedManyWithoutProductInput
+    productUser?: productCartCreateNestedManyWithoutProductInput
   }
 
   export type productUncheckedCreateWithoutImageInput = {
@@ -37424,13 +37439,14 @@ export namespace Prisma {
     dimensionsWCm?: number
     dimensionsHCm?: number
     dimensionsLCm?: number
+    weightInKg?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     productStock?: productStockUncheckedCreateNestedManyWithoutProductInput
     occasions?: occasionUncheckedCreateNestedManyWithoutProductsInput
     reviews?: reviewUncheckedCreateNestedManyWithoutProductInput
-    productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
     productOrder?: productOrderUncheckedCreateNestedManyWithoutProductInput
+    productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type productCreateOrConnectWithoutImageInput = {
@@ -37449,6 +37465,7 @@ export namespace Prisma {
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
     moneyInPocket?: number
+    fcmToken?: string | null
     role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -37475,6 +37492,7 @@ export namespace Prisma {
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
     moneyInPocket?: number
+    fcmToken?: string | null
     role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -37507,6 +37525,7 @@ export namespace Prisma {
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
     moneyInPocket?: number
+    fcmToken?: string | null
     role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -37533,6 +37552,7 @@ export namespace Prisma {
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
     moneyInPocket?: number
+    fcmToken?: string | null
     role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -37577,6 +37597,7 @@ export namespace Prisma {
     id?: StringFilter<"category"> | string
     name?: StringFilter<"category"> | string
     imageId?: StringFilter<"category"> | string
+    canBeDeliveredOutsideState?: BoolFilter<"category"> | boolean
     createdAt?: DateTimeFilter<"category"> | Date | string
     updatedAt?: DateTimeFilter<"category"> | Date | string
   }
@@ -37641,14 +37662,15 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productStock?: productStockUpdateManyWithoutProductNestedInput
     category?: categoryUpdateOneRequiredWithoutProductNestedInput
     occasions?: occasionUpdateManyWithoutProductsNestedInput
     reviews?: reviewUpdateManyWithoutProductNestedInput
-    productUser?: productCartUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUpdateManyWithoutProductNestedInput
+    productUser?: productCartUpdateManyWithoutProductNestedInput
   }
 
   export type productUncheckedUpdateWithoutImageInput = {
@@ -37674,13 +37696,14 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productStock?: productStockUncheckedUpdateManyWithoutProductNestedInput
     occasions?: occasionUncheckedUpdateManyWithoutProductsNestedInput
     reviews?: reviewUncheckedUpdateManyWithoutProductNestedInput
-    productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUncheckedUpdateManyWithoutProductNestedInput
+    productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type storeUpsertWithWhereUniqueWithoutLogoInput = {
@@ -37716,6 +37739,7 @@ export namespace Prisma {
     refreshTokenSecret?: StringNullableFilter<"store"> | string | null
     accessTokenSecret?: StringNullableFilter<"store"> | string | null
     moneyInPocket?: FloatFilter<"store"> | number
+    fcmToken?: StringNullableFilter<"store"> | string | null
     role?: StringFilter<"store"> | string
     isApprovedByAdmin?: BoolFilter<"store"> | boolean
     isFreezed?: BoolFilter<"store"> | boolean
@@ -38151,6 +38175,7 @@ export namespace Prisma {
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
     moneyInPocket?: number
+    fcmToken?: string | null
     role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -38178,6 +38203,7 @@ export namespace Prisma {
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
     moneyInPocket?: number
+    fcmToken?: string | null
     role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -38229,8 +38255,6 @@ export namespace Prisma {
     startTime: Date | string
     endTime: Date | string
     day: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type workHourUncheckedCreateWithoutBranchInput = {
@@ -38238,8 +38262,6 @@ export namespace Prisma {
     startTime: Date | string
     endTime: Date | string
     day: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type workHourCreateOrConnectWithoutBranchInput = {
@@ -38364,6 +38386,7 @@ export namespace Prisma {
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
@@ -38391,6 +38414,7 @@ export namespace Prisma {
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
@@ -38463,8 +38487,6 @@ export namespace Prisma {
     startTime?: DateTimeFilter<"workHour"> | Date | string
     endTime?: DateTimeFilter<"workHour"> | Date | string
     day?: IntFilter<"workHour"> | number
-    createdAt?: DateTimeFilter<"workHour"> | Date | string
-    updatedAt?: DateTimeFilter<"workHour"> | Date | string
   }
 
   export type productStockUpsertWithWhereUniqueWithoutBranchInput = {
@@ -38686,8 +38708,6 @@ export namespace Prisma {
     facebook?: string | null
     x?: string | null
     instagram?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type socialLinkUncheckedCreateWithoutStoreInput = {
@@ -38697,8 +38717,6 @@ export namespace Prisma {
     facebook?: string | null
     x?: string | null
     instagram?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type socialLinkCreateOrConnectWithoutStoreInput = {
@@ -38856,8 +38874,6 @@ export namespace Prisma {
     facebook?: NullableStringFieldUpdateOperationsInput | string | null
     x?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type socialLinkUncheckedUpdateWithoutStoreInput = {
@@ -38867,8 +38883,6 @@ export namespace Prisma {
     facebook?: NullableStringFieldUpdateOperationsInput | string | null
     x?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type branchUpsertWithWhereUniqueWithoutStoreInput = {
@@ -38928,6 +38942,7 @@ export namespace Prisma {
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
     moneyInPocket?: number
+    fcmToken?: string | null
     role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -38954,6 +38969,7 @@ export namespace Prisma {
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
     moneyInPocket?: number
+    fcmToken?: string | null
     role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -39311,6 +39327,7 @@ export namespace Prisma {
   export type deliveryTaxesCreateWithoutOriginStateInput = {
     id?: string
     baseFee: number
+    additionalFeesAfterKg?: number
     feePerKg?: number
     estimatedDays?: number | null
     effectiveDate?: Date | string
@@ -39325,6 +39342,7 @@ export namespace Prisma {
     id?: string
     destinationStateId: string
     baseFee: number
+    additionalFeesAfterKg?: number
     feePerKg?: number
     estimatedDays?: number | null
     effectiveDate?: Date | string
@@ -39347,6 +39365,7 @@ export namespace Prisma {
   export type deliveryTaxesCreateWithoutDestinationStateInput = {
     id?: string
     baseFee: number
+    additionalFeesAfterKg?: number
     feePerKg?: number
     estimatedDays?: number | null
     effectiveDate?: Date | string
@@ -39361,6 +39380,7 @@ export namespace Prisma {
     id?: string
     originStateId: string
     baseFee: number
+    additionalFeesAfterKg?: number
     feePerKg?: number
     estimatedDays?: number | null
     effectiveDate?: Date | string
@@ -39590,6 +39610,7 @@ export namespace Prisma {
     originStateId?: StringFilter<"deliveryTaxes"> | string
     destinationStateId?: StringFilter<"deliveryTaxes"> | string
     baseFee?: FloatFilter<"deliveryTaxes"> | number
+    additionalFeesAfterKg?: FloatFilter<"deliveryTaxes"> | number
     feePerKg?: FloatFilter<"deliveryTaxes"> | number
     estimatedDays?: IntNullableFilter<"deliveryTaxes"> | number | null
     effectiveDate?: DateTimeFilter<"deliveryTaxes"> | Date | string
@@ -39943,14 +39964,15 @@ export namespace Prisma {
     dimensionsWCm?: number
     dimensionsHCm?: number
     dimensionsLCm?: number
+    weightInKg?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     image?: imageCreateNestedManyWithoutProductInput
     productStock?: productStockCreateNestedManyWithoutProductInput
     occasions?: occasionCreateNestedManyWithoutProductsInput
     reviews?: reviewCreateNestedManyWithoutProductInput
-    productUser?: productCartCreateNestedManyWithoutProductInput
     productOrder?: productOrderCreateNestedManyWithoutProductInput
+    productUser?: productCartCreateNestedManyWithoutProductInput
   }
 
   export type productUncheckedCreateWithoutCategoryInput = {
@@ -39975,14 +39997,15 @@ export namespace Prisma {
     dimensionsWCm?: number
     dimensionsHCm?: number
     dimensionsLCm?: number
+    weightInKg?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     image?: imageUncheckedCreateNestedManyWithoutProductInput
     productStock?: productStockUncheckedCreateNestedManyWithoutProductInput
     occasions?: occasionUncheckedCreateNestedManyWithoutProductsInput
     reviews?: reviewUncheckedCreateNestedManyWithoutProductInput
-    productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
     productOrder?: productOrderUncheckedCreateNestedManyWithoutProductInput
+    productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type productCreateOrConnectWithoutCategoryInput = {
@@ -40068,6 +40091,7 @@ export namespace Prisma {
     dimensionsWCm?: FloatFilter<"product"> | number
     dimensionsHCm?: FloatFilter<"product"> | number
     dimensionsLCm?: FloatFilter<"product"> | number
+    weightInKg?: FloatFilter<"product"> | number
     createdAt?: DateTimeFilter<"product"> | Date | string
     updatedAt?: DateTimeFilter<"product"> | Date | string
   }
@@ -40119,14 +40143,15 @@ export namespace Prisma {
     dimensionsWCm?: number
     dimensionsHCm?: number
     dimensionsLCm?: number
+    weightInKg?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     image?: imageCreateNestedManyWithoutProductInput
     productStock?: productStockCreateNestedManyWithoutProductInput
     category?: categoryCreateNestedOneWithoutProductInput
     reviews?: reviewCreateNestedManyWithoutProductInput
-    productUser?: productCartCreateNestedManyWithoutProductInput
     productOrder?: productOrderCreateNestedManyWithoutProductInput
+    productUser?: productCartCreateNestedManyWithoutProductInput
   }
 
   export type productUncheckedCreateWithoutOccasionsInput = {
@@ -40152,13 +40177,14 @@ export namespace Prisma {
     dimensionsWCm?: number
     dimensionsHCm?: number
     dimensionsLCm?: number
+    weightInKg?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     image?: imageUncheckedCreateNestedManyWithoutProductInput
     productStock?: productStockUncheckedCreateNestedManyWithoutProductInput
     reviews?: reviewUncheckedCreateNestedManyWithoutProductInput
-    productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
     productOrder?: productOrderUncheckedCreateNestedManyWithoutProductInput
+    productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type productCreateOrConnectWithoutOccasionsInput = {
@@ -40272,6 +40298,7 @@ export namespace Prisma {
   export type categoryCreateWithoutProductInput = {
     id?: string
     name: string
+    canBeDeliveredOutsideState?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     image: imageCreateNestedOneWithoutCategoryInput
@@ -40281,6 +40308,7 @@ export namespace Prisma {
     id?: string
     name: string
     imageId: string
+    canBeDeliveredOutsideState?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -40337,36 +40365,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type productCartCreateWithoutProductInput = {
-    color: string
-    quantity?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    cart: userCartCreateNestedOneWithoutProductInput
-    branch: branchCreateNestedOneWithoutProductUserInput
-    deliveryTaxes: deliveryTaxesCreateNestedOneWithoutProductUserInput
-  }
-
-  export type productCartUncheckedCreateWithoutProductInput = {
-    userCartId: string
-    branchId: string
-    deliveryTaxesId: string
-    color: string
-    quantity?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type productCartCreateOrConnectWithoutProductInput = {
-    where: productCartWhereUniqueInput
-    create: XOR<productCartCreateWithoutProductInput, productCartUncheckedCreateWithoutProductInput>
-  }
-
-  export type productCartCreateManyProductInputEnvelope = {
-    data: productCartCreateManyProductInput | productCartCreateManyProductInput[]
-    skipDuplicates?: boolean
-  }
-
   export type productOrderCreateWithoutProductInput = {
     color: string
     quantity?: number
@@ -40398,6 +40396,36 @@ export namespace Prisma {
 
   export type productOrderCreateManyProductInputEnvelope = {
     data: productOrderCreateManyProductInput | productOrderCreateManyProductInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type productCartCreateWithoutProductInput = {
+    color: string
+    quantity?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cart: userCartCreateNestedOneWithoutProductInput
+    branch: branchCreateNestedOneWithoutProductUserInput
+    deliveryTaxes: deliveryTaxesCreateNestedOneWithoutProductUserInput
+  }
+
+  export type productCartUncheckedCreateWithoutProductInput = {
+    userCartId: string
+    branchId: string
+    deliveryTaxesId: string
+    color: string
+    quantity?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type productCartCreateOrConnectWithoutProductInput = {
+    where: productCartWhereUniqueInput
+    create: XOR<productCartCreateWithoutProductInput, productCartUncheckedCreateWithoutProductInput>
+  }
+
+  export type productCartCreateManyProductInputEnvelope = {
+    data: productCartCreateManyProductInput | productCartCreateManyProductInput[]
     skipDuplicates?: boolean
   }
 
@@ -40457,6 +40485,7 @@ export namespace Prisma {
   export type categoryUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    canBeDeliveredOutsideState?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUpdateOneRequiredWithoutCategoryNestedInput
@@ -40466,6 +40495,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     imageId?: StringFieldUpdateOperationsInput | string
+    canBeDeliveredOutsideState?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -40502,22 +40532,6 @@ export namespace Prisma {
     data: XOR<reviewUpdateManyMutationInput, reviewUncheckedUpdateManyWithoutProductInput>
   }
 
-  export type productCartUpsertWithWhereUniqueWithoutProductInput = {
-    where: productCartWhereUniqueInput
-    update: XOR<productCartUpdateWithoutProductInput, productCartUncheckedUpdateWithoutProductInput>
-    create: XOR<productCartCreateWithoutProductInput, productCartUncheckedCreateWithoutProductInput>
-  }
-
-  export type productCartUpdateWithWhereUniqueWithoutProductInput = {
-    where: productCartWhereUniqueInput
-    data: XOR<productCartUpdateWithoutProductInput, productCartUncheckedUpdateWithoutProductInput>
-  }
-
-  export type productCartUpdateManyWithWhereWithoutProductInput = {
-    where: productCartScalarWhereInput
-    data: XOR<productCartUpdateManyMutationInput, productCartUncheckedUpdateManyWithoutProductInput>
-  }
-
   export type productOrderUpsertWithWhereUniqueWithoutProductInput = {
     where: productOrderWhereUniqueInput
     update: XOR<productOrderUpdateWithoutProductInput, productOrderUncheckedUpdateWithoutProductInput>
@@ -40532,6 +40546,22 @@ export namespace Prisma {
   export type productOrderUpdateManyWithWhereWithoutProductInput = {
     where: productOrderScalarWhereInput
     data: XOR<productOrderUpdateManyMutationInput, productOrderUncheckedUpdateManyWithoutProductInput>
+  }
+
+  export type productCartUpsertWithWhereUniqueWithoutProductInput = {
+    where: productCartWhereUniqueInput
+    update: XOR<productCartUpdateWithoutProductInput, productCartUncheckedUpdateWithoutProductInput>
+    create: XOR<productCartCreateWithoutProductInput, productCartUncheckedCreateWithoutProductInput>
+  }
+
+  export type productCartUpdateWithWhereUniqueWithoutProductInput = {
+    where: productCartWhereUniqueInput
+    data: XOR<productCartUpdateWithoutProductInput, productCartUncheckedUpdateWithoutProductInput>
+  }
+
+  export type productCartUpdateManyWithWhereWithoutProductInput = {
+    where: productCartScalarWhereInput
+    data: XOR<productCartUpdateManyMutationInput, productCartUncheckedUpdateManyWithoutProductInput>
   }
 
   export type productCreateWithoutProductStockInput = {
@@ -40556,14 +40586,15 @@ export namespace Prisma {
     dimensionsWCm?: number
     dimensionsHCm?: number
     dimensionsLCm?: number
+    weightInKg?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     image?: imageCreateNestedManyWithoutProductInput
     category?: categoryCreateNestedOneWithoutProductInput
     occasions?: occasionCreateNestedManyWithoutProductsInput
     reviews?: reviewCreateNestedManyWithoutProductInput
-    productUser?: productCartCreateNestedManyWithoutProductInput
     productOrder?: productOrderCreateNestedManyWithoutProductInput
+    productUser?: productCartCreateNestedManyWithoutProductInput
   }
 
   export type productUncheckedCreateWithoutProductStockInput = {
@@ -40589,13 +40620,14 @@ export namespace Prisma {
     dimensionsWCm?: number
     dimensionsHCm?: number
     dimensionsLCm?: number
+    weightInKg?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     image?: imageUncheckedCreateNestedManyWithoutProductInput
     occasions?: occasionUncheckedCreateNestedManyWithoutProductsInput
     reviews?: reviewUncheckedCreateNestedManyWithoutProductInput
-    productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
     productOrder?: productOrderUncheckedCreateNestedManyWithoutProductInput
+    productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type productCreateOrConnectWithoutProductStockInput = {
@@ -40669,14 +40701,15 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUpdateManyWithoutProductNestedInput
     category?: categoryUpdateOneRequiredWithoutProductNestedInput
     occasions?: occasionUpdateManyWithoutProductsNestedInput
     reviews?: reviewUpdateManyWithoutProductNestedInput
-    productUser?: productCartUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUpdateManyWithoutProductNestedInput
+    productUser?: productCartUpdateManyWithoutProductNestedInput
   }
 
   export type productUncheckedUpdateWithoutProductStockInput = {
@@ -40702,13 +40735,14 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUncheckedUpdateManyWithoutProductNestedInput
     occasions?: occasionUncheckedUpdateManyWithoutProductsNestedInput
     reviews?: reviewUncheckedUpdateManyWithoutProductNestedInput
-    productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUncheckedUpdateManyWithoutProductNestedInput
+    productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type branchUpsertWithoutProductStockInput = {
@@ -40823,14 +40857,15 @@ export namespace Prisma {
     dimensionsWCm?: number
     dimensionsHCm?: number
     dimensionsLCm?: number
+    weightInKg?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     image?: imageCreateNestedManyWithoutProductInput
     productStock?: productStockCreateNestedManyWithoutProductInput
     category?: categoryCreateNestedOneWithoutProductInput
     occasions?: occasionCreateNestedManyWithoutProductsInput
-    productUser?: productCartCreateNestedManyWithoutProductInput
     productOrder?: productOrderCreateNestedManyWithoutProductInput
+    productUser?: productCartCreateNestedManyWithoutProductInput
   }
 
   export type productUncheckedCreateWithoutReviewsInput = {
@@ -40856,13 +40891,14 @@ export namespace Prisma {
     dimensionsWCm?: number
     dimensionsHCm?: number
     dimensionsLCm?: number
+    weightInKg?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     image?: imageUncheckedCreateNestedManyWithoutProductInput
     productStock?: productStockUncheckedCreateNestedManyWithoutProductInput
     occasions?: occasionUncheckedCreateNestedManyWithoutProductsInput
-    productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
     productOrder?: productOrderUncheckedCreateNestedManyWithoutProductInput
+    productUser?: productCartUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type productCreateOrConnectWithoutReviewsInput = {
@@ -40960,14 +40996,15 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUpdateManyWithoutProductNestedInput
     productStock?: productStockUpdateManyWithoutProductNestedInput
     category?: categoryUpdateOneRequiredWithoutProductNestedInput
     occasions?: occasionUpdateManyWithoutProductsNestedInput
-    productUser?: productCartUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUpdateManyWithoutProductNestedInput
+    productUser?: productCartUpdateManyWithoutProductNestedInput
   }
 
   export type productUncheckedUpdateWithoutReviewsInput = {
@@ -40993,13 +41030,14 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUncheckedUpdateManyWithoutProductNestedInput
     productStock?: productStockUncheckedUpdateManyWithoutProductNestedInput
     occasions?: occasionUncheckedUpdateManyWithoutProductsNestedInput
-    productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUncheckedUpdateManyWithoutProductNestedInput
+    productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type userCreateWithoutUserCartInput = {
@@ -41203,6 +41241,7 @@ export namespace Prisma {
     dimensionsWCm?: number
     dimensionsHCm?: number
     dimensionsLCm?: number
+    weightInKg?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     image?: imageCreateNestedManyWithoutProductInput
@@ -41236,6 +41275,7 @@ export namespace Prisma {
     dimensionsWCm?: number
     dimensionsHCm?: number
     dimensionsLCm?: number
+    weightInKg?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     image?: imageUncheckedCreateNestedManyWithoutProductInput
@@ -41286,6 +41326,7 @@ export namespace Prisma {
   export type deliveryTaxesCreateWithoutProductUserInput = {
     id?: string
     baseFee: number
+    additionalFeesAfterKg?: number
     feePerKg?: number
     estimatedDays?: number | null
     effectiveDate?: Date | string
@@ -41301,6 +41342,7 @@ export namespace Prisma {
     originStateId: string
     destinationStateId: string
     baseFee: number
+    additionalFeesAfterKg?: number
     feePerKg?: number
     estimatedDays?: number | null
     effectiveDate?: Date | string
@@ -41378,6 +41420,7 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUpdateManyWithoutProductNestedInput
@@ -41411,6 +41454,7 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUncheckedUpdateManyWithoutProductNestedInput
@@ -41473,6 +41517,7 @@ export namespace Prisma {
   export type deliveryTaxesUpdateWithoutProductUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
+    additionalFeesAfterKg?: FloatFieldUpdateOperationsInput | number
     feePerKg?: FloatFieldUpdateOperationsInput | number
     estimatedDays?: NullableIntFieldUpdateOperationsInput | number | null
     effectiveDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -41488,6 +41533,7 @@ export namespace Prisma {
     originStateId?: StringFieldUpdateOperationsInput | string
     destinationStateId?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
+    additionalFeesAfterKg?: FloatFieldUpdateOperationsInput | number
     feePerKg?: FloatFieldUpdateOperationsInput | number
     estimatedDays?: NullableIntFieldUpdateOperationsInput | number | null
     effectiveDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -41853,6 +41899,7 @@ export namespace Prisma {
     dimensionsWCm?: number
     dimensionsHCm?: number
     dimensionsLCm?: number
+    weightInKg?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     image?: imageCreateNestedManyWithoutProductInput
@@ -41886,6 +41933,7 @@ export namespace Prisma {
     dimensionsWCm?: number
     dimensionsHCm?: number
     dimensionsLCm?: number
+    weightInKg?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     image?: imageUncheckedCreateNestedManyWithoutProductInput
@@ -42021,6 +42069,7 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUpdateManyWithoutProductNestedInput
@@ -42054,6 +42103,7 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUncheckedUpdateManyWithoutProductNestedInput
@@ -42164,6 +42214,7 @@ export namespace Prisma {
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
     moneyInPocket?: number
+    fcmToken?: string | null
     role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -42191,6 +42242,7 @@ export namespace Prisma {
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
     moneyInPocket?: number
+    fcmToken?: string | null
     role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -42285,6 +42337,7 @@ export namespace Prisma {
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
@@ -42312,6 +42365,7 @@ export namespace Prisma {
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
@@ -42325,6 +42379,7 @@ export namespace Prisma {
   export type categoryCreateManyImageInput = {
     id?: string
     name: string
+    canBeDeliveredOutsideState?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -42349,6 +42404,7 @@ export namespace Prisma {
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
     moneyInPocket?: number
+    fcmToken?: string | null
     role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -42371,6 +42427,7 @@ export namespace Prisma {
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
     moneyInPocket?: number
+    fcmToken?: string | null
     role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -42383,6 +42440,7 @@ export namespace Prisma {
   export type categoryUpdateWithoutImageInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    canBeDeliveredOutsideState?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: productUpdateManyWithoutCategoryNestedInput
@@ -42391,6 +42449,7 @@ export namespace Prisma {
   export type categoryUncheckedUpdateWithoutImageInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    canBeDeliveredOutsideState?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: productUncheckedUpdateManyWithoutCategoryNestedInput
@@ -42399,6 +42458,7 @@ export namespace Prisma {
   export type categoryUncheckedUpdateManyWithoutImageInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    canBeDeliveredOutsideState?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -42437,6 +42497,7 @@ export namespace Prisma {
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
@@ -42463,6 +42524,7 @@ export namespace Prisma {
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
@@ -42487,6 +42549,7 @@ export namespace Prisma {
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
@@ -42507,6 +42570,7 @@ export namespace Prisma {
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
@@ -42533,6 +42597,7 @@ export namespace Prisma {
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
@@ -42557,6 +42622,7 @@ export namespace Prisma {
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
@@ -42771,8 +42837,6 @@ export namespace Prisma {
     startTime: Date | string
     endTime: Date | string
     day: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type productStockCreateManyBranchInput = {
@@ -42810,8 +42874,6 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     day?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type workHourUncheckedUpdateWithoutBranchInput = {
@@ -42819,8 +42881,6 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     day?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type workHourUncheckedUpdateManyWithoutBranchInput = {
@@ -42828,8 +42888,6 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     day?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type productStockUpdateWithoutBranchInput = {
@@ -43027,6 +43085,7 @@ export namespace Prisma {
     refreshTokenSecret?: string | null
     accessTokenSecret?: string | null
     moneyInPocket?: number
+    fcmToken?: string | null
     role?: string
     isApprovedByAdmin?: boolean
     isFreezed?: boolean
@@ -43047,6 +43106,7 @@ export namespace Prisma {
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
@@ -43073,6 +43133,7 @@ export namespace Prisma {
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
@@ -43097,6 +43158,7 @@ export namespace Prisma {
     refreshTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     accessTokenSecret?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    fcmToken?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isApprovedByAdmin?: BoolFieldUpdateOperationsInput | boolean
     isFreezed?: BoolFieldUpdateOperationsInput | boolean
@@ -43337,6 +43399,7 @@ export namespace Prisma {
     id?: string
     destinationStateId: string
     baseFee: number
+    additionalFeesAfterKg?: number
     feePerKg?: number
     estimatedDays?: number | null
     effectiveDate?: Date | string
@@ -43349,6 +43412,7 @@ export namespace Prisma {
     id?: string
     originStateId: string
     baseFee: number
+    additionalFeesAfterKg?: number
     feePerKg?: number
     estimatedDays?: number | null
     effectiveDate?: Date | string
@@ -43459,6 +43523,7 @@ export namespace Prisma {
   export type deliveryTaxesUpdateWithoutOriginStateInput = {
     id?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
+    additionalFeesAfterKg?: FloatFieldUpdateOperationsInput | number
     feePerKg?: FloatFieldUpdateOperationsInput | number
     estimatedDays?: NullableIntFieldUpdateOperationsInput | number | null
     effectiveDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43473,6 +43538,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     destinationStateId?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
+    additionalFeesAfterKg?: FloatFieldUpdateOperationsInput | number
     feePerKg?: FloatFieldUpdateOperationsInput | number
     estimatedDays?: NullableIntFieldUpdateOperationsInput | number | null
     effectiveDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43486,6 +43552,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     destinationStateId?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
+    additionalFeesAfterKg?: FloatFieldUpdateOperationsInput | number
     feePerKg?: FloatFieldUpdateOperationsInput | number
     estimatedDays?: NullableIntFieldUpdateOperationsInput | number | null
     effectiveDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43497,6 +43564,7 @@ export namespace Prisma {
   export type deliveryTaxesUpdateWithoutDestinationStateInput = {
     id?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
+    additionalFeesAfterKg?: FloatFieldUpdateOperationsInput | number
     feePerKg?: FloatFieldUpdateOperationsInput | number
     estimatedDays?: NullableIntFieldUpdateOperationsInput | number | null
     effectiveDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43511,6 +43579,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     originStateId?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
+    additionalFeesAfterKg?: FloatFieldUpdateOperationsInput | number
     feePerKg?: FloatFieldUpdateOperationsInput | number
     estimatedDays?: NullableIntFieldUpdateOperationsInput | number | null
     effectiveDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43524,6 +43593,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     originStateId?: StringFieldUpdateOperationsInput | string
     baseFee?: FloatFieldUpdateOperationsInput | number
+    additionalFeesAfterKg?: FloatFieldUpdateOperationsInput | number
     feePerKg?: FloatFieldUpdateOperationsInput | number
     estimatedDays?: NullableIntFieldUpdateOperationsInput | number | null
     effectiveDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -43724,6 +43794,7 @@ export namespace Prisma {
     dimensionsWCm?: number
     dimensionsHCm?: number
     dimensionsLCm?: number
+    weightInKg?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -43750,14 +43821,15 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUpdateManyWithoutProductNestedInput
     productStock?: productStockUpdateManyWithoutProductNestedInput
     occasions?: occasionUpdateManyWithoutProductsNestedInput
     reviews?: reviewUpdateManyWithoutProductNestedInput
-    productUser?: productCartUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUpdateManyWithoutProductNestedInput
+    productUser?: productCartUpdateManyWithoutProductNestedInput
   }
 
   export type productUncheckedUpdateWithoutCategoryInput = {
@@ -43782,14 +43854,15 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUncheckedUpdateManyWithoutProductNestedInput
     productStock?: productStockUncheckedUpdateManyWithoutProductNestedInput
     occasions?: occasionUncheckedUpdateManyWithoutProductsNestedInput
     reviews?: reviewUncheckedUpdateManyWithoutProductNestedInput
-    productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUncheckedUpdateManyWithoutProductNestedInput
+    productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type productUncheckedUpdateManyWithoutCategoryInput = {
@@ -43814,6 +43887,7 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -43840,14 +43914,15 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUpdateManyWithoutProductNestedInput
     productStock?: productStockUpdateManyWithoutProductNestedInput
     category?: categoryUpdateOneRequiredWithoutProductNestedInput
     reviews?: reviewUpdateManyWithoutProductNestedInput
-    productUser?: productCartUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUpdateManyWithoutProductNestedInput
+    productUser?: productCartUpdateManyWithoutProductNestedInput
   }
 
   export type productUncheckedUpdateWithoutOccasionsInput = {
@@ -43873,13 +43948,14 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     image?: imageUncheckedUpdateManyWithoutProductNestedInput
     productStock?: productStockUncheckedUpdateManyWithoutProductNestedInput
     reviews?: reviewUncheckedUpdateManyWithoutProductNestedInput
-    productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
     productOrder?: productOrderUncheckedUpdateManyWithoutProductNestedInput
+    productUser?: productCartUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type productUncheckedUpdateManyWithoutOccasionsInput = {
@@ -43905,6 +43981,7 @@ export namespace Prisma {
     dimensionsWCm?: FloatFieldUpdateOperationsInput | number
     dimensionsHCm?: FloatFieldUpdateOperationsInput | number
     dimensionsLCm?: FloatFieldUpdateOperationsInput | number
+    weightInKg?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -43931,16 +44008,6 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type productCartCreateManyProductInput = {
-    userCartId: string
-    branchId: string
-    deliveryTaxesId: string
-    color: string
-    quantity?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type productOrderCreateManyProductInput = {
     orderId: string
     branchId: string
@@ -43951,6 +44018,16 @@ export namespace Prisma {
     cancellationReason?: string | null
     refundAmount?: number | null
     subtotal?: number
+  }
+
+  export type productCartCreateManyProductInput = {
+    userCartId: string
+    branchId: string
+    deliveryTaxesId: string
+    color: string
+    quantity?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type imageUpdateWithoutProductInput = {
@@ -44051,36 +44128,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type productCartUpdateWithoutProductInput = {
-    color?: StringFieldUpdateOperationsInput | string
-    quantity?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    cart?: userCartUpdateOneRequiredWithoutProductNestedInput
-    branch?: branchUpdateOneRequiredWithoutProductUserNestedInput
-    deliveryTaxes?: deliveryTaxesUpdateOneRequiredWithoutProductUserNestedInput
-  }
-
-  export type productCartUncheckedUpdateWithoutProductInput = {
-    userCartId?: StringFieldUpdateOperationsInput | string
-    branchId?: StringFieldUpdateOperationsInput | string
-    deliveryTaxesId?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
-    quantity?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type productCartUncheckedUpdateManyWithoutProductInput = {
-    userCartId?: StringFieldUpdateOperationsInput | string
-    branchId?: StringFieldUpdateOperationsInput | string
-    deliveryTaxesId?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
-    quantity?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type productOrderUpdateWithoutProductInput = {
     color?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
@@ -44115,6 +44162,36 @@ export namespace Prisma {
     cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
     refundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     subtotal?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type productCartUpdateWithoutProductInput = {
+    color?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cart?: userCartUpdateOneRequiredWithoutProductNestedInput
+    branch?: branchUpdateOneRequiredWithoutProductUserNestedInput
+    deliveryTaxes?: deliveryTaxesUpdateOneRequiredWithoutProductUserNestedInput
+  }
+
+  export type productCartUncheckedUpdateWithoutProductInput = {
+    userCartId?: StringFieldUpdateOperationsInput | string
+    branchId?: StringFieldUpdateOperationsInput | string
+    deliveryTaxesId?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type productCartUncheckedUpdateManyWithoutProductInput = {
+    userCartId?: StringFieldUpdateOperationsInput | string
+    branchId?: StringFieldUpdateOperationsInput | string
+    deliveryTaxesId?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type productCartCreateManyCartInput = {

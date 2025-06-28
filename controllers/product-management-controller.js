@@ -19,6 +19,7 @@ const createProduct = async (req, res, next) => {
     detailedDescription,
     price,
     doesNeedPreparation,
+    canBeDeliveredOutsideState,
     isAvailable,
     preparationTimeInMinutes,
     discountPercent,
@@ -26,14 +27,17 @@ const createProduct = async (req, res, next) => {
     discountEndTime,
     categoryId,
     productStock,
-    occasionId,
+    occasions,
     dimensionsWCm,
     dimensionsHCm,
     dimensionsLCm,
+    weightInKg,
   } = req.body;
   const image = req.files.images;
   console.log(productStock);
-  const productStockJson = JSON.parse(productStock);
+  const productStockList = JSON.parse(productStock);
+  const occasionsList = JSON.parse(occasions);
+
   const zodModel = CreateProductZodModel.safeParse({
     name: name,
     image: image,
@@ -41,6 +45,7 @@ const createProduct = async (req, res, next) => {
     detailedDescription: detailedDescription,
     price: price,
     doesNeedPreparation: doesNeedPreparation,
+    canBeDeliveredOutsideState: canBeDeliveredOutsideState,
     isAvailable: isAvailable,
     preparationTimeInMinutes: preparationTimeInMinutes,
     discountPercent: discountPercent,
@@ -48,11 +53,12 @@ const createProduct = async (req, res, next) => {
     discountEndTime: discountEndTime,
     // color: color,
     categoryId: categoryId,
-    occasionId: occasionId,
-    productStock: productStockJson,
+    occasions: occasionsList,
+    productStock: productStockList,
     dimensionsWCm: dimensionsWCm,
     dimensionsHCm: dimensionsHCm,
     dimensionsLCm: dimensionsLCm,
+    weightInKg: weightInKg,
   });
   if (!zodModel.success) {
     console.log(zodModel.error.errors[0]);
@@ -65,29 +71,27 @@ const createProduct = async (req, res, next) => {
   if (!category) {
     throw new BadRequestError("Category not found");
   }
-  if (occasionId) {
-    for (var occasionIdElement in occasionId) {
-      const occasion = await prisma.occasion.findUnique({
-        where: { id: occasionIdElement },
-      });
-      if (!occasion) {
-        throw new BadRequestError("Occasion not found");
-      }
-    }
-  }
+  // if (occasions) {
+  //   const occasionCount = await prisma.occasion.count({
+  //     where: { id: { in: occasionsList } },
+  //     select: { id: true },
+  //   });
+  //   if (occasionsList.length != occasionCount.length) {
+  //     throw new BadRequestError("Some occasions are not found");
+  //   }
+  // }
 
-  for (
-    let productStockIndex = 0;
-    productStockIndex < productStockJson.length;
-    productStockIndex++
-  ) {
-    const branch = await prisma.branch.findUnique({
-      where: { id: productStockJson[productStockIndex].branchId },
-    });
-    if (!branch) {
-      throw new BadRequestError("Branch not found");
-    }
-  }
+  // if (productStockList.length !== 0) {
+  //   const productStockBranchIds = productStockList.map(
+  //     (product) => product.branchId
+  //   );
+  //   const branchCount = await prisma.branch.count({
+  //     where: { id: { in: productStockBranchIds } },
+  //   });
+  //   if (!branch) {
+  //     throw new BadRequestError("Branch not found");
+  //   }
+  // }
   let dateDiscountStartTime = null;
   let dateDiscountEndTime = null;
 
@@ -111,6 +115,17 @@ const createProduct = async (req, res, next) => {
       publicId: imagePublicIdsToStore[imageIndex],
     });
   }
+  const productStockListToStore = productStockList.map((product) => {
+    return {
+      branch: {
+        connect: {
+          id: product.branchId,
+        },
+      },
+      stock: product.stock,
+      color: product.color,
+    };
+  });
   const createdProduct = await prisma.product.create({
     data: {
       name: name,
@@ -120,6 +135,12 @@ const createProduct = async (req, res, next) => {
       description: description,
       detailedDescription: detailedDescription,
       price: parseFloat(price),
+      canBeDeliveredOutsideState:
+        category.canBeDeliveredOutsideState == true
+          ? canBeDeliveredOutsideState == undefined
+            ? undefined
+            : Boolean(canBeDeliveredOutsideState)
+          : false,
       actualPrice:
         discountPercent == undefined || discountPercent == 0
           ? parseFloat(price)
@@ -131,20 +152,29 @@ const createProduct = async (req, res, next) => {
       discountPercent: parseFloat(discountPercent),
       discountStartTime: dateDiscountStartTime,
       discountEndTime: dateDiscountEndTime,
-      categoryId: categoryId,
-      occasionId: occasionId,
+      category: { connect: { id: categoryId } },
+      occasions: {
+        connect: occasionsList.map((id) => ({ id })),
+      },
       productStock: {
-        createMany: {
-          data: productStockJson,
-        },
+        create: productStockListToStore.map((productStock) => productStock),
+        // connect: {
+        //   branchId: { in: productStockList.map((branch) => branch.branchId) },
+        // },
+        // createMany: {
+        //   //productStockList
+        //   data: productStockList,
+        // },
       },
       dimensionsWCm: parseFloat(dimensionsWCm),
       dimensionsHCm: parseFloat(dimensionsHCm),
       dimensionsLCm: parseFloat(dimensionsLCm),
+      weightInKg: parseFloat(weightInKg),
     },
     include: {
       productStock: true,
       image: true,
+      occasions: true,
     },
   });
   /*
@@ -195,18 +225,22 @@ const updateProduct = async (req, res, next) => {
     isPopular,
     preparationTimeInMinutes,
     discountPercent,
+    canBeDeliveredOutsideState,
     discountStartTime,
     discountEndTime,
     categoryId,
     productStock,
-    occasionId,
+    occasions,
     dimensionsWCm,
     dimensionsHCm,
     dimensionsLCm,
+    weightInKg,
   } = req.body;
   const image = req.files == undefined ? undefined : req.files.images;
-  const productStockJson =
+  const productStockList =
     productStock == undefined ? [] : JSON.parse(productStock);
+  const occasionsList = occasions == undefined ? [] : JSON.parse(occasions);
+
   const zodModel = UpdateProductZodModel.safeParse({
     name: name,
     image: image,
@@ -218,15 +252,17 @@ const updateProduct = async (req, res, next) => {
     doesNeedPreparation: doesNeedPreparation,
     isAvailable: isAvailable,
     preparationTimeInMinutes: preparationTimeInMinutes,
+    canBeDeliveredOutsideState: canBeDeliveredOutsideState,
     discountPercent: discountPercent,
     discountStartTime: discountStartTime,
     discountEndTime: discountEndTime,
     categoryId: categoryId,
-    occasionId: occasionId,
-    productStock: productStockJson,
+    occasions: occasionsList,
+    productStock: productStockList,
     dimensionsWCm: dimensionsWCm,
     dimensionsHCm: dimensionsHCm,
     dimensionsLCm: dimensionsLCm,
+    weightInKg: weightInKg,
   });
 
   if (!zodModel.success) {
@@ -239,38 +275,39 @@ const updateProduct = async (req, res, next) => {
   // if (!productToUpdate) {
   //   throw new BadRequestError("Product not found");
   // }
+  let category;
   if (categoryId) {
-    const category = await prisma.category.findUnique({
+    category = await prisma.category.findUnique({
       where: { id: categoryId },
     });
     if (!category) {
       throw new BadRequestError("Category not found");
     }
   }
-  if (occasionId) {
-    for (var occasionIdElement in occasionId) {
-      const occasion = await prisma.occasion.findUnique({
-        where: { id: occasionIdElement },
-      });
-      if (!occasion) {
-        throw new BadRequestError("Occasion not found");
-      }
-    }
-  }
-  if (productStockJson) {
-    for (
-      let productStockIndex = 0;
-      productStockIndex < productStockJson.length;
-      productStockIndex++
-    ) {
-      const branch = await prisma.branch.findUnique({
-        where: { id: productStockJson[productStockIndex].branchId },
-      });
-      if (!branch) {
-        throw new BadRequestError("Branch not found");
-      }
-    }
-  }
+  // if (occasions) {
+  //   for (var occasionIdElement in occasions) {
+  //     const occasion = await prisma.occasion.findUnique({
+  //       where: { id: occasionIdElement },
+  //     });
+  //     if (!occasion) {
+  //       throw new BadRequestError("Occasion not found");
+  //     }
+  //   }
+  // }
+  // if (productStockList) {
+  //   for (
+  //     let productStockIndex = 0;
+  //     productStockIndex < productStockList.length;
+  //     productStockIndex++
+  //   ) {
+  //     const branch = await prisma.branch.findUnique({
+  //       where: { id: productStockList[productStockIndex].branchId },
+  //     });
+  //     if (!branch) {
+  //       throw new BadRequestError("Branch not found");
+  //     }
+  //   }
+  // }
   let dateDiscountStartTime = null;
   let dateDiscountEndTime = null;
 
@@ -286,26 +323,26 @@ const updateProduct = async (req, res, next) => {
   }
   let product = undefined;
   let imageToStore = [];
-  if (discountPercent) {
-    product = await prisma.product.findUnique({
-      where: { id: id },
-      include: {
-        image: true,
-      },
-    });
-    if (!product) {
-      throw new BadRequestError("Category not found");
-    }
-  }
+  // if (discountPercent) {
+  //   product = await prisma.product.findUnique({
+  //     where: { id: id },
+  //     include: {
+  //       image: true,
+  //     },
+  //   });
+  //   if (!product) {
+  //     throw new BadRequestError("Category not found");
+  //   }
+  // }
   if (image) {
     product = await prisma.product.findUnique({
       where: { id: id },
-      include: {
+      select: {
         image: true,
       },
     });
     if (!product) {
-      throw new BadRequestError("Category not found");
+      throw new BadRequestError("Product not found");
     }
     const [imageUrlsToStore, imagePublicIdsToStore] =
       await uploadMultipleImages({
@@ -322,17 +359,18 @@ const updateProduct = async (req, res, next) => {
       });
     }
   }
-
   const updatedProduct = await prisma.product.update({
     where: { id: id },
     data: {
       name: name || undefined,
-      image:
-        image == undefined
-          ? undefined
-          : {
-              createMany: { data: imageToStore },
-            },
+      image: {
+        createMany: image == undefined ? undefined : { data: imageToStore },
+      },
+      // image == undefined
+      //   ? undefined
+      //   : {
+      //       createMany: { data: imageToStore },
+      //     },
       description: description || undefined,
       detailedDescription: detailedDescription || undefined,
       price: price == undefined ? undefined : parseFloat(price),
@@ -348,36 +386,71 @@ const updateProduct = async (req, res, next) => {
       isAvailable: isAvailable == undefined ? undefined : Boolean(isAvailable),
       isPopular: isPopular == undefined ? undefined : Boolean(isPopular),
       isFeatured: isFeatured == undefined ? undefined : Boolean(isFeatured),
-
-      // isFeatured: isFeatured || undefined,
-      // isPopular: isPopular || undefined,
+      canBeDeliveredOutsideState:
+        canBeDeliveredOutsideState == undefined
+          ? undefined
+          : Boolean(canBeDeliveredOutsideState),
       preparationTimeInMinutes: preparationTimeInMinutes || undefined,
       discountPercent:
         discountPercent == undefined ? undefined : parseFloat(discountPercent),
       discountStartTime: dateDiscountStartTime || undefined,
       discountEndTime: dateDiscountEndTime || undefined,
-      categoryId: categoryId || undefined,
-      occasionId: occasionId || undefined,
-      // productStock: || undefined productStockDb,
+      category:
+        categoryId == undefined ? undefined : { connect: { id: categoryId } },
+      occasions:
+        occasionsList.length == 0
+          ? undefined
+          : {
+              connect: occasionsList.map((id) => ({ id })),
+            }, // productStock: || undefined productStockDb,
       dimensionsWCm:
         dimensionsWCm == undefined ? undefined : parseFloat(dimensionsWCm),
       dimensionsHCm:
         dimensionsHCm == undefined ? undefined : parseFloat(dimensionsHCm),
       dimensionsLCm:
         dimensionsLCm == undefined ? undefined : parseFloat(dimensionsLCm),
+      weightInKg: weightInKg == undefined ? undefined : parseFloat(weightInKg),
+      productStock: {
+        upsert: productStockList.map((product) => ({
+          where: {
+            productId_branchId_color: {
+              color: product.color || undefined,
+              branchId: product.branchId || undefined,
+              productId: id,
+            },
+          },
+          update: {
+            stock: product.stock || undefined,
+          },
+          create: {
+            color: product.color || undefined,
+            branchId: product.branchId || undefined,
+            stock: product.stock || undefined,
+            // productId: id,
+          },
+        })),
+        // isFeatured: isFeatured || undefined,
+        // isPopular: isPopular || undefined,
+      },
+    },
+    include: {
+      productStock: true,
+      occasions: true,
+      image: true,
     },
   });
-  if (image) {
-    console.log(product.image);
-    const publicIds = product.image.map((image) => image.publicId);
-    console.log(publicIds);
+  // if (image) {
+  //   console.log(product.image);
+  //   const publicIds = product.image.map((image) => image.publicId);
+  //   console.log(publicIds);
 
-    await destroyMultipleImages({ imagesPublicIds: publicIds });
-  }
-  if (productStockJson) {
+  //   await destroyMultipleImages({ imagesPublicIds: publicIds });
+  // }
+  /*
+  if (productStockList) {
     for (
       let productStockIndex = 0;
-      productStockIndex < productStockJson.length;
+      productStockIndex < productStockList.length;
       productStockIndex++
     ) {
       // if (
@@ -389,22 +462,22 @@ const updateProduct = async (req, res, next) => {
         where: {
           productId_branchId_color: {
             productId: id,
-            branchId: productStockJson[productStockIndex].branchId,
-            color: productStockJson[productStockIndex].color,
+            branchId: productStockList[productStockIndex].branchId,
+            color: productStockList[productStockIndex].color,
           },
         },
         update: {
           // branchId: productStock[productStockIndex].branchId,
-          stock: productStockJson[productStockIndex].stock || undefined,
+          stock: productStockList[productStockIndex].stock || undefined,
           // color: productStock[productStockIndex].color || undefined,
           // color: productStock[productStockIndex].color,
 
           // productId: id,
         },
         create: {
-          branchId: productStockJson[productStockIndex].branchId,
-          stock: productStockJson[productStockIndex].stock,
-          color: productStockJson[productStockIndex].color,
+          branchId: productStockList[productStockIndex].branchId,
+          stock: productStockList[productStockIndex].stock,
+          color: productStockList[productStockIndex].color,
           productId: id,
         },
       });
@@ -419,6 +492,7 @@ const updateProduct = async (req, res, next) => {
       // }
     }
   }
+  */
   return res
     .status(StatusCodes.OK)
     .json({ isSuccess: true, data: updatedProduct });
@@ -426,6 +500,22 @@ const updateProduct = async (req, res, next) => {
 
 const deleteProduct = async (req, res, next) => {
   const { id: ProductId } = req.params;
+
+  const order = await prisma.order.findFirst({
+    where: {
+      productOrder: {
+        every: {
+          productId: ProductId,
+          status: { not: "delivered" },
+        },
+      },
+    },
+  });
+  if (order) {
+    throw new BadRequestError({
+      message: "Product can not be deleted. Some orders are not delivered yet.",
+    });
+  }
   const product = await prisma.product.delete({
     where: { id: ProductId },
   });
@@ -437,9 +527,57 @@ const deleteProduct = async (req, res, next) => {
     .json({ isSuccess: true, message: "Product deleted successfully" });
 };
 
+const deleteProductImage = async (req, res, next) => {
+  const { id: ProductId } = req.params;
+  const { images } = req.body;
+  // const imagesList = images == undefined ? [] : JSON.parse(images);
+  const imagesList = images;
+  console.log(images);
+
+  const product = await prisma.product.findUnique({
+    where: {
+      id: ProductId,
+      // image: { every: { id: { in: imagesList } } },
+    },
+    select: { image: true },
+  });
+
+  if (!product) {
+    throw new BadRequestError("Product is not found.");
+  }
+  // const productImageIds = product.image.map((image) => image.id);
+
+  let productImages = [];
+  imagesList.forEach((item) =>
+    productImages.push(product.image.find((image) => image.id === item))
+  );
+  console.log(productImages);
+
+  if (imagesList.length != productImages.length) {
+    throw new BadRequestError("Product images are not found.");
+  }
+
+  const productImagePublicIds = productImages.map((image) => image.publicId);
+  const productImageIds = productImages.map((image) => image.id);
+
+  await prisma.image.deleteMany({
+    where: {
+      id: { in: productImageIds },
+    },
+  });
+  await destroyMultipleImages({
+    imagesPublicIds: productImagePublicIds,
+  });
+
+  return res
+    .status(StatusCodes.OK)
+    .json({ isSuccess: true, message: "Product images deleted successfully" });
+};
+
 module.exports = {
   getAllProducts,
   createProduct,
   updateProduct,
   deleteProduct,
+  deleteProductImage,
 };

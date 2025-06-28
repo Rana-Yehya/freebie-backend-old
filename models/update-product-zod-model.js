@@ -82,6 +82,19 @@ const UpdateProductZodModel = z
       })
       .default("false")
       .optional(),
+    canBeDeliveredOutsideState: z
+      .string()
+      .refine(
+        (canBeDeliveredOutsideState) =>
+          canBeDeliveredOutsideState === "true" ||
+          canBeDeliveredOutsideState === "false",
+        {
+          message:
+            "Availablity to deliver outside the state does not equal to true or false",
+        }
+      )
+      .default("true")
+      .optional(),
     preparationTimeInMinutes: z.string().optional(),
     discountPercent: z.string().optional(),
     discountStartTime: z.string().date().optional(),
@@ -113,14 +126,15 @@ const UpdateProductZodModel = z
     // }),
     // stock: z.number().optional(),
     categoryId: z.string({ message: "Category Id is required" }).optional(),
-    occasionId: z
+    occasions: z
       .array(z.string({ message: "Occasion Id must be a string" }), {
         message: "Occasions can't be empty!",
       })
-      .nonempty({
-        message: "Occasions can't be empty!",
-      })
+      // .nonempty({
+      //   message: "Occasions can't be empty!",
+      // })
       .optional(),
+
     /*
       {
         message: "Branches can't be empty!",
@@ -134,14 +148,14 @@ const UpdateProductZodModel = z
       .optional(),
     dimensionsWCm: z
       .string({ message: "Dimensions Width is required" })
-      .refine((price) => parseFloat(price) > 0, {
+      .refine((dimensionsWCm) => parseFloat(dimensionsWCm) > 0, {
         message: "Dimensions Width is not a number or it is less than zero",
       })
       .optional(),
 
     dimensionsHCm: z
       .string({ message: "Dimensions Height is required" })
-      .refine((price) => parseFloat(price) > 0, {
+      .refine((dimensionsHCm) => parseFloat(dimensionsHCm) > 0, {
         message: "Dimensions Height is not a number or it is less than zero",
       })
       .optional(),
@@ -149,10 +163,17 @@ const UpdateProductZodModel = z
     //z.number({ message: "Dimensions Height is required" }),
     dimensionsLCm: z
       .string({ message: "Dimensions Length is required" })
-      .refine((price) => parseFloat(price) > 0, {
+      .refine((dimensionsLCm) => parseFloat(dimensionsLCm) > 0, {
         message: "Dimensions Length is not a number or it is less than zero",
       })
       .optional(),
+    weightInKg: z
+      .string({ message: "Weight(Kg) is required" })
+      .refine((price) => parseFloat(price) > 0, {
+        message: "Weight(Kg) is not a number or it is less than zero",
+      })
+      .optional(),
+
     //{ message: "Is deleted is required" }
     // isDeleted: z.boolean().default(false),
     //{ message: "Is deleted is required" }
