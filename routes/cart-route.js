@@ -5,6 +5,8 @@ const {
   createCartItem,
   updateCartQuantity,
   deleteCart,
+  calculateSubTotal,
+  calculateDeliveryFees,
   // deleteCity,
 } = require("../controllers/cart-controller");
 const {
@@ -46,5 +48,18 @@ router
     authorizeMiddleware(userConstant),
     deleteCartItem
   );
-
+router
+  .route("/calculate-subtotal")
+  .get(
+    authenticateUserMiddleware,
+    authorizeMiddleware(userConstant),
+    calculateSubTotal
+  );
+router
+  .route("/calculate-delivery")
+  .get(
+    authenticateUserMiddleware,
+    authorizeMiddleware(userConstant),
+    calculateDeliveryFees
+  );
 module.exports = router;

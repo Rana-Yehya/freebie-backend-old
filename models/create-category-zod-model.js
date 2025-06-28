@@ -1,6 +1,6 @@
 const { z } = require("zod");
 
-const CategoryZodModel = z.object({
+const CreateCategoryZodModel = z.object({
   name: z.string({ message: "Name is required" }),
   image: z
     .any()
@@ -18,6 +18,19 @@ const CategoryZodModel = z.object({
     .refine((file) => file.size <= 1024 * 1024, {
       message: "Image is too large",
     }),
+
+  canBeDeliveredOutsideState: z
+    .string()
+    .refine(
+      (canBeDeliveredOutsideState) =>
+        canBeDeliveredOutsideState === "true" ||
+        canBeDeliveredOutsideState === "false",
+      {
+        message:
+          "Availablity to deliver outside the state does not equal to true or false",
+      }
+    )
+    .default("true"),
 });
 // type UserModel = z.infer<typeof UserZodModel>;
-module.exports = { CategoryZodModel };
+module.exports = { CreateCategoryZodModel };

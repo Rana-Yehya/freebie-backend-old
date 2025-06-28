@@ -1,4 +1,6 @@
-const { DeliveryTaxesZodModel } = require("../models/delivery-taxes-zod-model");
+const {
+  CreateDeliveryTaxesZodModel,
+} = require("../models/create-delivery-taxes-zod-model");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
 const {
@@ -6,6 +8,10 @@ const {
   BadRequestError,
   UnauthenticatedError,
 } = require("../errors");
+const {
+  UpdateDeliveryTaxesZodModel,
+} = require("../models/update-delivery-taxes-zod-model");
+const { connect } = require("../routes/cart-route");
 
 const getAllDeliveryTaxes = async (req, res, next) => {
   const deliveryTaxes = await prisma.deliveryTaxes.findMany({});
@@ -29,34 +35,44 @@ const getSingleDeliveryTaxes = async (req, res, next) => {
 };
 
 const createDeliveryTaxes = async (req, res, next) => {
-  const { originStateId, destinationStateId, baseFee } = req.body;
+  const {
+    originStateId,
+    destinationStateId,
+    baseFee,
+    additionalFeesAfterKg,
+    feePerKg,
+  } = req.body;
 
-  const zodModel = DeliveryTaxesZodModel.safeParse({
+  const zodModel = CreateDeliveryTaxesZodModel.safeParse({
     originStateId: originStateId,
     destinationStateId: destinationStateId,
     baseFee: baseFee,
+    additionalFeesAfterKg: additionalFeesAfterKg,
+    feePerKg: feePerKg,
   });
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
-  const originState = await prisma.state.findUnique({
-    where: { id: originStateId },
-  });
-  if (!originState) {
-    throw new BadRequestError("Origin State not found");
-  }
-  const destinationState = await prisma.state.findUnique({
-    where: { id: destinationStateId },
-  });
-  if (!destinationState) {
-    throw new BadRequestError("destination State not found");
-  }
+  // const originState = await prisma.state.findUnique({
+  //   where: { id: originStateId },
+  // });
+  // if (!originState) {
+  //   throw new BadRequestError("Origin State not found");
+  // }
+  // const destinationState = await prisma.state.findUnique({
+  //   where: { id: destinationStateId },
+  // });
+  // if (!destinationState) {
+  //   throw new BadRequestError("destination State not found");
+  // }
 
   const createdDeliveryTaxes = await prisma.deliveryTaxes.create({
     data: {
-      originStateId: originStateId,
-      destinationStateId: destinationStateId,
+      originState: { connect: { id: originStateId } },
+      destinationState: { connect: { id: destinationStateId } },
       baseFee: baseFee,
+      additionalFeesAfterKg: additionalFeesAfterKg,
+      feePerKg: feePerKg,
     },
   });
 
@@ -67,36 +83,54 @@ const createDeliveryTaxes = async (req, res, next) => {
 
 const updateDeliveryTaxes = async (req, res, next) => {
   const { id } = req.params;
-  const { originStateId, destinationStateId, baseFee } = req.body;
-  const image = req.files == undefined ? undefined : req.files.image;
-
-  if (!id) {
-    throw new BadRequestError("Please send an ID");
+  const {
+    originStateId,
+    destinationStateId,
+    baseFee,
+    additionalFeesAfterKg,
+    feePerKg,
+  } = req.body;
+  const zodModel = UpdateDeliveryTaxesZodModel.safeParse({
+    originStateId: originStateId,
+    destinationStateId: destinationStateId,
+    baseFee: baseFee,
+    additionalFeesAfterKg: additionalFeesAfterKg,
+    feePerKg: feePerKg,
+  });
+  if (!zodModel.success) {
+    throw new BadRequestError(zodModel.error.errors[0].message);
   }
-
-  if (originStateId) {
-    const originState = await prisma.state.findUnique({
-      where: { id: originStateId },
-    });
-    if (!originState) {
-      throw new BadRequestError("Origin State not found");
-    }
-  }
-  if (destinationStateId) {
-    const destinationState = await prisma.state.findUnique({
-      where: { id: destinationStateId },
-    });
-    if (!destinationState) {
-      throw new BadRequestError("destination State not found");
-    }
-  }
+  // if (originStateId) {
+  //   const originState = await prisma.state.findUnique({
+  //     where: { id: originStateId },
+  //   });
+  //   if (!originState) {
+  //     throw new BadRequestError("Origin State not found");
+  //   }
+  // }
+  // if (destinationStateId) {
+  //   const destinationState = await prisma.state.findUnique({
+  //     where: { id: destinationStateId },
+  //   });
+  //   if (!destinationState) {
+  //     throw new BadRequestError("destination State not found");
+  //   }
+  // }
 
   const deliveryTaxes = await prisma.deliveryTaxes.update({
     where: { id: id },
     data: {
-      originStateId: originStateId || undefined,
-      destinationStateId: destinationStateId || undefined,
+      originState:
+        originStateId == undefined
+          ? undefined
+          : { connect: { id: originStateId } },
+      destinationState:
+        destinationStateId == undefined
+          ? undefined
+          : { connect: { id: destinationStateId || undefined } },
       baseFee: baseFee || undefined,
+      additionalFeesAfterKg: additionalFeesAfterKg || undefined,
+      feePerKg: feePerKg || undefined,
     },
   });
   if (!deliveryTaxes) {

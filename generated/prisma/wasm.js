@@ -307,6 +307,7 @@ exports.Prisma.UserCartScalarFieldEnum = {
   subtotal: 'subtotal',
   taxAmount: 'taxAmount',
   deliveryFee: 'deliveryFee',
+  totalAmount: 'totalAmount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

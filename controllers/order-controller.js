@@ -196,8 +196,7 @@ const createOrder = async (req, res, next) => {
       deliveryFee: userCart.deliveryFee,
       taxAmount: userCart.taxAmount,
       subtotal: userCart.subtotal,
-      totalAmount:
-        userCart.subtotal + userCart.deliveryFee + userCart.taxAmount,
+      totalAmount: userCart.totalAmount,
       cityId: req.user.cityId,
       stateId: req.user.stateId,
       countryId: req.user.countryId,

@@ -21368,12 +21368,14 @@ export namespace Prisma {
     subtotal: number | null
     taxAmount: number | null
     deliveryFee: number | null
+    totalAmount: number | null
   }
 
   export type UserCartSumAggregateOutputType = {
     subtotal: number | null
     taxAmount: number | null
     deliveryFee: number | null
+    totalAmount: number | null
   }
 
   export type UserCartMinAggregateOutputType = {
@@ -21382,6 +21384,7 @@ export namespace Prisma {
     subtotal: number | null
     taxAmount: number | null
     deliveryFee: number | null
+    totalAmount: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -21392,6 +21395,7 @@ export namespace Prisma {
     subtotal: number | null
     taxAmount: number | null
     deliveryFee: number | null
+    totalAmount: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -21402,6 +21406,7 @@ export namespace Prisma {
     subtotal: number
     taxAmount: number
     deliveryFee: number
+    totalAmount: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -21412,12 +21417,14 @@ export namespace Prisma {
     subtotal?: true
     taxAmount?: true
     deliveryFee?: true
+    totalAmount?: true
   }
 
   export type UserCartSumAggregateInputType = {
     subtotal?: true
     taxAmount?: true
     deliveryFee?: true
+    totalAmount?: true
   }
 
   export type UserCartMinAggregateInputType = {
@@ -21426,6 +21433,7 @@ export namespace Prisma {
     subtotal?: true
     taxAmount?: true
     deliveryFee?: true
+    totalAmount?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -21436,6 +21444,7 @@ export namespace Prisma {
     subtotal?: true
     taxAmount?: true
     deliveryFee?: true
+    totalAmount?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -21446,6 +21455,7 @@ export namespace Prisma {
     subtotal?: true
     taxAmount?: true
     deliveryFee?: true
+    totalAmount?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -21543,6 +21553,7 @@ export namespace Prisma {
     subtotal: number
     taxAmount: number
     deliveryFee: number
+    totalAmount: number
     createdAt: Date
     updatedAt: Date
     _count: UserCartCountAggregateOutputType | null
@@ -21572,6 +21583,7 @@ export namespace Prisma {
     subtotal?: boolean
     taxAmount?: boolean
     deliveryFee?: boolean
+    totalAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | userDefaultArgs<ExtArgs>
@@ -21585,6 +21597,7 @@ export namespace Prisma {
     subtotal?: boolean
     taxAmount?: boolean
     deliveryFee?: boolean
+    totalAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | userDefaultArgs<ExtArgs>
@@ -21596,6 +21609,7 @@ export namespace Prisma {
     subtotal?: boolean
     taxAmount?: boolean
     deliveryFee?: boolean
+    totalAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | userDefaultArgs<ExtArgs>
@@ -21607,11 +21621,12 @@ export namespace Prisma {
     subtotal?: boolean
     taxAmount?: boolean
     deliveryFee?: boolean
+    totalAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type userCartOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "subtotal" | "taxAmount" | "deliveryFee" | "createdAt" | "updatedAt", ExtArgs["result"]["userCart"]>
+  export type userCartOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "subtotal" | "taxAmount" | "deliveryFee" | "totalAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["userCart"]>
   export type userCartInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | userDefaultArgs<ExtArgs>
     product?: boolean | userCart$productArgs<ExtArgs>
@@ -21636,6 +21651,7 @@ export namespace Prisma {
       subtotal: number
       taxAmount: number
       deliveryFee: number
+      totalAmount: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["userCart"]>
@@ -22068,6 +22084,7 @@ export namespace Prisma {
     readonly subtotal: FieldRef<"userCart", 'Float'>
     readonly taxAmount: FieldRef<"userCart", 'Float'>
     readonly deliveryFee: FieldRef<"userCart", 'Float'>
+    readonly totalAmount: FieldRef<"userCart", 'Float'>
     readonly createdAt: FieldRef<"userCart", 'DateTime'>
     readonly updatedAt: FieldRef<"userCart", 'DateTime'>
   }
@@ -29636,6 +29653,7 @@ export namespace Prisma {
     subtotal: 'subtotal',
     taxAmount: 'taxAmount',
     deliveryFee: 'deliveryFee',
+    totalAmount: 'totalAmount',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -31101,6 +31119,7 @@ export namespace Prisma {
     subtotal?: FloatFilter<"userCart"> | number
     taxAmount?: FloatFilter<"userCart"> | number
     deliveryFee?: FloatFilter<"userCart"> | number
+    totalAmount?: FloatFilter<"userCart"> | number
     createdAt?: DateTimeFilter<"userCart"> | Date | string
     updatedAt?: DateTimeFilter<"userCart"> | Date | string
     user?: XOR<UserScalarRelationFilter, userWhereInput>
@@ -31113,6 +31132,7 @@ export namespace Prisma {
     subtotal?: SortOrder
     taxAmount?: SortOrder
     deliveryFee?: SortOrder
+    totalAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: userOrderByWithRelationInput
@@ -31128,6 +31148,7 @@ export namespace Prisma {
     subtotal?: FloatFilter<"userCart"> | number
     taxAmount?: FloatFilter<"userCart"> | number
     deliveryFee?: FloatFilter<"userCart"> | number
+    totalAmount?: FloatFilter<"userCart"> | number
     createdAt?: DateTimeFilter<"userCart"> | Date | string
     updatedAt?: DateTimeFilter<"userCart"> | Date | string
     user?: XOR<UserScalarRelationFilter, userWhereInput>
@@ -31140,6 +31161,7 @@ export namespace Prisma {
     subtotal?: SortOrder
     taxAmount?: SortOrder
     deliveryFee?: SortOrder
+    totalAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: userCartCountOrderByAggregateInput
@@ -31158,6 +31180,7 @@ export namespace Prisma {
     subtotal?: FloatWithAggregatesFilter<"userCart"> | number
     taxAmount?: FloatWithAggregatesFilter<"userCart"> | number
     deliveryFee?: FloatWithAggregatesFilter<"userCart"> | number
+    totalAmount?: FloatWithAggregatesFilter<"userCart"> | number
     createdAt?: DateTimeWithAggregatesFilter<"userCart"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"userCart"> | Date | string
   }
@@ -33047,6 +33070,7 @@ export namespace Prisma {
     subtotal?: number
     taxAmount?: number
     deliveryFee?: number
+    totalAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     user: userCreateNestedOneWithoutUserCartInput
@@ -33059,6 +33083,7 @@ export namespace Prisma {
     subtotal?: number
     taxAmount?: number
     deliveryFee?: number
+    totalAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     product?: productCartUncheckedCreateNestedManyWithoutCartInput
@@ -33069,6 +33094,7 @@ export namespace Prisma {
     subtotal?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     deliveryFee?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: userUpdateOneRequiredWithoutUserCartNestedInput
@@ -33081,6 +33107,7 @@ export namespace Prisma {
     subtotal?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     deliveryFee?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: productCartUncheckedUpdateManyWithoutCartNestedInput
@@ -33092,6 +33119,7 @@ export namespace Prisma {
     subtotal?: number
     taxAmount?: number
     deliveryFee?: number
+    totalAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -33101,6 +33129,7 @@ export namespace Prisma {
     subtotal?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     deliveryFee?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -33111,6 +33140,7 @@ export namespace Prisma {
     subtotal?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     deliveryFee?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -34761,6 +34791,7 @@ export namespace Prisma {
     subtotal?: SortOrder
     taxAmount?: SortOrder
     deliveryFee?: SortOrder
+    totalAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -34769,6 +34800,7 @@ export namespace Prisma {
     subtotal?: SortOrder
     taxAmount?: SortOrder
     deliveryFee?: SortOrder
+    totalAmount?: SortOrder
   }
 
   export type userCartMaxOrderByAggregateInput = {
@@ -34777,6 +34809,7 @@ export namespace Prisma {
     subtotal?: SortOrder
     taxAmount?: SortOrder
     deliveryFee?: SortOrder
+    totalAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -34787,6 +34820,7 @@ export namespace Prisma {
     subtotal?: SortOrder
     taxAmount?: SortOrder
     deliveryFee?: SortOrder
+    totalAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -34795,6 +34829,7 @@ export namespace Prisma {
     subtotal?: SortOrder
     taxAmount?: SortOrder
     deliveryFee?: SortOrder
+    totalAmount?: SortOrder
   }
 
   export type UserCartScalarRelationFilter = {
@@ -37860,6 +37895,7 @@ export namespace Prisma {
     subtotal?: number
     taxAmount?: number
     deliveryFee?: number
+    totalAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     product?: productCartCreateNestedManyWithoutCartInput
@@ -37870,6 +37906,7 @@ export namespace Prisma {
     subtotal?: number
     taxAmount?: number
     deliveryFee?: number
+    totalAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     product?: productCartUncheckedCreateNestedManyWithoutCartInput
@@ -38091,6 +38128,7 @@ export namespace Prisma {
     subtotal?: FloatFilter<"userCart"> | number
     taxAmount?: FloatFilter<"userCart"> | number
     deliveryFee?: FloatFilter<"userCart"> | number
+    totalAmount?: FloatFilter<"userCart"> | number
     createdAt?: DateTimeFilter<"userCart"> | Date | string
     updatedAt?: DateTimeFilter<"userCart"> | Date | string
   }
@@ -41199,6 +41237,7 @@ export namespace Prisma {
     subtotal?: number
     taxAmount?: number
     deliveryFee?: number
+    totalAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     user: userCreateNestedOneWithoutUserCartInput
@@ -41210,6 +41249,7 @@ export namespace Prisma {
     subtotal?: number
     taxAmount?: number
     deliveryFee?: number
+    totalAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -41372,6 +41412,7 @@ export namespace Prisma {
     subtotal?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     deliveryFee?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: userUpdateOneRequiredWithoutUserCartNestedInput
@@ -41383,6 +41424,7 @@ export namespace Prisma {
     subtotal?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     deliveryFee?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -42648,6 +42690,7 @@ export namespace Prisma {
     subtotal?: number
     taxAmount?: number
     deliveryFee?: number
+    totalAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -42719,6 +42762,7 @@ export namespace Prisma {
     subtotal?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     deliveryFee?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: productCartUpdateManyWithoutCartNestedInput
@@ -42729,6 +42773,7 @@ export namespace Prisma {
     subtotal?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     deliveryFee?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: productCartUncheckedUpdateManyWithoutCartNestedInput
@@ -42739,6 +42784,7 @@ export namespace Prisma {
     subtotal?: FloatFieldUpdateOperationsInput | number
     taxAmount?: FloatFieldUpdateOperationsInput | number
     deliveryFee?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

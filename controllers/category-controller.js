@@ -1,4 +1,6 @@
-const { CategoryZodModel } = require("../models/category-zod-model");
+const {
+  CreateCategoryZodModel,
+} = require("../models/create-category-zod-model");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
 const {
@@ -8,6 +10,9 @@ const {
 } = require("../errors");
 const { uploadImage } = require("../helpers/cloudinary/upload-image");
 const { destroyImage } = require("../helpers/cloudinary/delete-image");
+const {
+  UpdateCategoryZodModel,
+} = require("../models/update-category-zod-model");
 const getAllCategories = async (req, res, next) => {
   const category = await prisma.category.findMany({
     include: {
@@ -33,12 +38,13 @@ const getCategory = async (req, res, next) => {
 };
 
 const createCategory = async (req, res, next) => {
-  const { name } = req.body;
+  const { name, canBeDeliveredOutsideState } = req.body;
   const image = req.files.image;
 
-  const zodModel = CategoryZodModel.safeParse({
+  const zodModel = CreateCategoryZodModel.safeParse({
     name: name,
     image: image,
+    canBeDeliveredOutsideState: canBeDeliveredOutsideState,
   });
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
@@ -49,6 +55,10 @@ const createCategory = async (req, res, next) => {
   const createdCategory = await prisma.category.create({
     data: {
       name: name,
+      canBeDeliveredOutsideState:
+        canBeDeliveredOutsideState == undefined
+          ? true
+          : Boolean(canBeDeliveredOutsideState),
       image: {
         create: {
           secureUrl: imageUploadedSecureUrl,
@@ -66,9 +76,16 @@ const createCategory = async (req, res, next) => {
 
 const updateCategory = async (req, res, next) => {
   const { id } = req.params;
-  const { name } = req.body;
+  const { name, canBeDeliveredOutsideState } = req.body;
   const image = req.files == undefined ? undefined : req.files.image;
-
+  const zodModel = UpdateCategoryZodModel.safeParse({
+    name: name,
+    image: image,
+    canBeDeliveredOutsideState: canBeDeliveredOutsideState,
+  });
+  if (!zodModel.success) {
+    throw new BadRequestError(zodModel.error.errors[0].message);
+  }
   if (!id) {
     throw new BadRequestError("Please send an ID");
   }
@@ -93,6 +110,10 @@ const updateCategory = async (req, res, next) => {
     where: { id: id },
     data: {
       name: name || undefined,
+      canBeDeliveredOutsideState:
+        canBeDeliveredOutsideState == undefined
+          ? undefined
+          : Boolean(canBeDeliveredOutsideState),
       image: {
         // where: { occasionId: id },
         update: {
