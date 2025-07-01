@@ -6,7 +6,9 @@ const { UpdateProductZodModel } = require("../models/update-product-zod-model");
 const { uploadMultipleImages } = require("../helpers/cloudinary/upload-image");
 const { destroyMultipleImages } = require("../helpers/cloudinary/delete-image");
 const getAllProducts = async (req, res, next) => {
-  const products = await prisma.product.findMany();
+  const products = await prisma.product.findMany({
+    include: { occasions: true },
+  });
   return res
     .status(StatusCodes.OK)
     .json({ isSuccess: true, count: products.length, data: products });
@@ -115,6 +117,28 @@ const createProduct = async (req, res, next) => {
       publicId: imagePublicIdsToStore[imageIndex],
     });
   }
+  // console.log(category.canBeDeliveredOutsideState);
+  // console.log(canBeDeliveredOutsideState);
+  // console.log(
+  //   category.canBeDeliveredOutsideState == true
+  //     ? canBeDeliveredOutsideState == undefined
+  //       ? undefined
+  //       : canBeDeliveredOutsideState === "false"
+  //       ? false
+  //       : true
+  //     : false
+  // );
+  // if (category.canBeDeliveredOutsideState == true) {
+  //   console.log("here");
+
+  //   console.log(canBeDeliveredOutsideState == undefined);
+  //   console.log("here");
+  //   const x = Boolean(canBeDeliveredOutsideState);
+  //   console.log(x);
+  //   //   ? undefined
+  //   //   : Boolean(canBeDeliveredOutsideState);
+  //   // false;
+  // }
   const productStockListToStore = productStockList.map((product) => {
     return {
       branch: {
@@ -139,15 +163,17 @@ const createProduct = async (req, res, next) => {
         category.canBeDeliveredOutsideState == true
           ? canBeDeliveredOutsideState == undefined
             ? undefined
-            : Boolean(canBeDeliveredOutsideState)
+            : canBeDeliveredOutsideState === "false"
+            ? false
+            : true
           : false,
       actualPrice:
         discountPercent == undefined || discountPercent == 0
           ? parseFloat(price)
           : parseFloat(price) -
             (parseFloat(price) * parseFloat(discountPercent)) / 100,
-      doesNeedPreparation: Boolean(doesNeedPreparation),
-      isAvailable: Boolean(isAvailable),
+      doesNeedPreparation: doesNeedPreparation === "false" ? false : true,
+      isAvailable: isAvailable === "false" ? false : true,
       preparationTimeInMinutes: preparationTimeInMinutes,
       discountPercent: parseFloat(discountPercent),
       discountStartTime: dateDiscountStartTime,
@@ -382,14 +408,35 @@ const updateProduct = async (req, res, next) => {
       doesNeedPreparation:
         doesNeedPreparation == undefined
           ? undefined
-          : Boolean(doesNeedPreparation),
-      isAvailable: isAvailable == undefined ? undefined : Boolean(isAvailable),
-      isPopular: isPopular == undefined ? undefined : Boolean(isPopular),
-      isFeatured: isFeatured == undefined ? undefined : Boolean(isFeatured),
-      canBeDeliveredOutsideState:
-        canBeDeliveredOutsideState == undefined
+          : doesNeedPreparation === "false"
+          ? false
+          : true,
+      isAvailable:
+        isAvailable == undefined
           ? undefined
-          : Boolean(canBeDeliveredOutsideState),
+          : isAvailable === "false"
+          ? false
+          : true,
+      isPopular:
+        isPopular == undefined
+          ? undefined
+          : isPopular === "false"
+          ? false
+          : true,
+      isFeatured:
+        isFeatured == undefined
+          ? undefined
+          : isFeatured === "false"
+          ? false
+          : true,
+      canBeDeliveredOutsideState:
+        category.canBeDeliveredOutsideState == true
+          ? canBeDeliveredOutsideState == undefined
+            ? undefined
+            : canBeDeliveredOutsideState === "false"
+            ? false
+            : true
+          : undefined,
       preparationTimeInMinutes: preparationTimeInMinutes || undefined,
       discountPercent:
         discountPercent == undefined ? undefined : parseFloat(discountPercent),

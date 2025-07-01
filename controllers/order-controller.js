@@ -218,6 +218,25 @@ const createOrder = async (req, res, next) => {
       userId: req.user.id,
     },
   });
+  userCart.product.map(async (item) => {
+    await prisma.product.update({
+      where: { id: item.productId },
+      data: {
+        productStock: {
+          update: {
+            where: {
+              productId_branchId_color: {
+                productId: item.productId,
+                color: item.color,
+                branchId: item.branchId,
+              },
+            },
+            data: { stock: { decrement: item.quantity } },
+          },
+        },
+      },
+    });
+  });
   return res.status(StatusCodes.CREATED).json({ isSuccess: true, data: order });
 };
 

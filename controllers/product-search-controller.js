@@ -80,6 +80,7 @@ const getProductsQuery = async (req, res, next) => {
     by: "color",
   });
   const colors = groupColors.map((color) => color.color);
+  // console.log(colors);
   const categories = await prisma.category.findMany({});
   const occasions = await prisma.occasion.findMany({});
 
@@ -407,7 +408,7 @@ const searchAllProducts = async (req, res, next) => {
         name: name ? { contains: name.trim() } : undefined,
         // id: { in: [...productIdsList, ...productOccsionsIdsList] },
         occasions: occasionsIdsList
-          ? { every: { id: { in: occasionsIdsList } } }
+          ? { some: { id: { in: occasionsIdsList } } }
           : undefined,
         categoryId: categoryIdsList ? { in: categoryIdsList } : undefined,
         productStock: {
@@ -627,7 +628,13 @@ const getProduct = async (req, res, next) => {
           },
         },
       },
-      productStock: true,
+      productStock: {
+        select: {
+          branch: true,
+          stock: true,
+          color: true,
+        },
+      },
       image: true,
     },
   });

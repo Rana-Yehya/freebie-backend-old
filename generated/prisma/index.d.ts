@@ -22552,6 +22552,7 @@ export namespace Prisma {
     deliveryTaxesId: string | null
     color: string | null
     quantity: number | null
+    doesHaveEnoughQuantity: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -22563,6 +22564,7 @@ export namespace Prisma {
     deliveryTaxesId: string | null
     color: string | null
     quantity: number | null
+    doesHaveEnoughQuantity: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -22574,6 +22576,7 @@ export namespace Prisma {
     deliveryTaxesId: number
     color: number
     quantity: number
+    doesHaveEnoughQuantity: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -22595,6 +22598,7 @@ export namespace Prisma {
     deliveryTaxesId?: true
     color?: true
     quantity?: true
+    doesHaveEnoughQuantity?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -22606,6 +22610,7 @@ export namespace Prisma {
     deliveryTaxesId?: true
     color?: true
     quantity?: true
+    doesHaveEnoughQuantity?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -22617,6 +22622,7 @@ export namespace Prisma {
     deliveryTaxesId?: true
     color?: true
     quantity?: true
+    doesHaveEnoughQuantity?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -22715,6 +22721,7 @@ export namespace Prisma {
     deliveryTaxesId: string
     color: string
     quantity: number
+    doesHaveEnoughQuantity: boolean
     createdAt: Date
     updatedAt: Date
     _count: ProductCartCountAggregateOutputType | null
@@ -22745,6 +22752,7 @@ export namespace Prisma {
     deliveryTaxesId?: boolean
     color?: boolean
     quantity?: boolean
+    doesHaveEnoughQuantity?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     cart?: boolean | userCartDefaultArgs<ExtArgs>
@@ -22760,6 +22768,7 @@ export namespace Prisma {
     deliveryTaxesId?: boolean
     color?: boolean
     quantity?: boolean
+    doesHaveEnoughQuantity?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     cart?: boolean | userCartDefaultArgs<ExtArgs>
@@ -22775,6 +22784,7 @@ export namespace Prisma {
     deliveryTaxesId?: boolean
     color?: boolean
     quantity?: boolean
+    doesHaveEnoughQuantity?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     cart?: boolean | userCartDefaultArgs<ExtArgs>
@@ -22790,11 +22800,12 @@ export namespace Prisma {
     deliveryTaxesId?: boolean
     color?: boolean
     quantity?: boolean
+    doesHaveEnoughQuantity?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type productCartOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"userCartId" | "productId" | "branchId" | "deliveryTaxesId" | "color" | "quantity" | "createdAt" | "updatedAt", ExtArgs["result"]["productCart"]>
+  export type productCartOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"userCartId" | "productId" | "branchId" | "deliveryTaxesId" | "color" | "quantity" | "doesHaveEnoughQuantity" | "createdAt" | "updatedAt", ExtArgs["result"]["productCart"]>
   export type productCartInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     cart?: boolean | userCartDefaultArgs<ExtArgs>
     product?: boolean | productDefaultArgs<ExtArgs>
@@ -22829,6 +22840,7 @@ export namespace Prisma {
       deliveryTaxesId: string
       color: string
       quantity: number
+      doesHaveEnoughQuantity: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["productCart"]>
@@ -23264,6 +23276,7 @@ export namespace Prisma {
     readonly deliveryTaxesId: FieldRef<"productCart", 'String'>
     readonly color: FieldRef<"productCart", 'String'>
     readonly quantity: FieldRef<"productCart", 'Int'>
+    readonly doesHaveEnoughQuantity: FieldRef<"productCart", 'Boolean'>
     readonly createdAt: FieldRef<"productCart", 'DateTime'>
     readonly updatedAt: FieldRef<"productCart", 'DateTime'>
   }
@@ -29668,6 +29681,7 @@ export namespace Prisma {
     deliveryTaxesId: 'deliveryTaxesId',
     color: 'color',
     quantity: 'quantity',
+    doesHaveEnoughQuantity: 'doesHaveEnoughQuantity',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -31195,6 +31209,7 @@ export namespace Prisma {
     deliveryTaxesId?: StringFilter<"productCart"> | string
     color?: StringFilter<"productCart"> | string
     quantity?: IntFilter<"productCart"> | number
+    doesHaveEnoughQuantity?: BoolFilter<"productCart"> | boolean
     createdAt?: DateTimeFilter<"productCart"> | Date | string
     updatedAt?: DateTimeFilter<"productCart"> | Date | string
     cart?: XOR<UserCartScalarRelationFilter, userCartWhereInput>
@@ -31210,6 +31225,7 @@ export namespace Prisma {
     deliveryTaxesId?: SortOrder
     color?: SortOrder
     quantity?: SortOrder
+    doesHaveEnoughQuantity?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     cart?: userCartOrderByWithRelationInput
@@ -31229,6 +31245,7 @@ export namespace Prisma {
     deliveryTaxesId?: StringFilter<"productCart"> | string
     color?: StringFilter<"productCart"> | string
     quantity?: IntFilter<"productCart"> | number
+    doesHaveEnoughQuantity?: BoolFilter<"productCart"> | boolean
     createdAt?: DateTimeFilter<"productCart"> | Date | string
     updatedAt?: DateTimeFilter<"productCart"> | Date | string
     cart?: XOR<UserCartScalarRelationFilter, userCartWhereInput>
@@ -31244,6 +31261,7 @@ export namespace Prisma {
     deliveryTaxesId?: SortOrder
     color?: SortOrder
     quantity?: SortOrder
+    doesHaveEnoughQuantity?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: productCartCountOrderByAggregateInput
@@ -31263,6 +31281,7 @@ export namespace Prisma {
     deliveryTaxesId?: StringWithAggregatesFilter<"productCart"> | string
     color?: StringWithAggregatesFilter<"productCart"> | string
     quantity?: IntWithAggregatesFilter<"productCart"> | number
+    doesHaveEnoughQuantity?: BoolWithAggregatesFilter<"productCart"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"productCart"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"productCart"> | Date | string
   }
@@ -33148,6 +33167,7 @@ export namespace Prisma {
   export type productCartCreateInput = {
     color: string
     quantity?: number
+    doesHaveEnoughQuantity?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     cart: userCartCreateNestedOneWithoutProductInput
@@ -33163,6 +33183,7 @@ export namespace Prisma {
     deliveryTaxesId: string
     color: string
     quantity?: number
+    doesHaveEnoughQuantity?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -33170,6 +33191,7 @@ export namespace Prisma {
   export type productCartUpdateInput = {
     color?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    doesHaveEnoughQuantity?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cart?: userCartUpdateOneRequiredWithoutProductNestedInput
@@ -33185,6 +33207,7 @@ export namespace Prisma {
     deliveryTaxesId?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    doesHaveEnoughQuantity?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -33196,6 +33219,7 @@ export namespace Prisma {
     deliveryTaxesId: string
     color: string
     quantity?: number
+    doesHaveEnoughQuantity?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -33203,6 +33227,7 @@ export namespace Prisma {
   export type productCartUpdateManyMutationInput = {
     color?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    doesHaveEnoughQuantity?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -33214,6 +33239,7 @@ export namespace Prisma {
     deliveryTaxesId?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    doesHaveEnoughQuantity?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -34856,6 +34882,7 @@ export namespace Prisma {
     deliveryTaxesId?: SortOrder
     color?: SortOrder
     quantity?: SortOrder
+    doesHaveEnoughQuantity?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -34871,6 +34898,7 @@ export namespace Prisma {
     deliveryTaxesId?: SortOrder
     color?: SortOrder
     quantity?: SortOrder
+    doesHaveEnoughQuantity?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -34882,6 +34910,7 @@ export namespace Prisma {
     deliveryTaxesId?: SortOrder
     color?: SortOrder
     quantity?: SortOrder
+    doesHaveEnoughQuantity?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -38341,6 +38370,7 @@ export namespace Prisma {
   export type productCartCreateWithoutBranchInput = {
     color: string
     quantity?: number
+    doesHaveEnoughQuantity?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     cart: userCartCreateNestedOneWithoutProductInput
@@ -38354,6 +38384,7 @@ export namespace Prisma {
     deliveryTaxesId: string
     color: string
     quantity?: number
+    doesHaveEnoughQuantity?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -38581,6 +38612,7 @@ export namespace Prisma {
     deliveryTaxesId?: StringFilter<"productCart"> | string
     color?: StringFilter<"productCart"> | string
     quantity?: IntFilter<"productCart"> | number
+    doesHaveEnoughQuantity?: BoolFilter<"productCart"> | boolean
     createdAt?: DateTimeFilter<"productCart"> | Date | string
     updatedAt?: DateTimeFilter<"productCart"> | Date | string
   }
@@ -39838,6 +39870,7 @@ export namespace Prisma {
   export type productCartCreateWithoutDeliveryTaxesInput = {
     color: string
     quantity?: number
+    doesHaveEnoughQuantity?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     cart: userCartCreateNestedOneWithoutProductInput
@@ -39851,6 +39884,7 @@ export namespace Prisma {
     branchId: string
     color: string
     quantity?: number
+    doesHaveEnoughQuantity?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -40440,6 +40474,7 @@ export namespace Prisma {
   export type productCartCreateWithoutProductInput = {
     color: string
     quantity?: number
+    doesHaveEnoughQuantity?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     cart: userCartCreateNestedOneWithoutProductInput
@@ -40453,6 +40488,7 @@ export namespace Prisma {
     deliveryTaxesId: string
     color: string
     quantity?: number
+    doesHaveEnoughQuantity?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -41132,6 +41168,7 @@ export namespace Prisma {
   export type productCartCreateWithoutCartInput = {
     color: string
     quantity?: number
+    doesHaveEnoughQuantity?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     product: productCreateNestedOneWithoutProductUserInput
@@ -41145,6 +41182,7 @@ export namespace Prisma {
     deliveryTaxesId: string
     color: string
     quantity?: number
+    doesHaveEnoughQuantity?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -42899,6 +42937,7 @@ export namespace Prisma {
     deliveryTaxesId: string
     color: string
     quantity?: number
+    doesHaveEnoughQuantity?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -42963,6 +43002,7 @@ export namespace Prisma {
   export type productCartUpdateWithoutBranchInput = {
     color?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    doesHaveEnoughQuantity?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cart?: userCartUpdateOneRequiredWithoutProductNestedInput
@@ -42976,6 +43016,7 @@ export namespace Prisma {
     deliveryTaxesId?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    doesHaveEnoughQuantity?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -42986,6 +43027,7 @@ export namespace Prisma {
     deliveryTaxesId?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    doesHaveEnoughQuantity?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -43784,6 +43826,7 @@ export namespace Prisma {
     branchId: string
     color: string
     quantity?: number
+    doesHaveEnoughQuantity?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -43791,6 +43834,7 @@ export namespace Prisma {
   export type productCartUpdateWithoutDeliveryTaxesInput = {
     color?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    doesHaveEnoughQuantity?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cart?: userCartUpdateOneRequiredWithoutProductNestedInput
@@ -43804,6 +43848,7 @@ export namespace Prisma {
     branchId?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    doesHaveEnoughQuantity?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -43814,6 +43859,7 @@ export namespace Prisma {
     branchId?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    doesHaveEnoughQuantity?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -44072,6 +44118,7 @@ export namespace Prisma {
     deliveryTaxesId: string
     color: string
     quantity?: number
+    doesHaveEnoughQuantity?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -44213,6 +44260,7 @@ export namespace Prisma {
   export type productCartUpdateWithoutProductInput = {
     color?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    doesHaveEnoughQuantity?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cart?: userCartUpdateOneRequiredWithoutProductNestedInput
@@ -44226,6 +44274,7 @@ export namespace Prisma {
     deliveryTaxesId?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    doesHaveEnoughQuantity?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -44236,6 +44285,7 @@ export namespace Prisma {
     deliveryTaxesId?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    doesHaveEnoughQuantity?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -44246,6 +44296,7 @@ export namespace Prisma {
     deliveryTaxesId: string
     color: string
     quantity?: number
+    doesHaveEnoughQuantity?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -44253,6 +44304,7 @@ export namespace Prisma {
   export type productCartUpdateWithoutCartInput = {
     color?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    doesHaveEnoughQuantity?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: productUpdateOneRequiredWithoutProductUserNestedInput
@@ -44266,6 +44318,7 @@ export namespace Prisma {
     deliveryTaxesId?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    doesHaveEnoughQuantity?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -44276,6 +44329,7 @@ export namespace Prisma {
     deliveryTaxesId?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    doesHaveEnoughQuantity?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -58,7 +58,9 @@ const createCategory = async (req, res, next) => {
       canBeDeliveredOutsideState:
         canBeDeliveredOutsideState == undefined
           ? true
-          : Boolean(canBeDeliveredOutsideState),
+          : canBeDeliveredOutsideState === "false"
+          ? false
+          : true,
       image: {
         create: {
           secureUrl: imageUploadedSecureUrl,
@@ -113,7 +115,9 @@ const updateCategory = async (req, res, next) => {
       canBeDeliveredOutsideState:
         canBeDeliveredOutsideState == undefined
           ? undefined
-          : Boolean(canBeDeliveredOutsideState),
+          : canBeDeliveredOutsideState === "false"
+          ? false
+          : true,
       image: {
         // where: { occasionId: id },
         update: {

@@ -30,41 +30,80 @@ const getAllCartItems = async (req, res, next) => {
       updatedAt: false,
     },
   });
+  // if (userCart) {
+  // const productsList = await prisma.productUser.findMany({
+  //   where: { userCartId: userCartId.id },
+  //   include: {
+  //     product: true,
+  //     userCartId: false,
+  //     productId: false,
+  //     createdAt: false,
+  //     updatedAt: false,
+  //   },
+  // });
+  // const productsList = userCarts.map((item) => item.product);
+  // console.log(productsList);
+  // const productUser = await prisma.productUser.findMany({
+  //   where: { userCartId: { in: userCarts.map((cart) => cart.id) } },
+  // });
   if (userCart) {
-    // const productsList = await prisma.productUser.findMany({
-    //   where: { userCartId: userCartId.id },
-    //   include: {
-    //     product: true,
-    //     userCartId: false,
-    //     productId: false,
-    //     createdAt: false,
-    //     updatedAt: false,
-    //   },
-    // });
-    // const productsList = userCarts.map((item) => item.product);
-    // console.log(productsList);
-    // const productUser = await prisma.productUser.findMany({
-    //   where: { userCartId: { in: userCarts.map((cart) => cart.id) } },
-    // });
-    return res.status(StatusCodes.OK).json({
-      isSuccess: true,
-      // userCart: userCart,
-      count: userCart.product.length,
-      cartId: userCart.id,
-      subtotal: userCart.subtotal,
-      taxAmount: userCart.taxAmount,
-      deliveryFee: userCart.deliveryFee,
-      data: userCart.product,
-    });
-  } else {
-    return res.status(StatusCodes.OK).json({
-      isSuccess: true,
-      message: "Cart is empty",
-      // cartId: userCartId.id,
-      // count: productsList.length,
-      // data: productsList,
+    userCart.product.forEach(async (item) => {
+      const productStockBranch = item.product.productStock.filter(
+        (productStock) => productStock.branchId === item.branch.id
+      );
+      const stock = productStockBranch[0].stock;
+      // console.log(item.quantity);
+
+      // console.log(stock);
+      if (stock < item.quantity) {
+        // throw new BadRequestError("Stock is not enough");
+        if (item.doesHaveEnoughQuantity == true) {
+          await prisma.userCart.update({
+            where: { userId: req.user.id },
+            data: {
+              product: {
+                update: {
+                  where: {
+                    userCartId_productId_color_branchId: {
+                      userCartId: userCart.id,
+                      productId: item.productId,
+                      color: item.color,
+                      branchId: item.branchId,
+                    },
+                  },
+                  data: { doesHaveEnoughQuantity: false, quantity: stock },
+                },
+              },
+            },
+          });
+        }
+        // return res.status(StatusCodes.BAD_REQUEST).json({
+        //   isSuccess: false,
+        //   message: "Stock is not enough",
+        // });
+      }
     });
   }
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    // userCart: userCart,
+    count: userCart != null ? userCart.product.length : 0,
+    cartId: userCart != null ? userCart.id : null,
+    subtotal: userCart != null ? userCart.subtotal : 0,
+    taxAmount: userCart != null ? userCart.taxAmount : 0,
+    deliveryFee: userCart != null ? userCart.deliveryFee : 0,
+    totalAmount: userCart != null ? userCart.totalAmount : 0,
+    data: userCart != null ? userCart.product : [],
+  });
+  // } else {
+  //   return res.status(StatusCodes.OK).json({
+  //     isSuccess: true,
+  //     message: "Cart is empty",
+  //     // cartId: userCartId.id,
+  //     // count: productsList.length,
+  //     // data: productsList,
+  //   });
+  // }
 };
 // const deleteCartItem = async (req, res, next) => {
 //   const {
@@ -118,6 +157,9 @@ const createCartItem = async (req, res, next) => {
   }
 
   const statesIds = product.productStock.map((stock) => stock.branch.stateId);
+  // console.log(req.user.stateId);
+  // console.log(statesIds);
+  // console.log(product.canBeDeliveredOutsideState);
   if (
     product.canBeDeliveredOutsideState == false &&
     !statesIds.includes(req.user.stateId)
@@ -127,29 +169,29 @@ const createCartItem = async (req, res, next) => {
     );
   }
   let coloredProductStock = [];
-  // product.productStock.map((element) => {
-  //   if (!product.doesNeedPreparation) {
-  //     // if (element.stock != undefined && element.stock > 0) {
-  //     //   if (element.stock < quantity) {
-  //     //     //  throw new BadRequestError("Not enough stock");
-  //     //   }
-  //     // }
-
-  //     element.color == color && element.stock >= quantity
-  //       ? coloredProductStock.push(element)
-  //       : undefined;
-  //   } else {
-  //     element.color == color ? coloredProductStock.push(element) : undefined;
-  //   }
-  //   // console.log(element);
-  //   // element.color == color && element.stock >= quantity
-  //   //   ? coloredProductStock.push(element)
-  //   //   : undefined;
-  // });
   product.productStock.map((element) => {
-    element.color == color ? coloredProductStock.push(element) : undefined;
+    if (!product.doesNeedPreparation) {
+      // if (element.stock != undefined && element.stock > 0) {
+      //   if (element.stock < quantity) {
+      //     //  throw new BadRequestError("Not enough stock");
+      //   }
+      // }
+
+      element.color == color && element.stock >= quantity
+        ? coloredProductStock.push(element)
+        : undefined;
+    } else {
+      element.color == color ? coloredProductStock.push(element) : undefined;
+    }
+    // console.log(element);
+    // element.color == color && element.stock >= quantity
+    //   ? coloredProductStock.push(element)
+    //   : undefined;
   });
-  console.log(coloredProductStock);
+  // product.productStock.map((element) => {
+  //   element.color == color ? coloredProductStock.push(element) : undefined;
+  // });
+  // console.log(coloredProductStock);
   let branchWithStates = [];
   coloredProductStock.map((element) => {
     const found = product.productStock.find(
@@ -159,16 +201,16 @@ const createCartItem = async (req, res, next) => {
       branchWithStates.push(found);
     }
   });
-  console.log("branchWithStates");
+  // console.log("branchWithStates");
 
-  console.log(branchWithStates);
-  console.log(req.user);
-  console.log({
-    originStateId: {
-      in: branchWithStates.map((element) => element.branch.stateId),
-    },
-    destinationStateId: req.user.stateId,
-  });
+  // console.log(branchWithStates);
+  // console.log(req.user);
+  // console.log({
+  //   originStateId: {
+  //     in: branchWithStates.map((element) => element.branch.stateId),
+  //   },
+  //   destinationStateId: req.user.stateId,
+  // });
   const deliveryStates = await prisma.deliveryTaxes.findFirst({
     where: {
       originStateId: {
@@ -186,14 +228,14 @@ const createCartItem = async (req, res, next) => {
     },
   });
 
-  console.log(deliveryStates);
+  // console.log(deliveryStates);
   if (!deliveryStates) {
     throw new BadRequestError("No delivery state found");
   }
   const branch = branchWithStates.find(
     (element) => element.branch.stateId == deliveryStates.destinationStateId
   );
-  console.log(branch);
+  // console.log(branch);
 
   const userCart = await prisma.userCart.findUnique({
     where: { userId: req.user.id },
@@ -339,28 +381,28 @@ const updateCartQuantity = async (req, res, next) => {
   const doesNeedPreparation = userCart.product[0].product.doesNeedPreparation;
   console.log(doesNeedPreparation);
   let coloredProductStock = [];
-  // productStock.map((element) => {
-  //   if (!doesNeedPreparation[0]) {
-  //     // if (element.stock != undefined && element.stock > 0) {
-  //     //   if (element.stock < quantity) {
-  //     //     //  throw new BadRequestError("Not enough stock");
-  //     //   }
-  //     // }
-
-  //     element.color == color && element.stock >= quantity
-  //       ? coloredProductStock.push(element)
-  //       : undefined;
-  //   } else {
-  //     element.color == color ? coloredProductStock.push(element) : undefined;
-  //   }
-  //   // console.log(element);
-  //   // element.color == color && element.stock >= quantity
-  //   //   ? coloredProductStock.push(element)
-  //   //   : undefined;
-  // });
   productStock.map((element) => {
-    element.color == color ? coloredProductStock.push(element) : undefined;
+    if (!doesNeedPreparation[0]) {
+      // if (element.stock != undefined && element.stock > 0) {
+      //   if (element.stock < quantity) {
+      //     //  throw new BadRequestError("Not enough stock");
+      //   }
+      // }
+
+      element.color == color && element.stock >= quantity
+        ? coloredProductStock.push(element)
+        : undefined;
+    } else {
+      element.color == color ? coloredProductStock.push(element) : undefined;
+    }
+    // console.log(element);
+    // element.color == color && element.stock >= quantity
+    //   ? coloredProductStock.push(element)
+    //   : undefined;
   });
+  // productStock.map((element) => {
+  //   element.color == color ? coloredProductStock.push(element) : undefined;
+  // });
   console.log(coloredProductStock);
   if (coloredProductStock.length == 0) {
     throw new BadRequestError("Not enough stock");
@@ -410,7 +452,7 @@ const updateCartQuantity = async (req, res, next) => {
   //   .status(StatusCodes.CREATED)
   //   .json({ isSuccess: true, data: updatedUserCart });
 };
-
+//TODO is there a better impl?
 const deleteCartItem = async (req, res, next) => {
   const { productId: productId, color: color } = req.query;
   const userCartId = req.params.id;
@@ -426,7 +468,7 @@ const deleteCartItem = async (req, res, next) => {
   });
   const userCart = await prisma.userCart.findUnique({
     where: { id: userCartId },
-    include: {
+    select: {
       product: true,
     },
   });

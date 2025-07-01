@@ -319,6 +319,7 @@ exports.Prisma.ProductCartScalarFieldEnum = {
   deliveryTaxesId: 'deliveryTaxesId',
   color: 'color',
   quantity: 'quantity',
+  doesHaveEnoughQuantity: 'doesHaveEnoughQuantity',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
