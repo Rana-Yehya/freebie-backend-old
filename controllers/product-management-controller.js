@@ -16,9 +16,15 @@ const getAllProducts = async (req, res, next) => {
 const createProduct = async (req, res, next) => {
   const {
     name,
+    nameEn,
+    nameAr,
     // image,
     description,
+    descriptionEn,
+    descriptionAr,
     detailedDescription,
+    detailedDescriptionEn,
+    detailedDescriptionAr,
     price,
     doesNeedPreparation,
     canBeDeliveredOutsideState,
@@ -36,15 +42,29 @@ const createProduct = async (req, res, next) => {
     weightInKg,
   } = req.body;
   const image = req.files.images;
-  console.log(productStock);
-  const productStockList = JSON.parse(productStock);
-  const occasionsList = JSON.parse(occasions);
+  // console.log(productStock);
+  const productStockList =
+    productStock != undefined ? JSON.parse(productStock) : [];
+  const occasionsList =
+    occasions != undefined ? JSON.parse(occasions) : undefined;
 
   const zodModel = CreateProductZodModel.safeParse({
-    name: name,
+    name: {
+      defaultName: name,
+      nameAr: nameAr,
+      nameEn: nameEn,
+    },
     image: image,
-    description: description,
-    detailedDescription: detailedDescription,
+    description: {
+      defaultName: description,
+      nameAr: descriptionAr,
+      nameEn: descriptionEn,
+    },
+    detailedDescription: {
+      defaultName: detailedDescription,
+      nameAr: detailedDescriptionAr,
+      nameEn: detailedDescriptionEn,
+    },
     price: price,
     doesNeedPreparation: doesNeedPreparation,
     canBeDeliveredOutsideState: canBeDeliveredOutsideState,
@@ -73,15 +93,15 @@ const createProduct = async (req, res, next) => {
   if (!category) {
     throw new BadRequestError("Category not found");
   }
-  // if (occasions) {
-  //   const occasionCount = await prisma.occasion.count({
-  //     where: { id: { in: occasionsList } },
-  //     select: { id: true },
-  //   });
-  //   if (occasionsList.length != occasionCount.length) {
-  //     throw new BadRequestError("Some occasions are not found");
-  //   }
-  // }
+  if (occasions) {
+    const occasionCount = await prisma.occasion.count({
+      where: { id: { in: occasionsList } },
+      select: { id: true },
+    });
+    if (occasionsList.length != occasionCount.length) {
+      throw new BadRequestError("Some occasions are not found");
+    }
+  }
 
   // if (productStockList.length !== 0) {
   //   const productStockBranchIds = productStockList.map(
@@ -152,12 +172,30 @@ const createProduct = async (req, res, next) => {
   });
   const createdProduct = await prisma.product.create({
     data: {
-      name: name,
+      name: {
+        create: {
+          defaultName: name,
+          nameEn: nameEn || name,
+          nameAr: nameAr || name,
+        },
+      },
       image: {
         createMany: { data: imageToStore },
       },
-      description: description,
-      detailedDescription: detailedDescription,
+      description: {
+        create: {
+          defaultName: description,
+          nameEn: descriptionEn || description,
+          nameAr: descriptionAr || description,
+        },
+      },
+      detailedDescription: {
+        create: {
+          defaultName: detailedDescription,
+          nameEn: detailedDescriptionEn || detailedDescription,
+          nameAr: detailedDescriptionAr || detailedDescription,
+        },
+      },
       price: parseFloat(price),
       canBeDeliveredOutsideState:
         category.canBeDeliveredOutsideState == true
@@ -179,9 +217,12 @@ const createProduct = async (req, res, next) => {
       discountStartTime: dateDiscountStartTime,
       discountEndTime: dateDiscountEndTime,
       category: { connect: { id: categoryId } },
-      occasions: {
-        connect: occasionsList.map((id) => ({ id })),
-      },
+      occasions:
+        occasionsList == undefined
+          ? undefined
+          : {
+              connect: occasionsList.map((id) => ({ id })),
+            },
       productStock: {
         create: productStockListToStore.map((productStock) => productStock),
         // connect: {
@@ -242,8 +283,15 @@ const updateProduct = async (req, res, next) => {
   }
   const {
     name,
+    nameEn,
+    nameAr,
+    // image,
     description,
+    descriptionEn,
+    descriptionAr,
     detailedDescription,
+    detailedDescriptionEn,
+    detailedDescriptionAr,
     price,
     doesNeedPreparation,
     isAvailable,
@@ -268,10 +316,22 @@ const updateProduct = async (req, res, next) => {
   const occasionsList = occasions == undefined ? [] : JSON.parse(occasions);
 
   const zodModel = UpdateProductZodModel.safeParse({
-    name: name,
+    name: {
+      defaultName: name,
+      nameAr: nameAr,
+      nameEn: nameEn,
+    },
     image: image,
-    description: description,
-    detailedDescription: detailedDescription,
+    description: {
+      defaultName: description,
+      nameAr: descriptionAr,
+      nameEn: descriptionEn,
+    },
+    detailedDescription: {
+      defaultName: detailedDescription,
+      nameAr: detailedDescriptionAr,
+      nameEn: detailedDescriptionEn,
+    },
     price: price,
     isFeatured: isFeatured,
     isPopular: isPopular,
@@ -290,7 +350,7 @@ const updateProduct = async (req, res, next) => {
     dimensionsLCm: dimensionsLCm,
     weightInKg: weightInKg,
   });
-
+  console.log(zodModel.error);
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
@@ -339,15 +399,22 @@ const updateProduct = async (req, res, next) => {
 
   if (discountStartTime) {
     const parseDiscountStartTime = Date.parse(discountStartTime);
-
     dateDiscountStartTime = new Date(parseDiscountStartTime);
   }
   if (discountEndTime) {
     const parseDiscountEndTime = Date.parse(discountEndTime);
-
     dateDiscountEndTime = new Date(parseDiscountEndTime);
   }
-  let product = undefined;
+  const product = await prisma.product.findUnique({
+    where: { id: id },
+    select: {
+      image: true,
+      category: true,
+    },
+  });
+  if (!product) {
+    throw new BadRequestError("Product not found");
+  }
   let imageToStore = [];
   // if (discountPercent) {
   //   product = await prisma.product.findUnique({
@@ -361,15 +428,6 @@ const updateProduct = async (req, res, next) => {
   //   }
   // }
   if (image) {
-    product = await prisma.product.findUnique({
-      where: { id: id },
-      select: {
-        image: true,
-      },
-    });
-    if (!product) {
-      throw new BadRequestError("Product not found");
-    }
     const [imageUrlsToStore, imagePublicIdsToStore] =
       await uploadMultipleImages({
         images: image,
@@ -388,7 +446,27 @@ const updateProduct = async (req, res, next) => {
   const updatedProduct = await prisma.product.update({
     where: { id: id },
     data: {
-      name: name || undefined,
+      name: {
+        update: {
+          defaultName: name || undefined,
+          nameEn: nameEn || undefined,
+          nameAr: nameAr || undefined,
+        },
+      },
+      description: {
+        update: {
+          defaultName: description || undefined,
+          nameEn: descriptionEn || undefined,
+          nameAr: descriptionAr || undefined,
+        },
+      },
+      detailedDescription: {
+        update: {
+          defaultName: detailedDescription || undefined,
+          nameEn: detailedDescriptionEn || undefined,
+          nameAr: detailedDescriptionAr || undefined,
+        },
+      },
       image: {
         createMany: image == undefined ? undefined : { data: imageToStore },
       },
@@ -397,8 +475,7 @@ const updateProduct = async (req, res, next) => {
       //   : {
       //       createMany: { data: imageToStore },
       //     },
-      description: description || undefined,
-      detailedDescription: detailedDescription || undefined,
+
       price: price == undefined ? undefined : parseFloat(price),
       actualPrice:
         discountPercent == undefined || discountPercent == 0
@@ -430,7 +507,7 @@ const updateProduct = async (req, res, next) => {
           ? false
           : true,
       canBeDeliveredOutsideState:
-        category.canBeDeliveredOutsideState == true
+        product.category.canBeDeliveredOutsideState == true
           ? canBeDeliveredOutsideState == undefined
             ? undefined
             : canBeDeliveredOutsideState === "false"

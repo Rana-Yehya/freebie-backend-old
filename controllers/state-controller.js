@@ -32,9 +32,13 @@ const getState = async (req, res, next) => {
 };
 
 const createState = async (req, res, next) => {
-  const { name, countryId } = req.body;
+  const { name, nameEn, nameAr, countryId } = req.body;
   const zodModel = StateZodModel.safeParse({
-    name: name,
+    name: {
+      defaultName: name,
+      nameEn: nameEn,
+      nameAr: nameAr,
+    },
     countryId: countryId,
   });
 
@@ -42,17 +46,30 @@ const createState = async (req, res, next) => {
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
-  const country = await prisma.country.findUnique({
-    where: { id: countryId },
-  });
-  if (!country) {
-    throw new BadRequestError("Country not found");
-  }
-
+  // const country = await prisma.country.findUnique({
+  //   where: { id: countryId },
+  // });
+  // if (!country) {
+  //   throw new BadRequestError("Country not found");
+  // }
+  /*
+    defaultName: name,
+          nameEn: nameEn || name,
+          nameAr: nameAr || name,
+*/
   const createdState = await prisma.state.create({
     data: {
-      name: name,
-      countryId: countryId,
+      name: {
+        create: {
+          defaultName: name,
+          nameEn: nameEn || name,
+          nameAr: nameAr || name,
+        },
+      },
+      // countryId: countryId,
+      country: { connect: { id: countryId } },
+
+      // asfd: "Dadfwf",
     },
   });
   console.log(createdState);
@@ -64,7 +81,7 @@ const createState = async (req, res, next) => {
 
 const updateState = async (req, res, next) => {
   const { id } = req.params;
-  const { name, countryId } = req.body;
+  const { name, nameEn, nameAr, countryId } = req.body;
 
   if (!id) {
     throw new BadRequestError("Please send an ID");
@@ -80,14 +97,20 @@ const updateState = async (req, res, next) => {
   const updatedState = await prisma.state.update({
     where: { id: id },
     data: {
-      name: name || undefined,
+      name: {
+        update: {
+          defaultName: name || undefined,
+          nameEn: nameEn || undefined,
+          nameAr: nameAr || undefined,
+        },
+      },
       countryId: countryId || undefined,
     },
   });
   console.log(updatedState);
 
   return res
-    .status(StatusCodes.CREATED)
+    .status(StatusCodes.OK)
     .json({ isSuccess: true, data: updatedState });
 };
 

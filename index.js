@@ -16,6 +16,7 @@ require("dotenv").config();
 require("express-async-errors");
 require("./config/notification");
 require("./config/cloudinary");
+const { prisma } = require("./config/prisma");
 
 const adminAuthRouter = require("./routes/admin-auth-route");
 const adminRouter = require("./routes/admin-route");
@@ -39,6 +40,7 @@ const reviewsRouter = require("./routes/review-route");
 
 const notFound = require("./middleware/not-found");
 const errorHandler = require("./middleware/error-handler");
+const { create } = require("domain");
 
 const app = express();
 
@@ -187,6 +189,39 @@ const startServer = async () => {
 
   try {
     await app.listen(PORT);
+    // const countries = await prisma.country.findMany();
+    // let country;
+    // if (countries.length == 0) {
+    //   country = await prisma.country.create({
+    //     data: {
+    //       name: {
+    //         create: {
+    //           defaultName: "Egypt",
+    //           nameEn: "Egypt",
+    //           nameAr: "مصر",
+    //         },
+    //       },
+    //       currencyCode: "EGP",
+    //       countryIsoCode: "EGP",
+    //     },
+    //   });
+    // }
+    // const states = await prisma.state.findMany();
+
+    // if (states.length == 0) {
+    //   const createdState = await prisma.state.create({
+    //     data: {
+    //       //   name: {
+    //       //   create: {
+    //       //     defaultName: "Cairo",
+    //       //     nameEn: "Cairo",
+    //       //     nameAr: "القاهرة",
+    //       //   },
+    //       // },
+    //       countryId: countries[0].id, //country.id ||
+    //     },
+    //   });
+    // }
     console.log("PORT connected");
   } catch (err) {
     console.log(err);

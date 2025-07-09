@@ -127,6 +127,13 @@ exports.Prisma.ImageScalarFieldEnum = {
   productId: 'productId'
 };
 
+exports.Prisma.NameScalarFieldEnum = {
+  id: 'id',
+  defaultName: 'defaultName',
+  nameEn: 'nameEn',
+  nameAr: 'nameAr'
+};
+
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -147,11 +154,17 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.LocationScalarFieldEnum = {
+  id: 'id',
+  address: 'address',
+  stateId: 'stateId',
+  branchId: 'branchId',
+  orderId: 'orderId'
+};
+
 exports.Prisma.BranchScalarFieldEnum = {
   id: 'id',
   storeId: 'storeId',
-  address: 'address',
-  stateId: 'stateId',
   phone: 'phone',
   isFreezed: 'isFreezed',
   createdAt: 'createdAt',
@@ -168,15 +181,13 @@ exports.Prisma.WorkHourScalarFieldEnum = {
 
 exports.Prisma.StoreScalarFieldEnum = {
   id: 'id',
-  name: 'name',
-  bio: 'bio',
+  nameId: 'nameId',
+  bioId: 'bioId',
   logoId: 'logoId',
   bannerId: 'bannerId',
   phone: 'phone',
   email: 'email',
   password: 'password',
-  socialLinksId: 'socialLinksId',
-  paymentId: 'paymentId',
   refreshTokenSecret: 'refreshTokenSecret',
   accessTokenSecret: 'accessTokenSecret',
   moneyInPocket: 'moneyInPocket',
@@ -196,12 +207,13 @@ exports.Prisma.SocialLinkScalarFieldEnum = {
   youtube: 'youtube',
   facebook: 'facebook',
   x: 'x',
-  instagram: 'instagram'
+  instagram: 'instagram',
+  storeId: 'storeId'
 };
 
 exports.Prisma.CountryScalarFieldEnum = {
   id: 'id',
-  countryName: 'countryName',
+  nameId: 'nameId',
   currencyCode: 'currencyCode',
   countryIsoCode: 'countryIsoCode',
   createdAt: 'createdAt',
@@ -210,7 +222,7 @@ exports.Prisma.CountryScalarFieldEnum = {
 
 exports.Prisma.StateScalarFieldEnum = {
   id: 'id',
-  name: 'name',
+  nameId: 'nameId',
   countryId: 'countryId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -218,7 +230,7 @@ exports.Prisma.StateScalarFieldEnum = {
 
 exports.Prisma.CityScalarFieldEnum = {
   id: 'id',
-  name: 'name',
+  nameId: 'nameId',
   stateId: 'stateId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -240,7 +252,7 @@ exports.Prisma.DeliveryTaxesScalarFieldEnum = {
 
 exports.Prisma.CategoryScalarFieldEnum = {
   id: 'id',
-  name: 'name',
+  nameId: 'nameId',
   imageId: 'imageId',
   canBeDeliveredOutsideState: 'canBeDeliveredOutsideState',
   createdAt: 'createdAt',
@@ -249,7 +261,7 @@ exports.Prisma.CategoryScalarFieldEnum = {
 
 exports.Prisma.OccasionScalarFieldEnum = {
   id: 'id',
-  name: 'name',
+  nameId: 'nameId',
   imageId: 'imageId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -257,9 +269,9 @@ exports.Prisma.OccasionScalarFieldEnum = {
 
 exports.Prisma.ProductScalarFieldEnum = {
   id: 'id',
-  name: 'name',
-  description: 'description',
-  detailedDescription: 'detailedDescription',
+  nameId: 'nameId',
+  descriptionId: 'descriptionId',
+  detailedDescriptionId: 'detailedDescriptionId',
   price: 'price',
   actualPrice: 'actualPrice',
   doesNeedPreparation: 'doesNeedPreparation',
@@ -284,6 +296,7 @@ exports.Prisma.ProductScalarFieldEnum = {
 };
 
 exports.Prisma.ProductStockScalarFieldEnum = {
+  id: 'id',
   productId: 'productId',
   branchId: 'branchId',
   stock: 'stock',
@@ -302,7 +315,6 @@ exports.Prisma.ReviewScalarFieldEnum = {
 };
 
 exports.Prisma.UserCartScalarFieldEnum = {
-  id: 'id',
   userId: 'userId',
   subtotal: 'subtotal',
   taxAmount: 'taxAmount',
@@ -313,13 +325,13 @@ exports.Prisma.UserCartScalarFieldEnum = {
 };
 
 exports.Prisma.ProductCartScalarFieldEnum = {
-  userCartId: 'userCartId',
-  productId: 'productId',
-  branchId: 'branchId',
+  userCartUserId: 'userCartUserId',
+  productStockId: 'productStockId',
   deliveryTaxesId: 'deliveryTaxesId',
-  color: 'color',
   quantity: 'quantity',
   doesHaveEnoughQuantity: 'doesHaveEnoughQuantity',
+  oldQuantity: 'oldQuantity',
+  isDeleted: 'isDeleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -333,30 +345,31 @@ exports.Prisma.OrderScalarFieldEnum = {
   deliveryFee: 'deliveryFee',
   totalAmount: 'totalAmount',
   paymentMethod: 'paymentMethod',
-  stateId: 'stateId',
-  countryId: 'countryId',
-  address: 'address',
   notes: 'notes',
-  status: 'status',
   cancellationReason: 'cancellationReason',
   refundAmount: 'refundAmount',
-  currency: 'currency',
-  estimatedDeliveryDate: 'estimatedDeliveryDate',
+  currencyId: 'currencyId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CurrencyScalarFieldEnum = {
+  id: 'id',
+  currencyAbb: 'currencyAbb',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ProductOrderScalarFieldEnum = {
   orderId: 'orderId',
-  productId: 'productId',
-  branchId: 'branchId',
-  color: 'color',
+  productStockId: 'productStockId',
   quantity: 'quantity',
   price: 'price',
+  deliveryFee: 'deliveryFee',
+  subtotal: 'subtotal',
   status: 'status',
   cancellationReason: 'cancellationReason',
-  refundAmount: 'refundAmount',
-  subtotal: 'subtotal'
+  refundAmount: 'refundAmount'
 };
 
 exports.Prisma.TransactionScalarFieldEnum = {
@@ -366,7 +379,7 @@ exports.Prisma.TransactionScalarFieldEnum = {
   storeId: 'storeId',
   amount: 'amount',
   purpose: 'purpose',
-  currency: 'currency',
+  currencyId: 'currencyId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -407,7 +420,9 @@ exports.Prisma.NullsOrder = {
 
 exports.Prisma.ModelName = {
   image: 'image',
+  name: 'name',
   user: 'user',
+  location: 'location',
   branch: 'branch',
   workHour: 'workHour',
   store: 'store',
@@ -424,6 +439,7 @@ exports.Prisma.ModelName = {
   userCart: 'userCart',
   productCart: 'productCart',
   order: 'order',
+  currency: 'currency',
   productOrder: 'productOrder',
   transaction: 'transaction',
   info: 'info',

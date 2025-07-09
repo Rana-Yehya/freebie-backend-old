@@ -1,11 +1,11 @@
 const { z } = require("zod");
-const { SocialMediaZodModel } = require("./social-media-zod-model");
+const { NameZodModel } = require("./name-zod-model");
 
 const StoreZodModel = z.object({
   // store - restaurant - place for weddings
 
-  name: z.string({ message: "Please enter a name" }),
-  bio: z.string({ message: "Please enter a description" }),
+  name: NameZodModel, //
+  bio: NameZodModel, // z.string({ message: "Please enter a description" }),
   logo: z
     .any()
     .refine(

@@ -27,11 +27,15 @@ const getOccasion = async (req, res, next) => {
 };
 
 const createOccasion = async (req, res, next) => {
-  const { name } = req.body;
+  const { nameAr, nameEn, name } = req.body;
   const image = req.files.image;
 
   const zodModel = OccasionZodModel.safeParse({
-    name: name,
+    name: {
+      defaultName: name,
+      nameAr: nameAr,
+      nameEn: nameEn,
+    },
     image: image,
   });
 
@@ -43,7 +47,13 @@ const createOccasion = async (req, res, next) => {
   });
   const createdOccasion = await prisma.occasion.create({
     data: {
-      name: name,
+      name: {
+        create: {
+          defaultName: name,
+          nameEn: nameEn || name,
+          nameAr: nameAr || name,
+        },
+      },
       image: {
         create: {
           secureUrl: imageUploadedSecureUrl,
@@ -59,7 +69,7 @@ const createOccasion = async (req, res, next) => {
 
 const updateOccasion = async (req, res, next) => {
   const { id } = req.params;
-  const { name } = req.body;
+  const { nameAr, nameEn, name } = req.body;
   const image = req.files == undefined ? undefined : req.files.image;
   if (!id) {
     throw new BadRequestError("Please send an ID");
@@ -85,7 +95,13 @@ const updateOccasion = async (req, res, next) => {
   const updatedOccasion = await prisma.occasion.update({
     where: { id: id },
     data: {
-      name: name || undefined,
+      name: {
+        update: {
+          defaultName: name || undefined,
+          nameEn: nameEn || undefined,
+          nameAr: nameAr || undefined,
+        },
+      },
       image: {
         // where: { occasionId: id },
         update: {

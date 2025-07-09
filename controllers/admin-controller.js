@@ -74,7 +74,6 @@ const getAllStores = async (req, res, next) => {
       isDeleted: true,
       createdAt: true,
       updatedAt: true,
-      paymentId: false,
       transactions: false,
       refreshTokenSecret: false,
       accessTokenSecret: false,

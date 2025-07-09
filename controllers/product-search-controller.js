@@ -630,6 +630,7 @@ const getProduct = async (req, res, next) => {
       },
       productStock: {
         select: {
+          id: true,
           branch: true,
           stock: true,
           color: true,

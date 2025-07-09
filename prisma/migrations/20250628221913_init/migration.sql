@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "userCart" ADD COLUMN     "totalAmount" DOUBLE PRECISION NOT NULL DEFAULT 0;

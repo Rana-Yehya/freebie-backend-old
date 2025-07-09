@@ -1,7 +1,8 @@
 const { z } = require("zod");
+const { NameZodModel } = require("./name-zod-model");
 
 const CreateCategoryZodModel = z.object({
-  name: z.string({ message: "Name is required" }),
+  name: NameZodModel, //z.string({ message: "Name is required" }),
   image: z
     .any()
     .refine(

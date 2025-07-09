@@ -24,9 +24,19 @@ const getCountry = async (req, res, next) => {
 };
 
 const createCountry = async (req, res, next) => {
-  const { countryName, currencyCode, countryIsoCode } = req.body;
+  const {
+    countryName,
+    countryNameEn,
+    countryNameAr,
+    currencyCode,
+    countryIsoCode,
+  } = req.body;
   const zodModel = CountryZodModel.safeParse({
-    countryName: countryName,
+    countryName: {
+      defaultName: countryName,
+      nameEn: countryNameEn,
+      nameAr: countryNameAr,
+    },
     currencyCode: currencyCode,
     countryIsoCode: countryIsoCode,
   });
@@ -38,7 +48,13 @@ const createCountry = async (req, res, next) => {
 
   const createdCountry = await prisma.country.create({
     data: {
-      countryName: countryName,
+      name: {
+        create: {
+          defaultName: countryName,
+          nameEn: countryNameEn || countryName,
+          nameAr: countryNameAr || countryName,
+        },
+      },
       currencyCode: currencyCode,
       countryIsoCode: countryIsoCode,
     },
@@ -52,7 +68,13 @@ const createCountry = async (req, res, next) => {
 
 const updateCountry = async (req, res, next) => {
   const { id } = req.params;
-  const { countryName, currencyCode, countryIsoCode } = req.body;
+  const {
+    countryName,
+    countryNameEn,
+    countryNameAr,
+    currencyCode,
+    countryIsoCode,
+  } = req.body;
 
   if (!id) {
     throw new BadRequestError("Please send an ID");
@@ -60,7 +82,13 @@ const updateCountry = async (req, res, next) => {
   const updatedCountry = await prisma.country.update({
     where: { id: id },
     data: {
-      countryName: countryName || undefined,
+      name: {
+        update: {
+          defaultName: countryName || undefined,
+          nameEn: countryNameEn || undefined,
+          nameAr: countryNameAr || undefined,
+        },
+      },
       currencyCode: currencyCode || undefined,
       countryIsoCode: countryIsoCode || undefined,
     },

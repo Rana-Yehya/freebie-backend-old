@@ -14,12 +14,16 @@ const getAllCartItems = async (req, res, next) => {
   const userCart = await prisma.userCart.findUnique({
     where: { userId: req.user.id },
     include: {
-      product: {
+      productCart: {
         include: {
-          product: {
-            include: { image: true, productStock: true },
+          productStock: {
+            include: {
+              product: {
+                include: { image: true, productStock: true },
+              },
+              branch: true,
+            },
           },
-          branch: true,
         },
       },
 
@@ -47,11 +51,13 @@ const getAllCartItems = async (req, res, next) => {
   //   where: { userCartId: { in: userCarts.map((cart) => cart.id) } },
   // });
   if (userCart) {
-    userCart.product.forEach(async (item) => {
-      const productStockBranch = item.product.productStock.filter(
-        (productStock) => productStock.branchId === item.branch.id
-      );
-      const stock = productStockBranch[0].stock;
+    userCart.productCart.forEach(async (item) => {
+      // (
+      //   (productStock) => productStock.branch.id === item.branch.id
+      // );
+      const stock = item.productStock.stock;
+      const productStockId = item.productStock.id;
+
       // console.log(item.quantity);
 
       // console.log(stock);
@@ -64,14 +70,16 @@ const getAllCartItems = async (req, res, next) => {
               product: {
                 update: {
                   where: {
-                    userCartId_productId_color_branchId: {
-                      userCartId: userCart.id,
-                      productId: item.productId,
-                      color: item.color,
-                      branchId: item.branchId,
+                    userCartUserId_productStockId: {
+                      userCartUserId: req.user.id,
+                      productStockId: productStockId,
                     },
                   },
-                  data: { doesHaveEnoughQuantity: false, quantity: stock },
+                  data: {
+                    doesHaveEnoughQuantity: false,
+                    quantity: stock,
+                    oldQuantity: item.quantity,
+                  },
                 },
               },
             },
@@ -81,19 +89,42 @@ const getAllCartItems = async (req, res, next) => {
         //   isSuccess: false,
         //   message: "Stock is not enough",
         // });
+      } else if (stock >= item.oldQuantity) {
+        if (item.doesHaveEnoughQuantity == false) {
+          await prisma.userCart.update({
+            where: { userId: req.user.id },
+            data: {
+              product: {
+                update: {
+                  where: {
+                    userCartUserId_productStockId: {
+                      userCartUserId: req.user.id,
+                      productStockId: productStockId,
+                    },
+                  },
+                  data: {
+                    doesHaveEnoughQuantity: true,
+                    quantity: item.quantity,
+                    oldQuantity: 0,
+                  },
+                },
+              },
+            },
+          });
+        }
       }
     });
   }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     // userCart: userCart,
-    count: userCart != null ? userCart.product.length : 0,
+    count: userCart != null ? userCart.productCart.length : 0,
     cartId: userCart != null ? userCart.id : null,
     subtotal: userCart != null ? userCart.subtotal : 0,
     taxAmount: userCart != null ? userCart.taxAmount : 0,
     deliveryFee: userCart != null ? userCart.deliveryFee : 0,
     totalAmount: userCart != null ? userCart.totalAmount : 0,
-    data: userCart != null ? userCart.product : [],
+    data: userCart != null ? userCart.productCart : [],
   });
   // } else {
   //   return res.status(StatusCodes.OK).json({
@@ -140,13 +171,11 @@ const createCartItem = async (req, res, next) => {
     include: {
       productStock: {
         select: {
-          branchId: true,
+          id: true,
           stock: true,
           color: true,
           branch: {
-            select: {
-              stateId: true,
-            },
+            select: { id: true, location: { select: { stateId: true } } },
           },
         },
       },
@@ -188,6 +217,8 @@ const createCartItem = async (req, res, next) => {
     //   ? coloredProductStock.push(element)
     //   : undefined;
   });
+  console.log("coloredProductStock");
+  console.log(coloredProductStock);
   // product.productStock.map((element) => {
   //   element.color == color ? coloredProductStock.push(element) : undefined;
   // });
@@ -195,15 +226,14 @@ const createCartItem = async (req, res, next) => {
   let branchWithStates = [];
   coloredProductStock.map((element) => {
     const found = product.productStock.find(
-      (stock) => stock.branchId == element.branchId
+      (stock) => stock.branch.id == element.branch.id
     );
     if (found) {
       branchWithStates.push(found);
     }
   });
-  // console.log("branchWithStates");
-
-  // console.log(branchWithStates);
+  console.log("branchWithStates");
+  console.log(branchWithStates);
   // console.log(req.user);
   // console.log({
   //   originStateId: {
@@ -214,13 +244,13 @@ const createCartItem = async (req, res, next) => {
   const deliveryStates = await prisma.deliveryTaxes.findFirst({
     where: {
       originStateId: {
-        in: branchWithStates.map((element) => element.branch.stateId),
+        in: branchWithStates.map((element) => element.branch.location.stateId),
       },
       destinationStateId: req.user.stateId,
     },
     select: {
       id: true,
-      baseFee: true,
+      // baseFee: true,
       destinationStateId: true,
     },
     orderBy: {
@@ -232,42 +262,49 @@ const createCartItem = async (req, res, next) => {
   if (!deliveryStates) {
     throw new BadRequestError("No delivery state found");
   }
-  const branch = branchWithStates.find(
-    (element) => element.branch.stateId == deliveryStates.destinationStateId
-  );
-  // console.log(branch);
-
-  const userCart = await prisma.userCart.findUnique({
-    where: { userId: req.user.id },
-    select: {
-      deliveryFee: true,
-      subtotal: true,
-    },
-  });
-  let deliveryFee = deliveryStates.baseFee;
-  let subtotal = quantity * product.actualPrice;
-  if (userCart) {
-    subtotal = userCart.subtotal + subtotal;
-
-    if (deliveryFee < userCart.deliveryFee) {
-      deliveryFee = userCart.deliveryFee;
+  let productStock = [];
+  branchWithStates.map((element) => {
+    console.log(element.branch.location.stateId);
+    console.log(deliveryStates.destinationStateId);
+    const found =
+      element.branch.location.stateId == deliveryStates.destinationStateId;
+    if (found) {
+      productStock.push(element);
     }
-  }
+  });
+  console.log(productStock);
+
+  // const userCart = await prisma.userCart.findUnique({
+  //   where: { userId: req.user.id },
+  //   select: {
+  //     deliveryFee: true,
+  //     subtotal: true,
+  //   },
+  // });
+  // let deliveryFee = deliveryStates.baseFee;
+  // let subtotal = quantity * product.actualPrice;
+  // if (userCart) {
+  //   subtotal = userCart.subtotal + subtotal;
+
+  //   if (deliveryFee < userCart.deliveryFee) {
+  //     deliveryFee = userCart.deliveryFee;
+  //   }
+  // }
   const productUser = {
-    productId: productId,
-    color: color,
+    // productId: productId,
+    // color: color,
     quantity: quantity,
     deliveryTaxesId: deliveryStates.id,
-    branchId: branch.branchId,
+    productStockId: productStock[0].id,
+    // branchId: branch.branchId,
   };
 
   const createdOrUpdatedUserCart = await prisma.userCart.upsert({
     where: { userId: req.user.id },
-
     update: {
-      subtotal: subtotal,
-      deliveryFee: deliveryFee,
-      product: {
+      // subtotal: subtotal,
+      // deliveryFee: deliveryFee,
+      productCart: {
         createMany: {
           data: productUser,
         },
@@ -275,13 +312,13 @@ const createCartItem = async (req, res, next) => {
     },
     create: {
       userId: req.user.id,
-      product: {
+      productCart: {
         createMany: {
           data: productUser,
         },
       },
-      subtotal: subtotal,
-      deliveryFee: deliveryFee,
+      // subtotal: subtotal,
+      // deliveryFee: deliveryFee,
     },
   });
 
@@ -343,42 +380,50 @@ const updateCartQuantity = async (req, res, next) => {
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
-  const userCartId = req.params.id;
+  const userCartId = req.user.id;
   if (!userCartId) {
     throw new BadRequestError("Please send an ID");
   }
   const userCart = await prisma.userCart.findUnique({
     where: {
-      id: userCartId,
-      product: {
+      userId: userCartId,
+      productCart: {
         every: {
-          branch: {
-            id: branchId,
+          productStock: {
+            productId: productId,
+            color: color,
           },
         },
       },
     },
     select: {
-      product: {
+      productCart: {
         select: {
-          product: {
+          productStock: {
             select: {
-              doesNeedPreparation: true,
-              productStock: true,
+              id: true,
+              stock: true,
+              color: true,
+              product: {
+                select: {
+                  doesNeedPreparation: true,
+                },
+              },
             },
           },
         },
       },
     },
   });
-  console.log(userCart.product);
+  console.log(userCart.productCart);
 
-  const productStock = userCart.product.flatMap(
-    (product) => product.product.productStock
+  const productStock = userCart.productCart.map(
+    (product) => product.productStock
   );
   console.log(productStock);
   // let coloredProductStock = [];
-  const doesNeedPreparation = userCart.product[0].product.doesNeedPreparation;
+  const doesNeedPreparation =
+    userCart.productCart[0].productStock.product.doesNeedPreparation;
   console.log(doesNeedPreparation);
   let coloredProductStock = [];
   productStock.map((element) => {
@@ -410,16 +455,14 @@ const updateCartQuantity = async (req, res, next) => {
   // if(userCart.)
   //TODO SHOULD I CHECK FOR THE STOCK AND THE BRANCH IF IT EXISTS OR NOT
   const updatedUserCart = await prisma.userCart.update({
-    where: { id: userCartId },
+    where: { userId: userCartId },
     data: {
-      product: {
+      productCart: {
         update: {
           where: {
-            userCartId_productId_color_branchId: {
-              userCartId: userCartId,
-              productId: productId,
-              color: color,
-              branchId: branchId,
+            userCartUserId_productStockId: {
+              userCartUserId: req.user.id,
+              productStockId: productStock[0].id,
             },
           },
           data: {

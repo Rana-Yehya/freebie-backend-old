@@ -33,6 +33,9 @@ const getAllStoreBranches = async (req, res, next) => {
     where: {
       storeId: id || req.user.id,
     },
+    include: {
+      location: true,
+    },
   });
   return res
     .status(StatusCodes.OK)
@@ -42,6 +45,9 @@ const getBranch = async (req, res, next) => {
   const { id: branchId } = req.params;
   const branch = await prisma.branch.findUnique({
     where: { id: branchId },
+    include: {
+      location: true,
+    },
   });
   if (!branch) {
     throw new BadRequestError("Branch not found");
@@ -64,10 +70,15 @@ const createBranch = async (req, res, next) => {
   // }
   const { address, phone: phoneNumber, stateId } = req.body;
   const zodModel = BranchZodModel.safeParse({
-    address: address,
+    // address: address,
     // countryId: countryId,
     phone: phoneNumber,
-    stateId: stateId,
+    location: {
+      address: address,
+      stateId: stateId,
+    },
+
+    // stateId: stateId,
   });
 
   if (!zodModel.success) {
@@ -86,20 +97,25 @@ const createBranch = async (req, res, next) => {
       throw new BadRequestError("Store not found");
     }
   }
-  const state = await prisma.state.findUnique({
-    where: { id: stateId },
-  });
-  if (!state) {
-    throw new BadRequestError("State not found");
-  }
+  // const state = await prisma.state.findUnique({
+  //   where: { id: stateId },
+  // });
+  // if (!state) {
+  //   throw new BadRequestError("State not found");
+  // }
 
   const createdBranch = await prisma.branch.create({
     data: {
-      address: address,
       // countryId: countryId,
       phone: phoneNumber,
       storeId: id || req.user.id,
-      stateId: stateId,
+      // stateId: stateId,
+      location: {
+        create: {
+          state: { connect: { id: stateId } },
+          address: address,
+        },
+      },
       // workHours: [],
     },
   });

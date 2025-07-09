@@ -1,5 +1,0 @@
--- AlterTable
-ALTER TABLE "store" ADD COLUMN     "moneyInPocket" DOUBLE PRECISION NOT NULL DEFAULT 0;
-
--- AlterTable
-ALTER TABLE "user" ADD COLUMN     "moneyInPocket" DOUBLE PRECISION NOT NULL DEFAULT 0;

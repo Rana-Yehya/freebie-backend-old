@@ -38,11 +38,15 @@ const getCategory = async (req, res, next) => {
 };
 
 const createCategory = async (req, res, next) => {
-  const { name, canBeDeliveredOutsideState } = req.body;
+  const { name, nameAr, nameEn, canBeDeliveredOutsideState } = req.body;
   const image = req.files.image;
 
   const zodModel = CreateCategoryZodModel.safeParse({
-    name: name,
+    name: {
+      defaultName: name,
+      nameAr: nameAr,
+      nameEn: nameEn,
+    },
     image: image,
     canBeDeliveredOutsideState: canBeDeliveredOutsideState,
   });
@@ -54,7 +58,13 @@ const createCategory = async (req, res, next) => {
   });
   const createdCategory = await prisma.category.create({
     data: {
-      name: name,
+      name: {
+        create: {
+          defaultName: name,
+          nameEn: nameEn || name,
+          nameAr: nameAr || name,
+        },
+      },
       canBeDeliveredOutsideState:
         canBeDeliveredOutsideState == undefined
           ? true
@@ -78,10 +88,14 @@ const createCategory = async (req, res, next) => {
 
 const updateCategory = async (req, res, next) => {
   const { id } = req.params;
-  const { name, canBeDeliveredOutsideState } = req.body;
+  const { name, nameAr, nameEn, canBeDeliveredOutsideState } = req.body;
   const image = req.files == undefined ? undefined : req.files.image;
   const zodModel = UpdateCategoryZodModel.safeParse({
-    name: name,
+    name: {
+      defaultName: name,
+      nameAr: nameAr,
+      nameEn: nameEn,
+    },
     image: image,
     canBeDeliveredOutsideState: canBeDeliveredOutsideState,
   });
@@ -111,7 +125,13 @@ const updateCategory = async (req, res, next) => {
   const updatedCategory = await prisma.category.update({
     where: { id: id },
     data: {
-      name: name || undefined,
+      name: {
+        update: {
+          defaultName: name || undefined,
+          nameEn: nameEn || undefined,
+          nameAr: nameAr || undefined,
+        },
+      },
       canBeDeliveredOutsideState:
         canBeDeliveredOutsideState == undefined
           ? undefined

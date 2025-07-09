@@ -30,6 +30,10 @@ const authenticateUserMiddleware = async (req, res, next) => {
             })
           : await prisma.user.findUnique({
               where: { id: decoded.userId },
+              include: {
+                userCountry: true,
+                userState: true,
+              },
             });
       // console.log("user.accessTokenSecret", user.accessTokenSecret);
       // console.log("user", user);
@@ -54,7 +58,7 @@ const authenticateUserMiddleware = async (req, res, next) => {
       // const { userId, email } = decoded;
 
       req.user = user;
-      decoded.role === storeConstant ? req.user.role === storeConstant : null;
+      // decoded.role === storeConstant ? req.user.role === storeConstant : null;
 
       return next();
     } else {
@@ -87,14 +91,20 @@ const optionalAuthenticateUserMiddleware = async (req, res, next) => {
             })
           : await prisma.user.findUnique({
               where: { id: decoded.userId },
+              include: { userState: true, userCountry: true },
             });
-      if (user.accessTokenSecret !== decoded.accessTokenSecret) {
+      if (
+        !user ||
+        !user.accessTokenSecret ||
+        !decoded.accessTokenSecret ||
+        user.accessTokenSecret.toString() !=
+          decoded.accessTokenSecret.toString()
+      ) {
         throw new UnauthenticatedError("Unauthorizated");
       }
       // const { userId, email } = decoded;
 
       req.user = user;
-      console.log("user ", user);
       // if (decoded.role === storeConstant) {
       //   req.user.role = storeConstant;
       // } else if (decoded.role === adminConstant) {

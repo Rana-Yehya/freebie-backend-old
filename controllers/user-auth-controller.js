@@ -382,7 +382,6 @@ const showMe = async (req, res) => {
 const deleteAccount = async (req, res) => {
   const email = req.query.email;
   const phone = req.query.phone;
-
   if (!(req.user != undefined && req.user.role === userConstant)) {
     if (!(email || phone)) {
       throw new BadRequestError("Please provide an email or phone");
@@ -407,9 +406,9 @@ const deleteAccount = async (req, res) => {
     },
   });
   if (order) {
-    throw new BadRequestError({
-      message: "User can not be deleted. This user has unfinished orders.",
-    });
+    throw new BadRequestError(
+      "User can not be deleted. This user has unfinished orders."
+    );
   }
   await prisma.user.delete({
     where: {

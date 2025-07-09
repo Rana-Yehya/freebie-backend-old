@@ -67,7 +67,11 @@ const login = async (req, res) => {
 const register = async (req, res, next) => {
   const {
     username: name,
+    nameEn,
+    nameAr,
     bio,
+    bioEn,
+    bioAr,
     phone: phoneNumber,
     email,
     password,
@@ -96,8 +100,16 @@ const register = async (req, res, next) => {
 
   // console.log(logo);
   const storeZodModel = StoreZodModel.safeParse({
-    name: name,
-    bio: bio,
+    name: {
+      defaultName: name,
+      nameEn: nameEn,
+      nameAr: nameAr,
+    },
+    bio: {
+      defaultName: bio,
+      nameEn: bioEn,
+      nameAr: bioAr,
+    },
     logo: logo,
     banner: banner,
     phone: phoneNumber,
@@ -150,8 +162,20 @@ const register = async (req, res, next) => {
   const passwordHash = await passwordEncrypt(password);
   const store = await prisma.store.create({
     data: {
-      name: name,
-      bio: bio,
+      name: {
+        create: {
+          defaultName: name,
+          nameEn: nameEn || name,
+          nameAr: nameAr || name,
+        },
+      },
+      bio: {
+        create: {
+          defaultName: bio,
+          nameEn: bioEn || bio,
+          nameAr: bioAr || bio,
+        },
+      },
       logo: {
         create: {
           publicId: logoUploadedPublicId,

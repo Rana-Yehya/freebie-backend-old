@@ -1,12 +1,13 @@
 const { z } = require("zod");
 const { ProductStockZodModel } = require("./product-stock-zod-model");
+const { NameZodModel } = require("./name-zod-model");
 
 const CreateProductZodModel = z
   .object({
     // isAvailable              Boolean   @default(true)
     // isFeatured               Boolean   @default(false)
     // isPopular                Boolean   @default(false)
-    name: z.string({ message: "Name is required" }),
+    name: NameZodModel, //z.string({ message: "Name is required" }),
     image: z
       .array(
         z
@@ -32,10 +33,11 @@ const CreateProductZodModel = z
       .nonempty({
         message: "Images can't be empty!",
       }),
-    description: z.string({ message: "Description is required" }),
-    detailedDescription: z.string({
-      message: "Detailed Description is required",
-    }),
+    description: NameZodModel, //z.string({ message: "Description is required" }),
+    detailedDescription: NameZodModel,
+    //  z.string({
+    //   message: "Detailed Description is required",
+    // }),
     price: z
       .string({ message: "Price is required" })
       .refine((price) => parseFloat(price) > 0, {
