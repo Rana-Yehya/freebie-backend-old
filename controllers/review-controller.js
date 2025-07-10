@@ -6,7 +6,7 @@ const {
   UnauthenticatedError,
 } = require("../errors");
 const { uploadImage } = require("../helpers/cloudinary/upload-image");
-const { destroyImage } = require("../helpers/cloudinary/delete-image");
+const { destroyImage } = require("../helpers/cloudinary/destroy-image");
 const { ReviewZodModel } = require("../models/review-zod-model");
 const getAllProductReviews = async (req, res, next) => {
   const reviews = await prisma.review.findMany({

@@ -5,7 +5,7 @@ const cloudinary = require("cloudinary").v2;
 // const path = require("path");
 const fs = require("fs");
 
-async function uploadImage({ image, folder = "file-upload" }) {
+async function uploadImage({ req, image, folder = "file-upload" }) {
   const uploadedImage = await cloudinary.uploader.upload(
     image.tempFilePath,
     { filename_override: `${Date.now()}`, folder: folder }
@@ -34,6 +34,9 @@ async function uploadImage({ image, folder = "file-upload" }) {
   }
   // req.images = uploadedImage;
   const imageToStore = [uploadedImage.secure_url, uploadedImage.public_id];
+  req.isImageUploaded = true;
+  req.isSingleImage = true;
+  req.imageUploadedData = uploadedImage.public_id;
   return imageToStore;
   // return res.status(StatusCodes.CREATED).json({
   //   isSuccess: true,
@@ -89,7 +92,7 @@ async function uploadImage({ image, folder = "file-upload" }) {
 //   // return next();
 //   // await imageToUpload.mv(imagePath);
 // };
-async function uploadMultipleImages({ images, folder = "file-upload" }) {
+async function uploadMultipleImages({ req, images, folder = "file-upload" }) {
   const urls = [];
   const publicIds = [];
   if (images) {
@@ -135,6 +138,9 @@ async function uploadMultipleImages({ images, folder = "file-upload" }) {
     }
   }
   const imageToStore = [urls, publicIds];
+  req.isImageUploaded = true;
+  req.isSingleImage = false;
+  req.imageUploadedData = publicIds;
   return imageToStore;
 }
 // const uploadMultipleImages = async (req, res, next) => {

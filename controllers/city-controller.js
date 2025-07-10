@@ -29,9 +29,13 @@ const getCity = async (req, res, next) => {
 };
 
 const createCity = async (req, res, next) => {
-  const { name, stateId } = req.body;
+  const { name, nameEn, nameAr, stateId } = req.body;
   const zodModel = CityZodModel.safeParse({
-    name: name,
+    name: {
+      defaultName: name,
+      nameEn: nameEn,
+      nameAr: nameAr,
+    },
     stateId: stateId,
   });
 
@@ -39,17 +43,23 @@ const createCity = async (req, res, next) => {
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
-  const country = await prisma.state.findUnique({
-    where: { id: stateId },
-  });
-  if (!country) {
-    throw new BadRequestError("Country not found");
-  }
+  // const country = await prisma.state.findUnique({
+  //   where: { id: stateId },
+  // });
+  // if (!country) {
+  //   throw new BadRequestError("Country not found");
+  // }
 
   const createdCity = await prisma.city.create({
     data: {
-      name: name,
-      stateId: stateId,
+      name: {
+        create: {
+          defaultName: name,
+          nameEn: nameEn || name,
+          nameAr: nameAr || name,
+        },
+      },
+      state: { connect: { id: stateId } },
     },
   });
   console.log(createdCity);
@@ -61,24 +71,28 @@ const createCity = async (req, res, next) => {
 
 const updateCity = async (req, res, next) => {
   const { id } = req.params;
-  const { name, stateId } = req.body;
+  const { name, nameEn, nameAr, stateId } = req.body;
 
   if (!id) {
     throw new BadRequestError("Please send an ID");
   }
-  if (stateId) {
-    const country = await prisma.state.findUnique({
-      where: { id: stateId },
-    });
-    if (!country) {
-      throw new BadRequestError("State not found");
-    }
-  }
+  // if (stateId) {
+  //   const country = await prisma.state.findUnique({
+  //     where: { id: stateId },
+  //   });
+  //   if (!country) {
+  //     throw new BadRequestError("State not found");
+  //   }
+  // }
   const updatedCity = await prisma.city.update({
     where: { id: id },
     data: {
-      name: name || undefined,
-      stateId: stateId || undefined,
+      update: {
+        defaultName: name || undefined,
+        nameEn: nameEn || undefined,
+        nameAr: nameAr || undefined,
+      },
+      state: { connect: { id: stateId || undefined } },
     },
   });
   console.log(updatedCity);

@@ -8,34 +8,34 @@ const {
 const {
   destroyImage,
   destroyMultipleImages,
-} = require("../helpers/cloudinary/delete-image");
+} = require("../helpers/cloudinary/destroy-image");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
 
 const router = express.Router();
 //egR_fzaMRZ2V8RgFdDkPFU:APA91bGb9kcPUzh9PBVsQaVlLIvfYXsZYy6ymjrCBOMhtKDPUuBYSeHsbJosBiMb-CpW7B3RYIzk_Z3YYBJfFg2x1l0EyanfHDfLH5qi85K_Lzg6ValL5hY
 
-const getAllImages = async (req, res) => {
-  const occasion = await prisma.image.findMany({
-    include: {
-      occasion: true,
-      category: true,
-      storeLogo: true,
-      storeBanner: true,
-    },
-  });
+// const getAllImages = async (req, res) => {
+//   const occasion = await prisma.image.findMany({
+//     include: {
+//       occasion: true,
+//       category: true,
+//       storeLogo: true,
+//       storeBanner: true,
+//     },
+//   });
 
-  return res
-    .status(StatusCodes.OK)
-    .json({ isSuccess: true, count: occasion.length, data: occasion });
-};
+//   return res
+//     .status(StatusCodes.OK)
+//     .json({ isSuccess: true, count: occasion.length, data: occasion });
+// };
 
 // router.route("/send-to-device").post(sendToDevice);
-router.route("/upload-images").post(uploadMultipleImages);
-router.route("/destroy-images").post(destroyMultipleImages);
-router.route("/upload-image").post(uploadImage);
-router.route("/destroy-image").post(destroyImage);
-router.route("/images").get(getAllImages);
+// router.route("/upload-images").post(uploadMultipleImages);
+// router.route("/destroy-images").post(destroyMultipleImages);
+// router.route("/upload-image").post(uploadImage);
+// router.route("/destroy-image").post(destroyImage);
+// router.route("/images").get(getAllImages);
 
 module.exports = router;
 

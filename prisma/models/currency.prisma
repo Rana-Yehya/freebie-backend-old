@@ -1,0 +1,9 @@
+
+model currency {
+  id          String        @id @unique @default(uuid())
+  currencyAbb String
+  order       order[]
+  transaction transaction[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}

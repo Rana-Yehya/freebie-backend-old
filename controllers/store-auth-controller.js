@@ -153,10 +153,12 @@ const register = async (req, res, next) => {
     );
   }
   const [logoUploadedSecureUrl, logoUploadedPublicId] = await uploadImage({
+    req: req,
     image: logo,
   });
 
   const [bannerUploadedSecureUrl, bannerUploadedPublicId] = await uploadImage({
+    req: req,
     image: banner,
   });
   const passwordHash = await passwordEncrypt(password);

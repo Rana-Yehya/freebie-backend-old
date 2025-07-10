@@ -9,7 +9,7 @@ const {
   UnauthenticatedError,
 } = require("../errors");
 const { uploadImage } = require("../helpers/cloudinary/upload-image");
-const { destroyImage } = require("../helpers/cloudinary/delete-image");
+const { destroyImage } = require("../helpers/cloudinary/destroy-image");
 const {
   UpdateCategoryZodModel,
 } = require("../models/update-category-zod-model");
@@ -54,6 +54,7 @@ const createCategory = async (req, res, next) => {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
   const [imageUploadedSecureUrl, imageUploadedPublicId] = await uploadImage({
+    req: req,
     image: image,
   });
   const createdCategory = await prisma.category.create({
@@ -119,6 +120,7 @@ const updateCategory = async (req, res, next) => {
       throw new BadRequestError("Category not found");
     }
     [imageUploadedSecureUrl, imageUploadedPublicId] = await uploadImage({
+      req: req,
       image: image,
     });
   }

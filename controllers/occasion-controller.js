@@ -7,7 +7,7 @@ const {
   UnauthenticatedError,
 } = require("../errors");
 const { uploadImage } = require("../helpers/cloudinary/upload-image");
-const { destroyImage } = require("../helpers/cloudinary/delete-image");
+const { destroyImage } = require("../helpers/cloudinary/destroy-image");
 const getAllOccasions = async (req, res, next) => {
   const occasion = await prisma.occasion.findMany({ include: { image: true } });
   return res
@@ -43,6 +43,7 @@ const createOccasion = async (req, res, next) => {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
   const [imageUploadedSecureUrl, imageUploadedPublicId] = await uploadImage({
+    req: req,
     image: image,
   });
   const createdOccasion = await prisma.occasion.create({
@@ -88,6 +89,7 @@ const updateOccasion = async (req, res, next) => {
       throw new BadRequestError("Occasion not found");
     }
     [imageUploadedSecureUrl, imageUploadedPublicId] = await uploadImage({
+      req: req,
       image: image,
     });
   }

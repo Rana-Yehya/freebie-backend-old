@@ -202,8 +202,10 @@ const CreateProductZodModel = z
     }
 
     if (
-      parseFloat(data.discountPercent) < 0 ||
-      parseFloat(data.discountPercent) >= 100
+      !(
+        parseFloat(data.discountPercent) * 100 >= 0 &&
+        parseFloat(data.discountPercent) * 100 < 100
+      )
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,

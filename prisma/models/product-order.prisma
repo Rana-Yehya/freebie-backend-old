@@ -1,0 +1,20 @@
+model productOrder {
+  id             String        @id @unique @default(uuid())
+  order          order         @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  orderId        String
+  // product            product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // productId          String
+  // branch             branch  @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // branchId           String
+  // color              String
+  productStock   productStock? @relation(fields: [productStockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productStockId String?
+
+  quantity           Int     @default(1)
+  price              Float   @default(0)
+  deliveryFee        Float   @default(0)
+  subtotal           Float   @default(0)
+  status             String  @default("pending") //pending, confirmed, shipped, delivered, cancelled, refunded
+  cancellationReason String?
+  refundAmount       Float?
+}

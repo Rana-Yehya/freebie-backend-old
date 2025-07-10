@@ -7,13 +7,11 @@ async function sendNotificationToAllUsersHelper({ title, body, fcmTokens }) {
   };
   //  "c7SGXJf0QMC0biYtBPifMG:APA91bGGhijlH04xrx4sEf9oco8SoJHrDz9ZtLQkGZ5Nw_2DVDFgzD4iZRku4720et8S2t85nlfLZczW_QPKHVADxIttajWEJ_BOHNtTsOKtQF_Qxl7vIjM";
   // const type = "notification";
-  //TODO FIXME
-  for (let i = 0; i < fcmTokens.length; i++) {
-    const fcmToken = fcmTokens[i];
-    const notificationPayload = {
-      notification: notification,
-      token: fcmToken,
-    };
+  for (let i = 0; i < fcmTokens.length; i = i + 500) {
+    const fcmToken = fcmTokens.slice(
+      i,
+      fcmTokens.length < i + 500 ? fcmTokens.length : i + 500
+    );
     // } else if (type === "data") {
     //   notificationPayload = {
     //     data: data,
@@ -45,10 +43,10 @@ async function sendNotificationToAllUsersHelper({ title, body, fcmTokens }) {
     // var notificationOptions = {
     //   priority: "high",
     // };
-    console.log(notificationPayload);
-    const result = await getMessaging().sendEachForMulticast(
-      notificationPayload
-    );
+    const result = await getMessaging().sendEachForMulticast({
+      notification: notification,
+      tokens: fcmToken,
+    });
     console.log(result);
   }
   // return result;

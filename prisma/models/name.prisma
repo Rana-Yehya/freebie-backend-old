@@ -1,0 +1,30 @@
+
+model name {
+  id                         String    @id @unique @default(uuid())
+  defaultName                String
+  nameEn                     String?
+  // nameFr      String?
+  // nameDe      String?
+  // nameEs      String?
+  // nameIt      String?
+  // namePt      String?
+  // nameRu      String?
+  // nameZh      String?
+  // nameJa      String?
+  // nameKo      String?
+  nameAr                     String?
+  // namePl      String?
+  // nameTr      String?
+  // nameCn      String?
+  // productId   String? @unique
+  nameProduct                product?  @relation("nameProduct") //@relation("name", fields: [nameProductId], references: [id]) // @relation("ProductToName", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  country                    country?
+  state                      state?
+  storeName                  store?    @relation("storeName")
+  storeBio                   store?    @relation("storeBio")
+  city                       city?
+  category                   category?
+  occasion                   occasion?
+  descriptionProduct         product?  @relation("descriptionProduct") //, references: [id], fields: [descriptionProductId])
+  detailedDescriptionProduct product?  @relation("detailedDescriptionProduct") //, references: [id], fields: [detailedDescriptionProductId])
+}

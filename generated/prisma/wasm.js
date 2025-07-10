@@ -20,12 +20,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.7.0
- * Query Engine version: 3cff47a7f5d65c3ea74883f1d736e41d68ce91ed
+ * Prisma Client JS version: 6.11.1
+ * Query Engine version: f40f79ec31188888a2e33acda0ecc8fd10a853a9
  */
 Prisma.prismaVersion = {
-  client: "6.7.0",
-  engine: "3cff47a7f5d65c3ea74883f1d736e41d68ce91ed"
+  client: "6.11.1",
+  engine: "f40f79ec31188888a2e33acda0ecc8fd10a853a9"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -120,51 +120,10 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.ImageScalarFieldEnum = {
-  id: 'id',
-  publicId: 'publicId',
-  secureUrl: 'secureUrl',
-  productId: 'productId'
-};
-
-exports.Prisma.NameScalarFieldEnum = {
-  id: 'id',
-  defaultName: 'defaultName',
-  nameEn: 'nameEn',
-  nameAr: 'nameAr'
-};
-
-exports.Prisma.UserScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  dateOfBirth: 'dateOfBirth',
-  gender: 'gender',
-  moneyInPocket: 'moneyInPocket',
-  countryId: 'countryId',
-  stateId: 'stateId',
-  phone: 'phone',
-  email: 'email',
-  password: 'password',
-  role: 'role',
-  isVerified: 'isVerified',
-  refreshTokenSecret: 'refreshTokenSecret',
-  accessTokenSecret: 'accessTokenSecret',
-  fcmToken: 'fcmToken',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.LocationScalarFieldEnum = {
-  id: 'id',
-  address: 'address',
-  stateId: 'stateId',
-  branchId: 'branchId',
-  orderId: 'orderId'
-};
-
 exports.Prisma.BranchScalarFieldEnum = {
   id: 'id',
   storeId: 'storeId',
+  locationId: 'locationId',
   phone: 'phone',
   isFreezed: 'isFreezed',
   createdAt: 'createdAt',
@@ -177,6 +136,201 @@ exports.Prisma.WorkHourScalarFieldEnum = {
   startTime: 'startTime',
   endTime: 'endTime',
   day: 'day'
+};
+
+exports.Prisma.CategoryScalarFieldEnum = {
+  id: 'id',
+  nameId: 'nameId',
+  imageId: 'imageId',
+  canBeDeliveredOutsideState: 'canBeDeliveredOutsideState',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CityScalarFieldEnum = {
+  id: 'id',
+  nameId: 'nameId',
+  stateId: 'stateId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CountryScalarFieldEnum = {
+  id: 'id',
+  nameId: 'nameId',
+  currencyCode: 'currencyCode',
+  countryIsoCode: 'countryIsoCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CurrencyScalarFieldEnum = {
+  id: 'id',
+  currencyAbb: 'currencyAbb',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DeliveryTaxesScalarFieldEnum = {
+  id: 'id',
+  originStateId: 'originStateId',
+  destinationStateId: 'destinationStateId',
+  baseFee: 'baseFee',
+  additionalFeesAfterKg: 'additionalFeesAfterKg',
+  feePerKg: 'feePerKg',
+  estimatedDays: 'estimatedDays',
+  effectiveDate: 'effectiveDate',
+  expiryDate: 'expiryDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ImageScalarFieldEnum = {
+  id: 'id',
+  publicId: 'publicId',
+  secureUrl: 'secureUrl',
+  productId: 'productId'
+};
+
+exports.Prisma.InboxScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  name: 'name',
+  message: 'message',
+  slug: 'slug',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.InfoScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  data: 'data',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LocationScalarFieldEnum = {
+  id: 'id',
+  address: 'address',
+  stateId: 'stateId',
+  branchId: 'branchId'
+};
+
+exports.Prisma.NameScalarFieldEnum = {
+  id: 'id',
+  defaultName: 'defaultName',
+  nameEn: 'nameEn',
+  nameAr: 'nameAr'
+};
+
+exports.Prisma.OccasionScalarFieldEnum = {
+  id: 'id',
+  nameId: 'nameId',
+  imageId: 'imageId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.OrderScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  trackingNumber: 'trackingNumber',
+  subtotal: 'subtotal',
+  taxAmount: 'taxAmount',
+  deliveryFee: 'deliveryFee',
+  totalAmount: 'totalAmount',
+  paymentMethod: 'paymentMethod',
+  locationId: 'locationId',
+  notes: 'notes',
+  cancellationReason: 'cancellationReason',
+  refundAmount: 'refundAmount',
+  currencyId: 'currencyId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProductCartScalarFieldEnum = {
+  userCartUserId: 'userCartUserId',
+  productStockId: 'productStockId',
+  deliveryTaxesId: 'deliveryTaxesId',
+  quantity: 'quantity',
+  doesHaveEnoughQuantity: 'doesHaveEnoughQuantity',
+  oldQuantity: 'oldQuantity',
+  isDeleted: 'isDeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProductOrderScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  productStockId: 'productStockId',
+  quantity: 'quantity',
+  price: 'price',
+  deliveryFee: 'deliveryFee',
+  subtotal: 'subtotal',
+  status: 'status',
+  cancellationReason: 'cancellationReason',
+  refundAmount: 'refundAmount'
+};
+
+exports.Prisma.ProductPriceScalarFieldEnum = {
+  productId: 'productId',
+  actualPrice: 'actualPrice',
+  discountPercent: 'discountPercent',
+  discountStartTime: 'discountStartTime',
+  discountEndTime: 'discountEndTime'
+};
+
+exports.Prisma.ProductStockScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  branchId: 'branchId',
+  stock: 'stock',
+  color: 'color',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProductScalarFieldEnum = {
+  id: 'id',
+  nameId: 'nameId',
+  descriptionId: 'descriptionId',
+  detailedDescriptionId: 'detailedDescriptionId',
+  price: 'price',
+  doesNeedPreparation: 'doesNeedPreparation',
+  isAcceptedByAdmin: 'isAcceptedByAdmin',
+  isAvailable: 'isAvailable',
+  tags: 'tags',
+  preparationTimeInMinutes: 'preparationTimeInMinutes',
+  canBeDeliveredOutsideState: 'canBeDeliveredOutsideState',
+  categoryId: 'categoryId',
+  avgRating: 'avgRating',
+  reviewsCount: 'reviewsCount',
+  dimensionsWCm: 'dimensionsWCm',
+  dimensionsHCm: 'dimensionsHCm',
+  dimensionsLCm: 'dimensionsLCm',
+  weightInKg: 'weightInKg',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ReviewScalarFieldEnum = {
+  userId: 'userId',
+  productId: 'productId',
+  stars: 'stars',
+  comment: 'comment',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StateScalarFieldEnum = {
+  id: 'id',
+  nameId: 'nameId',
+  countryId: 'countryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.StoreScalarFieldEnum = {
@@ -211,105 +365,14 @@ exports.Prisma.SocialLinkScalarFieldEnum = {
   storeId: 'storeId'
 };
 
-exports.Prisma.CountryScalarFieldEnum = {
+exports.Prisma.TransactionScalarFieldEnum = {
   id: 'id',
-  nameId: 'nameId',
-  currencyCode: 'currencyCode',
-  countryIsoCode: 'countryIsoCode',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.StateScalarFieldEnum = {
-  id: 'id',
-  nameId: 'nameId',
-  countryId: 'countryId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.CityScalarFieldEnum = {
-  id: 'id',
-  nameId: 'nameId',
-  stateId: 'stateId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.DeliveryTaxesScalarFieldEnum = {
-  id: 'id',
-  originStateId: 'originStateId',
-  destinationStateId: 'destinationStateId',
-  baseFee: 'baseFee',
-  additionalFeesAfterKg: 'additionalFeesAfterKg',
-  feePerKg: 'feePerKg',
-  estimatedDays: 'estimatedDays',
-  effectiveDate: 'effectiveDate',
-  expiryDate: 'expiryDate',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.CategoryScalarFieldEnum = {
-  id: 'id',
-  nameId: 'nameId',
-  imageId: 'imageId',
-  canBeDeliveredOutsideState: 'canBeDeliveredOutsideState',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.OccasionScalarFieldEnum = {
-  id: 'id',
-  nameId: 'nameId',
-  imageId: 'imageId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.ProductScalarFieldEnum = {
-  id: 'id',
-  nameId: 'nameId',
-  descriptionId: 'descriptionId',
-  detailedDescriptionId: 'detailedDescriptionId',
-  price: 'price',
-  actualPrice: 'actualPrice',
-  doesNeedPreparation: 'doesNeedPreparation',
-  isAcceptedByAdmin: 'isAcceptedByAdmin',
-  isAvailable: 'isAvailable',
-  isFeatured: 'isFeatured',
-  isPopular: 'isPopular',
-  preparationTimeInMinutes: 'preparationTimeInMinutes',
-  discountPercent: 'discountPercent',
-  discountStartTime: 'discountStartTime',
-  discountEndTime: 'discountEndTime',
-  canBeDeliveredOutsideState: 'canBeDeliveredOutsideState',
-  categoryId: 'categoryId',
-  avgRating: 'avgRating',
-  reviewsCount: 'reviewsCount',
-  dimensionsWCm: 'dimensionsWCm',
-  dimensionsHCm: 'dimensionsHCm',
-  dimensionsLCm: 'dimensionsLCm',
-  weightInKg: 'weightInKg',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.ProductStockScalarFieldEnum = {
-  id: 'id',
-  productId: 'productId',
-  branchId: 'branchId',
-  stock: 'stock',
-  color: 'color',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.ReviewScalarFieldEnum = {
+  type: 'type',
   userId: 'userId',
-  productId: 'productId',
-  stars: 'stars',
-  comment: 'comment',
+  storeId: 'storeId',
+  amount: 'amount',
+  purpose: 'purpose',
+  currencyId: 'currencyId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -324,80 +387,22 @@ exports.Prisma.UserCartScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.ProductCartScalarFieldEnum = {
-  userCartUserId: 'userCartUserId',
-  productStockId: 'productStockId',
-  deliveryTaxesId: 'deliveryTaxesId',
-  quantity: 'quantity',
-  doesHaveEnoughQuantity: 'doesHaveEnoughQuantity',
-  oldQuantity: 'oldQuantity',
-  isDeleted: 'isDeleted',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.OrderScalarFieldEnum = {
+exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
-  trackingNumber: 'trackingNumber',
-  subtotal: 'subtotal',
-  taxAmount: 'taxAmount',
-  deliveryFee: 'deliveryFee',
-  totalAmount: 'totalAmount',
-  paymentMethod: 'paymentMethod',
-  notes: 'notes',
-  cancellationReason: 'cancellationReason',
-  refundAmount: 'refundAmount',
-  currencyId: 'currencyId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.CurrencyScalarFieldEnum = {
-  id: 'id',
-  currencyAbb: 'currencyAbb',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.ProductOrderScalarFieldEnum = {
-  orderId: 'orderId',
-  productStockId: 'productStockId',
-  quantity: 'quantity',
-  price: 'price',
-  deliveryFee: 'deliveryFee',
-  subtotal: 'subtotal',
-  status: 'status',
-  cancellationReason: 'cancellationReason',
-  refundAmount: 'refundAmount'
-};
-
-exports.Prisma.TransactionScalarFieldEnum = {
-  id: 'id',
-  type: 'type',
-  userId: 'userId',
-  storeId: 'storeId',
-  amount: 'amount',
-  purpose: 'purpose',
-  currencyId: 'currencyId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.InfoScalarFieldEnum = {
-  id: 'id',
-  slug: 'slug',
-  data: 'data',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.InboxScalarFieldEnum = {
-  id: 'id',
-  email: 'email',
   name: 'name',
-  message: 'message',
-  slug: 'slug',
+  dateOfBirth: 'dateOfBirth',
+  gender: 'gender',
+  moneyInPocket: 'moneyInPocket',
+  countryId: 'countryId',
+  stateId: 'stateId',
+  phone: 'phone',
+  email: 'email',
+  password: 'password',
+  role: 'role',
+  isVerified: 'isVerified',
+  refreshTokenSecret: 'refreshTokenSecret',
+  accessTokenSecret: 'accessTokenSecret',
+  fcmToken: 'fcmToken',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -416,34 +421,39 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-
+exports.productTags = exports.$Enums.productTags = {
+  FEATURED: 'FEATURED',
+  POPULAR: 'POPULAR',
+  NONE: 'NONE'
+};
 
 exports.Prisma.ModelName = {
-  image: 'image',
-  name: 'name',
-  user: 'user',
-  location: 'location',
   branch: 'branch',
   workHour: 'workHour',
+  category: 'category',
+  city: 'city',
+  country: 'country',
+  currency: 'currency',
+  deliveryTaxes: 'deliveryTaxes',
+  image: 'image',
+  inbox: 'inbox',
+  info: 'info',
+  location: 'location',
+  name: 'name',
+  occasion: 'occasion',
+  order: 'order',
+  productCart: 'productCart',
+  productOrder: 'productOrder',
+  productPrice: 'productPrice',
+  productStock: 'productStock',
+  product: 'product',
+  review: 'review',
+  state: 'state',
   store: 'store',
   socialLink: 'socialLink',
-  country: 'country',
-  state: 'state',
-  city: 'city',
-  deliveryTaxes: 'deliveryTaxes',
-  category: 'category',
-  occasion: 'occasion',
-  product: 'product',
-  productStock: 'productStock',
-  review: 'review',
-  userCart: 'userCart',
-  productCart: 'productCart',
-  order: 'order',
-  currency: 'currency',
-  productOrder: 'productOrder',
   transaction: 'transaction',
-  info: 'info',
-  inbox: 'inbox'
+  userCart: 'userCart',
+  user: 'user'
 };
 
 /**

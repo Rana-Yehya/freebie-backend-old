@@ -1,0 +1,11 @@
+model country {
+  id             String   @id @unique @default(uuid())
+  nameId         String   @unique
+  name           name     @relation(fields: [nameId], references: [id])
+  currencyCode   String
+  countryIsoCode String   @unique
+  user           user[]
+  state          state[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

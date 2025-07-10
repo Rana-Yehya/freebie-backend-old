@@ -70,20 +70,20 @@ const UpdateProductZodModel = z
       )
       .default("true")
       .optional(),
-    isFeatured: z
-      .string()
-      .refine((isFeatured) => isFeatured === "true" || isFeatured === "false", {
-        message: "Featured property does not equal to true or false",
-      })
-      .default("false")
-      .optional(),
-    isPopular: z
-      .string()
-      .refine((isPopular) => isPopular === "true" || isPopular === "false", {
-        message: "Popular property does not equal to true or false",
-      })
-      .default("false")
-      .optional(),
+    // isFeatured: z
+    //   .string()
+    //   .refine((isFeatured) => isFeatured === "true" || isFeatured === "false", {
+    //     message: "Featured property does not equal to true or false",
+    //   })
+    //   .default("false")
+    //   .optional(),
+    // isPopular: z
+    //   .string()
+    //   .refine((isPopular) => isPopular === "true" || isPopular === "false", {
+    //     message: "Popular property does not equal to true or false",
+    //   })
+    //   .default("false")
+    //   .optional(),
     canBeDeliveredOutsideState: z
       .string()
       .refine(
@@ -220,10 +220,14 @@ const UpdateProductZodModel = z
         }
       }
     }
+    console.log(parseFloat(data.discountPercent) * 100);
+    console.log(parseFloat(data.discountPercent) * 100 >= 0);
 
     if (
-      parseFloat(data.discountPercent) >= 0 &&
-      parseFloat(data.discountPercent) >= 100
+      !(
+        parseFloat(data.discountPercent) * 100 >= 0 &&
+        parseFloat(data.discountPercent) * 100 < 100
+      )
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,

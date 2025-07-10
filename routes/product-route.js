@@ -8,15 +8,15 @@ const {
 } = require("../controllers/product-management-controller");
 
 const {
-  getAllProductsPerState,
-  getAllProductsPerOccasions,
-  getAllProductsPerCategories,
+  // getAllProductsPerState,
+  // getAllProductsPerOccasions,
+  // getAllProductsPerCategories,
   getProduct,
-  getAllProductsCanBeDeliveredOutsideStates,
+  // getAllProductsCanBeDeliveredOutsideStates,
   searchAllProducts,
-  getFeaturedProducts,
-  getBigSaleProducts,
-  getPopularProducts,
+  // getFeaturedProducts,
+  // getBigSaleProducts,
+  // getPopularProducts,
   getProductsQuery,
   getAllProductsPerStoreBranch,
 } = require("../controllers/product-search-controller");
@@ -33,40 +33,40 @@ const { route } = require("./country-route");
 
 const router = express.Router();
 
-router
-  .route("/per-categories")
-  .get(optionalAuthenticateUserMiddleware, getAllProductsPerCategories);
+// router
+//   .route("/per-categories")
+//   .get(optionalAuthenticateUserMiddleware, getAllProductsPerCategories);
 router
   .route("/query")
   .get(optionalAuthenticateUserMiddleware, getProductsQuery);
-router
-  .route("/per-occasions")
-  .get(optionalAuthenticateUserMiddleware, getAllProductsPerOccasions);
-router
-  .route("/per-states")
-  .get(optionalAuthenticateUserMiddleware, getAllProductsPerState);
+// router
+//   .route("/per-occasions")
+//   .get(optionalAuthenticateUserMiddleware, getAllProductsPerOccasions);
+// router
+//   .route("/per-states")
+//   .get(optionalAuthenticateUserMiddleware, getAllProductsPerState);
 router
   .route("/search")
   .get(optionalAuthenticateUserMiddleware, searchAllProducts);
 router
   .route("/per-branches")
   .get(optionalAuthenticateUserMiddleware, getAllProductsPerStoreBranch);
-router
-  .route("/big-sale")
-  .get(optionalAuthenticateUserMiddleware, getBigSaleProducts);
-router
-  .route("/featured")
-  .get(optionalAuthenticateUserMiddleware, getFeaturedProducts);
-router
-  .route("/popular")
-  .get(optionalAuthenticateUserMiddleware, getPopularProducts);
+// router
+//   .route("/big-sale")
+//   .get(optionalAuthenticateUserMiddleware, getBigSaleProducts);
+// router
+//   .route("/featured")
+//   .get(optionalAuthenticateUserMiddleware, getFeaturedProducts);
+// router
+//   .route("/popular")
+//   .get(optionalAuthenticateUserMiddleware, getPopularProducts);
 
-router
-  .route("/delivery-outside-state")
-  .get(
-    optionalAuthenticateUserMiddleware,
-    getAllProductsCanBeDeliveredOutsideStates
-  );
+// router
+//   .route("/delivery-outside-state")
+//   .get(
+//     optionalAuthenticateUserMiddleware,
+//     getAllProductsCanBeDeliveredOutsideStates
+//   );
 router
   .route("/")
   .get(

@@ -1,0 +1,16 @@
+
+model productStock {
+  id           String         @id @unique @default(uuid())
+  product      product        @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productId    String
+  branch       branch         @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  branchId     String
+  stock        Int?
+  color        String
+  productOrder productOrder[]
+  productCart  productCart[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@unique([productId, branchId, color])
+}

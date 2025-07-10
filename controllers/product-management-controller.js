@@ -4,7 +4,10 @@ const { StatusCodes } = require("http-status-codes");
 const { BadRequestError } = require("../errors");
 const { UpdateProductZodModel } = require("../models/update-product-zod-model");
 const { uploadMultipleImages } = require("../helpers/cloudinary/upload-image");
-const { destroyMultipleImages } = require("../helpers/cloudinary/delete-image");
+const {
+  destroyMultipleImages,
+} = require("../helpers/cloudinary/destroy-image");
+const { productTags } = require("../generated/prisma");
 const getAllProducts = async (req, res, next) => {
   const products = await prisma.product.findMany({
     include: { occasions: true },
@@ -93,15 +96,15 @@ const createProduct = async (req, res, next) => {
   if (!category) {
     throw new BadRequestError("Category not found");
   }
-  if (occasions) {
-    const occasionCount = await prisma.occasion.count({
-      where: { id: { in: occasionsList } },
-      select: { id: true },
-    });
-    if (occasionsList.length != occasionCount.length) {
-      throw new BadRequestError("Some occasions are not found");
-    }
-  }
+  // if (occasions) {
+  //   const occasionCount = await prisma.occasion.count({
+  //     where: { id: { in: occasionsList } },
+  //     select: { id: true },
+  //   });
+  //   if (occasionsList.length != occasionCount.length) {
+  //     throw new BadRequestError("Some occasions are not found");
+  //   }
+  // }
 
   // if (productStockList.length !== 0) {
   //   const productStockBranchIds = productStockList.map(
@@ -128,6 +131,7 @@ const createProduct = async (req, res, next) => {
     dateDiscountEndTime = new Date(parseDiscountEndTime);
   }
   const [imageUrlsToStore, imagePublicIdsToStore] = await uploadMultipleImages({
+    req: req,
     images: image,
   });
   let imageToStore = [];
@@ -196,7 +200,21 @@ const createProduct = async (req, res, next) => {
           nameAr: detailedDescriptionAr || detailedDescription,
         },
       },
+      tags: productTags.NONE,
       price: parseFloat(price),
+      productPrice:
+        discountStartTime && discountEndTime && discountPercent
+          ? {
+              create: {
+                actualPrice:
+                  parseFloat(price) -
+                  (parseFloat(price) * parseFloat(discountPercent) * 100) / 100,
+                discountPercent: parseFloat(discountPercent),
+                discountStartTime: dateDiscountStartTime,
+                discountEndTime: dateDiscountEndTime,
+              },
+            }
+          : undefined,
       canBeDeliveredOutsideState:
         category.canBeDeliveredOutsideState == true
           ? canBeDeliveredOutsideState == undefined
@@ -205,17 +223,14 @@ const createProduct = async (req, res, next) => {
             ? false
             : true
           : false,
-      actualPrice:
-        discountPercent == undefined || discountPercent == 0
-          ? parseFloat(price)
-          : parseFloat(price) -
-            (parseFloat(price) * parseFloat(discountPercent)) / 100,
+      // actualPrice:
+      //   discountPercent == undefined || discountPercent == 0
+      //     ? parseFloat(price)
+      //     : parseFloat(price) -
+      //       (parseFloat(price) * parseFloat(discountPercent)) / 100,
       doesNeedPreparation: doesNeedPreparation === "false" ? false : true,
       isAvailable: isAvailable === "false" ? false : true,
       preparationTimeInMinutes: preparationTimeInMinutes,
-      discountPercent: parseFloat(discountPercent),
-      discountStartTime: dateDiscountStartTime,
-      discountEndTime: dateDiscountEndTime,
       category: { connect: { id: categoryId } },
       occasions:
         occasionsList == undefined
@@ -240,6 +255,7 @@ const createProduct = async (req, res, next) => {
     },
     include: {
       productStock: true,
+      productPrice: true,
       image: true,
       occasions: true,
     },
@@ -295,8 +311,6 @@ const updateProduct = async (req, res, next) => {
     price,
     doesNeedPreparation,
     isAvailable,
-    isFeatured,
-    isPopular,
     preparationTimeInMinutes,
     discountPercent,
     canBeDeliveredOutsideState,
@@ -333,8 +347,6 @@ const updateProduct = async (req, res, next) => {
       nameEn: detailedDescriptionEn,
     },
     price: price,
-    isFeatured: isFeatured,
-    isPopular: isPopular,
     doesNeedPreparation: doesNeedPreparation,
     isAvailable: isAvailable,
     preparationTimeInMinutes: preparationTimeInMinutes,
@@ -408,6 +420,7 @@ const updateProduct = async (req, res, next) => {
   const product = await prisma.product.findUnique({
     where: { id: id },
     select: {
+      price: true,
       image: true,
       category: true,
     },
@@ -430,6 +443,7 @@ const updateProduct = async (req, res, next) => {
   if (image) {
     const [imageUrlsToStore, imagePublicIdsToStore] =
       await uploadMultipleImages({
+        req: req,
         images: image,
       });
     for (
@@ -443,9 +457,73 @@ const updateProduct = async (req, res, next) => {
       });
     }
   }
+
+  console.log(price);
+
+  console.log(product.price);
+
+  console.log(price || product.price);
+  console.log(discountPercent);
+
+  console.log(product.discountPercent);
+  console.log(discountPercent || product.discountPercent);
+
+  console.log(
+    parseFloat(price || product.price) -
+      (parseFloat(price || product.price) *
+        parseFloat(discountPercent || product.discountPercent)) /
+        100
+  );
   const updatedProduct = await prisma.product.update({
     where: { id: id },
     data: {
+      image: {
+        createMany: image == undefined ? undefined : { data: imageToStore },
+      },
+      // image == undefined
+      //   ? undefined
+      //   : {
+      //       createMany: { data: imageToStore },
+      //     },
+
+      price: price == undefined ? undefined : parseFloat(price),
+      productPrice:
+        discountStartTime || discountEndTime || discountPercent
+          ? {
+              connectOrCreate: {
+                where: {
+                  productId: id,
+                },
+                create: {
+                  actualPrice:
+                    parseFloat(price || product.price) -
+                      (parseFloat(price || product.price) *
+                        parseFloat(discountPercent || product.discountPercent) *
+                        100) /
+                        100 || undefined,
+                  discountPercent: parseFloat(discountPercent) || undefined,
+                  discountStartTime: dateDiscountStartTime || undefined,
+                  discountEndTime: dateDiscountEndTime || undefined,
+                },
+              },
+              update: {
+                actualPrice:
+                  parseFloat(price || product.price) -
+                    (parseFloat(price || product.price) *
+                      parseFloat(discountPercent || product.discountPercent) *
+                      100) /
+                      100 || undefined,
+                discountPercent: parseFloat(discountPercent) || undefined,
+                discountStartTime: dateDiscountStartTime || undefined,
+                discountEndTime: dateDiscountEndTime || undefined,
+              },
+            }
+          : undefined,
+      // actualPrice:
+      //   discountPercent == undefined || discountPercent == 0
+      //     ? undefined
+      //     : parseFloat(product.price) -
+      //       (parseFloat(product.price) * parseFloat(discountPercent)) / 100,
       name: {
         update: {
           defaultName: name || undefined,
@@ -467,21 +545,6 @@ const updateProduct = async (req, res, next) => {
           nameAr: detailedDescriptionAr || undefined,
         },
       },
-      image: {
-        createMany: image == undefined ? undefined : { data: imageToStore },
-      },
-      // image == undefined
-      //   ? undefined
-      //   : {
-      //       createMany: { data: imageToStore },
-      //     },
-
-      price: price == undefined ? undefined : parseFloat(price),
-      actualPrice:
-        discountPercent == undefined || discountPercent == 0
-          ? undefined
-          : parseFloat(product.price) -
-            (parseFloat(product.price) * parseFloat(discountPercent)) / 100,
       doesNeedPreparation:
         doesNeedPreparation == undefined
           ? undefined
@@ -494,18 +557,18 @@ const updateProduct = async (req, res, next) => {
           : isAvailable === "false"
           ? false
           : true,
-      isPopular:
-        isPopular == undefined
-          ? undefined
-          : isPopular === "false"
-          ? false
-          : true,
-      isFeatured:
-        isFeatured == undefined
-          ? undefined
-          : isFeatured === "false"
-          ? false
-          : true,
+      // isPopular:
+      //   isPopular == undefined
+      //     ? undefined
+      //     : isPopular === "false"
+      //     ? false
+      //     : true,
+      // isFeatured:
+      //   isFeatured == undefined
+      //     ? undefined
+      //     : isFeatured === "false"
+      //     ? false
+      //     : true,
       canBeDeliveredOutsideState:
         product.category.canBeDeliveredOutsideState == true
           ? canBeDeliveredOutsideState == undefined
@@ -514,13 +577,13 @@ const updateProduct = async (req, res, next) => {
             ? false
             : true
           : undefined,
+      tags: undefined,
       preparationTimeInMinutes: preparationTimeInMinutes || undefined,
-      discountPercent:
-        discountPercent == undefined ? undefined : parseFloat(discountPercent),
-      discountStartTime: dateDiscountStartTime || undefined,
-      discountEndTime: dateDiscountEndTime || undefined,
-      category:
-        categoryId == undefined ? undefined : { connect: { id: categoryId } },
+      // discountPercent:
+      //   discountPercent == undefined ? undefined : parseFloat(discountPercent),
+      // discountStartTime: dateDiscountStartTime || undefined,
+      // discountEndTime: dateDiscountEndTime || undefined,
+      category: { connect: { id: categoryId || undefined } },
       occasions:
         occasionsList.length == 0
           ? undefined
@@ -558,6 +621,7 @@ const updateProduct = async (req, res, next) => {
       },
     },
     include: {
+      productPrice: true,
       productStock: true,
       occasions: true,
       image: true,
@@ -629,7 +693,7 @@ const deleteProduct = async (req, res, next) => {
     where: {
       productOrder: {
         every: {
-          productId: ProductId,
+          productStock: { product: { id: ProductId } },
           status: { not: "delivered" },
         },
       },
@@ -642,6 +706,7 @@ const deleteProduct = async (req, res, next) => {
   }
   const product = await prisma.product.delete({
     where: { id: ProductId },
+    select: { image: true },
   });
   if (!product) {
     throw new BadRequestError("Product not found");

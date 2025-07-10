@@ -28,6 +28,7 @@ const {
   UpdateUserProfileZodModel,
 } = require("../models/update-user-profile-zod-model");
 const { stat } = require("fs");
+const { connect } = require("http2");
 //TODO AM I IN NEED TO LOGIN
 
 const login = async (req, res) => {
@@ -81,7 +82,6 @@ const sendCode = async (req, res, next) => {
       "Account already in use or has an individal account"
     );
   }
-  console.log(userInDB);
   /*
   ELSE SEND OTP AND CREATE USER DATA
   */
@@ -152,17 +152,17 @@ const register = async (req, res, next) => {
   // const country = await prisma.country.findUnique({
   //   where: { countryIsoCode: userCountry },
   // });
-  const state = await prisma.state.findUnique({
-    where: { countryId: userCountry, id: userState },
-  });
-  // if (!country) {
-  //   throw new BadRequestError("Country not found");
+  // const state = await prisma.state.findUnique({
+  //   where: { countryId: userCountry, id: userState },
+  // });
+  // // if (!country) {
+  // //   throw new BadRequestError("Country not found");
+  // // }
+  // if (!state) {
+  //   throw new BadRequestError(
+  //     "State not found or does not belong to this country"
+  //   );
   // }
-  if (!state) {
-    throw new BadRequestError(
-      "State not found or does not belong to this country"
-    );
-  }
   const parse = Date.parse(dateOfBirth);
 
   const date = new Date(parse);
@@ -176,11 +176,11 @@ const register = async (req, res, next) => {
       gender: gender,
       email: email,
       phone: phoneNumber,
-      countryId: userCountry,
+      userCountry: { connect: { id: userCountry } },
       role: role,
       //TODO CAN ADD AN EXTRA LEVEL OF CHECK AND INTEGRATE THE VEERIFICATION WITH IOREEDIS
       isVerified: true,
-      stateId: userState,
+      userState: { connect: { id: userState } },
       refreshTokenSecret: refreshTokenSecret,
       accessTokenSecret: accessTokenSecret,
     },
@@ -309,12 +309,12 @@ const updateProfile = async (req, res) => {
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
-  const state = await prisma.state.findFirst({
-    where: { id: stateId, countryId: countryId },
-  });
-  if (!state) {
-    throw new BadRequestError("State not found");
-  }
+  // const state = await prisma.state.findFirst({
+  //   where: { id: stateId, countryId: countryId },
+  // });
+  // if (!state) {
+  //   throw new BadRequestError("State not found");
+  // }
   let parse;
   let date;
   if (dateOfBirth) {

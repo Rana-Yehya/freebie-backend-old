@@ -1,0 +1,28 @@
+
+model productCart {
+  userCart       userCart     @relation(fields: [userCartUserId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  userCartUserId String
+  // id         String   @id @unique @default(uuid())
+  // cart                   user          @relation(fields: [userCartId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // userCartId             String
+  // product                product       @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // productId              String
+  // branch                 branch        @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // branchId               String
+  productStock   productStock @relation(fields: [productStockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productStockId String
+
+  deliveryTaxes          deliveryTaxes @relation(fields: [deliveryTaxesId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  deliveryTaxesId        String
+  // color                  String
+  quantity               Int           @default(1)
+  doesHaveEnoughQuantity Boolean       @default(true)
+  oldQuantity            Int?          @default(0)
+
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //userCartId
+  @@unique([userCartUserId, productStockId])
+}

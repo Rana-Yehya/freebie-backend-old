@@ -1,0 +1,10 @@
+model productPrice {
+  productId                    String   @unique
+  product                      product     @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  actualPrice Float? // @default(1)
+
+  discountPercent          Float?    @default(0)
+  discountStartTime        DateTime?
+  discountEndTime          DateTime? 
+}

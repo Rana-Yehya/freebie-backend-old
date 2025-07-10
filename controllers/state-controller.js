@@ -86,14 +86,14 @@ const updateState = async (req, res, next) => {
   if (!id) {
     throw new BadRequestError("Please send an ID");
   }
-  if (countryId) {
-    const country = await prisma.country.findUnique({
-      where: { id: countryId },
-    });
-    if (!country) {
-      throw new BadRequestError("Country not found");
-    }
-  }
+  // if (countryId) {
+  //   const country = await prisma.country.findUnique({
+  //     where: { id: countryId },
+  //   });
+  //   if (!country) {
+  //     throw new BadRequestError("Country not found");
+  //   }
+  // }
   const updatedState = await prisma.state.update({
     where: { id: id },
     data: {
@@ -104,7 +104,9 @@ const updateState = async (req, res, next) => {
           nameAr: nameAr || undefined,
         },
       },
-      countryId: countryId || undefined,
+      country: {
+        connect: { id: countryId || undefined },
+      },
     },
   });
   console.log(updatedState);

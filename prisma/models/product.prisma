@@ -1,0 +1,55 @@
+// Big sales
+
+//  1 100 000  20%       price = 80 000
+//  2 2000     5%        price = 1900
+enum productTags {
+  FEATURED
+  POPULAR
+  NONE
+}
+
+model product {
+  id                    String  @id @unique @default(uuid())
+  nameId                String  @unique
+  name                  name    @relation("nameProduct", fields: [nameId], references: [id])
+  // image                      String[]
+  image                 image[]
+  // description                String
+  descriptionId         String  @unique
+  description           name    @relation("descriptionProduct", fields: [descriptionId], references: [id])
+  detailedDescriptionId String  @unique
+  detailedDescription   name    @relation("detailedDescriptionProduct", fields: [detailedDescriptionId], references: [id])
+
+  // detailedDescription        String
+  // store                    store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  // storeId                  String
+  // user                     user?             @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  // userId                   String?
+  price                      Float          @default(1)
+  productPrice               productPrice?
+  doesNeedPreparation        Boolean        @default(false)
+  isAcceptedByAdmin          Boolean        @default(false)
+  isAvailable                Boolean        @default(true)
+  // isFeatured               Boolean   @default(false)
+  // isPopular                Boolean   @default(false)
+  tags                       productTags?   
+  preparationTimeInMinutes   Int            @default(1)
+  canBeDeliveredOutsideState Boolean        @default(true)
+  productStock               productStock[]
+  category                   category?      @relation(fields: [categoryId], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
+  categoryId                 String?
+  // branch                   branches  @relation(fields: [branchId], references: [id], onDelete: SetDefault, onUpdate: SerDefault)
+  // branchId                 String    @default("no_val")
+  occasions                  occasion[]
+  avgRating                  Float          @default(0)
+  reviewsCount               Int            @default(0)
+  reviews                    review[]
+  dimensionsWCm              Float          @default(1)
+  dimensionsHCm              Float          @default(1)
+  dimensionsLCm              Float          @default(1)
+  weightInKg                 Float          @default(3)
+  // productOrder               productOrder[]
+  // productUser                productCart[]
+  createdAt                  DateTime       @default(now())
+  updatedAt                  DateTime       @updatedAt
+}

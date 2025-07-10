@@ -1,7 +1,11 @@
 const { CustomAPIError } = require("../errors/custom-api-error");
 const { StatusCodes } = require("http-status-codes");
+const {
+  destroyImage,
+  destroyMultipleImages,
+} = require("../helpers/cloudinary/destroy-image");
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = async (err, req, res, next) => {
   console.log(err);
   // let customError = {
   //   statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
@@ -38,6 +42,12 @@ const errorHandler = (err, req, res, next) => {
   //   statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
   //   message: err.message || 'Internal Server Error',
   // };
+
+  if (req.isImageUploaded && req.isSingleImage) {
+    await destroyImage({ imagePublicId: req.imageUploadedData });
+  } else if (req.isImageUploaded && !req.isSingleImage) {
+    await destroyMultipleImages({ imagesPublicIds: req.imageUploadedData });
+  }
   let customError = {
     statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
     message: err.message || "Internal Server Error",

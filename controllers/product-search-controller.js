@@ -8,24 +8,23 @@ const {
 } = require("../errors");
 const { UpdateProductZodModel } = require("../models/update-product-zod-model");
 const { userConstant, adminConstant } = require("../config/constants");
+const { productTags } = require("../generated/prisma");
 
 const selectedQuery = {
   id: true,
   name: true,
   // description: true,
+  productPrice: true,
   price: true,
-  actualPrice: true,
   doesNeedPreparation: true,
   isAvailable: true,
-  isFeatured: true,
-  isPopular: true,
   avgRating: true,
   reviewsCount: true,
-  discountPercent: true,
+  tags: true,
   image: {
     select: { publicId: true, secureUrl: true },
   },
-
+  name: true,
   category: {
     select: {
       id: true,
@@ -35,7 +34,6 @@ const selectedQuery = {
       },
     },
   },
-
   occasions: {
     select: {
       id: true,
@@ -93,6 +91,7 @@ const getProductsQuery = async (req, res, next) => {
     occasions: occasions,
   });
 };
+/*
 const getAllProductsPerOccasions = async (req, res, next) => {
   // let isAcceptedByAdmin = true;
   // if (req.user.role === adminConstant) {
@@ -195,6 +194,7 @@ const getPopularProducts = async (req, res, next) => {
     .status(StatusCodes.OK)
     .json({ isSuccess: true, count: product.length, data: product });
 };
+
 const getBigSaleProducts = async (req, res, next) => {
   const { page = 1, limit = 10 } = req.query;
   let productQuerySearch = {
@@ -209,6 +209,7 @@ const getBigSaleProducts = async (req, res, next) => {
           gte: new Date().toISOString(),
         },
       },
+      {},
       { isAcceptedByAdmin: true },
     ],
   };
@@ -235,7 +236,12 @@ const getBigSaleProducts = async (req, res, next) => {
     skip: ((parseInt(page) || 1) - 1) * (parseInt(limit) || 10),
     where: productQuerySearch,
     select: selectedQuery,
+    orderBy: {
+      price: "asc", //400 800
+      discountPercent: "desc", //80 70 50 20 10
+    },
   });
+
   return res
     .status(StatusCodes.OK)
     .json({ isSuccess: true, count: product.length, data: product });
@@ -368,10 +374,11 @@ const getAllProductsPerState = async (req, res, next) => {
     .status(StatusCodes.OK)
     .json({ isSuccess: true, count: product.length, data: product });
 };
+*/
 const searchAllProducts = async (req, res, next) => {
   const stateIds = req.query.stateIds;
   const { page = 1, limit = 10 } = req.query;
-  const { priceSmall, priceHigh, name } = req.query;
+  const { priceSmall, priceHigh, isFeatured, isPopular, name } = req.query;
 
   let priceSmallFloat = undefined;
   if (priceSmall && parseFloat(priceSmall) !== NaN) {
@@ -381,7 +388,13 @@ const searchAllProducts = async (req, res, next) => {
   if (priceHigh && parseFloat(priceHigh) !== NaN) {
     priceHighFloat = parseFloat(priceHigh);
   }
-
+  const tags =
+    isFeatured == "true"
+      ? productTags.FEATURED
+      : isPopular == "true"
+      ? productTags.POPULAR
+      : undefined;
+  console.log(tags);
   const colorList = req.query.colors
     ? decodeURIComponent(req.query.colors)
         .replace(/[\[\] ]/g, "")
@@ -405,8 +418,15 @@ const searchAllProducts = async (req, res, next) => {
   let productQuerySearch = {
     AND: [
       {
-        name: name ? { contains: name.trim() } : undefined,
-        // id: { in: [...productIdsList, ...productOccsionsIdsList] },
+        name: name
+          ? {
+              OR: [
+                { nameAr: { contains: name.trim() } },
+                { nameEn: { contains: name.trim() } },
+                { defaultName: { contains: name.trim() } },
+              ],
+            }
+          : undefined, // id: { in: [...productIdsList, ...productOccsionsIdsList] },
         occasions: occasionsIdsList
           ? { some: { id: { in: occasionsIdsList } } }
           : undefined,
@@ -416,16 +436,45 @@ const searchAllProducts = async (req, res, next) => {
             color: colorList ? { in: colorList } : undefined,
           },
         },
-        actualPrice: { gte: priceSmallFloat, lte: priceHighFloat },
+        OR: [
+          { price: { gte: priceSmallFloat, lte: priceHighFloat } },
+          {
+            productPrice: {
+              actualPrice: { gte: priceSmallFloat, lte: priceHighFloat },
+            },
+          },
+        ],
+        tags: tags,
+        // actualPrice: { gte: priceSmallFloat, lte: priceHighFloat },
       },
       { isAcceptedByAdmin: true },
     ],
   };
+  //   ALTER TABLE "product"
+  // DROP COLUMN IF EXISTS "actualPrice";
+  //   ADD COLUMN "actualPrice" FLOAT GENERATED ALWAYS AS (
+  //   CASE
+  //     WHEN "discountPercent" IS NOT NULL
+  //       AND "discountStartTime" IS NOT NULL
+  //       AND "discountEndTime" IS NOT NULL
+  //       AND NOW() BETWEEN "discountStartTime" AND "discountEndTime"
+  //     THEN "price" * (1 - "discountPercent")
+  //     ELSE "price"
+  //   END
+  // ) STORED;
   //   console.log(req.user);
 
   if (req.user && req.user.role === adminConstant) {
     productQuerySearch = {
-      name: name ? { contains: name.trim() } : undefined,
+      name: name
+        ? {
+            OR: [
+              { nameAr: { contains: name.trim() } },
+              { nameEn: { contains: name.trim() } },
+              { defaultName: { contains: name.trim() } },
+            ],
+          }
+        : undefined,
       // id: { in: [...productIdsList, ...productOccsionsIdsList] },
       occasions:
         occasionsIdsList || occasionsIdsList.length != 0
@@ -441,13 +490,43 @@ const searchAllProducts = async (req, res, next) => {
             colorList || colorList.length != 0 ? { in: colorList } : undefined,
         },
       },
-      actualPrice: { gte: priceSmallFloat, lte: priceHighFloat },
+      OR: [
+        { price: { gte: priceSmallFloat, lte: priceHighFloat } },
+        {
+          productPrice: {
+            actualPrice: { gte: priceSmallFloat, lte: priceHighFloat },
+          },
+        },
+      ],
+      tags: tags,
+
+      // actualPrice: { gte: priceSmallFloat, lte: priceHighFloat },
     };
   }
   const product = await prisma.product.findMany({
     take: parseInt(limit) || 10,
     skip: ((parseInt(page) || 1) - 1) * (parseInt(limit) || 10),
+    // where: { tags: tags },
     where: productQuerySearch,
+    // where: {
+    //   OR: [
+    //     { price: { gte: priceSmallFloat, lte: priceHighFloat } },
+    //     {
+    //       productPrice: {
+    //         actualPrice: { gte: priceSmallFloat, lte: priceHighFloat },
+    //       },
+    //     },
+    //   ],
+    // },
+    // where: {
+    //   name: {
+    //     OR: [
+    //       { nameAr: { contains: name.trim() } },
+    //       { nameEn: { contains: name.trim() } },
+    //       { defaultName: { contains: name.trim() } },
+    //     ],
+    //   },
+    // },
     select: selectedQuery,
   });
   return res
@@ -628,6 +707,7 @@ const getProduct = async (req, res, next) => {
           },
         },
       },
+      productPrice: true,
       productStock: {
         select: {
           id: true,
@@ -658,15 +738,15 @@ const getProduct = async (req, res, next) => {
 };
 
 module.exports = {
-  getAllProductsPerOccasions,
-  getAllProductsPerCategories,
-  getFeaturedProducts,
-  getBigSaleProducts,
+  // getAllProductsPerOccasions,
+  // getAllProductsPerCategories,
+  // getFeaturedProducts,
+  // getBigSaleProducts,
   getProduct,
-  getAllProductsPerState,
+  // getAllProductsPerState,
   searchAllProducts,
   getAllProductsPerStoreBranch,
-  getPopularProducts,
-  getAllProductsCanBeDeliveredOutsideStates,
+  // getPopularProducts,
+  // getAllProductsCanBeDeliveredOutsideStates,
   getProductsQuery,
 };

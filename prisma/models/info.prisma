@@ -1,0 +1,9 @@
+
+model info {
+  id        String   @id @unique @default(uuid())
+  // buy something or take money from wallet -> false = buy, true = take
+  slug      String   @unique
+  data      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

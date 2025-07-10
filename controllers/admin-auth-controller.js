@@ -14,6 +14,7 @@ const {
   UnauthenticatedError,
 } = require("../errors");
 const { UserZodModel } = require("../models/user-zod-model");
+const { connect } = require("http2");
 
 const login = async (req, res) => {
   const { phoneNumber, password } = req.body;
@@ -111,17 +112,17 @@ const register = async (req, res, next) => {
   // const country = await prisma.country.findUnique({
   //   where: { countryIsoCode: userCountry },
   // });
-  const state = await prisma.state.findUnique({
-    where: { countryId: userCountry, id: userState },
-  });
-  // if (!country) {
-  //   throw new BadRequestError("Country not found");
+  // const state = await prisma.state.findUnique({
+  //   where: { countryId: userCountry, id: userState },
+  // });
+  // // if (!country) {
+  // //   throw new BadRequestError("Country not found");
+  // // }
+  // if (!state) {
+  //   throw new BadRequestError(
+  //     "State not found or does not belong to this country"
+  //   );
   // }
-  if (!state) {
-    throw new BadRequestError(
-      "State not found or does not belong to this country"
-    );
-  }
   const parse = Date.parse(dateOfBirth);
   const passwordHash = await passwordEncrypt(password);
 
@@ -133,8 +134,8 @@ const register = async (req, res, next) => {
       gender: gender,
       email: email,
       phone: phoneNumber,
-      countryId: userCountry,
-      stateId: userState,
+      country: { connect: { id: userCountry } },
+      state: { connect: { id: userState } },
       role: adminConstant,
       isVerified: true,
       password: passwordHash,

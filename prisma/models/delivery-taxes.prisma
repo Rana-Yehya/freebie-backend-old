@@ -1,0 +1,23 @@
+
+
+model deliveryTaxes {
+  id                    String        @id @unique @default(uuid())
+  // name               String
+  originState           state         @relation("OriginStateFees", fields: [originStateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  originStateId         String
+  destinationState      state         @relation("DestinationStateFees", fields: [destinationStateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  destinationStateId    String
+  productCart           productCart[]
+  baseFee               Float
+  additionalFeesAfterKg Float         @default(100)
+  feePerKg              Float         @default(0)
+  estimatedDays         Int?
+  effectiveDate         DateTime      @default(now())
+  expiryDate            DateTime?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+  // government            government?   @relation(fields: [governmentId], references: [id])
+  // governmentId          String?
+
+  @@map("delivery_taxes")
+}

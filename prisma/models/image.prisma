@@ -1,0 +1,13 @@
+model image {
+  id          String     @id @unique @default(uuid())
+  publicId    String
+  secureUrl   String
+  // userId String? 
+  // users  user?   
+  category    category[]
+  occasion    occasion[]
+  product     product?   @relation(fields: [productId], references: [id])
+  productId   String?
+  storeLogo   store[]    @relation("storeLogo")
+  storeBanner store[]    @relation("storeBanner")
+}

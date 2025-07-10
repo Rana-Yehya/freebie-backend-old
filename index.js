@@ -189,39 +189,46 @@ const startServer = async () => {
 
   try {
     await app.listen(PORT);
-    // const countries = await prisma.country.findMany();
-    // let country;
-    // if (countries.length == 0) {
-    //   country = await prisma.country.create({
-    //     data: {
-    //       name: {
-    //         create: {
-    //           defaultName: "Egypt",
-    //           nameEn: "Egypt",
-    //           nameAr: "مصر",
-    //         },
-    //       },
-    //       currencyCode: "EGP",
-    //       countryIsoCode: "EGP",
-    //     },
-    //   });
-    // }
-    // const states = await prisma.state.findMany();
+    const countries = await prisma.country.findMany();
+    let country;
+    if (countries.length == 0) {
+      country = await prisma.country.create({
+        data: {
+          name: {
+            create: {
+              defaultName: "Egypt",
+              nameEn: "Egypt",
+              nameAr: "مصر",
+            },
+          },
+          currencyCode: "EGP",
+          countryIsoCode: "EGP",
+        },
+      });
+    }
+    const states = await prisma.state.findMany();
 
-    // if (states.length == 0) {
-    //   const createdState = await prisma.state.create({
-    //     data: {
-    //       //   name: {
-    //       //   create: {
-    //       //     defaultName: "Cairo",
-    //       //     nameEn: "Cairo",
-    //       //     nameAr: "القاهرة",
-    //       //   },
-    //       // },
-    //       countryId: countries[0].id, //country.id ||
-    //     },
-    //   });
-    // }
+    if (states.length == 0) {
+      const createdState = await prisma.state.create({
+        data: {
+          name: {
+            create: {
+              defaultName: "Cairo",
+              nameEn: "Cairo",
+              nameAr: "القاهرة",
+            },
+          },
+          // name: {
+          //   create: {
+          //     defaultName: "Cairo",
+          //     nameEn: "Cairo",
+          //     nameAr: "القاهرة",
+          //   },
+          // },
+          country: { connect: { id: country.id || countries[0].id } }, //country.id ||
+        },
+      });
+    }
     console.log("PORT connected");
   } catch (err) {
     console.log(err);

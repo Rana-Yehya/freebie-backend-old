@@ -11,7 +11,6 @@ const {
 const {
   UpdateDeliveryTaxesZodModel,
 } = require("../models/update-delivery-taxes-zod-model");
-const { connect } = require("../routes/cart-route");
 
 const getAllDeliveryTaxes = async (req, res, next) => {
   const deliveryTaxes = await prisma.deliveryTaxes.findMany({});
@@ -120,14 +119,8 @@ const updateDeliveryTaxes = async (req, res, next) => {
   const deliveryTaxes = await prisma.deliveryTaxes.update({
     where: { id: id },
     data: {
-      originState:
-        originStateId == undefined
-          ? undefined
-          : { connect: { id: originStateId } },
-      destinationState:
-        destinationStateId == undefined
-          ? undefined
-          : { connect: { id: destinationStateId || undefined } },
+      originState: { connect: { id: originStateId || undefined } },
+      destinationState: { connect: { id: destinationStateId || undefined } },
       baseFee: baseFee || undefined,
       additionalFeesAfterKg: additionalFeesAfterKg || undefined,
       feePerKg: feePerKg || undefined,
