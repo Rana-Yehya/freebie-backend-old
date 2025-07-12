@@ -1,11 +1,9 @@
-
-
 model store {
-  id     String  @id @unique @default(uuid())
+  id     String @id @unique @default(uuid())
   nameId String @unique
-  name   name   @relation("storeName", fields: [nameId], references: [id])
+  name   locale @relation("storeName", fields: [nameId], references: [id])
   bioId  String @unique
-  bio    name   @relation("storeBio", fields: [bioId], references: [id])
+  bio    locale @relation("storeBio", fields: [bioId], references: [id])
 
   // name               String
   // bio                String
@@ -36,7 +34,6 @@ model store {
   updatedAt         DateTime @updatedAt
   // storeAddress storeAddress[]
 }
-
 
 model socialLink {
   id        String  @id @unique @default(uuid())

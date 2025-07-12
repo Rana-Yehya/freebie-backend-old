@@ -1,4 +1,3 @@
-
 model review {
   // id                       String    @id @unique @default(uuid())
   user      user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)

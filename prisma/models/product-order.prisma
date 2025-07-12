@@ -17,4 +17,5 @@ model productOrder {
   status             String  @default("pending") //pending, confirmed, shipped, delivered, cancelled, refunded
   cancellationReason String?
   refundAmount       Float?
+  @@map("product_order")
 }

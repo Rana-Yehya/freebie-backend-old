@@ -6,7 +6,7 @@ const {
   UnauthenticatedError,
 } = require("../errors");
 const { uploadImage } = require("../helpers/cloudinary/upload-image");
-const { destroyImage } = require("../helpers/cloudinary/destroy-image");
+const { destroyImage } = require("../helpers/cloudinary/delete-image");
 const { ReviewZodModel } = require("../models/review-zod-model");
 const getAllProductReviews = async (req, res, next) => {
   const reviews = await prisma.review.findMany({
@@ -84,9 +84,11 @@ const createReview = async (req, res, next) => {
       productId: productId,
     },
   });
-  return res
-    .status(StatusCodes.CREATED)
-    .json({ isSuccess: true, data: createdReview });
+  return res.status(StatusCodes.CREATED).json({
+    isSuccess: true,
+    message: "Review created successfully",
+    data: createdReview,
+  });
 };
 
 const updateReview = async (req, res, next) => {
@@ -94,7 +96,7 @@ const updateReview = async (req, res, next) => {
   const { stars, comment } = req.body;
 
   if (!productId) {
-    throw new BadRequestError("Please send an ID");
+    throw new BadRequestError("Please send a review ID");
   }
   const zodModel = ReviewZodModel.safeParse({
     stars: stars,
@@ -113,7 +115,11 @@ const updateReview = async (req, res, next) => {
 
   return res
     .status(StatusCodes.OK)
-    .json({ isSuccess: true, data: updatedReview });
+    .json({
+      isSuccess: true,
+      message: "Review updated successfully",
+      data: updatedReview,
+    });
 };
 
 const deleteReview = async (req, res, next) => {

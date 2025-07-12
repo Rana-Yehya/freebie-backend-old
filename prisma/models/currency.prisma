@@ -1,9 +1,11 @@
-
 model currency {
-  id          String        @id @unique @default(uuid())
-  currencyAbb String
-  order       order[]
-  transaction transaction[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  id            String        @id @unique @default(uuid())
+  nameId        String        @unique
+  name          locale        @relation("currencyName", fields: [nameId], references: [id])
+  currencyAbbId String        @unique
+  currencyAbb   locale        @relation("currencyAbbLocale", fields: [currencyAbbId], references: [id])
+  order         order[]
+  transaction   transaction[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }

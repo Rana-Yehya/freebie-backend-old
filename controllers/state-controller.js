@@ -8,7 +8,7 @@ const {
 } = require("../errors");
 const getAllCountryStates = async (req, res, next) => {
   if (!req.query.id) {
-    throw new BadRequestError("Please provide country id");
+    throw new BadRequestError("Please provide country ID");
   }
   const states = await prisma.state.findMany({
     where: { countryId: req.query.id },
@@ -35,9 +35,9 @@ const createState = async (req, res, next) => {
   const { name, nameEn, nameAr, countryId } = req.body;
   const zodModel = StateZodModel.safeParse({
     name: {
-      defaultName: name,
-      nameEn: nameEn,
-      nameAr: nameAr,
+      default: name,
+      en: nameEn,
+      ar: nameAr,
     },
     countryId: countryId,
   });
@@ -61,9 +61,9 @@ const createState = async (req, res, next) => {
     data: {
       name: {
         create: {
-          defaultName: name,
-          nameEn: nameEn || name,
-          nameAr: nameAr || name,
+          default: name,
+          en: nameEn || name,
+          ar: nameAr || name,
         },
       },
       // countryId: countryId,
@@ -74,9 +74,11 @@ const createState = async (req, res, next) => {
   });
   console.log(createdState);
 
-  return res
-    .status(StatusCodes.CREATED)
-    .json({ isSuccess: true, data: createdState });
+  return res.status(StatusCodes.CREATED).json({
+    isSuccess: true,
+    message: "State created successfully",
+    data: createdState,
+  });
 };
 
 const updateState = async (req, res, next) => {
@@ -84,7 +86,7 @@ const updateState = async (req, res, next) => {
   const { name, nameEn, nameAr, countryId } = req.body;
 
   if (!id) {
-    throw new BadRequestError("Please send an ID");
+    throw new BadRequestError("Please send a state ID");
   }
   // if (countryId) {
   //   const country = await prisma.country.findUnique({
@@ -99,9 +101,9 @@ const updateState = async (req, res, next) => {
     data: {
       name: {
         update: {
-          defaultName: name || undefined,
-          nameEn: nameEn || undefined,
-          nameAr: nameAr || undefined,
+          default: name || undefined,
+          en: nameEn || undefined,
+          ar: nameAr || undefined,
         },
       },
       country: {
@@ -113,7 +115,11 @@ const updateState = async (req, res, next) => {
 
   return res
     .status(StatusCodes.OK)
-    .json({ isSuccess: true, data: updatedState });
+    .json({
+      isSuccess: true,
+      message: "State updated successfully",
+      data: updatedState,
+    });
 };
 
 const deleteState = async (req, res, next) => {

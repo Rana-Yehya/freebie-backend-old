@@ -206,7 +206,7 @@ const createOrder = async (req, res, next) => {
   });
 
   if (!order) {
-    throw new BadRequestError("Order was not created. Please contact support.");
+    throw new BadRequestError("Order was not created. Please contact support");
   }
   const productCart = userCart.productCart.map((item) => {
     return {
@@ -687,7 +687,7 @@ const changeOrderStatusAsShippedByStore = async (req, res, next) => {
   });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Order Status Updated Successfully",
+    message: "Order Status Shipped Successfully",
     data: updatedOrder,
   });
 };
@@ -719,7 +719,7 @@ const changeOrderStatusAsDeliveredByStore = async (req, res, next) => {
   console.log(order);
   if (order.length == 0) {
     throw new BadRequestError(
-      "Order has not been delivered or it is not shipped yet"
+      "Order has not been confirmed or it is already delivered"
     );
   }
 
@@ -841,7 +841,7 @@ const cancelOrderByUser = async (req, res, next) => {
   });
 
   if (order.length == 0) {
-    throw new BadRequestError("Order can not be cancelled now.");
+    throw new BadRequestError("Order can not be cancelled now");
   }
   // const orderStatusListToNotAcceptCancellation = [
   //   "shipped",

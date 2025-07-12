@@ -1,13 +1,13 @@
 const { z } = require("zod");
 const { ProductStockZodModel } = require("./product-stock-zod-model");
-const { UpdateNameZodModel } = require("./update-name-zod-model");
+const { UpdateLocaleZodModel } = require("./update-locale-zod-model");
 
 const UpdateProductZodModel = z
   .object({
     // isAvailable              Boolean   @default(true)
     // isFeatured               Boolean   @default(false)
     // isPopular                Boolean   @default(false)
-    name: UpdateNameZodModel,
+    name: UpdateLocaleZodModel,
     image: z
       .array(
         z
@@ -34,8 +34,8 @@ const UpdateProductZodModel = z
         message: "Images can't be empty!",
       })
       .optional(),
-    description: UpdateNameZodModel, // z.string({ message: "Description is required" }).optional(),
-    detailedDescription: UpdateNameZodModel,
+    description: UpdateLocaleZodModel, // z.string({ message: "Description is required" }).optional(),
+    detailedDescription: UpdateLocaleZodModel,
     // z
     //   .string({
     //     message: "Detailed Description is required",
@@ -127,10 +127,10 @@ const UpdateProductZodModel = z
     //   }
     // }),
     // stock: z.number().optional(),
-    categoryId: z.string({ message: "Category Id is required" }).optional(),
+    categoryId: z.string({ message: "Category is required" }).optional(),
     occasions: z
-      .array(z.string({ message: "Occasion Id must be a string" }), {
-        message: "Occasions can't be empty!",
+      .array(z.string({ message: "Occasion must be a string" }), {
+        message: "Occasions can't be empty",
       })
       // .nonempty({
       //   message: "Occasions can't be empty!",

@@ -11,14 +11,14 @@ enum productTags {
 model product {
   id                    String  @id @unique @default(uuid())
   nameId                String  @unique
-  name                  name    @relation("nameProduct", fields: [nameId], references: [id])
+  name                  locale  @relation("nameProduct", fields: [nameId], references: [id])
   // image                      String[]
   image                 image[]
   // description                String
   descriptionId         String  @unique
-  description           name    @relation("descriptionProduct", fields: [descriptionId], references: [id])
+  description           locale  @relation("descriptionProduct", fields: [descriptionId], references: [id])
   detailedDescriptionId String  @unique
-  detailedDescription   name    @relation("detailedDescriptionProduct", fields: [detailedDescriptionId], references: [id])
+  detailedDescription   locale  @relation("detailedDescriptionProduct", fields: [detailedDescriptionId], references: [id])
 
   // detailedDescription        String
   // store                    store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
@@ -32,7 +32,7 @@ model product {
   isAvailable                Boolean        @default(true)
   // isFeatured               Boolean   @default(false)
   // isPopular                Boolean   @default(false)
-  tags                       productTags?   
+  tags                       productTags?
   preparationTimeInMinutes   Int            @default(1)
   canBeDeliveredOutsideState Boolean        @default(true)
   productStock               productStock[]

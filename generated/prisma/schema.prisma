@@ -53,11 +53,10 @@ model workHour {
 }
 
 // ===== category.prisma =====
-
 model category {
   id                         String    @id @unique @default(uuid())
   nameId                     String?   @unique
-  name                       name?     @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  name                       locale?   @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   imageId                    String
   image                      image     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   product                    product[]
@@ -67,11 +66,10 @@ model category {
 }
 
 // ===== city.prisma =====
-
 model city {
   id        String   @id @unique @default(uuid())
   nameId    String?  @unique
-  name      name?    @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  name      locale?  @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   state     state    @relation(fields: [stateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   stateId   String
   createdAt DateTime @default(now())
@@ -83,7 +81,7 @@ model city {
 model country {
   id             String   @id @unique @default(uuid())
   nameId         String   @unique
-  name           name     @relation(fields: [nameId], references: [id])
+  name           locale   @relation(fields: [nameId], references: [id])
   currencyCode   String
   countryIsoCode String   @unique
   user           user[]
@@ -93,18 +91,19 @@ model country {
 }
 
 // ===== currency.prisma =====
-
 model currency {
-  id          String        @id @unique @default(uuid())
-  currencyAbb String
-  order       order[]
-  transaction transaction[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  id            String        @id @unique @default(uuid())
+  nameId        String        @unique
+  name          locale        @relation("currencyName", fields: [nameId], references: [id])
+  currencyAbbId String        @unique
+  currencyAbb   locale        @relation("currencyAbbLocale", fields: [currencyAbbId], references: [id])
+  order         order[]
+  transaction   transaction[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }
 
 // ===== delivery-taxes.prisma =====
-
 model deliveryTaxes {
   id                    String        @id @unique @default(uuid())
   // name               String
@@ -143,7 +142,6 @@ model image {
 }
 
 // ===== inbox.prisma =====
-
 model inbox {
   id        String   @id @unique @default(uuid())
   // buy something or take money from wallet -> false = buy, true = take
@@ -156,7 +154,6 @@ model inbox {
 }
 
 // ===== info.prisma =====
-
 model info {
   id        String   @id @unique @default(uuid())
   // buy something or take money from wallet -> false = buy, true = take
@@ -166,8 +163,40 @@ model info {
   updatedAt DateTime @updatedAt
 }
 
-// ===== location.prisma =====
+// ===== locale.prisma =====
+model locale {
+  id                         String    @id @unique @default(uuid())
+  default                    String?
+  en                         String?
+  // localeFr      String?
+  // localeDe      String?
+  // localeEs      String?
+  // localeIt      String?
+  // localePt      String?
+  // localeRu      String?
+  // localeZh      String?
+  // localeJa      String?
+  // localeKo      String?
+  ar                         String?
+  // localePl      String?
+  // localeTr      String?
+  // localeCn      String?
+  // productId   String? @unique
+  nameProduct                product?  @relation("nameProduct") //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  country                    country?
+  state                      state?
+  storeName                  store?    @relation("storeName")
+  storeBio                   store?    @relation("storeBio")
+  currencyAbbLocale          currency? @relation("currencyAbbLocale")
+  currencyName               currency? @relation("currencyName")
+  city                       city?
+  category                   category?
+  occasion                   occasion?
+  descriptionProduct         product?  @relation("descriptionProduct") //, references: [id], fields: [descriptionProductId])
+  detailedDescriptionProduct product?  @relation("detailedDescriptionProduct") //, references: [id], fields: [detailedDescriptionProductId])
+}
 
+// ===== location.prisma =====
 model location {
   id       String  @id @unique @default(uuid())
   address  String
@@ -178,44 +207,11 @@ model location {
   order    order?
 }
 
-// ===== name.prisma =====
-
-model name {
-  id                         String    @id @unique @default(uuid())
-  defaultName                String
-  nameEn                     String?
-  // nameFr      String?
-  // nameDe      String?
-  // nameEs      String?
-  // nameIt      String?
-  // namePt      String?
-  // nameRu      String?
-  // nameZh      String?
-  // nameJa      String?
-  // nameKo      String?
-  nameAr                     String?
-  // namePl      String?
-  // nameTr      String?
-  // nameCn      String?
-  // productId   String? @unique
-  nameProduct                product?  @relation("nameProduct") //@relation("name", fields: [nameProductId], references: [id]) // @relation("ProductToName", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  country                    country?
-  state                      state?
-  storeName                  store?    @relation("storeName")
-  storeBio                   store?    @relation("storeBio")
-  city                       city?
-  category                   category?
-  occasion                   occasion?
-  descriptionProduct         product?  @relation("descriptionProduct") //, references: [id], fields: [descriptionProductId])
-  detailedDescriptionProduct product?  @relation("detailedDescriptionProduct") //, references: [id], fields: [detailedDescriptionProductId])
-}
-
 // ===== occasion.prisma =====
-
 model occasion {
   id        String    @id @unique @default(uuid())
   nameId    String?   @unique
-  name      name?     @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  name      locale?   @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   imageId   String
   image     image     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // productOccasion productOccasion[]
@@ -251,7 +247,6 @@ model order {
 }
 
 // ===== product-cart.prisma =====
-
 model productCart {
   userCart       userCart     @relation(fields: [userCartUserId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
   userCartUserId String
@@ -278,6 +273,7 @@ model productCart {
 
   //userCartId
   @@unique([userCartUserId, productStockId])
+  @@map("product_cart")
 }
 
 // ===== product-order.prisma =====
@@ -300,6 +296,8 @@ model productOrder {
   status             String  @default("pending") //pending, confirmed, shipped, delivered, cancelled, refunded
   cancellationReason String?
   refundAmount       Float?
+
+  @@map("product_order")
 }
 
 // ===== product-price.prisma =====
@@ -312,10 +310,11 @@ model productPrice {
   discountPercent   Float?    @default(0)
   discountStartTime DateTime?
   discountEndTime   DateTime?
+
+  @@map("product_price")
 }
 
 // ===== product-stock.prisma =====
-
 model productStock {
   id           String         @id @unique @default(uuid())
   product      product        @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -330,6 +329,7 @@ model productStock {
   updatedAt    DateTime       @updatedAt
 
   @@unique([productId, branchId, color])
+  @@map("product_stock")
 }
 
 // ===== product.prisma =====
@@ -346,14 +346,14 @@ enum productTags {
 model product {
   id                    String  @id @unique @default(uuid())
   nameId                String  @unique
-  name                  name    @relation("nameProduct", fields: [nameId], references: [id])
+  name                  locale  @relation("nameProduct", fields: [nameId], references: [id])
   // image                      String[]
   image                 image[]
   // description                String
   descriptionId         String  @unique
-  description           name    @relation("descriptionProduct", fields: [descriptionId], references: [id])
+  description           locale  @relation("descriptionProduct", fields: [descriptionId], references: [id])
   detailedDescriptionId String  @unique
-  detailedDescription   name    @relation("detailedDescriptionProduct", fields: [detailedDescriptionId], references: [id])
+  detailedDescription   locale  @relation("detailedDescriptionProduct", fields: [detailedDescriptionId], references: [id])
 
   // detailedDescription        String
   // store                    store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
@@ -390,7 +390,6 @@ model product {
 }
 
 // ===== review.prisma =====
-
 model review {
   // id                       String    @id @unique @default(uuid())
   user      user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -410,7 +409,7 @@ model state {
   id                       String          @id @unique @default(uuid())
   // name                     String
   nameId                   String          @unique
-  name                     name            @relation(fields: [nameId], references: [id]) //onDelete: SetNull, onUpdate: SetNull
+  name                     locale          @relation(fields: [nameId], references: [id]) //onDelete: SetNull, onUpdate: SetNull
   country                  country         @relation(fields: [countryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   countryId                String
   city                     city[]
@@ -423,13 +422,12 @@ model state {
 }
 
 // ===== store.prisma =====
-
 model store {
   id     String @id @unique @default(uuid())
   nameId String @unique
-  name   name   @relation("storeName", fields: [nameId], references: [id])
+  name   locale @relation("storeName", fields: [nameId], references: [id])
   bioId  String @unique
-  bio    name   @relation("storeBio", fields: [bioId], references: [id])
+  bio    locale @relation("storeBio", fields: [bioId], references: [id])
 
   // name               String
   // bio                String
@@ -475,7 +473,6 @@ model socialLink {
 }
 
 // ===== transaction.prisma =====
-
 model transaction {
   id         String    @id @unique @default(uuid())
   // buy something or take money from wallet -> false = buy, true = take
@@ -494,7 +491,6 @@ model transaction {
 }
 
 // ===== user-cart.prisma =====
-
 model userCart {
   // id          String        @id @default(uuid())
   userId      String        @unique
@@ -510,10 +506,10 @@ model userCart {
   // @@id([userId, productId])
   // product   product? @relation(fields: [productId], references: [id])
   // productId String?
+  @@map("user_cart")
 }
 
 // ===== user.prisma =====
-//prisma/models/user.prisma
 model user {
   id                 String        @id @unique @default(uuid())
   name               String

@@ -9,7 +9,7 @@ const {
   UnauthenticatedError,
 } = require("../errors");
 const { uploadImage } = require("../helpers/cloudinary/upload-image");
-const { destroyImage } = require("../helpers/cloudinary/destroy-image");
+const { destroyImage } = require("../helpers/cloudinary/delete-image");
 const {
   UpdateCategoryZodModel,
 } = require("../models/update-category-zod-model");
@@ -43,9 +43,9 @@ const createCategory = async (req, res, next) => {
 
   const zodModel = CreateCategoryZodModel.safeParse({
     name: {
-      defaultName: name,
-      nameAr: nameAr,
-      nameEn: nameEn,
+      default: name,
+      ar: nameAr,
+      en: nameEn,
     },
     image: image,
     canBeDeliveredOutsideState: canBeDeliveredOutsideState,
@@ -61,9 +61,9 @@ const createCategory = async (req, res, next) => {
     data: {
       name: {
         create: {
-          defaultName: name,
-          nameEn: nameEn || name,
-          nameAr: nameAr || name,
+          default: name,
+          en: nameEn || name,
+          ar: nameAr || name,
         },
       },
       canBeDeliveredOutsideState:
@@ -82,9 +82,11 @@ const createCategory = async (req, res, next) => {
   });
   console.log(createdCategory);
 
-  return res
-    .status(StatusCodes.CREATED)
-    .json({ isSuccess: true, data: createdCategory });
+  return res.status(StatusCodes.CREATED).json({
+    isSuccess: true,
+    message: "Category created successfully",
+    data: createdCategory,
+  });
 };
 
 const updateCategory = async (req, res, next) => {
@@ -93,9 +95,9 @@ const updateCategory = async (req, res, next) => {
   const image = req.files == undefined ? undefined : req.files.image;
   const zodModel = UpdateCategoryZodModel.safeParse({
     name: {
-      defaultName: name,
-      nameAr: nameAr,
-      nameEn: nameEn,
+      default: name,
+      ar: nameAr,
+      en: nameEn,
     },
     image: image,
     canBeDeliveredOutsideState: canBeDeliveredOutsideState,
@@ -104,7 +106,7 @@ const updateCategory = async (req, res, next) => {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
   if (!id) {
-    throw new BadRequestError("Please send an ID");
+    throw new BadRequestError("Please send a category ID");
   }
   let imageUploadedSecureUrl = undefined;
   let imageUploadedPublicId = undefined;
@@ -129,9 +131,9 @@ const updateCategory = async (req, res, next) => {
     data: {
       name: {
         update: {
-          defaultName: name || undefined,
-          nameEn: nameEn || undefined,
-          nameAr: nameAr || undefined,
+          default: name || undefined,
+          en: nameEn || undefined,
+          ar: nameAr || undefined,
         },
       },
       canBeDeliveredOutsideState:
@@ -155,9 +157,11 @@ const updateCategory = async (req, res, next) => {
   if (image) {
     await destroyImage({ imagePublicId: category.image.publicId });
   }
-  return res
-    .status(StatusCodes.OK)
-    .json({ isSuccess: true, data: updatedCategory });
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "Category updated successfully",
+    data: updatedCategory,
+  });
 };
 
 const deleteCategory = async (req, res, next) => {

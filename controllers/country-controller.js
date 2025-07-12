@@ -33,9 +33,9 @@ const createCountry = async (req, res, next) => {
   } = req.body;
   const zodModel = CountryZodModel.safeParse({
     countryName: {
-      defaultName: countryName,
-      nameEn: countryNameEn,
-      nameAr: countryNameAr,
+      default: countryName,
+      en: countryNameEn,
+      ar: countryNameAr,
     },
     currencyCode: currencyCode,
     countryIsoCode: countryIsoCode,
@@ -50,9 +50,9 @@ const createCountry = async (req, res, next) => {
     data: {
       name: {
         create: {
-          defaultName: countryName,
-          nameEn: countryNameEn || countryName,
-          nameAr: countryNameAr || countryName,
+          default: countryName,
+          en: countryNameEn || countryName,
+          ar: countryNameAr || countryName,
         },
       },
       currencyCode: currencyCode,
@@ -61,9 +61,11 @@ const createCountry = async (req, res, next) => {
   });
   console.log(createdCountry);
 
-  return res
-    .status(StatusCodes.CREATED)
-    .json({ isSuccess: true, data: createdCountry });
+  return res.status(StatusCodes.CREATED).json({
+    isSuccess: true,
+    message: "Country created successfully",
+    data: createdCountry,
+  });
 };
 
 const updateCountry = async (req, res, next) => {
@@ -77,16 +79,16 @@ const updateCountry = async (req, res, next) => {
   } = req.body;
 
   if (!id) {
-    throw new BadRequestError("Please send an ID");
+    throw new BadRequestError("Please send a country ID");
   }
   const updatedCountry = await prisma.country.update({
     where: { id: id },
     data: {
       name: {
         update: {
-          defaultName: countryName || undefined,
-          nameEn: countryNameEn || undefined,
-          nameAr: countryNameAr || undefined,
+          default: countryName || undefined,
+          en: countryNameEn || undefined,
+          ar: countryNameAr || undefined,
         },
       },
       currencyCode: currencyCode || undefined,
@@ -95,9 +97,11 @@ const updateCountry = async (req, res, next) => {
   });
   console.log(updatedCountry);
 
-  return res
-    .status(StatusCodes.CREATED)
-    .json({ isSuccess: true, data: updatedCountry });
+  return res.status(StatusCodes.CREATED).json({
+    isSuccess: true,
+    message: "Country updated successfully",
+    data: updatedCountry,
+  });
 };
 
 const deleteCountry = async (req, res, next) => {

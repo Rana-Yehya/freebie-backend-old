@@ -1,8 +1,8 @@
 const { z } = require("zod");
-const { UpdateNameZodModel } = require("./update-name-zod-model");
+const { UpdateLocaleZodModel } = require("./update-locale-zod-model");
 
 const UpdateCategoryZodModel = z.object({
-  name: UpdateNameZodModel, //z.string({ message: "Name is required" }).optional(),
+  name: UpdateLocaleZodModel, //z.string({ message: "Name is required" }).optional(),
   image: z
     .any()
     .refine(

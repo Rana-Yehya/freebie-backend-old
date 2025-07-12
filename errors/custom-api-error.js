@@ -1,6 +1,8 @@
+const { appLocalize } = require("../helpers/localize");
+
 class CustomAPIError extends Error {
   constructor(message, statusCode, isOperational = true, details) {
-    super(message);
+    super(appLocalize.translate(message));
     this.statusCode = statusCode;
     this.isOperational = isOperational;
     this.details = details;

@@ -70,7 +70,7 @@ const sendInbox = async (req, res, next) => {
 
   return res
     .status(StatusCodes.CREATED)
-    .json({ isSuccess: true, message: "Support Ticket Sent Successfully" });
+    .json({ isSuccess: true, message: "Support Ticket sent successfully" });
 };
 
 const deleteInbox = async (req, res, next) => {
@@ -82,7 +82,7 @@ const deleteInbox = async (req, res, next) => {
 
   return res
     .status(StatusCodes.OK)
-    .json({ isSuccess: true, message: "Inbox Deleted Successfully" });
+    .json({ isSuccess: true, message: "Inbox deleted successfully" });
 };
 module.exports = {
   getInboxes,

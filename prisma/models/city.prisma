@@ -1,8 +1,7 @@
-
 model city {
   id        String   @id @unique @default(uuid())
   nameId    String?  @unique
-  name      name?    @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  name      locale?  @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   state     state    @relation(fields: [stateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   stateId   String
   createdAt DateTime @default(now())

@@ -6,5 +6,6 @@ model productPrice {
 
   discountPercent          Float?    @default(0)
   discountStartTime        DateTime?
-  discountEndTime          DateTime? 
+  discountEndTime          DateTime?
+  @@map("product_price")
 }

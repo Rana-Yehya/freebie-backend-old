@@ -407,7 +407,7 @@ const deleteAccount = async (req, res) => {
   });
   if (order) {
     throw new BadRequestError(
-      "User can not be deleted. This user has unfinished orders."
+      "User can not be deleted. This user has unfinished orders"
     );
   }
   await prisma.user.delete({

@@ -166,7 +166,8 @@ exports.Prisma.CountryScalarFieldEnum = {
 
 exports.Prisma.CurrencyScalarFieldEnum = {
   id: 'id',
-  currencyAbb: 'currencyAbb',
+  nameId: 'nameId',
+  currencyAbbId: 'currencyAbbId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -210,18 +211,18 @@ exports.Prisma.InfoScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.LocaleScalarFieldEnum = {
+  id: 'id',
+  default: 'default',
+  en: 'en',
+  ar: 'ar'
+};
+
 exports.Prisma.LocationScalarFieldEnum = {
   id: 'id',
   address: 'address',
   stateId: 'stateId',
   branchId: 'branchId'
-};
-
-exports.Prisma.NameScalarFieldEnum = {
-  id: 'id',
-  defaultName: 'defaultName',
-  nameEn: 'nameEn',
-  nameAr: 'nameAr'
 };
 
 exports.Prisma.OccasionScalarFieldEnum = {
@@ -438,8 +439,8 @@ exports.Prisma.ModelName = {
   image: 'image',
   inbox: 'inbox',
   info: 'info',
+  locale: 'locale',
   location: 'location',
-  name: 'name',
   occasion: 'occasion',
   order: 'order',
   productCart: 'productCart',

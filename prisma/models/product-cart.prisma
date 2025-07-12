@@ -1,4 +1,3 @@
-
 model productCart {
   userCart       userCart     @relation(fields: [userCartUserId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
   userCartUserId String
@@ -25,4 +24,5 @@ model productCart {
 
   //userCartId
   @@unique([userCartUserId, productStockId])
+  @@map("product_cart")
 }

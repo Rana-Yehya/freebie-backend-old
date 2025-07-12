@@ -14,7 +14,6 @@ const {
   UnauthenticatedError,
 } = require("../errors");
 const { UserZodModel } = require("../models/user-zod-model");
-const { connect } = require("http2");
 
 const login = async (req, res) => {
   const { phoneNumber, password } = req.body;

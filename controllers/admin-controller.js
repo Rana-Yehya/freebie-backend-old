@@ -86,7 +86,7 @@ const getAllStores = async (req, res, next) => {
 const sendNotificationToAllUsers = async (req, res, next) => {
   const { title, body } = req.body;
   if (title == null || body == null) {
-    throw new BadRequestError("title and body are required");
+    throw new BadRequestError("Title and body are required");
   }
   const userTokens = await prisma.user.findMany({
     select: { fcmToken: true },
@@ -107,7 +107,7 @@ const sendNotificationToAllUsers = async (req, res, next) => {
   // return res.status(StatusCodes.OK).json({ isSuccess: true });
   return res
     .status(StatusCodes.OK)
-    .json({ isSuccess: true, message: "Notifications sent successfully" });
+    .json({ isSuccess: true, message: "Notification sent successfully" });
 };
 module.exports = {
   approveStore,

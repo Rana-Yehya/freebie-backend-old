@@ -5,7 +5,6 @@ const {
   createOccasion,
   updateOccasion,
   deleteOccasion,
-  deleteOccasionImage,
 } = require("../controllers/occasion-controller");
 const {
   authenticateUserMiddleware,

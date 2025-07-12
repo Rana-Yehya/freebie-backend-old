@@ -75,9 +75,11 @@ const createDeliveryTaxes = async (req, res, next) => {
     },
   });
 
-  return res
-    .status(StatusCodes.CREATED)
-    .json({ isSuccess: true, data: createdDeliveryTaxes });
+  return res.status(StatusCodes.CREATED).json({
+    isSuccess: true,
+    message: "Delivery Taxes created successfully",
+    data: createdDeliveryTaxes,
+  });
 };
 
 const updateDeliveryTaxes = async (req, res, next) => {
@@ -89,6 +91,9 @@ const updateDeliveryTaxes = async (req, res, next) => {
     additionalFeesAfterKg,
     feePerKg,
   } = req.body;
+  if (!id) {
+    throw new BadRequestError("Please send a delivery taxes ID");
+  }
   const zodModel = UpdateDeliveryTaxesZodModel.safeParse({
     originStateId: originStateId,
     destinationStateId: destinationStateId,
@@ -130,9 +135,11 @@ const updateDeliveryTaxes = async (req, res, next) => {
     throw new BadRequestError("Delivery Taxes not found");
   }
 
-  return res
-    .status(StatusCodes.OK)
-    .json({ isSuccess: true, data: deliveryTaxes });
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "Delivery Taxes updated successfully",
+    data: deliveryTaxes,
+  });
 };
 
 const deleteDeliveryTaxes = async (req, res, next) => {

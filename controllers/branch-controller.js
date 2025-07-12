@@ -9,6 +9,7 @@ const {
   UnauthenticatedError,
 } = require("../errors");
 const { storeConstant } = require("../config/constants");
+const { messaging } = require("firebase-admin");
 const getAllStoreBranches = async (req, res, next) => {
   const id = req.query.id;
   console.log(id);
@@ -59,7 +60,7 @@ const createBranch = async (req, res, next) => {
   const id = req.query.id;
   if (!(req.user != undefined && req.user.role === storeConstant)) {
     if (!id) {
-      throw new BadRequestError("Please provide store id");
+      throw new BadRequestError("Please provide store ID");
     }
   }
   // if (!(req.user && req.user.role === store)) {
@@ -121,9 +122,11 @@ const createBranch = async (req, res, next) => {
     },
   });
 
-  return res
-    .status(StatusCodes.CREATED)
-    .json({ isSuccess: true, data: createdBranch });
+  return res.status(StatusCodes.CREATED).json({
+    isSuccess: true,
+    message: "Branch created successfully",
+    data: createdBranch,
+  });
 };
 
 const updateBranch = async (req, res, next) => {
@@ -131,7 +134,7 @@ const updateBranch = async (req, res, next) => {
   const { address, phone: phoneNumber, stateId } = req.body;
 
   if (!id) {
-    throw new BadRequestError("Please send an ID");
+    throw new BadRequestError("Please send a branch ID");
   }
   const updatedBranch = await prisma.branch.update({
     where: { id: id },
@@ -147,9 +150,11 @@ const updateBranch = async (req, res, next) => {
     },
   });
 
-  return res
-    .status(StatusCodes.OK)
-    .json({ isSuccess: true, data: updatedBranch });
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "Branch updated successfully",
+    data: updatedBranch,
+  });
 };
 
 const deleteBranch = async (req, res, next) => {

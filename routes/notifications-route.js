@@ -8,7 +8,7 @@ const {
 const {
   destroyImage,
   destroyMultipleImages,
-} = require("../helpers/cloudinary/destroy-image");
+} = require("../helpers/cloudinary/delete-image");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
 

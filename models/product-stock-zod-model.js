@@ -6,6 +6,6 @@ const ProductStockZodModel = z.object({
     .string({ message: "Color is required" })
     .min(6, { message: "Color should be a 6 octal hex digit" })
     .max(6, { message: "Color should be a 6 octal hex digit" }),
-  branchId: z.string({ message: "Please enter a branch ID" }),
+  branchId: z.string({ message: "Please enter a branch" }),
 });
 module.exports = { ProductStockZodModel };

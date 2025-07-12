@@ -1,5 +1,3 @@
-
-
 model userCart {
   // id          String        @id @default(uuid())
   userId      String        @unique
@@ -15,4 +13,5 @@ model userCart {
   // @@id([userId, productId])
   // product   product? @relation(fields: [productId], references: [id])
   // productId String?
+  @@map("user_cart")
 }

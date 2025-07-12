@@ -421,9 +421,9 @@ const searchAllProducts = async (req, res, next) => {
         name: name
           ? {
               OR: [
-                { nameAr: { contains: name.trim() } },
-                { nameEn: { contains: name.trim() } },
-                { defaultName: { contains: name.trim() } },
+                { default: { contains: name.trim() } },
+                { en: { contains: name.trim() } },
+                { ar: { contains: name.trim() } },
               ],
             }
           : undefined, // id: { in: [...productIdsList, ...productOccsionsIdsList] },
@@ -469,9 +469,9 @@ const searchAllProducts = async (req, res, next) => {
       name: name
         ? {
             OR: [
-              { nameAr: { contains: name.trim() } },
-              { nameEn: { contains: name.trim() } },
-              { defaultName: { contains: name.trim() } },
+              { default: { contains: name.trim() } },
+              { en: { contains: name.trim() } },
+              { ar: { contains: name.trim() } },
             ],
           }
         : undefined,

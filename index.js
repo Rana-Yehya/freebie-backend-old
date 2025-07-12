@@ -40,7 +40,9 @@ const reviewsRouter = require("./routes/review-route");
 
 const notFound = require("./middleware/not-found");
 const errorHandler = require("./middleware/error-handler");
-const { create } = require("domain");
+const {
+  localizationMiddleware,
+} = require("./middleware/localization-middleware");
 
 const app = express();
 
@@ -69,9 +71,10 @@ app.use(
     allowedHeaders: [
       "Authorization",
       "Content-Type",
-      "x-localization",
-      "user-agent",
-      "x-forwarded-for",
+      // "X-localization",
+      "User-Agent",
+      "Max-Forwards",
+      "Accept-Language",
     ],
     credentials: true,
   })
@@ -125,40 +128,10 @@ async function reset() {
     "This function will check for the prices in products and update them every 24 hours based on the discount percentage"
   );
 }
+app.use(localizationMiddleware);
+
 // app.use(cookieParser(process.env.JWT_SECRET));
 // app.use(express.static("./public"));
-app.get("/", (req, res) => {
-  const deviceInfo = req.device; // 'phone', 'tablet', 'desktop', 'tv', 'bot'
-  // isMobile: req.device.isMobile,
-  // isTablet: req.device.isTablet,
-  // isDesktop: req.device.isDesktop,
-  // isTV: req.device.isTV,
-  // isBot: req.device.isBot,
-  // browser: req.headers["user-agent"],
-  req.clientIp =
-    req.headers["x-forwarded-for"] ||
-    req.connection.remoteAddress ||
-    req.socket.remoteAddress ||
-    req.connection.socket.remoteAddress;
-  const deviceData = {
-    ip: req.clientIp,
-    userAgent: req.headers["user-agent"],
-    acceptLanguage: req.headers["accept-language"],
-    connection: {
-      secure: req.secure,
-      httpVersion: req.httpVersion,
-    },
-  };
-
-  console.log("Device request data:", deviceInfo);
-
-  console.log("Device request data:", deviceData);
-  console.log("Device request data:", req.headers["x-forwarded-for"]);
-  console.log("Device request data:", req.connection.remoteAddress);
-
-  console.log("Device request data:", req.socket.remoteAddress);
-  res.json(deviceData);
-});
 app.use("/api/v1/users/auth", userAuthRouter);
 app.use("/api/v1/admin/auth", adminAuthRouter);
 app.use("/api/v1/admin", adminRouter);
@@ -196,9 +169,9 @@ const startServer = async () => {
         data: {
           name: {
             create: {
-              defaultName: "Egypt",
-              nameEn: "Egypt",
-              nameAr: "مصر",
+              default: "Egypt",
+              en: "Egypt",
+              ar: "مصر",
             },
           },
           currencyCode: "EGP",
@@ -213,9 +186,9 @@ const startServer = async () => {
         data: {
           name: {
             create: {
-              defaultName: "Cairo",
-              nameEn: "Cairo",
-              nameAr: "القاهرة",
+              default: "Cairo",
+              en: "Cairo",
+              ar: "القاهرة",
             },
           },
           // name: {

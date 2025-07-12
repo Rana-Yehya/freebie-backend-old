@@ -1,5 +1,3 @@
-
-
 model transaction {
   id         String    @id @unique @default(uuid())
   // buy something or take money from wallet -> false = buy, true = take

@@ -194,7 +194,7 @@ const createCartItem = async (req, res, next) => {
     !statesIds.includes(req.user.stateId)
   ) {
     throw new BadRequestError(
-      "You can't purchase this item outside of your state."
+      "You can't purchase this item outside of your state"
     );
   }
   let coloredProductStock = [];
@@ -381,9 +381,6 @@ const updateCartQuantity = async (req, res, next) => {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
   const userCartId = req.user.id;
-  if (!userCartId) {
-    throw new BadRequestError("Please send an ID");
-  }
   const userCart = await prisma.userCart.findUnique({
     where: {
       userId: userCartId,
@@ -472,9 +469,11 @@ const updateCartQuantity = async (req, res, next) => {
       },
     },
   });
-  return res
-    .status(StatusCodes.OK)
-    .json({ isSuccess: true, data: updatedUserCart });
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "Cart updated successfully",
+    data: updatedUserCart,
+  });
   // if (stateId) {
   //   const country = await prisma.state.findUnique({
   //     where: { id: stateId },

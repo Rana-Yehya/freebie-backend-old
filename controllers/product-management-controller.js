@@ -4,9 +4,7 @@ const { StatusCodes } = require("http-status-codes");
 const { BadRequestError } = require("../errors");
 const { UpdateProductZodModel } = require("../models/update-product-zod-model");
 const { uploadMultipleImages } = require("../helpers/cloudinary/upload-image");
-const {
-  destroyMultipleImages,
-} = require("../helpers/cloudinary/destroy-image");
+const { destroyMultipleImages } = require("../helpers/cloudinary/delete-image");
 const { productTags } = require("../generated/prisma");
 const getAllProducts = async (req, res, next) => {
   const products = await prisma.product.findMany({
@@ -53,20 +51,20 @@ const createProduct = async (req, res, next) => {
 
   const zodModel = CreateProductZodModel.safeParse({
     name: {
-      defaultName: name,
-      nameAr: nameAr,
-      nameEn: nameEn,
+      default: name,
+      ar: nameAr,
+      en: nameEn,
     },
     image: image,
     description: {
-      defaultName: description,
-      nameAr: descriptionAr,
-      nameEn: descriptionEn,
+      default: description,
+      en: descriptionAr,
+      ar: descriptionEn,
     },
     detailedDescription: {
-      defaultName: detailedDescription,
-      nameAr: detailedDescriptionAr,
-      nameEn: detailedDescriptionEn,
+      default: detailedDescription,
+      en: detailedDescriptionAr,
+      ar: detailedDescriptionEn,
     },
     price: price,
     doesNeedPreparation: doesNeedPreparation,
@@ -178,9 +176,9 @@ const createProduct = async (req, res, next) => {
     data: {
       name: {
         create: {
-          defaultName: name,
-          nameEn: nameEn || name,
-          nameAr: nameAr || name,
+          default: name,
+          en: nameEn || name,
+          ar: nameAr || name,
         },
       },
       image: {
@@ -188,16 +186,16 @@ const createProduct = async (req, res, next) => {
       },
       description: {
         create: {
-          defaultName: description,
-          nameEn: descriptionEn || description,
-          nameAr: descriptionAr || description,
+          default: description,
+          en: descriptionEn || description,
+          ar: descriptionAr || description,
         },
       },
       detailedDescription: {
         create: {
-          defaultName: detailedDescription,
-          nameEn: detailedDescriptionEn || detailedDescription,
-          nameAr: detailedDescriptionAr || detailedDescription,
+          default: detailedDescription,
+          en: detailedDescriptionEn || detailedDescription,
+          ar: detailedDescriptionAr || detailedDescription,
         },
       },
       tags: productTags.NONE,
@@ -286,16 +284,18 @@ const createProduct = async (req, res, next) => {
   console.log(updatedProduct);
 
   */
-  return res
-    .status(StatusCodes.CREATED)
-    .json({ isSuccess: true, data: createdProduct });
+  return res.status(StatusCodes.CREATED).json({
+    isSuccess: true,
+    message: "Product created successfully",
+    data: createdProduct,
+  });
 };
 
 const updateProduct = async (req, res, next) => {
   const { id } = req.params;
 
   if (!id) {
-    throw new BadRequestError("Please send an ID");
+    throw new BadRequestError("Please send a product ID");
   }
   const {
     name,
@@ -331,20 +331,20 @@ const updateProduct = async (req, res, next) => {
 
   const zodModel = UpdateProductZodModel.safeParse({
     name: {
-      defaultName: name,
-      nameAr: nameAr,
-      nameEn: nameEn,
+      default: name,
+      ar: nameAr,
+      en: nameEn,
     },
     image: image,
     description: {
-      defaultName: description,
-      nameAr: descriptionAr,
-      nameEn: descriptionEn,
+      default: description,
+      en: descriptionAr,
+      ar: descriptionEn,
     },
     detailedDescription: {
-      defaultName: detailedDescription,
-      nameAr: detailedDescriptionAr,
-      nameEn: detailedDescriptionEn,
+      default: detailedDescription,
+      en: detailedDescriptionAr,
+      ar: detailedDescriptionEn,
     },
     price: price,
     doesNeedPreparation: doesNeedPreparation,
@@ -526,23 +526,23 @@ const updateProduct = async (req, res, next) => {
       //       (parseFloat(product.price) * parseFloat(discountPercent)) / 100,
       name: {
         update: {
-          defaultName: name || undefined,
-          nameEn: nameEn || undefined,
-          nameAr: nameAr || undefined,
+          default: name || undefined,
+          en: nameEn || undefined,
+          ar: nameAr || undefined,
         },
       },
       description: {
         update: {
-          defaultName: description || undefined,
-          nameEn: descriptionEn || undefined,
-          nameAr: descriptionAr || undefined,
+          default: description || undefined,
+          en: descriptionEn || undefined,
+          ar: descriptionAr || undefined,
         },
       },
       detailedDescription: {
         update: {
-          defaultName: detailedDescription || undefined,
-          nameEn: detailedDescriptionEn || undefined,
-          nameAr: detailedDescriptionAr || undefined,
+          default: detailedDescription || undefined,
+          en: detailedDescriptionEn || undefined,
+          ar: detailedDescriptionAr || undefined,
         },
       },
       doesNeedPreparation:
@@ -681,9 +681,11 @@ const updateProduct = async (req, res, next) => {
     }
   }
   */
-  return res
-    .status(StatusCodes.OK)
-    .json({ isSuccess: true, data: updatedProduct });
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "Product updated successfully",
+    data: updatedProduct,
+  });
 };
 
 const deleteProduct = async (req, res, next) => {
@@ -701,7 +703,7 @@ const deleteProduct = async (req, res, next) => {
   });
   if (order) {
     throw new BadRequestError({
-      message: "Product can not be deleted. Some orders are not delivered yet.",
+      message: "Product can not be deleted. Some orders are not delivered yet",
     });
   }
   const product = await prisma.product.delete({
@@ -732,7 +734,7 @@ const deleteProductImage = async (req, res, next) => {
   });
 
   if (!product) {
-    throw new BadRequestError("Product is not found.");
+    throw new BadRequestError("Product not found");
   }
   // const productImageIds = product.image.map((image) => image.id);
 
@@ -743,7 +745,7 @@ const deleteProductImage = async (req, res, next) => {
   console.log(productImages);
 
   if (imagesList.length != productImages.length) {
-    throw new BadRequestError("Product images are not found.");
+    throw new BadRequestError("Product images are not found");
   }
 
   const productImagePublicIds = productImages.map((image) => image.publicId);

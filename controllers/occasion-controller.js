@@ -7,7 +7,7 @@ const {
   UnauthenticatedError,
 } = require("../errors");
 const { uploadImage } = require("../helpers/cloudinary/upload-image");
-const { destroyImage } = require("../helpers/cloudinary/destroy-image");
+const { destroyImage } = require("../helpers/cloudinary/delete-image");
 const getAllOccasions = async (req, res, next) => {
   const occasion = await prisma.occasion.findMany({ include: { image: true } });
   return res
@@ -32,9 +32,9 @@ const createOccasion = async (req, res, next) => {
 
   const zodModel = OccasionZodModel.safeParse({
     name: {
-      defaultName: name,
-      nameAr: nameAr,
-      nameEn: nameEn,
+      default: name,
+      ar: nameAr,
+      en: nameEn,
     },
     image: image,
   });
@@ -50,9 +50,9 @@ const createOccasion = async (req, res, next) => {
     data: {
       name: {
         create: {
-          defaultName: name,
-          nameEn: nameEn || name,
-          nameAr: nameAr || name,
+          default: name,
+          en: nameEn || name,
+          ar: nameAr || name,
         },
       },
       image: {
@@ -63,9 +63,11 @@ const createOccasion = async (req, res, next) => {
       },
     },
   });
-  return res
-    .status(StatusCodes.CREATED)
-    .json({ isSuccess: true, data: createdOccasion });
+  return res.status(StatusCodes.CREATED).json({
+    isSuccess: true,
+    message: "Occasion Created Successfully",
+    data: createdOccasion,
+  });
 };
 
 const updateOccasion = async (req, res, next) => {
@@ -73,7 +75,7 @@ const updateOccasion = async (req, res, next) => {
   const { nameAr, nameEn, name } = req.body;
   const image = req.files == undefined ? undefined : req.files.image;
   if (!id) {
-    throw new BadRequestError("Please send an ID");
+    throw new BadRequestError("Please send an occasion ID");
   }
   let imageUploadedSecureUrl = undefined;
   let imageUploadedPublicId = undefined;
@@ -99,9 +101,9 @@ const updateOccasion = async (req, res, next) => {
     data: {
       name: {
         update: {
-          defaultName: name || undefined,
-          nameEn: nameEn || undefined,
-          nameAr: nameAr || undefined,
+          default: name || undefined,
+          en: nameEn || undefined,
+          ar: nameAr || undefined,
         },
       },
       image: {
@@ -119,33 +121,11 @@ const updateOccasion = async (req, res, next) => {
   if (image) {
     await destroyImage({ imagePublicId: occasion.image.publicId });
   }
-  return res
-    .status(StatusCodes.OK)
-    .json({ isSuccess: true, data: updatedOccasion });
-};
-
-const deleteOccasionImage = async (req, res, next) => {
-  const { id } = req.params;
-  // const { name } = req.body;
-  // const image = req.files == undefined ? undefined : req.files.image;
-  if (!id) {
-    throw new BadRequestError("Please send an ID");
-  }
-  // let imageUploadedSecureUrl = undefined;
-  // let imageUploadedPublicId = undefined;
-  // if (image) {
-  //   [imageUploadedSecureUrl, imageUploadedPublicId] = await uploadImage({
-  //     image: image,
-  //   });
-  // }
-
-  await prisma.image.delete({
-    where: { id: id },
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "Occasion updated successfully",
+    data: updatedOccasion,
   });
-
-  return res
-    .status(StatusCodes.OK)
-    .json({ isSuccess: true, message: "Image deleted successfully" });
 };
 
 const deleteOccasion = async (req, res, next) => {
@@ -169,7 +149,6 @@ const deleteOccasion = async (req, res, next) => {
 module.exports = {
   getAllOccasions,
   getOccasion,
-  deleteOccasionImage,
   createOccasion,
   updateOccasion,
   deleteOccasion,

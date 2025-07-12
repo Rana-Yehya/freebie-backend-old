@@ -32,9 +32,9 @@ const createCity = async (req, res, next) => {
   const { name, nameEn, nameAr, stateId } = req.body;
   const zodModel = CityZodModel.safeParse({
     name: {
-      defaultName: name,
-      nameEn: nameEn,
-      nameAr: nameAr,
+      default: name,
+      en: nameEn,
+      ar: nameAr,
     },
     stateId: stateId,
   });
@@ -54,9 +54,9 @@ const createCity = async (req, res, next) => {
     data: {
       name: {
         create: {
-          defaultName: name,
-          nameEn: nameEn || name,
-          nameAr: nameAr || name,
+          default: name,
+          en: nameEn || name,
+          ar: nameAr || name,
         },
       },
       state: { connect: { id: stateId } },
@@ -66,7 +66,11 @@ const createCity = async (req, res, next) => {
 
   return res
     .status(StatusCodes.CREATED)
-    .json({ isSuccess: true, data: createdCity });
+    .json({
+      isSuccess: true,
+      message: "City created successfully",
+      data: createdCity,
+    });
 };
 
 const updateCity = async (req, res, next) => {
@@ -74,7 +78,7 @@ const updateCity = async (req, res, next) => {
   const { name, nameEn, nameAr, stateId } = req.body;
 
   if (!id) {
-    throw new BadRequestError("Please send an ID");
+    throw new BadRequestError("Please send a city ID");
   }
   // if (stateId) {
   //   const country = await prisma.state.findUnique({
@@ -87,19 +91,23 @@ const updateCity = async (req, res, next) => {
   const updatedCity = await prisma.city.update({
     where: { id: id },
     data: {
-      update: {
-        defaultName: name || undefined,
-        nameEn: nameEn || undefined,
-        nameAr: nameAr || undefined,
+      name: {
+        update: {
+          default: name,
+          en: nameEn || name,
+          ar: nameAr || name,
+        },
       },
       state: { connect: { id: stateId || undefined } },
     },
   });
   console.log(updatedCity);
 
-  return res
-    .status(StatusCodes.CREATED)
-    .json({ isSuccess: true, data: updatedCity });
+  return res.status(StatusCodes.CREATED).json({
+    isSuccess: true,
+    message: "City updated successfully",
+    data: updatedCity,
+  });
 };
 
 const deleteCity = async (req, res, next) => {

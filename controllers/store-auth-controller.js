@@ -58,6 +58,7 @@ const login = async (req, res) => {
   });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
+    message: "Login Successfully",
     accessToken: accessTokenJWT,
     refreshToken: refreshTokenJWT,
     user: user,
@@ -101,14 +102,14 @@ const register = async (req, res, next) => {
   // console.log(logo);
   const storeZodModel = StoreZodModel.safeParse({
     name: {
-      defaultName: name,
-      nameEn: nameEn,
-      nameAr: nameAr,
+      default: name,
+      en: nameEn,
+      ar: nameAr,
     },
     bio: {
-      defaultName: bio,
-      nameEn: bioEn,
-      nameAr: bioAr,
+      default: bio,
+      en: bioEn,
+      ar: bioAr,
     },
     logo: logo,
     banner: banner,
@@ -166,16 +167,16 @@ const register = async (req, res, next) => {
     data: {
       name: {
         create: {
-          defaultName: name,
-          nameEn: nameEn || name,
-          nameAr: nameAr || name,
+          default: name,
+          en: nameEn || name,
+          ar: nameAr || name,
         },
       },
       bio: {
         create: {
-          defaultName: bio,
-          nameEn: bioEn || bio,
-          nameAr: bioAr || bio,
+          default: bio,
+          en: bioEn || bio,
+          ar: bioAr || bio,
         },
       },
       logo: {
@@ -264,7 +265,7 @@ const deleteStore = async (req, res) => {
   });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Store Deleted successfully",
+    message: "Store deleted successfully",
   });
 };
 const updateProfile = async (req, res) => {

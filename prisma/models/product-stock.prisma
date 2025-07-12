@@ -1,4 +1,3 @@
-
 model productStock {
   id           String         @id @unique @default(uuid())
   product      product        @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -13,4 +12,5 @@ model productStock {
   updatedAt    DateTime       @updatedAt
 
   @@unique([productId, branchId, color])
+  @@map("product_stock")
 }

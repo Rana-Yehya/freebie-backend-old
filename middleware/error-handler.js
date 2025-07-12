@@ -3,7 +3,8 @@ const { StatusCodes } = require("http-status-codes");
 const {
   destroyImage,
   destroyMultipleImages,
-} = require("../helpers/cloudinary/destroy-image");
+} = require("../helpers/cloudinary/delete-image");
+const { appLocalize } = require("../helpers/localize");
 
 const errorHandler = async (err, req, res, next) => {
   console.log(err);
@@ -65,7 +66,7 @@ const errorHandler = async (err, req, res, next) => {
   //   )}`;
   //   customError.statusCode = StatusCodes.BAD_REQUEST;
   // }
-  console.log(err.meta);
+  // console.log(err.meta);
   if (err.meta && err.meta.cause) {
     customError.message = err.meta.cause;
     customError.statusCode = StatusCodes.BAD_REQUEST;
@@ -80,7 +81,8 @@ const errorHandler = async (err, req, res, next) => {
   // }
   return res.status(customError.statusCode).json({
     isSuccess: false,
-    message: customError.message,
+    // message: customError.message,
+    message: appLocalize.translate(customError.message),
     // ...(err.details && { details: err.details }),
   });
   // return res

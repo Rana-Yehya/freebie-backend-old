@@ -1,13 +1,13 @@
 const { z } = require("zod");
 const { ProductStockZodModel } = require("./product-stock-zod-model");
-const { NameZodModel } = require("./name-zod-model");
+const { LocaleZodModel } = require("./locole-zod-model");
 
 const CreateProductZodModel = z
   .object({
     // isAvailable              Boolean   @default(true)
     // isFeatured               Boolean   @default(false)
     // isPopular                Boolean   @default(false)
-    name: NameZodModel, //z.string({ message: "Name is required" }),
+    name: LocaleZodModel, //z.string({ message: "Name is required" }),
     image: z
       .array(
         z
@@ -31,10 +31,10 @@ const CreateProductZodModel = z
         }
       )
       .nonempty({
-        message: "Images can't be empty!",
+        message: "Images can't be empty",
       }),
-    description: NameZodModel, //z.string({ message: "Description is required" }),
-    detailedDescription: NameZodModel,
+    description: LocaleZodModel, //z.string({ message: "Description is required" }),
+    detailedDescription: LocaleZodModel,
     //  z.string({
     //   message: "Detailed Description is required",
     // }),
@@ -118,21 +118,21 @@ const CreateProductZodModel = z
     //   }
     // }),
     // stock: z.number().optional(),
-    categoryId: z.string({ message: "Category Id is required" }),
+    categoryId: z.string({ message: "Category is required" }),
     occasions: z
-      .array(z.string({ message: "Occasion Id must be a string" }), {
-        message: "Occasions can't be empty!",
+      .array(z.string({ message: "Occasion must be a string" }), {
+        message: "Occasions can't be empty",
       })
       .nonempty({
-        message: "Occasions can't be empty!",
+        message: "Occasions can't be empty",
       })
       .optional(),
     productStock: z
       .array(ProductStockZodModel, {
-        message: "Branches can't be empty!",
+        message: "Product Stock can't be empty",
       })
       .nonempty({
-        message: "Branches can't be empty!",
+        message: "Product Stock can't be empty",
       }),
     dimensionsWCm: z
       .string({ message: "Dimensions Width is required" })
@@ -250,13 +250,13 @@ const CreateProductZodModel = z
           path: ["discountEndTime"],
         });
       }
-      if (discountStartTime > discountEndTime) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Discount start time must be before discount end time",
-          path: ["discountStartTime", "discountEndTime"],
-        });
-      }
+      // if (discountStartTime > discountEndTime) {
+      //   ctx.addIssue({
+      //     code: z.ZodIssueCode.custom,
+      //     message: "Discount start time must be before discount end time",
+      //     path: ["discountStartTime", "discountEndTime"],
+      //   });
+      // }
     }
 
     if (data.price <= 0) {

@@ -1,11 +1,11 @@
 const { z } = require("zod");
-const { NameZodModel } = require("./name-zod-model");
+const { LocaleZodModel } = require("./locole-zod-model");
 
 const StoreZodModel = z.object({
   // store - restaurant - place for weddings
 
-  name: NameZodModel, //
-  bio: NameZodModel, // z.string({ message: "Please enter a description" }),
+  name: LocaleZodModel, //
+  bio: LocaleZodModel, // z.string({ message: "Please enter a description" }),
   logo: z
     .any()
     .refine(
@@ -40,7 +40,7 @@ const StoreZodModel = z.object({
       message: "Banner image is too large",
     }),
   phone: z.string({ message: "Please enter a phone number" }),
-  email: z.string({ message: "Please enter am email" }),
+  email: z.string({ message: "Please enter an email" }),
   password: z.string({ message: "Please enter a password" }),
   // socialLinks: SocialMediaZodModel,
   // socialLinks: z

@@ -5,7 +5,7 @@ const UserCartZodModel = z.object({
   //   .string({ message: "User cart Id is required!" })
   //   .uuid()
   //   .optional(),
-  stateId: z.string({ message: "State Id is required!" }).uuid(),
+  stateId: z.string({ message: "State is required" }).uuid(),
   // userProducts: z
   //   .array(UserProductZodModel, {
   //     message: "User Products can't be empty!",
