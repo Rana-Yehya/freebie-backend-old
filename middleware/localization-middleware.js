@@ -1,6 +1,6 @@
 const { adminConstant } = require("../config/constants");
 const { prisma } = require("../config/prisma");
-const { UnauthorizatedError } = require("../errors");
+const { UnauthorizedError } = require("../errors");
 const { appLocalize } = require("../helpers/localize");
 
 const localizationMiddleware = async (req, res, next) => {

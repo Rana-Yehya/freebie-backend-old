@@ -120,6 +120,18 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.AdminScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  phone: 'phone',
+  email: 'email',
+  password: 'password',
+  moneyInPocket: 'moneyInPocket',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  countryId: 'countryId'
+};
+
 exports.Prisma.BranchScalarFieldEnum = {
   id: 'id',
   storeId: 'storeId',
@@ -158,7 +170,6 @@ exports.Prisma.CityScalarFieldEnum = {
 exports.Prisma.CountryScalarFieldEnum = {
   id: 'id',
   nameId: 'nameId',
-  currencyCode: 'currencyCode',
   countryIsoCode: 'countryIsoCode',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -168,6 +179,7 @@ exports.Prisma.CurrencyScalarFieldEnum = {
   id: 'id',
   nameId: 'nameId',
   currencyAbbId: 'currencyAbbId',
+  countryId: 'countryId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -253,7 +265,9 @@ exports.Prisma.OrderScalarFieldEnum = {
 
 exports.Prisma.ProductCartScalarFieldEnum = {
   userCartUserId: 'userCartUserId',
+  id: 'id',
   productStockId: 'productStockId',
+  variantId: 'variantId',
   deliveryTaxesId: 'deliveryTaxesId',
   quantity: 'quantity',
   doesHaveEnoughQuantity: 'doesHaveEnoughQuantity',
@@ -266,7 +280,7 @@ exports.Prisma.ProductCartScalarFieldEnum = {
 exports.Prisma.ProductOrderScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
-  productStockId: 'productStockId',
+  variantId: 'variantId',
   quantity: 'quantity',
   price: 'price',
   deliveryFee: 'deliveryFee',
@@ -286,17 +300,23 @@ exports.Prisma.ProductPriceScalarFieldEnum = {
 
 exports.Prisma.ProductStockScalarFieldEnum = {
   id: 'id',
-  productId: 'productId',
   branchId: 'branchId',
   stock: 'stock',
-  color: 'color',
+  variantId: 'variantId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProductVariantScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  color: 'color'
 };
 
 exports.Prisma.ProductScalarFieldEnum = {
   id: 'id',
   nameId: 'nameId',
+  mainImageId: 'mainImageId',
   descriptionId: 'descriptionId',
   detailedDescriptionId: 'detailedDescriptionId',
   price: 'price',
@@ -326,6 +346,15 @@ exports.Prisma.ReviewScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SessionScalarFieldEnum = {
+  id: 'id',
+  fcmToken: 'fcmToken',
+  userId: 'userId',
+  storeId: 'storeId',
+  isActive: 'isActive',
+  adminId: 'adminId'
+};
+
 exports.Prisma.StateScalarFieldEnum = {
   id: 'id',
   nameId: 'nameId',
@@ -343,15 +372,9 @@ exports.Prisma.StoreScalarFieldEnum = {
   phone: 'phone',
   email: 'email',
   password: 'password',
-  refreshTokenSecret: 'refreshTokenSecret',
-  accessTokenSecret: 'accessTokenSecret',
   moneyInPocket: 'moneyInPocket',
-  fcmToken: 'fcmToken',
   role: 'role',
-  isApprovedByAdmin: 'isApprovedByAdmin',
-  isFreezed: 'isFreezed',
-  isBanned: 'isBanned',
-  isDeleted: 'isDeleted',
+  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -371,6 +394,7 @@ exports.Prisma.TransactionScalarFieldEnum = {
   type: 'type',
   userId: 'userId',
   storeId: 'storeId',
+  adminId: 'adminId',
   amount: 'amount',
   purpose: 'purpose',
   currencyId: 'currencyId',
@@ -394,16 +418,11 @@ exports.Prisma.UserScalarFieldEnum = {
   dateOfBirth: 'dateOfBirth',
   gender: 'gender',
   moneyInPocket: 'moneyInPocket',
-  countryId: 'countryId',
   stateId: 'stateId',
   phone: 'phone',
   email: 'email',
-  password: 'password',
   role: 'role',
   isVerified: 'isVerified',
-  refreshTokenSecret: 'refreshTokenSecret',
-  accessTokenSecret: 'accessTokenSecret',
-  fcmToken: 'fcmToken',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -428,7 +447,24 @@ exports.productTags = exports.$Enums.productTags = {
   NONE: 'NONE'
 };
 
+exports.StoreStatus = exports.$Enums.StoreStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  FROZEN: 'FROZEN',
+  BANNED: 'BANNED',
+  DELETED: 'DELETED'
+};
+
+exports.TransactionType = exports.$Enums.TransactionType = {
+  DEPOSIT: 'DEPOSIT',
+  WITHDRAW: 'WITHDRAW',
+  TRANSFER: 'TRANSFER',
+  PAYMENT: 'PAYMENT',
+  REFUND: 'REFUND'
+};
+
 exports.Prisma.ModelName = {
+  admin: 'admin',
   branch: 'branch',
   workHour: 'workHour',
   category: 'category',
@@ -447,8 +483,10 @@ exports.Prisma.ModelName = {
   productOrder: 'productOrder',
   productPrice: 'productPrice',
   productStock: 'productStock',
+  productVariant: 'productVariant',
   product: 'product',
   review: 'review',
+  session: 'session',
   state: 'state',
   store: 'store',
   socialLink: 'socialLink',

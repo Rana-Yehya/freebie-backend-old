@@ -21,20 +21,41 @@ const authenticateUserMiddleware = async (req, res, next) => {
       secret: process.env.ACCESS_JWT_SECRET,
     });
     // console.log("decoded", decoded);
-
+    //{ userId: user.id, sessionId: session.id }
     if (decoded) {
-      const user =
-        decoded.role === storeConstant
-          ? await prisma.store.findUnique({
-              where: { id: decoded.userId },
-            })
-          : await prisma.user.findUnique({
-              where: { id: decoded.userId },
-              include: {
-                userCountry: true,
-                userState: true,
-              },
-            });
+      const session = await prisma.session.findUnique({
+        where: { id: decoded.sessionId },
+        include: {
+          user: true,
+          store: true,
+          admin: true,
+        },
+      });
+      if (
+        (session.admin &&
+          decoded.role == adminConstant &&
+          session.admin.id == decoded.userId) ||
+        (session.user &&
+          decoded.role == userConstant &&
+          session.user.id == decoded.userId) ||
+        (session.store &&
+          decoded.role == storeConstant &&
+          session.store.id == decoded.userId)
+      ) {
+        req.user = session.admin || session.user || session.store;
+        req.session = session.id;
+        req.fcmToken = session.fcmToken;
+        req.role = decoded.role;
+      } else {
+        throw new UnauthenticatedError("Unauthorizated");
+      }
+      // : await prisma.user.findUnique({
+      //     where: { id: decoded.userId },
+      //     include: {
+      //       userCountry: true,
+      //       userState: true,
+      //     },
+      //   });
       // console.log("user.accessTokenSecret", user.accessTokenSecret);
       // console.log("user", user);
       // console.log("decoded", decoded);
@@ -46,18 +67,18 @@ const authenticateUserMiddleware = async (req, res, next) => {
       // );
       // faf71e28742a0167a26f;
       // faf71e28742a0167a26f;
-      if (
-        !user ||
-        !user.accessTokenSecret ||
-        !decoded.accessTokenSecret ||
-        user.accessTokenSecret.toString() !=
-          decoded.accessTokenSecret.toString()
-      ) {
-        throw new UnauthenticatedError("Unauthorizated");
-      }
+      // if (
+      //   !user ||
+      //   !user.accessTokenSecret ||
+      //   !decoded.accessTokenSecret ||
+      //   user.accessTokenSecret.toString() !=
+      //     decoded.accessTokenSecret.toString()
+      // ) {
+      //   throw new UnauthenticatedError("Unauthorizated");
+      // }
       // const { userId, email } = decoded;
 
-      req.user = user;
+      // req.user = user;
       // decoded.role === storeConstant ? req.user.role === storeConstant : null;
 
       return next();
@@ -84,27 +105,32 @@ const optionalAuthenticateUserMiddleware = async (req, res, next) => {
       secret: process.env.ACCESS_JWT_SECRET,
     });
     if (decoded) {
-      const user =
-        decoded.role === storeConstant
-          ? await prisma.store.findUnique({
-              where: { id: decoded.userId },
-            })
-          : await prisma.user.findUnique({
-              where: { id: decoded.userId },
-              include: { userState: true, userCountry: true },
-            });
+      const user = await prisma.session.findUnique({
+        where: { id: decoded.sessionId },
+        select: {
+          user: true,
+          store: true,
+          admin: true,
+        },
+      });
       if (
-        !user ||
-        !user.accessTokenSecret ||
-        !decoded.accessTokenSecret ||
-        user.accessTokenSecret.toString() !=
-          decoded.accessTokenSecret.toString()
+        (user.admin &&
+          decoded.role == adminConstant &&
+          user.admin.id == decoded.userId) ||
+        (user.user &&
+          decoded.role == userConstant &&
+          user.user.id == decoded.userId) ||
+        (user.store &&
+          decoded.role == storeConstant &&
+          user.store.id == decoded.userId)
       ) {
+        req.user = user;
+        req.role = decoded.role;
+      } else {
         throw new UnauthenticatedError("Unauthorizated");
       }
       // const { userId, email } = decoded;
 
-      req.user = user;
       // if (decoded.role === storeConstant) {
       //   req.user.role = storeConstant;
       // } else if (decoded.role === adminConstant) {

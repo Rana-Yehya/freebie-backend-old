@@ -43,6 +43,7 @@ const errorHandler = require("./middleware/error-handler");
 const {
   localizationMiddleware,
 } = require("./middleware/localization-middleware");
+const { passwordEncrypt } = require("./utils/password-utils");
 
 const app = express();
 
@@ -162,46 +163,18 @@ const startServer = async () => {
 
   try {
     await app.listen(PORT);
-    const countries = await prisma.country.findMany();
-    let country;
-    if (countries.length == 0) {
-      country = await prisma.country.create({
+    const admins = await prisma.admin.count();
+    if (admins == 0) {
+      await prisma.admin.create({
         data: {
-          name: {
-            create: {
-              default: "Egypt",
-              en: "Egypt",
-              ar: "مصر",
-            },
-          },
-          currencyCode: "EGP",
-          countryIsoCode: "EGP",
+          name: "name",
+          email: "email@emal.com",
+          phone: "+201275559130",
+          password: await passwordEncrypt("password"),
         },
       });
     }
-    const states = await prisma.state.findMany();
 
-    if (states.length == 0) {
-      const createdState = await prisma.state.create({
-        data: {
-          name: {
-            create: {
-              default: "Cairo",
-              en: "Cairo",
-              ar: "القاهرة",
-            },
-          },
-          // name: {
-          //   create: {
-          //     defaultName: "Cairo",
-          //     nameEn: "Cairo",
-          //     nameAr: "القاهرة",
-          //   },
-          // },
-          country: { connect: { id: country.id || countries[0].id } }, //country.id ||
-        },
-      });
-    }
     console.log("PORT connected");
   } catch (err) {
     console.log(err);

@@ -833,6 +833,10 @@ const appLocalize = new Localize({
     en: "Phone number is required",
     ar: "رقم الهاتف مطلوب",
   },
+  Unauthorizated: {
+    en: "Unauthorizated",
+    ar: "غير مصرح به",
+  },
 });
 
 module.exports = { appLocalize };

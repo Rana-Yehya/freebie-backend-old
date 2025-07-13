@@ -27,8 +27,6 @@ const { userConstant } = require("../config/constants");
 const {
   UpdateUserProfileZodModel,
 } = require("../models/update-user-profile-zod-model");
-const { stat } = require("fs");
-const { connect } = require("http2");
 //TODO AM I IN NEED TO LOGIN
 
 const login = async (req, res) => {
@@ -70,12 +68,13 @@ const sendCode = async (req, res, next) => {
   if (isPhoneValid.isValid != true) {
     throw new BadRequestError("The phone number is not correct");
   }
-  const userInDB = await prisma.user.findFirst({
-    where: { phone: phoneNumber },
+  const userInDB = await prisma.session.findFirst({
+    where: { user: { phone: phoneNumber } },
+    select: { user: true },
   });
-  const storeInDB = await prisma.store.findFirst({
-    where: { phone: phoneNumber },
-  });
+  // const storeInDB = await prisma.store.findFirst({
+  //   where: { phone: phoneNumber },
+  // });
 
   if (storeInDB) {
     throw new BadRequestError(
@@ -105,25 +104,16 @@ const sendCode = async (req, res, next) => {
 };
 
 const register = async (req, res, next) => {
-  const {
-    name,
-    phoneNumber,
-    userState,
-    userCountry,
-    dateOfBirth,
-    gender,
-    email,
-    role,
-  } = req.body;
+  const { name, phoneNumber, userState, dateOfBirth, gender, fcmToken, email } =
+    req.body;
   const zodModel = UserZodModel.safeParse({
     name: name,
     dateOfBirth: dateOfBirth,
     gender: gender,
     email: email,
     userState: userState,
-    userCountry: userCountry,
     phone: phoneNumber,
-    role: role,
+    fcmToken: fcmToken,
   });
   const isPhoneValid = phone(phoneNumber.toString());
 
@@ -134,17 +124,22 @@ const register = async (req, res, next) => {
   if (isPhoneValid.isValid != true) {
     throw new BadRequestError("The phone number is not correct");
   }
-  const userInDB = await prisma.user.findFirst({
+  // const userInDB = await prisma.user.findFirst({
+  //   where: {
+  //     OR: [{ email }, { phone: phoneNumber }],
+  //   },
+  // });
+  const userInDB = await prisma.session.findFirst({
     where: {
-      OR: [{ email }, { phone: phoneNumber }],
+      OR: [
+        { user: { OR: [{ email }, { phone: phoneNumber }] } },
+        { admin: { OR: [{ email }, { phone: phoneNumber }] } },
+        { store: { OR: [{ email }, { phone: phoneNumber }] } },
+      ],
     },
   });
-  const storeInDB = await prisma.store.findFirst({
-    where: {
-      OR: [{ email }, { phone: phoneNumber }],
-    },
-  });
-  if (storeInDB || userInDB) {
+  //storeInDB ||
+  if (userInDB) {
     throw new BadRequestError(
       "Account already in use or has an individal account"
     );
@@ -167,8 +162,8 @@ const register = async (req, res, next) => {
 
   const date = new Date(parse);
   //this is for detecting the user login from another device
-  const refreshTokenSecret = crypto.randomBytes(40).toString("hex");
-  const accessTokenSecret = crypto.randomBytes(40).toString("hex");
+  // const refreshTokenSecret = crypto.randomBytes(40).toString("hex");
+  // const accessTokenSecret = crypto.randomBytes(40).toString("hex");
   const user = await prisma.user.create({
     data: {
       name: name,
@@ -176,20 +171,34 @@ const register = async (req, res, next) => {
       gender: gender,
       email: email,
       phone: phoneNumber,
-      userCountry: { connect: { id: userCountry } },
-      role: role,
+      sessions: {
+        create: {
+          fcmToken: fcmToken,
+        },
+      },
+      // userCountry: { connect: { id: userCountry } },
+      // role: role,
       //TODO CAN ADD AN EXTRA LEVEL OF CHECK AND INTEGRATE THE VEERIFICATION WITH IOREEDIS
       isVerified: true,
-      userState: { connect: { id: userState } },
-      refreshTokenSecret: refreshTokenSecret,
-      accessTokenSecret: accessTokenSecret,
+      state: { connect: { id: userState } },
+    },
+    include: {
+      sessions: true,
     },
   });
   const accessTokenJWT = createAccessJWT({
-    payload: { userId: user.id, accessTokenSecret, role: userConstant },
+    payload: {
+      userId: user.id,
+      sessionId: user.sessions[0].id,
+      role: userConstant,
+    },
   });
   const refreshTokenJWT = createRefreshJWT({
-    payload: { userId: user.id, refreshTokenSecret, role: userConstant },
+    payload: {
+      userId: user.id,
+      sessionId: user.sessions[0].id,
+      role: userConstant,
+    },
   });
   /*
   ELSE SEND OTP AND CREATE USER DATA
@@ -210,7 +219,7 @@ const register = async (req, res, next) => {
 };
 
 const verifyCode = async (req, res) => {
-  const { isAlreadyExist, phoneNumber, verificationCode } = req.body;
+  const { isAlreadyExist, phoneNumber, fcmToken, verificationCode } = req.body;
 
   if (!phoneNumber || !verificationCode || verificationCode.length != 4) {
     throw new BadRequestError("Please enter all data correctly");
@@ -224,29 +233,45 @@ const verifyCode = async (req, res) => {
   await verifyOtpHelper({ phone: phoneNumber, userOtp: verificationCode });
   // user.isVerified = true;
   if (isAlreadyExist) {
-    const user = await prisma.user.findUnique({
-      where: { phone: phoneNumber },
-    });
-    if (!user) {
-      throw new NotFoundError("User not found");
-    }
-    const refreshTokenSecret = crypto.randomBytes(40).toString("hex");
-    const accessTokenSecret = crypto.randomBytes(40).toString("hex");
+    // const user = await prisma.user.findUnique({
+    //   where: { phone: phoneNumber },
+    // });
+    // if (!user) {
+    //   throw new NotFoundError("User not found");
+    // }
+    // const refreshTokenSecret = crypto.randomBytes(40).toString("hex");
+    // const accessTokenSecret = crypto.randomBytes(40).toString("hex");
 
-    await prisma.user.update({
-      where: { id: user.id },
+    const session = await prisma.user.update({
+      where: { phone: phoneNumber },
       data: {
-        isVerified: true,
-        refreshTokenSecret: refreshTokenSecret,
-        accessTokenSecret: accessTokenSecret,
+        sessions: {
+          create: {
+            fcmToken: fcmToken,
+          },
+        },
+      },
+      include: {
+        sessions: true,
       },
     });
+    if (!session) {
+      throw new NotFoundError("User not found");
+    }
     // send the jwt
     const accessTokenJWT = createAccessJWT({
-      payload: { userId: user.id, accessTokenSecret, role: userConstant },
+      payload: {
+        userId: session.id,
+        sessionId: session.sessions[session.sessions.length - 1].id,
+        role: userConstant,
+      },
     });
     const refreshTokenJWT = createRefreshJWT({
-      payload: { userId: user.id, refreshTokenSecret, role: userConstant },
+      payload: {
+        userId: session.id,
+        sessionId: session.sessions[session.sessions.length - 1].id,
+        role: userConstant,
+      },
     });
 
     return res.status(StatusCodes.OK).json({

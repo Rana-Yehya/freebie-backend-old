@@ -8,6 +8,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ===== admin.prisma =====
+// model adminPrivilege {
+
+// }
+model admin {
+  id       String    @id @unique @default(uuid())
+  name     String
+  // dateOfBirth   DateTime?
+  // gender        String?
+  // is the country is deleted, the user country will be set to null
+  // what is the action after this?
+  // countryId     String?
+  // userCountry   country?      @relation(fields: [countryId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  phone    String    @unique
+  email    String    @unique
+  password String
+  // privilege          adminPrivilege  
+  sessions session[] @relation("adminSession")
+
+  transaction   transaction[]
+  moneyInPocket Float         @default(0)
+
+  // categoriesInterest category[]
+  // occasionsInterest  occasion[]
+
+  // products           product[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // imageId     String?  
+  // avatar      image?    @relation(fields: [imageId], references: [id])
+  country   country? @relation(fields: [countryId], references: [id])
+  countryId String?
+}
+
 // ===== branch.prisma =====
 model branch {
   id         String    @id @unique @default(uuid())
@@ -55,8 +90,8 @@ model workHour {
 // ===== category.prisma =====
 model category {
   id                         String    @id @unique @default(uuid())
-  nameId                     String?   @unique
-  name                       locale?   @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  nameId                     String    @unique
+  name                       locale    @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   imageId                    String
   image                      image     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   product                    product[]
@@ -64,6 +99,12 @@ model category {
   createdAt                  DateTime  @default(now())
   updatedAt                  DateTime  @updatedAt
 }
+
+// enum DeliveryPolicy {
+//   ANYWHERE
+//   WITHIN_STATE
+//   WITHIN_COUNTRY
+// }
 
 // ===== city.prisma =====
 model city {
@@ -79,15 +120,15 @@ model city {
 
 // ===== country.prisma =====
 model country {
-  id             String   @id @unique @default(uuid())
-  nameId         String   @unique
-  name           locale   @relation(fields: [nameId], references: [id])
-  currencyCode   String
-  countryIsoCode String   @unique
-  user           user[]
+  id             String    @id @unique @default(uuid())
+  nameId         String    @unique
+  name           locale    @relation(fields: [nameId], references: [id])
+  currency       currency?
+  countryIsoCode String    @unique
+  admin          admin[]
   state          state[]
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 }
 
 // ===== currency.prisma =====
@@ -99,6 +140,8 @@ model currency {
   currencyAbb   locale        @relation("currencyAbbLocale", fields: [currencyAbbId], references: [id])
   order         order[]
   transaction   transaction[]
+  country       country       @relation(fields: [countryId], references: [id])
+  countryId     String        @unique
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 }
@@ -122,23 +165,29 @@ model deliveryTaxes {
   updatedAt             DateTime      @updatedAt
   // government            government?   @relation(fields: [governmentId], references: [id])
   // governmentId          String?
+  //currency String @default("USD") // Required for multi-currency
 
   @@map("delivery_taxes")
 }
 
+// minimumFee Decimal @default(0) // New field
+// maximumFee Decimal? // New field
+// currency String @default("USD") // Required for multi-currency
+
 // ===== image.prisma =====
 model image {
-  id          String     @id @unique @default(uuid())
-  publicId    String
-  secureUrl   String
+  id               String     @id @unique @default(uuid())
+  publicId         String
+  secureUrl        String
   // userId String? 
   // users  user?   
-  category    category[]
-  occasion    occasion[]
-  product     product?   @relation(fields: [productId], references: [id])
-  productId   String?
-  storeLogo   store[]    @relation("storeLogo")
-  storeBanner store[]    @relation("storeBanner")
+  category         category[]
+  occasion         occasion[]
+  product          product?   @relation("imageProduct", fields: [productId], references: [id])
+  productId        String?
+  mainImageProduct product?   @relation("mainImageProduct")
+  storeLogo        store[]    @relation("storeLogo")
+  storeBanner      store[]    @relation("storeBanner")
 }
 
 // ===== inbox.prisma =====
@@ -210,8 +259,8 @@ model location {
 // ===== occasion.prisma =====
 model occasion {
   id        String    @id @unique @default(uuid())
-  nameId    String?   @unique
-  name      locale?   @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  nameId    String    @unique
+  name      locale    @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   imageId   String
   image     image     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // productOccasion productOccasion[]
@@ -246,54 +295,66 @@ model order {
   updatedAt          DateTime       @updatedAt
 }
 
+// Improved financial fields
+// subtotal Decimal @default(0)
+// taxAmount Decimal @default(0)
+// deliveryFee Decimal @default(0)
+// discountAmount Decimal @default(0)
+// totalAmount Decimal @default(0)
+// amountPaid Decimal @default(0)
+// amountDue Decimal @default(0) // Calculated as totalAmount - amountPaid
+
 // ===== product-cart.prisma =====
 model productCart {
-  userCart       userCart     @relation(fields: [userCartUserId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-  userCartUserId String
-  // id         String   @id @unique @default(uuid())
+  userCart               userCart       @relation(fields: [userCartUserId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  userCartUserId         String
+  id                     String         @id @unique @default(uuid())
   // cart                   user          @relation(fields: [userCartId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // userCartId             String
   // product                product       @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // productId              String
   // branch                 branch        @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // branchId               String
-  productStock   productStock @relation(fields: [productStockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  productStockId String
-
-  deliveryTaxes          deliveryTaxes @relation(fields: [deliveryTaxesId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  deliveryTaxesId        String
+  productStock           productStock?  @relation(fields: [productStockId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  productStockId         String?
+  variant                productVariant @relation(fields: [variantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  variantId              String
+  deliveryTaxes          deliveryTaxes? @relation(fields: [deliveryTaxesId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  deliveryTaxesId        String?
   // color                  String
-  quantity               Int           @default(1)
-  doesHaveEnoughQuantity Boolean       @default(true)
-  oldQuantity            Int?          @default(0)
+  quantity               Int            @default(1)
+  doesHaveEnoughQuantity Boolean        @default(true)
+  oldQuantity            Int?           @default(0)
 
   isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   //userCartId
-  @@unique([userCartUserId, productStockId])
+  // @@unique([userCartUserId, productStockId])
   @@map("product_cart")
 }
 
 // ===== product-order.prisma =====
 model productOrder {
-  id             String        @id @unique @default(uuid())
-  order          order         @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  orderId        String
+  id                 String         @id @unique @default(uuid())
+  order              order          @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  orderId            String
   // product            product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // productId          String
   // branch             branch  @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // branchId           String
   // color              String
-  productStock   productStock? @relation(fields: [productStockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  productStockId String?
-
-  quantity           Int     @default(1)
-  price              Float   @default(0)
-  deliveryFee        Float   @default(0)
-  subtotal           Float   @default(0)
-  status             String  @default("pending") //pending, confirmed, shipped, delivered, cancelled, refunded
+  // productStock   productStock? @relation(fields: [productStockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // productStockId String?
+  variant            productVariant @relation(fields: [variantId], references: [id])
+  variantId          String
+  productStock       productStock[]
+  quantity           Int            @default(1)
+  price              Float          @default(0)
+  deliveryFee        Float          @default(0)
+  subtotal           Float          @default(0)
+  status             String         @default("pending") //pending, confirmed, shipped, delivered, cancelled, refunded
   cancellationReason String?
   refundAmount       Float?
 
@@ -311,25 +372,56 @@ model productPrice {
   discountStartTime DateTime?
   discountEndTime   DateTime?
 
+  //bulkPricing BulkPricing[]
   @@map("product_price")
 }
+
+// minimumOrder: 5
+// discountPercent: 10 // 10% off when buying 5+ units
+
+// model BulkPricing {
+//   id String @id @default(uuid())
+//   minQuantity Int
+//   price Decimal
+//   productPrice ProductPrice @relation(...)
+// }
 
 // ===== product-stock.prisma =====
 model productStock {
   id           String         @id @unique @default(uuid())
-  product      product        @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  productId    String
+  // product      product        @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // productId    String
   branch       branch         @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   branchId     String
   stock        Int?
-  color        String
+  // color        String
   productOrder productOrder[]
   productCart  productCart[]
+  variant      productVariant @relation(fields: [variantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  variantId    String
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 
-  @@unique([productId, branchId, color])
+  @@unique([branchId])
+  // @@unique([productId, branchId, color])
   @@map("product_stock")
+}
+
+// ===== product-variant.prisma =====
+model productVariant {
+  id           String         @id @default(uuid())
+  product      product        @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productId    String
+  // Variant attributes (size, color, etc.)
+  color        String? // e.g., "Color"
+  //   option2   String?  // e.g., "Size"
+  //   option3   String?  // e.g., "Material"
+  // Inventory relationship
+  stock        productStock[]
+  productCart  productCart[]
+  productOrder productOrder[]
+
+  @@map("product_variant")
 }
 
 // ===== product.prisma =====
@@ -348,7 +440,9 @@ model product {
   nameId                String  @unique
   name                  locale  @relation("nameProduct", fields: [nameId], references: [id])
   // image                      String[]
-  image                 image[]
+  image                 image[] @relation("imageProduct")
+  mainImage             image   @relation("mainImageProduct", fields: [mainImageId], references: [id])
+  mainImageId           String  @unique
   // description                String
   descriptionId         String  @unique
   description           locale  @relation("descriptionProduct", fields: [descriptionId], references: [id])
@@ -360,34 +454,51 @@ model product {
   // storeId                  String
   // user                     user?             @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   // userId                   String?
-  price                      Float          @default(1)
+  price                      Float            @default(1)
   productPrice               productPrice?
-  doesNeedPreparation        Boolean        @default(false)
-  isAcceptedByAdmin          Boolean        @default(false)
-  isAvailable                Boolean        @default(true)
+  doesNeedPreparation        Boolean          @default(false)
+  isAcceptedByAdmin          Boolean          @default(false)
+  isAvailable                Boolean          @default(true)
   // isFeatured               Boolean   @default(false)
   // isPopular                Boolean   @default(false)
   tags                       productTags?
-  preparationTimeInMinutes   Int            @default(1)
-  canBeDeliveredOutsideState Boolean        @default(true)
-  productStock               productStock[]
-  category                   category?      @relation(fields: [categoryId], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
+  preparationTimeInMinutes   Int              @default(1)
+  canBeDeliveredOutsideState Boolean          @default(true)
+  productVariant             productVariant[]
+  category                   category?        @relation(fields: [categoryId], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
   categoryId                 String?
   // branch                   branches  @relation(fields: [branchId], references: [id], onDelete: SetDefault, onUpdate: SerDefault)
   // branchId                 String    @default("no_val")
   occasions                  occasion[]
-  avgRating                  Float          @default(0)
-  reviewsCount               Int            @default(0)
+  avgRating                  Float            @default(0)
+  reviewsCount               Int              @default(0)
   reviews                    review[]
-  dimensionsWCm              Float          @default(1)
-  dimensionsHCm              Float          @default(1)
-  dimensionsLCm              Float          @default(1)
-  weightInKg                 Float          @default(3)
+  dimensionsWCm              Float            @default(1)
+  dimensionsHCm              Float            @default(1)
+  dimensionsLCm              Float            @default(1)
+  weightInKg                 Float            @default(3)
   // productOrder               productOrder[]
   // productUser                productCart[]
-  createdAt                  DateTime       @default(now())
-  updatedAt                  DateTime       @updatedAt
+  createdAt                  DateTime         @default(now())
+  updatedAt                  DateTime         @updatedAt
 }
+
+// lowStockThreshold Int @default(5)
+// restockLeadTime Int? // Days needed to restock
+// backorderAllowed Boolean @default(false)
+
+// basePrice Decimal @default(0) // More precise than Float
+// compareAtPrice Decimal? // For showing "original" price
+// costPrice Decimal? // For profit calculations
+// currency String @default("USD") // Required for international
+
+// model ProductPrice {
+//   product Product @relation(...)
+//   // ... existing fields ...
+//   discountType DiscountType? @default(PERCENTAGE) // PERCENTAGE or FIXED_AMOUNT
+//   minimumOrder Int? // For tiered pricing
+//   bulkPricing BulkPricing[] // For quantity breaks
+// }
 
 // ===== review.prisma =====
 model review {
@@ -402,6 +513,19 @@ model review {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, productId])
+}
+
+// ===== session.prisma =====
+model session {
+  id       String  @id @unique @default(uuid())
+  fcmToken String?
+  user     user?   @relation("userSession", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId   String?
+  store    store?  @relation("storeSession", fields: [storeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  storeId  String?
+  admin    admin?  @relation("adminSession", fields: [adminId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  isActive Boolean @default(true)
+  adminId  String?
 }
 
 // ===== state.prisma =====
@@ -431,32 +555,40 @@ model store {
 
   // name               String
   // bio                String
-  logoId             String        @unique
-  logo               image         @relation("storeLogo", fields: [logoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  bannerId           String        @unique
-  banner             image         @relation("storeBanner", fields: [bannerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  phone              String        @unique
-  email              String        @unique
-  password           String
+  logoId        String        @unique
+  logo          image         @relation("storeLogo", fields: [logoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bannerId      String        @unique
+  banner        image         @relation("storeBanner", fields: [bannerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  phone         String        @unique
+  email         String        @unique
+  password      String
   // socialLinksId      String    
-  socialLinks        socialLink? //  @relation(fields: [socialLinksId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  branches           branch[]
-  transactions       transaction[]
-  refreshTokenSecret String?
-  accessTokenSecret  String?
-  moneyInPocket      Float         @default(0)
-  fcmToken           String?
+  socialLinks   socialLink? //  @relation(fields: [socialLinksId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  branches      branch[]
+  transactions  transaction[]
+  moneyInPocket Decimal       @default(0)
+  sessions      session[]     @relation("storeSession")
 
   // product            product[]
   // store - restaurant - place for weddings
-  role              String   @default("store")
-  isApprovedByAdmin Boolean  @default(false)
-  isFreezed         Boolean  @default(false)
-  isBanned          Boolean  @default(false)
-  isDeleted         Boolean  @default(false)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  role   String      @default("store")
+  status StoreStatus @default(PENDING)
+
+  // isApprovedByAdmin Boolean  @default(false)
+  // isFreezed         Boolean  @default(false)
+  // isBanned          Boolean  @default(false)
+  // isDeleted         Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   // storeAddress storeAddress[]
+}
+
+enum StoreStatus {
+  PENDING
+  APPROVED
+  FROZEN
+  BANNED
+  DELETED
 }
 
 model socialLink {
@@ -473,21 +605,31 @@ model socialLink {
 }
 
 // ===== transaction.prisma =====
+enum TransactionType {
+  DEPOSIT
+  WITHDRAW
+  TRANSFER
+  PAYMENT
+  REFUND
+}
+
 model transaction {
-  id         String    @id @unique @default(uuid())
+  id         String          @id @unique @default(uuid())
   // buy something or take money from wallet -> false = buy, true = take
   //deposit , withdraw
-  type       String    @default("deposit")
-  user       user?     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  type       TransactionType @default(DEPOSIT)
+  user       user?           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId     String?
-  store      store?    @relation(fields: [storeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  store      store?          @relation(fields: [storeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   storeId    String?
+  admin      admin?          @relation(fields: [adminId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  adminId    String?
   amount     Float
   purpose    String?
-  currency   currency? @relation(fields: [currencyId], references: [id])
+  currency   currency?       @relation(fields: [currencyId], references: [id])
   currencyId String?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
 }
 
 // ===== user-cart.prisma =====
@@ -511,37 +653,33 @@ model userCart {
 
 // ===== user.prisma =====
 model user {
-  id                 String        @id @unique @default(uuid())
-  name               String
-  dateOfBirth        DateTime?
-  gender             String?
-  moneyInPocket      Float         @default(0)
+  id            String        @id @unique @default(uuid())
+  name          String
+  dateOfBirth   DateTime?
+  gender        String?
+  moneyInPocket Decimal       @default(0)
   // is the country is deleted, the user country will be set to null
   // what is the action after this?
-  countryId          String?
-  userCountry        country?      @relation(fields: [countryId], references: [id], onDelete: SetNull, onUpdate: SetNull)
-  stateId            String?
-  userState          state?        @relation(fields: [stateId], references: [id], onDelete: SetNull, onUpdate: SetNull)
-  phone              String        @unique
-  email              String        @unique
-  password           String?
-  role               String        @default("user")
-  isVerified         Boolean       @default(false)
-  refreshTokenSecret String?
-  accessTokenSecret  String?
-  fcmToken           String?
-  transaction        transaction[]
-  userCart           userCart?
-  review             review[]
-  order              order[]
-
+  // countryId          String?
+  // userCountry        country?      @relation(fields: [countryId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  stateId       String?
+  state         state?        @relation(fields: [stateId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  phone         String        @unique
+  email         String        @unique
+  // password           String?
+  role          String        @default("user")
+  isVerified    Boolean       @default(false)
+  sessions      session[]     @relation("userSession")
+  transaction   transaction[]
+  userCart      userCart?
+  review        review[]
+  order         order[]
   // categoriesInterest category[]
   // occasionsInterest  occasion[]
 
   // products           product[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
   // imageId     String?  
   // avatar      image?    @relation(fields: [imageId], references: [id])
 }

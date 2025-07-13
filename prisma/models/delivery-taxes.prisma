@@ -16,6 +16,11 @@ model deliveryTaxes {
   updatedAt             DateTime      @updatedAt
   // government            government?   @relation(fields: [governmentId], references: [id])
   // governmentId          String?
+  //currency String @default("USD") // Required for multi-currency
 
   @@map("delivery_taxes")
 }
+
+// minimumFee Decimal @default(0) // New field
+// maximumFee Decimal? // New field
+// currency String @default("USD") // Required for multi-currency

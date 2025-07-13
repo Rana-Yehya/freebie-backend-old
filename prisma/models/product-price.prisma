@@ -7,5 +7,15 @@ model productPrice {
   discountPercent          Float?    @default(0)
   discountStartTime        DateTime?
   discountEndTime          DateTime?
+  //bulkPricing BulkPricing[]
   @@map("product_price")
 }
+// minimumOrder: 5
+// discountPercent: 10 // 10% off when buying 5+ units
+
+// model BulkPricing {
+//   id String @id @default(uuid())
+//   minQuantity Int
+//   price Decimal
+//   productPrice ProductPrice @relation(...)
+// }

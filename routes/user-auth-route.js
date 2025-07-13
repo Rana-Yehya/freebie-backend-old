@@ -14,7 +14,7 @@ const {
 const {
   authenticateUserMiddleware,
   optionalAuthenticateUserMiddleware,
-} = require("../middleware/user-auth-middleware");
+} = require("../middleware/authentication-middleware");
 const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
@@ -23,9 +23,12 @@ const {
 } = require("../middleware/admin-invalid-registeration-middleware");
 
 const router = express.Router();
-router.route("/send-code").post(adminInvalidRegisterationMiddleware, sendCode);
+// router.route("/send-code").post(adminInvalidRegisterationMiddleware, sendCode);
 
-router.route("/register").post(adminInvalidRegisterationMiddleware, register);
+// router.route("/register").post(adminInvalidRegisterationMiddleware, register);
+router.route("/send-code").post(sendCode);
+
+router.route("/register").post(register);
 router.route("/login").post(login);
 router.route("/verify-code").post(verifyCode);
 

@@ -8,7 +8,7 @@ const {
 } = require("../controllers/country-controller");
 const {
   authenticateUserMiddleware,
-} = require("../middleware/user-auth-middleware");
+} = require("../middleware/authentication-middleware");
 const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");

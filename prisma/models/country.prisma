@@ -1,11 +1,11 @@
 model country {
-  id             String   @id @unique @default(uuid())
-  nameId         String   @unique
-  name           locale   @relation(fields: [nameId], references: [id])
-  currencyCode   String
-  countryIsoCode String   @unique
-  user           user[]
+  id             String    @id @unique @default(uuid())
+  nameId         String    @unique
+  name           locale    @relation(fields: [nameId], references: [id])
+  currency       currency?
+  countryIsoCode String    @unique
+  admin          admin[]
   state          state[]
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 }

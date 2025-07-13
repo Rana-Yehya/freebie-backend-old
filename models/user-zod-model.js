@@ -12,11 +12,11 @@ const UserZodModel = z.object({
   dateOfBirth: z.string().date("Invalid date of birth"),
   gender: z.enum(["male", "female"], { message: "Invalid gender" }),
   email: z.string().email({ message: "Invalid email address" }),
-  userCountry: z.string({ message: "Country is required" }),
+  // userCountry: z.string({ message: "Country is required" }),
   userState: z.string({ message: "State is required" }),
   phone: z.string({ message: "Phone number is required" }),
   password: z.string().optional(),
-  role: z.string().optional(),
+  fcmToken: z.string().optional(),
 });
 // type UserModel = z.infer<typeof UserZodModel>;
 module.exports = { UserZodModel };

@@ -1,0 +1,15 @@
+model productVariant {
+    id           String         @id @default(uuid())
+    product      product        @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    productId    String
+    // Variant attributes (size, color, etc.)
+    color        String? // e.g., "Color"
+    //   option2   String?  // e.g., "Size"
+    //   option3   String?  // e.g., "Material"
+    // Inventory relationship
+    stock        productStock[]
+    productCart  productCart[]
+    productOrder productOrder[]
+
+    @@map("product_variant")
+}

@@ -11,10 +11,7 @@ const {
 } = require("../controllers/store-auth-controller");
 const {
   authenticateUserMiddleware,
-} = require("../middleware/user-auth-middleware");
-const {
-  adminInvalidRegisterationMiddleware,
-} = require("../middleware/admin-invalid-registeration-middleware");
+} = require("../middleware/authentication-middleware");
 
 const router = express.Router();
 

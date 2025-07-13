@@ -6,6 +6,8 @@ model currency {
   currencyAbb   locale        @relation("currencyAbbLocale", fields: [currencyAbbId], references: [id])
   order         order[]
   transaction   transaction[]
+  country       country       @relation(fields: [countryId], references: [id])
+  countryId     String        @unique
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 }

@@ -1,6 +1,6 @@
 const { adminConstant } = require("../config/constants");
 const { prisma } = require("../config/prisma");
-const { UnauthorizatedError } = require("../errors");
+const { UnauthorizedError } = require("../errors");
 
 const adminInvalidRegisterationMiddleware = async (req, res, next) => {
   const { role } = req.body;
@@ -12,7 +12,7 @@ const adminInvalidRegisterationMiddleware = async (req, res, next) => {
     if (!userInDB) {
       next();
     } else {
-      throw new UnauthorizatedError("Unauthorized to perform this action");
+      throw new UnauthorizedError("Unauthorized to perform this action");
     }
   } else {
     console.log("nicht admin");

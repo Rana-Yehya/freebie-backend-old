@@ -1,16 +1,19 @@
 model productStock {
   id           String         @id @unique @default(uuid())
-  product      product        @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  productId    String
+  // product      product        @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // productId    String
   branch       branch         @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   branchId     String
   stock        Int?
-  color        String
+  // color        String
   productOrder productOrder[]
   productCart  productCart[]
+  variant      productVariant @relation(fields: [variantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  variantId    String
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 
-  @@unique([productId, branchId, color])
+  @@unique([branchId])
+  // @@unique([productId, branchId, color])
   @@map("product_stock")
 }

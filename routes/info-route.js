@@ -11,7 +11,7 @@ const {
 const { userConstant, adminConstant } = require("../config/constants");
 const {
   authenticateUserMiddleware,
-} = require("../middleware/user-auth-middleware");
+} = require("../middleware/authentication-middleware");
 const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");

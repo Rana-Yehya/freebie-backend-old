@@ -12,12 +12,12 @@ const {
 const {
   // authenticateStoreMiddleware,
   optionalAuthenticateUserMiddleware,
-} = require("../middleware/user-auth-middleware");
+} = require("../middleware/authentication-middleware");
 
 const { storeConstant, adminConstant } = require("../config/constants");
 const {
   authenticateUserMiddleware,
-} = require("../middleware/user-auth-middleware");
+} = require("../middleware/authentication-middleware");
 
 const router = express.Router();
 

@@ -1,6 +1,6 @@
 const express = require("express");
 const {
-  register,
+  // register,
   login,
   // updateProfile,
   showMe,
@@ -10,7 +10,7 @@ const {
 } = require("../controllers/admin-auth-controller");
 const {
   authenticateUserMiddleware,
-} = require("../middleware/user-auth-middleware");
+} = require("../middleware/authentication-middleware");
 const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
@@ -20,7 +20,7 @@ const {
 
 const router = express.Router();
 
-router.route("/register").post(adminInvalidRegisterationMiddleware, register);
+// router.route("/register").post(adminInvalidRegisterationMiddleware, register);
 router.route("/login").post(login);
 
 // router.route("/forgot-password").post(forgotPassword);

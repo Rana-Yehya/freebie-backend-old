@@ -24,7 +24,7 @@ const {
 const {
   authenticateUserMiddleware,
   optionalAuthenticateUserMiddleware,
-} = require("../middleware/user-auth-middleware");
+} = require("../middleware/authentication-middleware");
 const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
