@@ -44,10 +44,12 @@ const errorHandler = async (err, req, res, next) => {
   //   message: err.message || 'Internal Server Error',
   // };
 
-  if (req.isImageUploaded && req.isSingleImage) {
-    await destroyImage({ imagePublicId: req.imageUploadedData });
-  } else if (req.isImageUploaded && !req.isSingleImage) {
-    await destroyMultipleImages({ imagesPublicIds: req.imageUploadedData });
+  if (req.isSingleImage && req.isSingleImage == true) {
+    await destroyImage({ imagePublicId: req.singleImageUploadedData });
+  } else if (req.isMultiImage && req.isMultiImage == true) {
+    await destroyMultipleImages({
+      imagesPublicIds: req.multiImageUploadedData,
+    });
   }
   let customError = {
     statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

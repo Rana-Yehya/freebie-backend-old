@@ -163,10 +163,11 @@ model deliveryTaxes {
   expiryDate            DateTime?
   createdAt             DateTime      @default(now())
   updatedAt             DateTime      @updatedAt
+
   // government            government?   @relation(fields: [governmentId], references: [id])
   // governmentId          String?
   //currency String @default("USD") // Required for multi-currency
-
+  @@unique([originStateId, destinationStateId])
   @@map("delivery_taxes")
 }
 
@@ -306,33 +307,37 @@ model order {
 
 // ===== product-cart.prisma =====
 model productCart {
-  userCart               userCart       @relation(fields: [userCartUserId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-  userCartUserId         String
-  id                     String         @id @unique @default(uuid())
+  userCart        userCart          @relation(fields: [userCartUserId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  userCartUserId  String
+  // id                     String         @id @unique @default(uuid())
   // cart                   user          @relation(fields: [userCartId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // userCartId             String
   // product                product       @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // productId              String
   // branch                 branch        @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // branchId               String
-  productStock           productStock?  @relation(fields: [productStockId], references: [id], onDelete: SetNull, onUpdate: SetNull)
-  productStockId         String?
-  variant                productVariant @relation(fields: [variantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  variantId              String
-  deliveryTaxes          deliveryTaxes? @relation(fields: [deliveryTaxesId], references: [id], onDelete: SetNull, onUpdate: SetNull)
-  deliveryTaxesId        String?
+  productStock    productStock      @relation(fields: [productStockId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productStockId  String
+  // variant                productVariant @relation(fields: [variantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // variantId              String
+  deliveryTaxes   deliveryTaxes?    @relation(fields: [deliveryTaxesId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  deliveryTaxesId String?
   // color                  String
-  quantity               Int            @default(1)
-  doesHaveEnoughQuantity Boolean        @default(true)
-  oldQuantity            Int?           @default(0)
-
-  isDeleted Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  quantity        Int               @default(1)
+  status          ProductCartStatus @default(ACTIVE)
+  oldQuantity     Int?              @default(0)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
 
   //userCartId
-  // @@unique([userCartUserId, productStockId])
+  @@unique([userCartUserId, productStockId])
   @@map("product_cart")
+}
+
+enum ProductCartStatus {
+  ACTIVE
+  NODELIVERYSTATES
+  OUTOFSTOCK
 }
 
 // ===== product-order.prisma =====
@@ -349,16 +354,26 @@ model productOrder {
   // productStockId String?
   variant            productVariant @relation(fields: [variantId], references: [id])
   variantId          String
-  productStock       productStock[]
+  productStock       productStock?  @relation(fields: [productStockId], references: [id])
+  productStockId     String?
   quantity           Int            @default(1)
   price              Float          @default(0)
   deliveryFee        Float          @default(0)
   subtotal           Float          @default(0)
-  status             String         @default("pending") //pending, confirmed, shipped, delivered, cancelled, refunded
+  status             OrderStatus    @default(PENDING) //pending, confirmed, shipped, delivered, cancelled, refunded
   cancellationReason String?
   refundAmount       Float?
 
   @@map("product_order")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
 }
 
 // ===== product-price.prisma =====
@@ -402,25 +417,26 @@ model productStock {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 
-  @@unique([branchId])
+  // @@unique([id, branchId])
   // @@unique([productId, branchId, color])
   @@map("product_stock")
 }
 
 // ===== product-variant.prisma =====
 model productVariant {
-  id           String         @id @default(uuid())
+  id           String         @id @unique @default(uuid())
   product      product        @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   productId    String
   // Variant attributes (size, color, etc.)
-  color        String? // e.g., "Color"
+  color        String // e.g., "Color"
   //   option2   String?  // e.g., "Size"
   //   option3   String?  // e.g., "Material"
   // Inventory relationship
-  stock        productStock[]
-  productCart  productCart[]
+  productStock productStock[]
+  // productCart  productCart[]
   productOrder productOrder[]
 
+  @@unique([productId, color])
   @@map("product_variant")
 }
 
@@ -429,9 +445,10 @@ model productVariant {
 
 //  1 100 000  20%       price = 80 000
 //  2 2000     5%        price = 1900
-enum productTags {
+enum ProductTags {
   FEATURED
   POPULAR
+  BIGSALE
   NONE
 }
 
@@ -457,11 +474,10 @@ model product {
   price                      Float            @default(1)
   productPrice               productPrice?
   doesNeedPreparation        Boolean          @default(false)
-  isAcceptedByAdmin          Boolean          @default(false)
-  isAvailable                Boolean          @default(true)
+  status                     ProductStatus    @default(PENDING)
   // isFeatured               Boolean   @default(false)
   // isPopular                Boolean   @default(false)
-  tags                       productTags?
+  tags                       ProductTags?
   preparationTimeInMinutes   Int              @default(1)
   canBeDeliveredOutsideState Boolean          @default(true)
   productVariant             productVariant[]
@@ -481,6 +497,14 @@ model product {
   // productUser                productCart[]
   createdAt                  DateTime         @default(now())
   updatedAt                  DateTime         @updatedAt
+}
+
+enum ProductStatus {
+  PENDING
+  APPROVED
+  // FROZEN
+  // BANNED
+  DELETED
 }
 
 // lowStockThreshold Int @default(5)
@@ -537,6 +561,9 @@ model state {
   country                  country         @relation(fields: [countryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   countryId                String
   city                     city[]
+  userLocations            userLocations[]
+  //   @relation(fields: [userLocationsId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  // userLocationsId          String?
   originDeliveryTaxes      deliveryTaxes[] @relation("OriginStateFees")
   destinationDeliveryTaxes deliveryTaxes[] @relation("DestinationStateFees")
   user                     user[]
@@ -653,23 +680,24 @@ model userCart {
 
 // ===== user.prisma =====
 model user {
-  id            String        @id @unique @default(uuid())
+  id            String          @id @unique @default(uuid())
   name          String
   dateOfBirth   DateTime?
   gender        String?
-  moneyInPocket Decimal       @default(0)
+  moneyInPocket Decimal         @default(0)
   // is the country is deleted, the user country will be set to null
   // what is the action after this?
   // countryId          String?
   // userCountry        country?      @relation(fields: [countryId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  userLocations userLocations[]
   stateId       String?
-  state         state?        @relation(fields: [stateId], references: [id], onDelete: SetNull, onUpdate: SetNull)
-  phone         String        @unique
-  email         String        @unique
+  state         state?          @relation(fields: [stateId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  phone         String          @unique
+  email         String          @unique
   // password           String?
-  role          String        @default("user")
-  isVerified    Boolean       @default(false)
-  sessions      session[]     @relation("userSession")
+  role          String          @default("user")
+  isVerified    Boolean         @default(false)
+  sessions      session[]       @relation("userSession")
   transaction   transaction[]
   userCart      userCart?
   review        review[]
@@ -682,4 +710,13 @@ model user {
   updatedAt DateTime @updatedAt
   // imageId     String?  
   // avatar      image?    @relation(fields: [imageId], references: [id])
+}
+
+model userLocations {
+  id      String  @id @unique @default(uuid())
+  userId  String
+  user    user    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  state   state?  @relation(fields: [stateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  stateId String?
+  isMain  Boolean @default(false)
 }

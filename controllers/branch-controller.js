@@ -12,24 +12,16 @@ const { storeConstant } = require("../config/constants");
 const { messaging } = require("firebase-admin");
 const getAllStoreBranches = async (req, res, next) => {
   const id = req.query.id;
-  console.log(id);
-  console.log(req.query);
-  console.log(req.user);
+  // console.log(id);
+  // console.log(req.query);
+  // console.log(req.user);
 
   if (!(req.user != undefined && req.user.role === storeConstant)) {
     if (!id) {
       // console.log("here");
       throw new BadRequestError("Please provide store id");
     }
-    // console.log(req.user.role === storeConstant);
-    // console.log(req.user != undefined);
-    // console.log("There");
-    // throw new BadRequestError("Please provide store id");
   }
-  // store -> id
-  // others -> id in query
-
-  // console.log(req.user);
   const branches = await prisma.branch.findMany({
     where: {
       storeId: id || req.user.id,
@@ -90,21 +82,6 @@ const createBranch = async (req, res, next) => {
   if (isPhoneValid.isValid != true) {
     throw new BadRequestError("The phone number is not correct");
   }
-  // if (req.user.role !== storeConstant) {
-  //   const store = await prisma.store.findUnique({
-  //     where: { id: id || req.user.id },
-  //   });
-  //   if (!store) {
-  //     throw new BadRequestError("Store not found");
-  //   }
-  // }
-  // const state = await prisma.state.findUnique({
-  //   where: { id: stateId },
-  // });
-  // if (!state) {
-  //   throw new BadRequestError("State not found");
-  // }
-
   const createdBranch = await prisma.branch.create({
     data: {
       // countryId: countryId,
@@ -142,14 +119,24 @@ const updateBranch = async (req, res, next) => {
       phone: phoneNumber || undefined,
       location: {
         update: {
-          state: { connect: { id: stateId || undefined } },
+          state: stateId != undefined ? { connect: { id: stateId } } : {},
           address: address || undefined,
         },
       },
       // storeId: id || req.user.id,
     },
   });
+  // if (updatedBranch && stateId != undefined) {
+  //   const productCart = await prisma.productCart.deleteMany({
+  //     where: {
+  //       productStock: { branchId: id },
+  //     },
+  //     include: {productStock: true}
+  //   });
+  //   productCart.map((stock) => {
 
+  //   })
+  // }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     message: "Branch updated successfully",

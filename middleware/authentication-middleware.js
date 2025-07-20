@@ -22,15 +22,24 @@ const authenticateUserMiddleware = async (req, res, next) => {
     });
     // console.log("decoded", decoded);
     //{ userId: user.id, sessionId: session.id }
-    if (decoded) {
+    if (decoded && decoded.sessionId != undefined) {
       const session = await prisma.session.findUnique({
         where: { id: decoded.sessionId },
         include: {
-          user: true,
+          user: {
+            include: {
+              state: {
+                include: { name: true, country: { include: { name: true } } },
+              },
+            },
+          },
           store: true,
-          admin: true,
+          admin: { include: { country: { include: { name: true } } } },
         },
       });
+      if (!session) {
+        throw new UnauthenticatedError("Unauthorizated");
+      }
       if (
         (session.admin &&
           decoded.role == adminConstant &&
@@ -105,26 +114,28 @@ const optionalAuthenticateUserMiddleware = async (req, res, next) => {
       secret: process.env.ACCESS_JWT_SECRET,
     });
     if (decoded) {
-      const user = await prisma.session.findUnique({
+      const session = await prisma.session.findUnique({
         where: { id: decoded.sessionId },
         select: {
-          user: true,
-          store: true,
-          admin: true,
+          user: { include: { state: { include: { country: true } } } },
+          store: { include: { password: false } },
+          admin: { include: { password: false } },
         },
       });
       if (
-        (user.admin &&
+        (session.admin &&
           decoded.role == adminConstant &&
-          user.admin.id == decoded.userId) ||
-        (user.user &&
+          session.admin.id == decoded.userId) ||
+        (session.user &&
           decoded.role == userConstant &&
-          user.user.id == decoded.userId) ||
-        (user.store &&
+          session.user.id == decoded.userId) ||
+        (session.store &&
           decoded.role == storeConstant &&
-          user.store.id == decoded.userId)
+          session.store.id == decoded.userId)
       ) {
-        req.user = user;
+        req.user = session.admin || session.user || session.store;
+        req.session = session.id;
+        req.fcmToken = session.fcmToken;
         req.role = decoded.role;
       } else {
         throw new UnauthenticatedError("Unauthorizated");

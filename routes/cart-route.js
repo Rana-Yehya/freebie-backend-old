@@ -2,8 +2,8 @@ const express = require("express");
 const {
   getAllCartItems,
   deleteCartItem,
-  createCartItem,
-  updateCartQuantity,
+  createUpdateCartItem,
+  // updateCartQuantity,
   deleteCart,
   calculateSubTotal,
   calculateDeliveryFees,
@@ -29,7 +29,7 @@ router
   .post(
     authenticateUserMiddleware,
     authorizeMiddleware(userConstant),
-    createCartItem
+    createUpdateCartItem
   )
   .delete(
     authenticateUserMiddleware,
@@ -37,12 +37,20 @@ router
     deleteCart
   );
 router
-  .route("/:id")
-  .patch(
+  .route("/") //:id
+  // .patch(
+  //   authenticateUserMiddleware,
+  //   authorizeMiddleware(userConstant),
+  //   createUpdateCartItem
+  //   // updateCartQuantity
+  // )
+  .delete(
     authenticateUserMiddleware,
     authorizeMiddleware(userConstant),
-    updateCartQuantity
-  )
+    deleteCartItem
+  );
+router
+  .route("/:id") //:id
   .delete(
     authenticateUserMiddleware,
     authorizeMiddleware(userConstant),

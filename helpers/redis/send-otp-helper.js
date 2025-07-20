@@ -15,16 +15,16 @@ const sendOtpHelper = async ({ name, phone, email }) => {
     "templates",
     "email-template.ejs"
   );
-  await sendValidationEmail({
-    email: email,
-    from: `"Maddison Foo Koch 👻" ${process.env.SMTP_USER}`,
-    subject: "Email Validation",
-    emailTemplatePath: emailTemplatePath,
-    data: {
-      name: name,
-      otp: otp,
-    },
-  });
+  // await sendValidationEmail({
+  //   email: email,
+  //   from: `"Maddison Foo Koch 👻" ${process.env.SMTP_USER}`,
+  //   subject: "Email Validation",
+  //   emailTemplatePath: emailTemplatePath,
+  //   data: {
+  //     name: name,
+  //     otp: otp,
+  //   },
+  // });
   //save the otp
   await redis.set(`otp:${phone}`, otp, "EX", 300); // 60 * 5
   //save user cooldown so he wont send another mail

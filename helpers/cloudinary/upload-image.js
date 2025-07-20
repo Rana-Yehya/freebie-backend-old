@@ -34,9 +34,8 @@ async function uploadImage({ req, image, folder = "file-upload" }) {
   }
   // req.images = uploadedImage;
   const imageToStore = [uploadedImage.secure_url, uploadedImage.public_id];
-  req.isImageUploaded = true;
   req.isSingleImage = true;
-  req.imageUploadedData = uploadedImage.public_id;
+  req.singleImageUploadedData = uploadedImage.public_id;
   return imageToStore;
   // return res.status(StatusCodes.CREATED).json({
   //   isSuccess: true,
@@ -138,9 +137,8 @@ async function uploadMultipleImages({ req, images, folder = "file-upload" }) {
     }
   }
   const imageToStore = [urls, publicIds];
-  req.isImageUploaded = true;
-  req.isSingleImage = false;
-  req.imageUploadedData = publicIds;
+  req.isMultiImage = true;
+  req.multiImageUploadedData = publicIds;
   return imageToStore;
 }
 // const uploadMultipleImages = async (req, res, next) => {

@@ -16,6 +16,7 @@ const { passwordEncrypt, passwordCompare } = require("../utils/password-utils");
 const { userConstant, storeConstant } = require("../config/constants");
 const { SocialMediaZodModel } = require("../models/social-media-zod-model");
 const { uploadImage } = require("../helpers/cloudinary/upload-image");
+const { StoreStatus } = require("../generated/prisma");
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -28,7 +29,7 @@ const login = async (req, res) => {
   if (!user) {
     throw new UnauthenticatedError("Invalid Credentials");
   }
-  if (!user.isApprovedByAdmin) {
+  if (!(user.status == StoreStatus.APPROVED)) {
     throw new UnauthenticatedError(
       "Please wait till admins approve your registeration"
     );
@@ -40,22 +41,31 @@ const login = async (req, res) => {
   if (!isPasswordMatch) {
     throw new UnauthenticatedError("Invalid Credentials");
   }
-  const refreshTokenSecret = crypto.randomBytes(40).toString("hex");
-  const accessTokenSecret = crypto.randomBytes(40).toString("hex");
-  const accessTokenJWT = createAccessJWT({
-    payload: { userId: user.id, accessTokenSecret, role: storeConstant },
-  });
-  const refreshTokenJWT = createRefreshJWT({
-    payload: { userId: user.id, refreshTokenSecret, role: storeConstant },
-  });
-
-  await prisma.store.update({
-    where: { id: user.id },
+  // const refreshTokenSecret = crypto.randomBytes(40).toString("hex");
+  // const accessTokenSecret = crypto.randomBytes(40).toString("hex");
+  // const accessTokenJWT = createAccessJWT({
+  //   payload: { userId: user.id, accessTokenSecret, role: storeConstant },
+  // });
+  // const refreshTokenJWT = createRefreshJWT({
+  //   payload: { userId: user.id, refreshTokenSecret, role: storeConstant },
+  // });
+  const session = await prisma.session.create({
+    // where: { id: user.id },
     data: {
-      refreshTokenSecret: refreshTokenSecret,
-      accessTokenSecret: accessTokenSecret,
+      // isVerified: true,
+      // refreshTokenSecret: refreshTokenSecret,
+      // accessTokenSecret: accessTokenSecret,
+      store: { connect: { id: user.id } },
     },
   });
+
+  const accessTokenJWT = createAccessJWT({
+    payload: { userId: user.id, sessionId: session.id, role: storeConstant },
+  });
+  const refreshTokenJWT = createRefreshJWT({
+    payload: { userId: user.id, sessionId: session.id, role: storeConstant }, //adminConstant
+  });
+
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     message: "Login Successfully",

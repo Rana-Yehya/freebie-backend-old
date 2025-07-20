@@ -4,12 +4,7 @@ const { UnauthorizedError } = require("../errors");
 const { appLocalize } = require("../helpers/localize");
 
 const localizationMiddleware = async (req, res, next) => {
-  console.log("lang", req.headers);
-
-  console.log("lang", req.headers["accept-language"]);
-
   const lang = req.headers["accept-language"]?.startsWith("ar") ? "ar" : "en";
-  console.log("lang", lang);
 
   // Attach localization function to request
   req.lang = lang;

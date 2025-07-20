@@ -837,6 +837,10 @@ const appLocalize = new Localize({
     en: "Unauthorizated",
     ar: "غير مصرح به",
   },
+  "Please provide a reason for cancellation": {
+    en: "Please provide a reason for cancellation",
+    ar: "يرجى تقديم سبب الإلغاء",
+  },
 });
 
 module.exports = { appLocalize };

@@ -9,6 +9,11 @@ const {
 const {
   sendNotificationToAllUsersHelper,
 } = require("../helpers/notifications/send-notificaton-to-all-users-helper");
+const {
+  StoreStatus,
+  ProductStatus,
+  ProductTags,
+} = require("../generated/prisma");
 
 const approveStore = async (req, res) => {
   const { storeId } = req.body;
@@ -16,7 +21,7 @@ const approveStore = async (req, res) => {
 
   await prisma.store.update({
     where: { id: storeId },
-    data: { isApprovedByAdmin: true },
+    data: { status: StoreStatus.APPROVED },
   });
 
   return res.status(StatusCodes.OK).json({
@@ -30,7 +35,7 @@ const approveProduct = async (req, res) => {
 
   await prisma.product.update({
     where: { id: productId },
-    data: { isAcceptedByAdmin: true },
+    data: { status: ProductStatus.APPROVED },
   });
 
   return res.status(StatusCodes.OK).json({
@@ -38,6 +43,27 @@ const approveProduct = async (req, res) => {
     message: "Product approved successfully",
   });
 };
+const setProductTag = async (req, res) => {
+  const { productId, tag } = req.body;
+  const tags =
+    tag == "featured"
+      ? ProductTags.FEATURED
+      : tag == "popular"
+      ? ProductTags.POPULAR
+      : undefined;
+  const product = await prisma.product.update({
+    where: { id: productId },
+    data: { tags: tags },
+  });
+  if (!product) {
+    throw new BadRequestError("Product not found");
+  }
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "Product approved successfully",
+  });
+};
+
 const getAllProducts = async (req, res, next) => {
   // let isAcceptedByAdmin = true;
   // if (req.user.role === adminConstant) {
@@ -68,15 +94,11 @@ const getAllStores = async (req, res, next) => {
       phone: true,
       email: true,
       role: true,
-      isApprovedByAdmin: true,
-      isFreezed: true,
-      isBanned: true,
-      isDeleted: true,
       createdAt: true,
       updatedAt: true,
       transactions: false,
-      refreshTokenSecret: false,
-      accessTokenSecret: false,
+      sessions: false,
+      status: true,
     },
   });
   return res
@@ -89,9 +111,9 @@ const sendNotificationToAllUsers = async (req, res, next) => {
     throw new BadRequestError("Title and body are required");
   }
   const userTokens = await prisma.user.findMany({
-    select: { fcmToken: true },
+    select: { sessions: { select: { fcmToken: true } } },
   });
-  const token = userTokens.map((user) => user.fcmToken);
+  const token = userTokens.map((user) => user.sessions.fcmToken);
   // console.log(x);
   // console.log(userTokens);
   // const token = [
@@ -115,4 +137,5 @@ module.exports = {
   getAllStores,
   getAllProducts,
   sendNotificationToAllUsers,
+  setProductTag,
 };

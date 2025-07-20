@@ -13,7 +13,7 @@ model productStock {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 
-  @@unique([branchId])
+  // @@unique([id, branchId])
   // @@unique([productId, branchId, color])
   @@map("product_stock")
 }

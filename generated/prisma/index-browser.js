@@ -265,14 +265,11 @@ exports.Prisma.OrderScalarFieldEnum = {
 
 exports.Prisma.ProductCartScalarFieldEnum = {
   userCartUserId: 'userCartUserId',
-  id: 'id',
   productStockId: 'productStockId',
-  variantId: 'variantId',
   deliveryTaxesId: 'deliveryTaxesId',
   quantity: 'quantity',
-  doesHaveEnoughQuantity: 'doesHaveEnoughQuantity',
+  status: 'status',
   oldQuantity: 'oldQuantity',
-  isDeleted: 'isDeleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -281,6 +278,7 @@ exports.Prisma.ProductOrderScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
   variantId: 'variantId',
+  productStockId: 'productStockId',
   quantity: 'quantity',
   price: 'price',
   deliveryFee: 'deliveryFee',
@@ -321,8 +319,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   detailedDescriptionId: 'detailedDescriptionId',
   price: 'price',
   doesNeedPreparation: 'doesNeedPreparation',
-  isAcceptedByAdmin: 'isAcceptedByAdmin',
-  isAvailable: 'isAvailable',
+  status: 'status',
   tags: 'tags',
   preparationTimeInMinutes: 'preparationTimeInMinutes',
   canBeDeliveredOutsideState: 'canBeDeliveredOutsideState',
@@ -427,6 +424,13 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.UserLocationsScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  stateId: 'stateId',
+  isMain: 'isMain'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -441,9 +445,31 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-exports.productTags = exports.$Enums.productTags = {
+exports.ProductCartStatus = exports.$Enums.ProductCartStatus = {
+  ACTIVE: 'ACTIVE',
+  NODELIVERYSTATES: 'NODELIVERYSTATES',
+  OUTOFSTOCK: 'OUTOFSTOCK'
+};
+
+exports.OrderStatus = exports.$Enums.OrderStatus = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  SHIPPED: 'SHIPPED',
+  DELIVERED: 'DELIVERED',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'REFUNDED'
+};
+
+exports.ProductStatus = exports.$Enums.ProductStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  DELETED: 'DELETED'
+};
+
+exports.ProductTags = exports.$Enums.ProductTags = {
   FEATURED: 'FEATURED',
   POPULAR: 'POPULAR',
+  BIGSALE: 'BIGSALE',
   NONE: 'NONE'
 };
 
@@ -492,7 +518,8 @@ exports.Prisma.ModelName = {
   socialLink: 'socialLink',
   transaction: 'transaction',
   userCart: 'userCart',
-  user: 'user'
+  user: 'user',
+  userLocations: 'userLocations'
 };
 
 /**

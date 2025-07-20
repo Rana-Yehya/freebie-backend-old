@@ -1,4 +1,4 @@
-const { CountryZodModel } = require("../models/country-zod-model");
+const { CurrencyZodModel } = require("../models/currency-zod-model");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
 const {
@@ -7,9 +7,7 @@ const {
   UnauthenticatedError,
 } = require("../errors");
 const getAllCountries = async (req, res, next) => {
-  const country = await prisma.country.findMany({
-    include: { name: true },
-  });
+  const country = await prisma.country.findMany();
   return res
     .status(StatusCodes.OK)
     .json({ isSuccess: true, count: country.length, data: country });
@@ -18,7 +16,6 @@ const getCountry = async (req, res, next) => {
   const { id: countryId } = req.params;
   const country = await prisma.country.findUnique({
     where: { id: countryId },
-    include: { name: true },
   });
   if (!country) {
     throw new BadRequestError("Country not found");
@@ -31,7 +28,7 @@ const createCountry = async (req, res, next) => {
     countryName,
     countryNameEn,
     countryNameAr,
-    // currencyCode,
+    currencyCode,
     countryIsoCode,
   } = req.body;
   const zodModel = CountryZodModel.safeParse({
@@ -40,7 +37,7 @@ const createCountry = async (req, res, next) => {
       en: countryNameEn,
       ar: countryNameAr,
     },
-    // currencyCode: currencyCode,
+    currencyCode: currencyCode,
     countryIsoCode: countryIsoCode,
   });
 
@@ -58,7 +55,7 @@ const createCountry = async (req, res, next) => {
           ar: countryNameAr || countryName,
         },
       },
-      // currencyCode: currencyCode,
+      currencyCode: currencyCode,
       countryIsoCode: countryIsoCode,
     },
   });
@@ -77,7 +74,7 @@ const updateCountry = async (req, res, next) => {
     countryName,
     countryNameEn,
     countryNameAr,
-    // currencyCode,
+    currencyCode,
     countryIsoCode,
   } = req.body;
 
@@ -94,13 +91,13 @@ const updateCountry = async (req, res, next) => {
           ar: countryNameAr || undefined,
         },
       },
-      // currencyCode: currencyCode || undefined,
+      currencyCode: currencyCode || undefined,
       countryIsoCode: countryIsoCode || undefined,
     },
   });
   console.log(updatedCountry);
 
-  return res.status(StatusCodes.OK).json({
+  return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
     message: "Country updated successfully",
     data: updatedCountry,

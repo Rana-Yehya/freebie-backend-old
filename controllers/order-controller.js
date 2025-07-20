@@ -11,35 +11,45 @@ const {
   UpdateUserProductZodModel,
 } = require("../models/update-user-product-zod-model");
 const { createDepositPayment } = require("./transaction-controller");
-const { connect } = require("../routes/country-route");
+const { OrderStatus, TransactionType } = require("../generated/prisma");
 
 //for now create a function for each status
-const OrderStatus = [
-  "pending",
-  "confirmed",
-  "shipped",
-  "delivered",
-  "cancelled",
-  "refunded",
-];
 
 //pending, confirmed, shipped, delivered, cancelled, refunded
 const getAllUserOrders = async (req, res, next) => {
   const userOrder = await prisma.order.findMany({
     where: { userId: req.user.id },
     include: {
+      location: {
+        select: {
+          state: {
+            include: { country: { include: { name: true } }, name: true },
+          },
+        },
+      },
       productOrder: {
         include: {
+          // productStock: {
+          //   include: {
           productStock: {
-            include: {
-              product: {
-                select: { name: true, image: true },
+            select: {
+              variant: {
+                include: {
+                  product: {
+                    select: { name: true, mainImage: true },
+                  },
+                },
               },
             },
           },
+          //   },
+          // },
           // branch: true,
         },
       },
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
 
@@ -64,6 +74,9 @@ const getAllStoreOrders = async (req, res, next) => {
           },
         },
       },
+    },
+    orderBy: {
+      createdAt: "desc",
     },
     // include: {
     //   //    productOrder: {
@@ -96,14 +109,24 @@ const getOrder = async (req, res, next) => {
   const order = await prisma.order.findUnique({
     where: { id: orderId },
     include: {
-      location: true,
+      location: {
+        include: {
+          state: {
+            include: { name: true, country: { include: { name: true } } },
+          },
+        },
+      },
       productOrder: {
         include: {
           orderId: false,
           productStock: {
             include: {
-              product: {
-                select: { id: true, name: true, image: true },
+              variant: {
+                include: {
+                  product: {
+                    select: { id: true, name: true, mainImage: true },
+                  },
+                },
               },
               branch: {
                 select: {
@@ -134,18 +157,27 @@ const createOrder = async (req, res, next) => {
   const { address, notes, paymentMethod } = req.body;
   // const { id: orderId } = req.params;
   const userCart = await prisma.userCart.findUnique({
-    where: { userId: req.user.id },
+    where: {
+      userId: req.user.id,
+    },
     include: {
       productCart: {
         select: {
+          deliveryTaxes: true,
           productStockId: true,
           productStock: {
             select: {
-              productId: true,
-              product: {
+              variant: {
                 select: {
-                  price: true,
-                  productPrice: true,
+                  id: true,
+                  productId: true,
+                  color: true,
+                  product: {
+                    select: {
+                      price: true,
+                      productPrice: true,
+                    },
+                  },
                 },
               },
             },
@@ -158,26 +190,55 @@ const createOrder = async (req, res, next) => {
 
   const productOrder = userCart.productCart.map((item) => {
     return {
-      price: item.productStock.product.productPrice
-        ? item.productStock.product.productPrice.actualPrice
-        : item.productStock.product.price,
-      // productStock: { connect: { id: item.productStockId } },
+      variantId: item.productStock.variant.id,
       productStockId: item.productStockId,
+      subtotal:
+        (item.productStock.variant.product.productPrice
+          ? item.productStock.variant.product.productPrice.actualPrice
+          : item.productStock.variant.product.price) * item.quantity,
+      // productStock: { connect: { id: item.productStockId } },
+      // productStockId: item.productStockId,
+      quantity: item.quantity,
+      // deliveryFee: item.deliveryTaxes
     };
-
-    //     {
-    //   productId: item.productId,
-    //   branchId: item.branchId,
-    //   //TODO IS IT CORRECT
-    //   price: item.product.actualPrice || item.product.price, //for one item
-    //   // storeId: item.branch.storeId,
-    //   color: item.color,
-    //   quantity: item.quantity,
-    // };
   });
-  console.log(userCart.productCart);
-  console.log(productOrder);
-  console.log(productOrder.productStock);
+
+  await prisma.userCart.delete({
+    where: { userId: req.user.id },
+  });
+  userCart.productCart.map(async (item) => {
+    await prisma.product.update({
+      where: {
+        id: item.productStock.variant.productId,
+        // {
+        //   in: userCart.productCart.map((item) => item.productStock.productId),
+        // },
+      },
+      data: {
+        productVariant: {
+          update: {
+            where: {
+              productId_color: {
+                productId: item.productStock.variant.productId,
+                color: item.productStock.variant.color,
+                // branchId: item.branchId,
+              },
+            },
+            data: {
+              productStock: {
+                update: {
+                  where: {
+                    id: item.productStockId,
+                  },
+                  data: { stock: { decrement: item.quantity } },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  });
 
   const order = await prisma.order.create({
     // where: { id: orderId },
@@ -208,69 +269,6 @@ const createOrder = async (req, res, next) => {
   if (!order) {
     throw new BadRequestError("Order was not created. Please contact support");
   }
-  const productCart = userCart.productCart.map((item) => {
-    return {
-      data: { isDeleted: true },
-      where: {
-        userCartUserId: req.user.id,
-        productStockId: item.productStockId,
-      },
-    };
-  });
-  /*
-   productCart: {
-        updateMany: {
-          data: { isDeleted: true },
-          where: {
-            userCartUserId_productStockId: productCart,
-          },
-        },
-      },
-*/
-  await prisma.userCart.update({
-    where: {
-      userId: req.user.id,
-    },
-    data: {
-      productCart: {
-        updateMany: productCart,
-
-        // userCart.productCart.map(
-        //       (item) =>  {
-        //   data: { isDeleted: true },
-        //   where: {
-        //     userCartUserId: req.user.id,
-        //     productStockId: item.productStockId
-        //    }
-        //    }
-        //  )
-      },
-    },
-  });
-  userCart.productCart.map(async (item) => {
-    await prisma.product.update({
-      where: {
-        id: item.productStock.productId,
-        // {
-        //   in: userCart.productCart.map((item) => item.productStock.productId),
-        // },
-      },
-      data: {
-        productStock: {
-          update: {
-            where: {
-              productId_branchId_color: {
-                productId: item.productId,
-                color: item.color,
-                branchId: item.branchId,
-              },
-            },
-            data: { stock: { decrement: item.quantity } },
-          },
-        },
-      },
-    });
-  });
   return res.status(StatusCodes.CREATED).json({ isSuccess: true, data: order });
 };
 
@@ -282,16 +280,18 @@ const changeOrderStatusAsConfirmedByStore = async (req, res, next) => {
         { id: orderId },
         {
           productOrder: {
-            every: { productStock: { branch: { storeId: req.user.id } } },
+            every: {
+              productStock: { branch: { storeId: req.user.id } },
+            },
           },
         },
-        { productOrder: { every: { status: "pending" } } },
+        { productOrder: { every: { status: OrderStatus.PENDING } } },
       ],
     },
     select: {
       productOrder: {
-        id: true,
         select: {
+          id: true,
           productStock: {
             select: {
               branchId: true,
@@ -308,66 +308,34 @@ const changeOrderStatusAsConfirmedByStore = async (req, res, next) => {
       "The order is confirmed or you already confirmed it"
     );
   }
+  console.log(order[0].productOrder);
 
-  // let productOrderList = [];
-
-  // order.productOrder.map((product) => {
-  //   console.log(product.branch.storeId);
-  //   if (product.branch.storeId == req.user.id) {
-  //     productOrderList.push(product);
-  //   }
-  // });
-  // if (
-  //   productOrderList.map(
-  //     (product) =>
-  //       product.status === "confirmed" || product.status !== "pending"
-  //   )
-  // ) {
-  //   throw new BadRequestError(
-  //     "The order is confirmed or you already confirmed it"
-  //   );
-  // }
-
-  // let productOrderBranches = [];
-  // order[0].productOrder.map((product) => {
-  //   productOrderBranches.push(product.branchId);
-  // });
-  // console.log(productOrderBranches);
-
-  // //TODO this is wrong
-  // // const generalStatus = productOrder.length == 1 ? "confirmed" : "pending";
-
+  const productOrder = order[0].productOrder;
+  let productOrderIds = [];
+  for (let i = 0; i < productOrder.length; i++) {
+    console.log(productOrder[i].id);
+    productOrderIds.push(productOrder[i].id);
+  }
   const updatedOrder = await prisma.order.update({
     where: {
       id: orderId,
     },
     data: {
-      //      status: generalStatus,
       productOrder: {
-        update: {
+        updateMany: {
           // where: {
           //   branchId: { in: productOrderBranches },
           // },
           where: {
-            productStock: { branch: { storeId: req.user.id } },
+            id: { in: productOrderIds },
+            // productStock: { every: { id: { in: branchIds } } },
+            //  productStock: { every: { branch: { storeId: req.user.id } } },
           },
           data: {
-            status: "confirmed",
+            status: OrderStatus.CONFIRMED,
           },
         },
       },
-      // branch: {
-      //   storeId: req.user.id,
-      //
-      //     },
-      //     data: {
-      //       status: "confirmed",
-      //     },
-      //   },
-      //   // branch: {
-      //   //   storeId: req.user.id,
-      //   // },
-      // },
     },
   });
 
@@ -393,21 +361,19 @@ const changeOrderStatusAsCancelledByStore = async (req, res, next) => {
         { id: orderId },
         {
           productOrder: {
-            every: { productStock: { branch: { storeId: req.user.id } } },
+            every: {
+              productStock: { branch: { storeId: req.user.id } },
+            },
           },
         },
-        { productOrder: { every: { status: "pending" } } },
+        { productOrder: { every: { status: OrderStatus.PENDING } } },
       ],
     },
     select: {
+      userId: true,
       productOrder: {
-        id: true,
         select: {
-          productStock: {
-            select: {
-              branchId: true,
-            },
-          },
+          id: true,
           status: true,
         },
       },
@@ -419,99 +385,60 @@ const changeOrderStatusAsCancelledByStore = async (req, res, next) => {
       "The order is confirmed or you already confirmed it"
     );
   }
-  // const productOrder = order.productOrder.filter(
-  //   (product) => product.status === "cancelled"
-  // );
-  // // const stores = order.productOrder.map((product) => product.branch.storeId);
-
-  // // console.log(productOrder.length);
-  // // if (productOrder.length == 1) {
-  // //   throw new Error("You can't cancel this order");
-  // // }
-  // // const generalStatus = productOrder.length == 1 ? "confirmed" : "pending";
-  // let productOrderList = [];
-
-  // order.productOrder.map((product) => {
-  //   console.log(product.branch.storeId);
-  //   if (product.branch.storeId == req.user.id) {
-  //     productOrderList.push(product);
-  //   }
-  // });
-  // if (
-  //   productOrderList.map(
-  //     (product) =>
-  //       product.status === "cancelled" || product.status !== "pending"
-  //   )
-  // ) {
-  //   throw new BadRequestError(
-  //     "The order is cancelled or you already confirmed it"
-  //   );
-  // }
-
-  // let productOrderBranches = [];
-  // order[0].productOrder.map((product) => {
-  //   productOrderBranches.push(product.branchId);
-  // });
-  // console.log(productOrderBranches);
-  const updatedOrder = await prisma.order.update({
-    where: {
-      id: orderId,
-    },
-    data: {
-      //      status: generalStatus,
-      productOrder: {
-        update: {
-          // where: {
-          //   branchId: { in: productOrderBranches },
-          // },
-          where: {
-            productStock: { branch: { storeId: req.user.id } },
-          },
-          data: {
-            status: "cancelled",
-          },
-        },
-      },
-    },
-    // include: {
-    //   productOrder: {
-    //     include: {
-    //       product: {
-    //         include: true,
-    //       },
-    //       branch: {
-    //         include: {
-    //           store: true,
-    //         },
-    //       },
-    //     },
-    //   },
-    // },
-  });
-  console.log(productOrder.length + 1);
-  if (order[0].productOrder.length == productOrder.length + 1) {
-    let sum = 0;
-    productOrderList.map((product) => {
-      sum = sum + product.price * product.quantity;
-    });
-    await createDepositPayment({
-      isUser: true,
-      userId: order[0].userId,
-      amount: sum + order[0].deliveryFee,
-      purpose: "cancel_order",
-    });
-  } else {
-    let sum = 0;
-    productOrderList.map((product) => {
-      sum = sum + product.price * product.quantity;
-    });
-    await createDepositPayment({
-      isUser: true,
-      userId: order[0].userId,
-      amount: sum,
-      purpose: "cancel_order",
-    });
+  console.log(order);
+  const productOrder = order[0].productOrder;
+  let productOrderIds = [];
+  for (let i = 0; i < productOrder.length; i++) {
+    console.log(productOrder[i].id);
+    productOrderIds.push(productOrder[i].id);
   }
+
+  // const updatedOrder = await prisma.order.update({
+  //   where: {
+  //     id: orderId,
+  //   },
+  //   data: {
+  //     productOrder: {
+  //       updateMany: {
+  //         // where: {
+  //         //   branchId: { in: productOrderBranches },
+  //         // },
+  //         where: {
+  //           id: { in: productOrderIds },
+  //           // productStock: { every: { id: { in: branchIds } } },
+  //           //  productStock: { every: { branch: { storeId: req.user.id } } },
+  //         },
+  //         data: {
+  //           status: OrderStatus.CANCELLED,
+  //         },
+  //       },
+  //     },
+  //   },
+  // });
+  console.log(productOrder.length + 1);
+  // if (order[0].productOrder.length == productOrder.length + 1) {
+  //   let sum = 0;
+  //   productOrderList.map((product) => {
+  //     sum = sum + product.price * product.quantity;
+  //   });
+  //   await createDepositPayment({
+  //     isUser: true,
+  //     userId: order[0].userId,
+  //     amount: sum + order[0].deliveryFee,
+  //     purpose: "cancel_order",
+  //   });
+  // } else {
+  //   let sum = 0;
+  //   productOrderList.map((product) => {
+  //     sum = sum + product.price * product.quantity;
+  //   });
+  //   await createDepositPayment({
+  //     isUser: true,
+  //     userId: order[0].userId,
+  //     amount: sum,
+  //     purpose: "cancel_order",
+  //   });
+  // }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     message: "Order Status Cancelled Successfully",
@@ -606,18 +533,23 @@ const changeOrderStatusAsShippedByStore = async (req, res, next) => {
     where: {
       AND: [
         { id: orderId },
-        { productOrder: { every: { branch: { storeId: req.user.id } } } },
-        { productOrder: { every: { status: "confirmed" } } },
+        {
+          productOrder: {
+            every: {
+              productStock: { branch: { storeId: req.user.id } },
+            },
+          },
+        },
+        { productOrder: { every: { status: OrderStatus.CONFIRMED } } },
       ],
     },
     select: {
-      status: true,
       productOrder: {
         select: {
-          price: true,
-          quantity: true,
-          branchId: true,
-          status: true,
+          id: true,
+          subtotal: true,
+          // quantity: true,
+          // status: true,
         },
       },
     },
@@ -627,6 +559,15 @@ const changeOrderStatusAsShippedByStore = async (req, res, next) => {
     throw new BadRequestError(
       "Order has not been confirmed or it is already shipped"
     );
+  }
+  const productOrder = order[0].productOrder;
+  let productOrderIds = [];
+  let sum = 0;
+
+  for (let i = 0; i < productOrder.length; i++) {
+    console.log(productOrder[i].id);
+    productOrderIds.push(productOrder[i].id);
+    sum = sum + productOrder[i].subtotal;
   }
 
   // let productOrderList = [];
@@ -648,11 +589,6 @@ const changeOrderStatusAsShippedByStore = async (req, res, next) => {
   //   );
   // }
 
-  let productOrderBranches = [];
-  order[0].productOrder.map((product) => {
-    productOrderBranches.push(product.branchId);
-  });
-  console.log(productOrderBranches);
   const updatedOrder = await prisma.order.update({
     where: {
       id: orderId,
@@ -662,10 +598,10 @@ const changeOrderStatusAsShippedByStore = async (req, res, next) => {
       productOrder: {
         updateMany: {
           where: {
-            branchId: { in: productOrderBranches },
+            id: { in: productOrderIds },
           },
           data: {
-            status: "shipped",
+            status: OrderStatus.SHIPPED,
           },
         },
         // branch: {
@@ -674,12 +610,9 @@ const changeOrderStatusAsShippedByStore = async (req, res, next) => {
       },
     },
   });
-  let sum = 0;
-  order[0].productOrder.map((product) => {
-    sum = sum + product.price * product.quantity;
-  });
 
   await createDepositPayment({
+    type: TransactionType.DEPOSIT,
     isUser: false,
     userId: req.user.id,
     amount: sum - sum * 0.2,
@@ -700,15 +633,22 @@ const changeOrderStatusAsDeliveredByStore = async (req, res, next) => {
     where: {
       AND: [
         { id: orderId },
-        { productOrder: { every: { branch: { storeId: storeId } } } },
-        { productOrder: { every: { status: "shipped" } } },
+        {
+          productOrder: {
+            every: {
+              productStock: { branch: { storeId: storeId } },
+            },
+          },
+        },
+        { productOrder: { every: { status: OrderStatus.SHIPPED } } },
       ],
     },
     select: {
       status: true,
       productOrder: {
         select: {
-          price: true,
+          id: true,
+          subtotal: true,
           quantity: true,
           branchId: true,
           status: true,
@@ -742,11 +682,13 @@ const changeOrderStatusAsDeliveredByStore = async (req, res, next) => {
   //   );
   // }
 
-  let productOrderBranches = [];
-  order[0].productOrder.map((product) => {
-    productOrderBranches.push(product.branchId);
-  });
-  console.log(productOrderBranches);
+  const productOrder = order[0].productOrder;
+  let productOrderIds = [];
+  for (let i = 0; i < productOrder.length; i++) {
+    console.log(productOrder[i]);
+    productOrderIds.push(productOrder[i].id);
+    // sum = sum + productOrder[i][0].subtotal;
+  }
   const updatedOrder = await prisma.order.update({
     where: {
       id: orderId,
@@ -756,10 +698,10 @@ const changeOrderStatusAsDeliveredByStore = async (req, res, next) => {
       productOrder: {
         updateMany: {
           where: {
-            branchId: { in: productOrderBranches },
+            id: { in: productOrderIds },
           },
           data: {
-            status: "delivered",
+            status: OrderStatus.DELIVERED,
           },
         },
         // branch: {
@@ -805,83 +747,121 @@ const changeOrderStatusAsDeliveredByStore = async (req, res, next) => {
 
 const cancelOrderByUser = async (req, res, next) => {
   const { id: orderId } = req.params;
+  const { cancellationReason } = req.body;
+  if (!cancellationReason) {
+    throw new BadRequestError("Please provide a reason for cancellation");
+  }
   //TODO WHAT IF THE ORDER IS PREPARING OR DELIVERING
-  const order = await prisma.order.findMany({
+  const order = await prisma.order.findUnique({
     where: {
-      AND: [
-        { id: orderId },
-        // { productOrder: { every: { branch: { storeId: req.user.id } } } },
-        {
-          productOrder: {
-            every: {
-              status: "shipped" || "delivered" || "cancelled" || "refunded",
-            },
-          },
-        },
-      ],
+      id: orderId,
+      // AND: [
+      //   { id: orderId },
+      //   // { productOrder: { every: { branch: { storeId: req.user.id } } } },
+      //   {
+      //     productOrder: {
+      //       every: {
+      //         status:
+      //           OrderStatus.CONFIRMED ||
+      //           OrderStatus.SHIPPED ||
+      //           OrderStatus.DELIVERED ||
+      //           OrderStatus.CANCELLED ||
+      //           OrderStatus.REFUNDED,
+      //       },
+      //     },
+      //   },
+      // ],
     },
     select: {
-      status: true,
+      taxAmount: true,
+      deliveryFee: true,
+      subtotal: true,
       totalAmount: true,
       productOrder: {
         select: {
-          product: {
+          id: true,
+          status: true,
+          variant: {
             select: {
-              doesNeedPreparation: true,
+              product: {
+                select: {
+                  doesNeedPreparation: true,
+                },
+              },
             },
           },
-          branch: {
+          productStock: {
             select: {
-              storeId: true,
+              branch: {
+                select: {
+                  storeId: true,
+                },
+              },
             },
           },
         },
       },
     },
   });
-
-  if (order.length == 0) {
+  const canOrderBeCancelled = order.productOrder.find(
+    (productOrder) =>
+      productOrder.status == OrderStatus.CONFIRMED ||
+      productOrder.status == OrderStatus.SHIPPED ||
+      productOrder.status == OrderStatus.DELIVERED ||
+      productOrder.status == OrderStatus.CANCELLED ||
+      productOrder.status == OrderStatus.REFUNDED
+  );
+  console.log(canOrderBeCancelled);
+  if (canOrderBeCancelled != undefined) {
     throw new BadRequestError("Order can not be cancelled now");
   }
-  // const orderStatusListToNotAcceptCancellation = [
-  //   "shipped",
-  //   "delivered",
-  //   "cancelled",
-  //   "refunded",
-  // ];
   // if (orderStatusListToNotAcceptCancellation.includes(order.status)) {
   //   throw new BadRequestError("Order cannot be cancelled.");
   // }
-  const doesNeedPreparation = order[0].productOrder.map(
-    (p) => p.product.doesNeedPreparation
-  );
-  console.log(doesNeedPreparation);
-  if (doesNeedPreparation.includes(true)) {
-    await createDepositPayment({
-      isUser: true,
-      userId: req.user.id,
-      amount: order.totalAmount - order.totalAmount * 0.2,
-      purpose: "cancel_order",
-    });
-    //TODO what if a lot of stores are preparing
-    // createDepositPayment({
-    //   isUser: true,
-    //   userId: req.user.id,
-    //   amount: order.totalAmount - order.totalAmount * 0.8,
-    //   purpose: "cancel_order",
-    // });
-  } else {
-    await createDepositPayment({
-      isUser: true,
-      userId: req.user.id,
-      amount: order.totalAmount,
-      purpose: "cancel_order",
-    });
+  let productOrderIds = [];
+  for (let i = 0; i < order.productOrder.length; i++) {
+    console.log(order.productOrder[i].id);
+    productOrderIds.push(order.productOrder[i].id);
   }
+  // if (doesNeedPreparation.includes(true)) {
+  //   await createDepositPayment({
+  //     type: TransactionType.DEPOSIT,
+  //     isUser: true,
+  //     userId: req.user.id,
+  //     amount: order.totalAmount - order.totalAmount * 0.2,
+  //     purpose: "cancel_order",
+  //   });
+  //   //TODO what if a lot of stores are preparing
+  //   // createDepositPayment({
+  //   //   isUser: true,
+  //   //   userId: req.user.id,
+  //   //   amount: order.totalAmount - order.totalAmount * 0.8,
+  //   //   purpose: "cancel_order",
+  //   // });
+  // } else {
+  await createDepositPayment({
+    type: TransactionType.DEPOSIT,
+    isUser: true,
+    userId: req.user.id,
+    amount: order.totalAmount,
+    purpose: "cancel_order",
+  });
+  // }
   const orderUpdated = await prisma.order.update({
     where: { id: orderId },
     data: {
-      status: "cancelled",
+      cancellationReason: cancellationReason,
+      refundAmount: order.totalAmount,
+      productOrder: {
+        updateMany: {
+          where: {
+            id: { in: productOrderIds },
+          },
+          data: {
+            status: OrderStatus.CANCELLED,
+          },
+        },
+      },
     },
   });
   console.log(orderUpdated);

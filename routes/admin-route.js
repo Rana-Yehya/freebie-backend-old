@@ -2,6 +2,7 @@ const express = require("express");
 const {
   getAllProducts,
   approveStore,
+  setProductTag,
   getAllStores,
   approveProduct,
   sendNotificationToAllUsers,
@@ -52,5 +53,12 @@ router
     authenticateUserMiddleware,
     authorizeMiddleware(adminConstant),
     getAllProducts
+  );
+router
+  .route("/set-product-tag")
+  .post(
+    authenticateUserMiddleware,
+    authorizeMiddleware(adminConstant),
+    setProductTag
   );
 module.exports = router;

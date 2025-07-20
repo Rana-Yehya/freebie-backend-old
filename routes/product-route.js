@@ -49,7 +49,7 @@ router
   .route("/search")
   .get(optionalAuthenticateUserMiddleware, searchAllProducts);
 router
-  .route("/per-branches")
+  .route("/per-store/:id")
   .get(optionalAuthenticateUserMiddleware, getAllProductsPerStoreBranch);
 // router
 //   .route("/big-sale")

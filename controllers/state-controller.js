@@ -12,6 +12,7 @@ const getAllCountryStates = async (req, res, next) => {
   }
   const states = await prisma.state.findMany({
     where: { countryId: req.query.id },
+    include: { name: true },
   });
   return res
     .status(StatusCodes.OK)
@@ -23,6 +24,7 @@ const getState = async (req, res, next) => {
     where: { id: stateId },
     include: {
       country: true,
+      name: true,
     },
   });
   if (!state) {
@@ -106,20 +108,21 @@ const updateState = async (req, res, next) => {
           ar: nameAr || undefined,
         },
       },
-      country: {
-        connect: { id: countryId || undefined },
-      },
+      country:
+        countryId != undefined
+          ? {
+              connect: { id: countryId },
+            }
+          : {},
     },
   });
   console.log(updatedState);
 
-  return res
-    .status(StatusCodes.OK)
-    .json({
-      isSuccess: true,
-      message: "State updated successfully",
-      data: updatedState,
-    });
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "State updated successfully",
+    data: updatedState,
+  });
 };
 
 const deleteState = async (req, res, next) => {

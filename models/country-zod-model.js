@@ -9,10 +9,10 @@ const CountryZodModel = z.object({
   countryName: LocaleZodModel, //z.string(),
   // .min(3, { message: "Name must be at least 3 characters long" })
   // .max(20, { message: "Name must be at most 20 characters long" }),
-  currencyCode: z
-    .string()
-    .min(1, { message: "Name must be at least 1 characters long" })
-    .max(4, { message: "Name must be at most 4 characters long" }),
+  // currencyCode: z
+  //   .string()
+  //   .min(1, { message: "Name must be at least 1 characters long" })
+  //   .max(4, { message: "Name must be at most 4 characters long" }),
 
   countryIsoCode: z
     .string()

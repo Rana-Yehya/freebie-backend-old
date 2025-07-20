@@ -1,5 +1,5 @@
 model user {
-  id            String        @id @unique @default(uuid())
+  id            String          @id @unique @default(uuid())
   name          String
   dateOfBirth   DateTime?
   gender        String?
@@ -8,14 +8,15 @@ model user {
   // what is the action after this?
   // countryId          String?
   // userCountry        country?      @relation(fields: [countryId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  userLocations userLocations[]
   stateId       String?
-  state         state?        @relation(fields: [stateId], references: [id], onDelete: SetNull, onUpdate: SetNull)
-  phone         String        @unique
-  email         String        @unique
+  state         state?          @relation(fields: [stateId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  phone         String          @unique
+  email         String          @unique
   // password           String?
-  role          String        @default("user")
-  isVerified    Boolean       @default(false)
-  sessions      session[]     @relation("userSession")
+  role          String          @default("user")
+  isVerified    Boolean         @default(false)
+  sessions      session[]       @relation("userSession")
   transaction   transaction[]
   userCart      userCart?
   review        review[]
@@ -28,4 +29,13 @@ model user {
   updatedAt DateTime @updatedAt
   // imageId     String?  
   // avatar      image?    @relation(fields: [imageId], references: [id])
+}
+
+model userLocations {
+  id      String  @id @unique @default(uuid())
+  userId  String
+  user    user    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  state   state?  @relation(fields: [stateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  stateId String?
+  isMain  Boolean @default(false)
 }

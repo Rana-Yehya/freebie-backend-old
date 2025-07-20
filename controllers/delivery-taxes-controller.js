@@ -124,8 +124,14 @@ const updateDeliveryTaxes = async (req, res, next) => {
   const deliveryTaxes = await prisma.deliveryTaxes.update({
     where: { id: id },
     data: {
-      originState: { connect: { id: originStateId || undefined } },
-      destinationState: { connect: { id: destinationStateId || undefined } },
+      originState:
+        originStateId != undefined ? { connect: { id: originStateId } } : {},
+      // { connect: { id: originStateId || undefined } },
+      destinationState:
+        destinationStateId != undefined
+          ? { connect: { id: destinationStateId } }
+          : {},
+      //{ connect: { id: destinationStateId || undefined } },
       baseFee: baseFee || undefined,
       additionalFeesAfterKg: additionalFeesAfterKg || undefined,
       feePerKg: feePerKg || undefined,

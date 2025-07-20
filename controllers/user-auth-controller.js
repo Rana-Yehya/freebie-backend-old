@@ -27,6 +27,7 @@ const { userConstant } = require("../config/constants");
 const {
   UpdateUserProfileZodModel,
 } = require("../models/update-user-profile-zod-model");
+const { connect } = require("http2");
 //TODO AM I IN NEED TO LOGIN
 
 const login = async (req, res) => {
@@ -72,9 +73,9 @@ const sendCode = async (req, res, next) => {
     where: { user: { phone: phoneNumber } },
     select: { user: true },
   });
-  // const storeInDB = await prisma.store.findFirst({
-  //   where: { phone: phoneNumber },
-  // });
+  const storeInDB = await prisma.store.findFirst({
+    where: { phone: phoneNumber },
+  });
 
   if (storeInDB) {
     throw new BadRequestError(
@@ -180,9 +181,15 @@ const register = async (req, res, next) => {
       // role: role,
       //TODO CAN ADD AN EXTRA LEVEL OF CHECK AND INTEGRATE THE VEERIFICATION WITH IOREEDIS
       isVerified: true,
+      userLocations: {
+        create: {
+          state: { connect: { id: userState } },
+        },
+      },
       state: { connect: { id: userState } },
     },
     include: {
+      state: { include: { country: true } },
       sessions: true,
     },
   });
@@ -251,9 +258,7 @@ const verifyCode = async (req, res) => {
           },
         },
       },
-      include: {
-        sessions: true,
-      },
+      include: { state: { include: { country: true } }, sessions: true },
     });
     if (!session) {
       throw new NotFoundError("User not found");
@@ -279,7 +284,7 @@ const verifyCode = async (req, res) => {
       message: "Account verified successfully",
       accessToken: accessTokenJWT,
       refreshToken: refreshTokenJWT,
-      user: user,
+      user: session,
     });
   } else {
     return res.status(StatusCodes.OK).json({
@@ -355,19 +360,30 @@ const updateProfile = async (req, res) => {
       dateOfBirth: date || undefined,
       gender: gender || undefined,
       ...(stateId && {
-        userState: {
-          connect: {
-            id: stateId || undefined,
-          },
-        },
+        state:
+          stateId != undefined
+            ? {
+                connect: {
+                  id: stateId,
+                  country:
+                    countryId != undefined ? { is: { id: countryId } } : {},
+                },
+              }
+            : {},
+        // connect: {
+        //   id: stateId || undefined,
+        // },
       }),
-      ...(countryId && {
-        userCountry: {
-          connect: {
-            id: countryId || undefined,
-          },
-        },
-      }),
+      // ...(countryId && {
+      //   userCountry:
+      //     countryId != undefined ? { connect: { id: countryId } } : {},
+
+      //   //  {
+      //   //   connect: {
+      //   //     id: countryId || undefined,
+      //   //   },
+      //   // },
+      // }),
     },
   });
 
@@ -398,6 +414,7 @@ const updateProfile = async (req, res) => {
 };
 
 const showMe = async (req, res) => {
+  console.log(req.user);
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     user: req.user,

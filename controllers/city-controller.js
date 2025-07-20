@@ -64,13 +64,11 @@ const createCity = async (req, res, next) => {
   });
   console.log(createdCity);
 
-  return res
-    .status(StatusCodes.CREATED)
-    .json({
-      isSuccess: true,
-      message: "City created successfully",
-      data: createdCity,
-    });
+  return res.status(StatusCodes.CREATED).json({
+    isSuccess: true,
+    message: "City created successfully",
+    data: createdCity,
+  });
 };
 
 const updateCity = async (req, res, next) => {
@@ -98,7 +96,8 @@ const updateCity = async (req, res, next) => {
           ar: nameAr || name,
         },
       },
-      state: { connect: { id: stateId || undefined } },
+      state: stateId != undefined ? { connect: { id: stateId } } : {},
+      //  connect: { id: stateId || undefined }
     },
   });
   console.log(updatedCity);

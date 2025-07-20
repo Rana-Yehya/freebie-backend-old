@@ -10,18 +10,32 @@ const { UserProductZodModel } = require("../models/user-product-zod-model");
 const {
   UpdateUserProductZodModel,
 } = require("../models/update-user-product-zod-model");
+const { connect } = require("../routes/country-route");
+const { ProductCartStatus } = require("../generated/prisma");
 const getAllCartItems = async (req, res, next) => {
   const userCart = await prisma.userCart.findUnique({
-    where: { userId: req.user.id },
+    where: {
+      userId: req.user.id,
+      // AND: [
+      //   { userId: req.user.id },
+      //   { productCart: { every: { isDeleted: false } } },
+      // ],
+    },
     include: {
       productCart: {
         include: {
+          deliveryTaxes: true,
           productStock: {
             include: {
-              product: {
-                include: { image: true, productStock: true },
+              branch: {
+                select: { location: { select: { stateId: true } } },
               },
-              branch: true,
+              variant: {
+                include: {
+                  product: { include: { mainImage: true, name: true } },
+                },
+              },
+              // branch: {select: },
             },
           },
         },
@@ -34,6 +48,8 @@ const getAllCartItems = async (req, res, next) => {
       updatedAt: false,
     },
   });
+  console.log(userCart);
+
   // if (userCart) {
   // const productsList = await prisma.productUser.findMany({
   //   where: { userCartId: userCartId.id },
@@ -50,75 +66,174 @@ const getAllCartItems = async (req, res, next) => {
   // const productUser = await prisma.productUser.findMany({
   //   where: { userCartId: { in: userCarts.map((cart) => cart.id) } },
   // });
-  if (userCart) {
+  if (
+    !(
+      userCart == null ||
+      userCart.productCart == undefined ||
+      userCart.productCart == null
+    )
+  ) {
     userCart.productCart.forEach(async (item) => {
       // (
       //   (productStock) => productStock.branch.id === item.branch.id
       // );
       const stock = item.productStock.stock;
       const productStockId = item.productStock.id;
+      const branchState = item.productStock.branch.location.stateId;
+      const branchDeliveryTaxes = item.deliveryTaxes.originStateId;
+      const userDeliveryTaxes = item.deliveryTaxes.destinationStateId;
+      let deliveryStates;
+      let productCartStatus;
 
+      if (
+        branchState != branchDeliveryTaxes ||
+        userDeliveryTaxes != req.user.state.id
+      ) {
+        console.log(branchState);
+        console.log(branchDeliveryTaxes);
+        console.log(userDeliveryTaxes);
+        console.log(req.user.state.id);
+        deliveryStates = await prisma.deliveryTaxes.findFirst({
+          where: {
+            originStateId: branchState,
+            destinationStateId: req.user.state.id,
+          },
+          select: {
+            id: true,
+            // originStateId: true,
+            // // baseFee: true,
+            // destinationStateId: true,
+          },
+          orderBy: {
+            baseFee: "desc",
+          },
+        });
+        productCartStatus = ProductCartStatus.ACTIVE;
+
+        // console.log(deliveryStates);
+        if (!deliveryStates) {
+          productCartStatus = ProductCartStatus.NODELIVERYSTATES;
+          //TODO NODELIVERYSTATES
+          // throw new BadRequestError("No delivery state found");
+        } else if (
+          item.productStock.variant.product.canBeDeliveredOutsideState == false
+        ) {
+          productCartStatus = ProductCartStatus.NODELIVERYSTATES;
+        }
+      }
+      // if (userDeliveryTaxes != req.user.state.id) {
+      //   console.log(branchState);
+      //   console.log(branchDeliveryTaxes);
+      //   console.log(userDeliveryTaxes);
+      //   console.log(req.user.state.id);
+      // }
       // console.log(item.quantity);
 
       // console.log(stock);
       if (stock < item.quantity) {
         // throw new BadRequestError("Stock is not enough");
-        if (item.doesHaveEnoughQuantity == true) {
-          await prisma.userCart.update({
-            where: { userId: req.user.id },
-            data: {
-              product: {
-                update: {
-                  where: {
-                    userCartUserId_productStockId: {
-                      userCartUserId: req.user.id,
-                      productStockId: productStockId,
-                    },
-                  },
-                  data: {
-                    doesHaveEnoughQuantity: false,
-                    quantity: stock,
-                    oldQuantity: item.quantity,
-                  },
-                },
-              },
-            },
-          });
+        if (productCartStatus == ProductCartStatus.ACTIVE) {
+          productCartStatus = ProductCartStatus.OUTOFSTOCK;
+          // await prisma.userCart.update({
+          //   where: { userId: req.user.id },
+          //   data: {
+          //     product: {
+          //       update: {
+          //         where: {
+          //           userCartUserId_productStockId: {
+          //             userCartUserId: req.user.id,
+          //             productStockId: productStockId,
+          //           },
+          //         },
+          //         data: {
+          //           doesHaveEnoughQuantity: false,
+          //           quantity: stock,
+          //           oldQuantity: item.quantity,
+          //         },
+          //       },
+          //     },
+          //   },
+          // });
         }
-        // return res.status(StatusCodes.BAD_REQUEST).json({
-        //   isSuccess: false,
-        //   message: "Stock is not enough",
-        // });
       } else if (stock >= item.oldQuantity) {
-        if (item.doesHaveEnoughQuantity == false) {
-          await prisma.userCart.update({
-            where: { userId: req.user.id },
-            data: {
-              product: {
-                update: {
-                  where: {
-                    userCartUserId_productStockId: {
-                      userCartUserId: req.user.id,
-                      productStockId: productStockId,
-                    },
+        if (productCartStatus == ProductCartStatus.OUTOFSTOCK) {
+          productCartStatus = ProductCartStatus.ACTIVE;
+          // await prisma.userCart.update({
+          //   where: { userId: req.user.id },
+          //   data: {
+          //     product: {
+          //       update: {
+          //         where: {
+          //           userCartUserId_productStockId: {
+          //             userCartUserId: req.user.id,
+          //             productStockId: productStockId,
+          //           },
+          //         },
+          //         data: {
+          //           doesHaveEnoughQuantity: true,
+          //           quantity: item.quantity,
+          //           oldQuantity: 0,
+          //         },
+          //       },
+          //     },
+          //   },
+          // });
+        }
+      }
+      console.log(productCartStatus);
+      console.log(
+        deliveryStates != undefined
+          ? { connect: { id: deliveryStates.id } }
+          : undefined
+      );
+      if (productCartStatus) {
+        console.log(deliveryStates);
+        await prisma.userCart.update({
+          where: { userId: req.user.id },
+          data: {
+            productCart: {
+              update: {
+                where: {
+                  userCartUserId_productStockId: {
+                    userCartUserId: req.user.id,
+                    productStockId: productStockId,
                   },
-                  data: {
-                    doesHaveEnoughQuantity: true,
-                    quantity: item.quantity,
-                    oldQuantity: 0,
-                  },
+                },
+                data: {
+                  status: productCartStatus || undefined,
+                  quantity:
+                    productCartStatus == ProductCartStatus.OUTOFSTOCK
+                      ? stock
+                      : productCartStatus == ProductCartStatus.ACTIVE
+                      ? item.oldQuantity
+                      : undefined,
+                  oldQuantity:
+                    productCartStatus == ProductCartStatus.OUTOFSTOCK
+                      ? item.quantity
+                      : productCartStatus == ProductCartStatus.ACTIVE
+                      ? stock
+                      : undefined,
+                  deliveryTaxes:
+                    deliveryStates != undefined
+                      ? { connect: { id: deliveryStates.id } }
+                      : undefined,
                 },
               },
             },
-          });
-        }
+          },
+        });
       }
     });
   }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     // userCart: userCart,
-    count: userCart != null ? userCart.productCart.length : 0,
+    count:
+      userCart != null
+        ? userCart.productCart == undefined
+          ? 0
+          : userCart.productCart.length
+        : 0,
     cartId: userCart != null ? userCart.id : null,
     subtotal: userCart != null ? userCart.subtotal : 0,
     taxAmount: userCart != null ? userCart.taxAmount : 0,
@@ -151,7 +266,7 @@ const getAllCartItems = async (req, res, next) => {
 //   return res.status(StatusCodes.OK).json({ isSuccess: true, data: userCart });
 // };
 
-const createCartItem = async (req, res, next) => {
+const createUpdateCartItem = async (req, res, next) => {
   const { productId, color, quantity } = req.body;
   const zodModel = UserProductZodModel.safeParse({
     // userCartId: userCartId,
@@ -169,13 +284,18 @@ const createCartItem = async (req, res, next) => {
   const product = await prisma.product.findUnique({
     where: { id: productId },
     include: {
-      productStock: {
+      productVariant: {
         select: {
-          id: true,
-          stock: true,
           color: true,
-          branch: {
-            select: { id: true, location: { select: { stateId: true } } },
+          productStock: {
+            select: {
+              id: true,
+              stock: true,
+              branch: { select: { id: true, location: true } },
+              // branch: {
+              //   select: { id: true, location: { select: { stateId: true } } },
+              // },
+            },
           },
         },
       },
@@ -184,10 +304,51 @@ const createCartItem = async (req, res, next) => {
   if (!product) {
     throw new BadRequestError("Product not found");
   }
+  // console.log(product.productVariant[0].productStock[0].branch);
 
-  const statesIds = product.productStock.map((stock) => stock.branch.stateId);
+  const productVariants = product.productVariant.find(
+    (variant) => variant.color == color
+  );
+  // console.log(productStock);
+  let productStocks = [];
+  console.log(productVariants);
+  console.log(productVariants.length);
+
+  // console.log(productVariants[0].productStock);
+  // console.log(productVariants[0].productStock.branch);
+
+  // console.log(productVariants[0].productStock.branch.location);
+  let statesIds = [];
+  if (productVariants.length == undefined) {
+    //&& productVariants != undefined
+    productVariants.productStock.map((stock) => {
+      // console.log(stock);
+      productStocks.push(stock);
+      console.log(stock);
+      console.log(stock.branch.location);
+
+      statesIds.push(stock.branch.location.stateId);
+    });
+  } else {
+    for (let i = 0; i < productVariants.length; i++) {
+      // console.log(productStock[i]);
+      productVariants[i].map((stock) => {
+        // console.log(stock);
+        productStocks.push(stock);
+        statesIds.push(stock.branch.location.stateId);
+      });
+      // for (let j = 0; j < productStock[i].length; j++) {
+
+      //   statesIds.push(productStock[i][j].branch.stateId);
+      // }
+    }
+  }
+  // const statesIds = productStock.map((stock) => stock.branch.stateId);
+  // console.log(productStock);
+  // console.log(statesIds);
   // console.log(req.user.stateId);
   // console.log(statesIds);
+  // console.log(statesIds.includes(req.user.stateId));
   // console.log(product.canBeDeliveredOutsideState);
   if (
     product.canBeDeliveredOutsideState == false &&
@@ -198,42 +359,33 @@ const createCartItem = async (req, res, next) => {
     );
   }
   let coloredProductStock = [];
-  product.productStock.map((element) => {
-    if (!product.doesNeedPreparation) {
-      // if (element.stock != undefined && element.stock > 0) {
-      //   if (element.stock < quantity) {
-      //     //  throw new BadRequestError("Not enough stock");
-      //   }
-      // }
+  // productVariants.map((element) => {
+  if (!product.doesNeedPreparation) {
+    // if (element.stock != undefined && element.stock > 0) {
+    //   if (element.stock < quantity) {
+    //     //  throw new BadRequestError("Not enough stock");
+    //   }
+    // }
+    // console.log("productVariants[i]");
 
-      element.color == color && element.stock >= quantity
-        ? coloredProductStock.push(element)
-        : undefined;
-    } else {
-      element.color == color ? coloredProductStock.push(element) : undefined;
-    }
+    // console.log(productVariants.productStock[i]);
+    productVariants.productStock.map((stock) => {
+      stock.stock >= quantity ? coloredProductStock.push(stock) : undefined;
+    });
+
     // console.log(element);
     // element.color == color && element.stock >= quantity
     //   ? coloredProductStock.push(element)
     //   : undefined;
-  });
-  console.log("coloredProductStock");
-  console.log(coloredProductStock);
+  } else {
+    coloredProductStock.push(productVariants.productStock);
+  }
+  // console.log("coloredProductStock");
+  // console.log(coloredProductStock);
   // product.productStock.map((element) => {
   //   element.color == color ? coloredProductStock.push(element) : undefined;
   // });
   // console.log(coloredProductStock);
-  let branchWithStates = [];
-  coloredProductStock.map((element) => {
-    const found = product.productStock.find(
-      (stock) => stock.branch.id == element.branch.id
-    );
-    if (found) {
-      branchWithStates.push(found);
-    }
-  });
-  console.log("branchWithStates");
-  console.log(branchWithStates);
   // console.log(req.user);
   // console.log({
   //   originStateId: {
@@ -244,12 +396,15 @@ const createCartItem = async (req, res, next) => {
   const deliveryStates = await prisma.deliveryTaxes.findFirst({
     where: {
       originStateId: {
-        in: branchWithStates.map((element) => element.branch.location.stateId),
+        in: coloredProductStock.map(
+          (element) => element.branch.location.stateId
+        ),
       },
       destinationStateId: req.user.stateId,
     },
     select: {
       id: true,
+      originStateId: true,
       // baseFee: true,
       destinationStateId: true,
     },
@@ -263,15 +418,17 @@ const createCartItem = async (req, res, next) => {
     throw new BadRequestError("No delivery state found");
   }
   let productStock = [];
-  branchWithStates.map((element) => {
+  for (let i = 0; i < coloredProductStock.length; i++) {
+    const element = coloredProductStock[i];
     console.log(element.branch.location.stateId);
-    console.log(deliveryStates.destinationStateId);
+    console.log(deliveryStates.originStateId);
     const found =
-      element.branch.location.stateId == deliveryStates.destinationStateId;
+      element.branch.location.stateId == deliveryStates.originStateId;
     if (found) {
       productStock.push(element);
+      break;
     }
-  });
+  }
   console.log(productStock);
 
   // const userCart = await prisma.userCart.findUnique({
@@ -290,165 +447,129 @@ const createCartItem = async (req, res, next) => {
   //     deliveryFee = userCart.deliveryFee;
   //   }
   // }
-  const productUser = {
-    // productId: productId,
-    // color: color,
-    quantity: quantity,
-    deliveryTaxesId: deliveryStates.id,
-    productStockId: productStock[0].id,
-    // branchId: branch.branchId,
-  };
-
+  // const productUser = {
+  //   // productId: productId,
+  //   // color: color,
+  //   quantity: quantity,
+  //   deliveryTaxesId: deliveryStates.id,
+  //   productStockId: productStock[0].id,
+  //   // branchId: branch.branchId,
+  // };
+  // const userCart = await prisma.userCart.findUnique({
+  //   where: { userId: req.user.id },
+  //   select: { productCart: { select: { id: true, productStockId: true } } },
+  // });
+  // const productInCart = userCart.productCart.find(
+  //   (product) => product.productStockId == productStock[0].id
+  // );
+  console.log("userCart", req.user.id);
+  console.log("productStock", productStock[0].id);
   const createdOrUpdatedUserCart = await prisma.userCart.upsert({
     where: { userId: req.user.id },
     update: {
-      // subtotal: subtotal,
-      // deliveryFee: deliveryFee,
+      // user: {},
       productCart: {
-        createMany: {
-          data: productUser,
+        upsert: {
+          create: {
+            productStock: { connect: { id: productStock[0].id } },
+            quantity: quantity,
+            deliveryTaxes: { connect: { id: deliveryStates.id } },
+            status: ProductCartStatus.ACTIVE,
+          },
+          where: {
+            userCartUserId_productStockId: {
+              userCartUserId: req.user.id,
+              productStockId: productStock[0].id,
+            },
+          },
+          update: {
+            quantity: quantity,
+            deliveryTaxes: { connect: { id: deliveryStates.id } },
+            status: ProductCartStatus.ACTIVE,
+          },
         },
+        // connectOrCreate: {
+        //   where: {
+        //     userCartUserId_productStockId: {
+        //       userCartUserId: req.user.id,
+        //       productStockId: productStock[0].id,
+        //     },
+        //   },
+        //   create: {
+        //     productStock: { connect: { id: productStock[0].id } },
+        //     quantity: quantity,
+        //     deliveryTaxes: { connect: { id: deliveryStates.id } },
+        //     status: ProductCartStatus.ACTIVE,
+        //   },
+        // },
+        // update: {
+        //   where: {
+        //     userCartUserId_productStockId: {
+        //       userCartUserId: req.user.id,
+        //       productStockId: productStock[0].id,
+        //     },
+        //   },
+        //   data: {
+        //     status: ProductCartStatus.ACTIVE,
+        //     quantity: quantity,
+        //     deliveryTaxes: { connect: { id: deliveryStates.id } },
+        //   },
+        // },
+        // create: {
+        //   productStock: { connect: { id: productStock[0].id } },
+        //   quantity: quantity,
+        //   deliveryTaxes: { connect: { id: deliveryStates.id } },
+        //   status: ProductCartStatus.ACTIVE,
+        // },
       },
     },
     create: {
-      userId: req.user.id,
+      user: { connect: { id: req.user.id } },
       productCart: {
-        createMany: {
-          data: productUser,
+        // connectOrCreate: {
+        //   where: {
+        //     userCartUserId_productStockId: {
+        //       userCartUserId: req.user.id,
+        //       productStockId: productStock[0].id,
+        //     },
+        //   },
+        //   create: {
+        //     status: ProductCartStatus.ACTIVE,
+        //     productStock: { connect: { id: productStock[0].id } },
+        //     // userCart: { connect: { userId: req.user.id } },
+        //     quantity: quantity,
+        //     deliveryTaxes: { connect: { id: deliveryStates.id } },
+        //   },
+        // },
+        create: {
+          status: ProductCartStatus.ACTIVE,
+          productStock: { connect: { id: productStock[0].id } },
+          // userCart: { connect: { userId: req.user.id } },
+          quantity: quantity,
+          deliveryTaxes: { connect: { id: deliveryStates.id } },
         },
       },
-      // subtotal: subtotal,
-      // deliveryFee: deliveryFee,
     },
   });
 
-  // for (let j = 0; j < productStock.length; j++) {
-  //   if (productStock[j].color !== productUser[i].color) {
-  //     throw new BadRequestError("Color does not exist");
-  //   }
-  // if (coloredProductStock == undefined) {
-  //   throw new BadRequestError("Color does not exist");
-  // }
-  // if (coloredProductStock.stock != undefined && coloredProductStock.stock > 0) {
-  //   if (coloredProductStock.stock < quantity) {
-  //     throw new BadRequestError("Not enough stock");
-  //   }
-  // }
-
-  // }
-  // productUser[i].userCartId = req.user.id;
-  // const createdUserCart = await prisma.userCart.upsert({
-  //   where: {
-  //     userId: req.user.id,
-  //   },
-
-  //   update: {
-  //     product: {
-  //       createMany: {
-  //         data: productUser,
-  //       },
-  //     },
-  //   },
-  //   create: {
-  //     userId: req.user.id,
-  //     product: {
-  //       createMany: {
-  //         data: productUser,
-  //       },
-  //     },
-  //   },
-  //   include: {
-  //     product: true,
-  //   },
-  // });
-
-  return res.status(StatusCodes.CREATED).json({
+  return res.status(StatusCodes.OK).json({
     isSuccess: true,
     message: "Added to cart successfully",
     data: createdOrUpdatedUserCart,
   });
 };
-
 const updateCartQuantity = async (req, res, next) => {
-  const { productId, color, quantity, branchId } = req.body;
+  const { productId, color, quantity, productStockId } = req.body;
   const zodModel = UpdateUserProductZodModel.safeParse({
-    productId: productId,
-    color: color,
+    // productId: productId,
+    // color: color,
     quantity: quantity,
-    branchId: branchId,
+    productStockId: productStockId,
   });
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
   const userCartId = req.user.id;
-  const userCart = await prisma.userCart.findUnique({
-    where: {
-      userId: userCartId,
-      productCart: {
-        every: {
-          productStock: {
-            productId: productId,
-            color: color,
-          },
-        },
-      },
-    },
-    select: {
-      productCart: {
-        select: {
-          productStock: {
-            select: {
-              id: true,
-              stock: true,
-              color: true,
-              product: {
-                select: {
-                  doesNeedPreparation: true,
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  });
-  console.log(userCart.productCart);
-
-  const productStock = userCart.productCart.map(
-    (product) => product.productStock
-  );
-  console.log(productStock);
-  // let coloredProductStock = [];
-  const doesNeedPreparation =
-    userCart.productCart[0].productStock.product.doesNeedPreparation;
-  console.log(doesNeedPreparation);
-  let coloredProductStock = [];
-  productStock.map((element) => {
-    if (!doesNeedPreparation[0]) {
-      // if (element.stock != undefined && element.stock > 0) {
-      //   if (element.stock < quantity) {
-      //     //  throw new BadRequestError("Not enough stock");
-      //   }
-      // }
-
-      element.color == color && element.stock >= quantity
-        ? coloredProductStock.push(element)
-        : undefined;
-    } else {
-      element.color == color ? coloredProductStock.push(element) : undefined;
-    }
-    // console.log(element);
-    // element.color == color && element.stock >= quantity
-    //   ? coloredProductStock.push(element)
-    //   : undefined;
-  });
-  // productStock.map((element) => {
-  //   element.color == color ? coloredProductStock.push(element) : undefined;
-  // });
-  console.log(coloredProductStock);
-  if (coloredProductStock.length == 0) {
-    throw new BadRequestError("Not enough stock");
-  }
   // if(userCart.)
   //TODO SHOULD I CHECK FOR THE STOCK AND THE BRANCH IF IT EXISTS OR NOT
   const updatedUserCart = await prisma.userCart.update({
@@ -459,7 +580,11 @@ const updateCartQuantity = async (req, res, next) => {
           where: {
             userCartUserId_productStockId: {
               userCartUserId: req.user.id,
-              productStockId: productStock[0].id,
+              productStockId: productStockId,
+              // productStock: {
+              //   variant: { productId: productId, color: color },
+              //   id: productStockId,
+              // },
             },
           },
           data: {
@@ -494,32 +619,157 @@ const updateCartQuantity = async (req, res, next) => {
   //   .status(StatusCodes.CREATED)
   //   .json({ isSuccess: true, data: updatedUserCart });
 };
+// const updateCartQuantity = async (req, res, next) => {
+//   const { productId, color, quantity, branchId } = req.body;
+//   const zodModel = UpdateUserProductZodModel.safeParse({
+//     productId: productId,
+//     color: color,
+//     quantity: quantity,
+//     // branchId: branchId,
+//   });
+//   if (!zodModel.success) {
+//     throw new BadRequestError(zodModel.error.errors[0].message);
+//   }
+//   const userCartId = req.user.id;
+//   const userCart = await prisma.userCart.findUnique({
+//     where: {
+//       userId: userCartId,
+//       productCart: {
+//         every: {
+//           productStock: {
+//             productId: productId,
+//             color: color,
+//           },
+//         },
+//       },
+//     },
+//     select: {
+//       productCart: {
+//         select: {
+//           productStock: {
+//             select: {
+//               id: true,
+//               stock: true,
+//               color: true,
+//               product: {
+//                 select: {
+//                   doesNeedPreparation: true,
+//                 },
+//               },
+//             },
+//           },
+//         },
+//       },
+//     },
+//   });
+//   console.log(userCart.productCart);
+
+//   const productStock = userCart.productCart.map(
+//     (product) => product.productStock
+//   );
+//   console.log(productStock);
+//   // let coloredProductStock = [];
+//   const doesNeedPreparation =
+//     userCart.productCart[0].productStock.product.doesNeedPreparation;
+//   console.log(doesNeedPreparation);
+//   let coloredProductStock = [];
+//   productStock.map((element) => {
+//     if (!doesNeedPreparation[0]) {
+//       // if (element.stock != undefined && element.stock > 0) {
+//       //   if (element.stock < quantity) {
+//       //     //  throw new BadRequestError("Not enough stock");
+//       //   }
+//       // }
+
+//       element.color == color && element.stock >= quantity
+//         ? coloredProductStock.push(element)
+//         : undefined;
+//     } else {
+//       element.color == color ? coloredProductStock.push(element) : undefined;
+//     }
+//     // console.log(element);
+//     // element.color == color && element.stock >= quantity
+//     //   ? coloredProductStock.push(element)
+//     //   : undefined;
+//   });
+//   // productStock.map((element) => {
+//   //   element.color == color ? coloredProductStock.push(element) : undefined;
+//   // });
+//   console.log(coloredProductStock);
+//   if (coloredProductStock.length == 0) {
+//     throw new BadRequestError("Not enough stock");
+//   }
+//   // if(userCart.)
+//   //TODO SHOULD I CHECK FOR THE STOCK AND THE BRANCH IF IT EXISTS OR NOT
+//   const updatedUserCart = await prisma.userCart.update({
+//     where: { userId: userCartId },
+//     data: {
+//       productCart: {
+//         update: {
+//           where: {
+//             userCartUserId_productStockId: {
+//               userCartUserId: req.user.id,
+//               productStockId: productStock[0].id,
+//             },
+//           },
+//           data: {
+//             quantity: quantity,
+//           },
+//         },
+//       },
+//     },
+//   });
+//   return res.status(StatusCodes.OK).json({
+//     isSuccess: true,
+//     message: "Cart updated successfully",
+//     data: updatedUserCart,
+//   });
+//   // if (stateId) {
+//   //   const country = await prisma.state.findUnique({
+//   //     where: { id: stateId },
+//   //   });
+//   //   if (!country) {
+//   //     throw new BadRequestError("State not found");
+//   //   }
+//   // }
+//   // const updatedUserCart = await prisma.userCart.update({
+//   //   where: { id: id },
+//   //   data: {
+//   //     name: name || undefined,
+//   //     stateId: stateId || undefined,
+//   //   },
+//   // });
+//   // console.log(updatedUserCart);
+//   // return res
+//   //   .status(StatusCodes.CREATED)
+//   //   .json({ isSuccess: true, data: updatedUserCart });
+// };
 //TODO is there a better impl?
 const deleteCartItem = async (req, res, next) => {
-  const { productId: productId, color: color } = req.query;
-  const userCartId = req.params.id;
-  console.log(productId, color, userCartId);
-  await prisma.productUser.delete({
+  // const { productId: productId, color: color } = req.query;
+  const productCartId = req.params.id;
+  // console.log(productId, color, userCartId);
+  await prisma.productCart.delete({
     where: {
-      userCartId_productId_color: {
-        userCartId: userCartId,
-        productId: productId,
-        color: color,
+      userCartUserId_productStockId: {
+        productStockId: productCartId,
+        userCartUserId: req.user.id,
       },
+      //AND: [{ id: req.user.id }, { productStockId: productStockId }],
     },
   });
-  const userCart = await prisma.userCart.findUnique({
-    where: { id: userCartId },
-    select: {
-      product: true,
-    },
-  });
+  // const userCart = await prisma.userCart.findUnique({
+  //   where: { id: userCartId },
+  //   select: {
+  //     product: true,
+  //   },
+  // });
 
-  if (userCart.product.length == 0) {
-    await prisma.userCart.delete({
-      where: { id: userCartId },
-    });
-  }
+  // if (userCart.product.length == 0) {
+  //   await prisma.userCart.delete({
+  //     where: { id: userCartId },
+  //   });
+  // }
 
   // await prisma.userCart.delete({
   //   where: { id: userCartId },
@@ -547,16 +797,24 @@ const deleteCart = async (req, res, next) => {
 
 const calculateSubTotal = async (req, res, next) => {
   let userCart = await prisma.userCart.findUnique({
-    where: { userId: req.user.id },
+    where: {
+      userId: req.user.id,
+    },
     select: {
       subtotal: true,
       totalAmount: true,
       deliveryFee: true,
       taxAmount: true,
-      product: {
+      productCart: {
         select: {
-          product: {
-            select: { actualPrice: true },
+          productStock: {
+            select: {
+              variant: {
+                include: {
+                  product: { select: { price: true, productPrice: true } },
+                },
+              },
+            },
             // include: { : true },
           },
           // branch: true,
@@ -567,12 +825,16 @@ const calculateSubTotal = async (req, res, next) => {
   });
   console.log(userCart);
   let sum = 0;
-  userCart.product.forEach((item) => {
-    sum += item.product.actualPrice * item.quantity;
+  userCart.productCart.forEach((item) => {
+    const price =
+      item.productStock.variant.product.productPrice == undefined
+        ? item.productStock.variant.product.price
+        : item.productStock.variant.product.productPrice.actualPrice;
+    sum += price * item.quantity;
   });
   console.log(sum);
   if (userCart.subtotal != sum) {
-    const totalAmount = sum + userCart.deliveryFee + userCart.taxAmount;
+    const totalAmount = userCart.totalAmount - userCart.subtotal + sum;
 
     userCart = await prisma.userCart.update({
       where: { userId: req.user.id },
@@ -584,31 +846,39 @@ const calculateSubTotal = async (req, res, next) => {
   }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    userCart: userCart,
+    subtotal: userCart.subtotal,
+    totalAmount: userCart.totalAmount,
     // message: "User Cart deleted successfully",
   });
 };
 
 const calculateDeliveryFees = async (req, res, next) => {
   let userCart = await prisma.userCart.findUnique({
-    where: { userId: req.user.id },
+    where: {
+      userId: req.user.id,
+    },
     select: {
       subtotal: true,
       totalAmount: true,
       deliveryFee: true,
       taxAmount: true,
-
-      product: {
+      productCart: {
         select: {
-          deliveryTaxes: {
+          deliveryTaxes: true,
+          productStock: {
             select: {
-              baseFee: true,
-              additionalFeesAfterKg: true,
-              feePerKg: true,
+              variant: {
+                include: {
+                  product: {
+                    select: {
+                      weightInKg: true,
+                      price: true,
+                      productPrice: true,
+                    },
+                  },
+                },
+              },
             },
-          },
-          product: {
-            select: { actualPrice: true, weightInKg: true },
             // include: { : true },
           },
           // branch: true,
@@ -620,20 +890,26 @@ const calculateDeliveryFees = async (req, res, next) => {
   console.log(userCart.product);
   let sum = 0;
 
-  userCart.product.forEach((item) => {
+  userCart.productCart.forEach((item) => {
     console.log(item.deliveryTaxes);
     console.log(item.product);
     sum += item.deliveryTaxes.baseFee;
-    if (item.deliveryTaxes.additionalFeesAfterKg < item.product.weightInKg) {
+    if (
+      item.deliveryTaxes.additionalFeesAfterKg <
+      item.productStock.variant.product.weightInKg
+    ) {
       sum +=
-        (item.product.weightInKg - item.deliveryTaxes.additionalFeesAfterKg) *
+        (item.productStock.variant.product.weightInKg -
+          item.deliveryTaxes.additionalFeesAfterKg) *
         item.quantity *
         item.deliveryTaxes.feePerKg;
     }
   });
   console.log(sum);
   if (userCart.deliveryFee != sum) {
-    const totalAmount = sum + userCart.subtotal + userCart.taxAmount;
+    const totalAmount = userCart.totalAmount - userCart.deliveryFee + sum;
+
+    // const totalAmount = sum + userCart.subtotal + userCart.taxAmount;
     userCart = await prisma.userCart.update({
       where: { userId: req.user.id },
       data: {
@@ -644,14 +920,15 @@ const calculateDeliveryFees = async (req, res, next) => {
   }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    userCart: userCart,
+    deliveryFee: userCart.deliveryFee,
+    totalAmount: userCart.totalAmount,
     // message: "User Cart deleted successfully",
   });
 };
 module.exports = {
   getAllCartItems,
   deleteCartItem,
-  createCartItem,
+  createUpdateCartItem,
   updateCartQuantity,
   calculateSubTotal,
   calculateDeliveryFees,
