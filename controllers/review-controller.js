@@ -8,6 +8,7 @@ const {
 const { uploadImage } = require("../helpers/cloudinary/upload-image");
 const { destroyImage } = require("../helpers/cloudinary/delete-image");
 const { ReviewZodModel } = require("../models/review-zod-model");
+const { OrderStatus } = require("../generated/prisma");
 const getAllProductReviews = async (req, res, next) => {
   const reviews = await prisma.review.findMany({
     where: { productId: req.params.id },
@@ -21,12 +22,19 @@ const getAllProductReviews = async (req, res, next) => {
           name: true,
         },
       },
+      userId: {},
       createdAt: true,
       updatedAt: true,
     },
-    orderBy: {
-      createdAt: "desc",
-    },
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+      {
+        userId: req.user != undefined ? req.user.id || undefined : undefined,
+        //equals: sort: "desc", // This puts the user's review first
+      },
+    ],
   });
   return res
     .status(StatusCodes.OK)
@@ -49,7 +57,10 @@ const createReview = async (req, res, next) => {
         { userId: req.user.id },
         {
           productOrder: {
-            every: { productId: productId, status: "delivered" },
+            every: {
+              variant: { productId: productId },
+              status: OrderStatus.DELIVERED,
+            },
           },
         },
       ],
@@ -57,12 +68,13 @@ const createReview = async (req, res, next) => {
     // where: {
     //   userId: req.user.id,
     // },
-    include: {
-      productOrder: {
-        select: {
-          productId: true,
-        },
-      },
+    select: {
+      id: true,
+      // productOrder: {
+      //   select: {
+      //     productId: true,
+      //   },
+      // },
     },
 
     orderBy: {
@@ -113,13 +125,11 @@ const updateReview = async (req, res, next) => {
     },
   });
 
-  return res
-    .status(StatusCodes.OK)
-    .json({
-      isSuccess: true,
-      message: "Review updated successfully",
-      data: updatedReview,
-    });
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "Review updated successfully",
+    data: updatedReview,
+  });
 };
 
 const deleteReview = async (req, res, next) => {

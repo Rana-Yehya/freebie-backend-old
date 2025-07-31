@@ -1,6 +1,6 @@
 model location {
   id       String  @id @unique @default(uuid())
-  address  String
+  address  String?
   state    state   @relation(fields: [stateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   stateId  String
   branchId String?

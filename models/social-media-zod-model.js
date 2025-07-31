@@ -44,5 +44,5 @@ const SocialMediaZodModel = z
       instagram === undefined,
     { message: "One of the social media links must be provided" }
   );
-// type UserModel = z.infer<typeof UserZodModel>;
+// type UserModel = z.infer<typeof CreateUserZodModel>;
 module.exports = { SocialMediaZodModel };

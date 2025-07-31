@@ -77,7 +77,7 @@ router
 
 router
   .route("/:id")
-  .get(getProduct)
+  .get(optionalAuthenticateUserMiddleware, getProduct)
   .patch(
     authenticateUserMiddleware,
     authorizeMiddleware(adminConstant, storeConstant),

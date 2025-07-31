@@ -841,6 +841,22 @@ const appLocalize = new Localize({
     en: "Please provide a reason for cancellation",
     ar: "يرجى تقديم سبب الإلغاء",
   },
+  "User location id is required": {
+    en: "User location id is required",
+    ar: "رقم موقع المستخدم مطلوب",
+  },
+  "Location updated successfully": {
+    en: "Location updated successfully",
+    ar: "تم تحديث الموقع بنجاح",
+  },
+  "Location created successfully": {
+    en: "Location created successfully",
+    ar: "تم إنشاء الموقع بنجاح",
+  },
+  "Location deleted successfully": {
+    en: "Location deleted successfully",
+    ar: "تم حذف الموقع بنجاح",
+  },
 });
 
 module.exports = { appLocalize };

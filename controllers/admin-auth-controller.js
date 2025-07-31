@@ -13,7 +13,6 @@ const {
   BadRequestError,
   UnauthenticatedError,
 } = require("../errors");
-const { UserZodModel } = require("../models/user-zod-model");
 
 const login = async (req, res) => {
   const { phoneNumber, email, password } = req.body;
@@ -90,7 +89,7 @@ const login = async (req, res) => {
 //   if (!password) {
 //     throw new BadRequestError("Password is required");
 //   }
-//   const zodModel = UserZodModel.safeParse({
+//   const zodModel = CreateUserZodModel.safeParse({
 //     name: name,
 //     dateOfBirth: dateOfBirth,
 //     gender: gender,

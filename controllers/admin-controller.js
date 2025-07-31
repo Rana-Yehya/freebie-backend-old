@@ -64,6 +64,21 @@ const setProductTag = async (req, res) => {
   });
 };
 
+const getAllUsers = async (req, res, next) => {
+  // let isAcceptedByAdmin = true;
+  // if (req.user.role === adminConstant) {
+  //   isAcceptedByAdmin = null;
+  // }
+  const { page = 1, limit = 10 } = req.query;
+
+  const user = await prisma.user.findMany({
+    take: limit,
+    skip: (page - 1) * limit,
+  });
+  return res
+    .status(StatusCodes.OK)
+    .json({ isSuccess: true, count: user.length, data: user });
+};
 const getAllProducts = async (req, res, next) => {
   // let isAcceptedByAdmin = true;
   // if (req.user.role === adminConstant) {
@@ -136,6 +151,7 @@ module.exports = {
   approveProduct,
   getAllStores,
   getAllProducts,
+  getAllUsers,
   sendNotificationToAllUsers,
   setProductTag,
 };

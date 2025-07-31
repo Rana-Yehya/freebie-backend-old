@@ -7,6 +7,7 @@ const {
 } = require("../controllers/review-controller");
 const {
   authenticateUserMiddleware,
+  optionalAuthenticateUserMiddleware,
 } = require("../middleware/authentication-middleware");
 const {
   authorizeMiddleware,
@@ -17,7 +18,7 @@ const router = express.Router();
 //
 router
   .route("/:id")
-  .get(getAllProductReviews)
+  .get(optionalAuthenticateUserMiddleware, getAllProductReviews)
   .post(
     authenticateUserMiddleware,
     authorizeMiddleware(userConstant),

@@ -257,7 +257,7 @@ model locale {
 // ===== location.prisma =====
 model location {
   id       String  @id @unique @default(uuid())
-  address  String
+  address  String?
   state    state   @relation(fields: [stateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   stateId  String
   branchId String?
@@ -284,35 +284,43 @@ model occasion {
 
 // ===== order.prisma =====
 model order {
-  id                 String         @id @unique @default(uuid())
+  id                 String          @id @unique @default(uuid())
   userId             String
-  user               user           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user               user            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   trackingNumber     String
   productOrder       productOrder[]
-  subtotal           Float          @default(0)
-  taxAmount          Float          @default(0)
-  deliveryFee        Float          @default(0)
-  totalAmount        Float          @default(0)
+  subtotal           Float           @default(0)
+  taxAmount          Float           @default(0)
+  deliveryFee        Float           @default(0)
+  totalAmount        Float           @default(0)
   paymentMethod      String //credit_card, paypal, mobile.
-  location           location       @relation(fields: [locationId], references: [id])
-  locationId         String         @unique
+  location           location        @relation(fields: [locationId], references: [id])
+  locationId         String          @unique
   notes              String
+  status             UserOrderStatus @default(UNPAID)
   cancellationReason String?
   refundAmount       Float?
   currencyId         String?
-  currency           currency?      @relation(fields: [currencyId], references: [id])
+  currency           currency?       @relation(fields: [currencyId], references: [id])
   // estimatedDeliveryDate DateTime       @default(dbgenerated("(NOW() + '7 days'::interval)"))
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime       @updatedAt
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
 }
+
+enum UserOrderStatus {
+  UNPAID
+  PAID
+}
+
 // Improved financial fields
-  // subtotal Decimal @default(0)
-  // taxAmount Decimal @default(0)
-  // deliveryFee Decimal @default(0)
-  // discountAmount Decimal @default(0)
-  // totalAmount Decimal @default(0)
-  // amountPaid Decimal @default(0)
-  // amountDue Decimal @default(0) // Calculated as totalAmount - amountPaid
+// subtotal Decimal @default(0)
+// taxAmount Decimal @default(0)
+// deliveryFee Decimal @default(0)
+// discountAmount Decimal @default(0)
+// totalAmount Decimal @default(0)
+// amountPaid Decimal @default(0)
+// amountDue Decimal @default(0) // Calculated as totalAmount - amountPaid
+
 
 // ===== product-cart.prisma =====
 model productCart {

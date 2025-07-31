@@ -34,5 +34,5 @@ const UpdateCategoryZodModel = z.object({
     .default("true")
     .optional(),
 });
-// type UserModel = z.infer<typeof UserZodModel>;
+// type UserModel = z.infer<typeof CreateUserZodModel>;
 module.exports = { UpdateCategoryZodModel };

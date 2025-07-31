@@ -11,14 +11,26 @@ const {
   UpdateUserProductZodModel,
 } = require("../models/update-user-product-zod-model");
 const { createDepositPayment } = require("./transaction-controller");
-const { OrderStatus, TransactionType } = require("../generated/prisma");
+const {
+  OrderStatus,
+  TransactionType,
+  UserOrderStatus,
+} = require("../generated/prisma");
+const {
+  createOrderHelper,
+  verifyUserOrderHelper,
+} = require("../helpers/redis");
 
 //for now create a function for each status
 
 //pending, confirmed, shipped, delivered, cancelled, refunded
 const getAllUserOrders = async (req, res, next) => {
+  // const hasUserCreatedNewOrder = await verifyUserOrderHelper({
+  //   userId: req.user.id,
+  // });
+
   const userOrder = await prisma.order.findMany({
-    where: { userId: req.user.id },
+    where: { AND: [{ userId: req.user.id }, { status: UserOrderStatus.PAID }] },
     include: {
       location: {
         select: {
@@ -55,6 +67,7 @@ const getAllUserOrders = async (req, res, next) => {
 
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
+    // hasUserCreatedNewOrder: hasUserCreatedNewOrder == "true" ? true : null,
     // userCart: userCart,
     count: userOrder.length,
     data: userOrder,
@@ -156,6 +169,7 @@ const getOrder = async (req, res, next) => {
 const createOrder = async (req, res, next) => {
   const { address, notes, paymentMethod } = req.body;
   // const { id: orderId } = req.params;
+  // await createOrderHelper({ userId: req.user.id });
   const userCart = await prisma.userCart.findUnique({
     where: {
       userId: req.user.id,
@@ -203,8 +217,113 @@ const createOrder = async (req, res, next) => {
     };
   });
 
+  // await prisma.userCart.delete({
+  //   where: { userId: req.user.id },
+  // });
+  // userCart.productCart.map(async (item) => {
+  //   await prisma.product.update({
+  //     where: {
+  //       id: item.productStock.variant.productId,
+  //       // {
+  //       //   in: userCart.productCart.map((item) => item.productStock.productId),
+  //       // },
+  //     },
+  //     data: {
+  //       productVariant: {
+  //         update: {
+  //           where: {
+  //             productId_color: {
+  //               productId: item.productStock.variant.productId,
+  //               color: item.productStock.variant.color,
+  //               // branchId: item.branchId,
+  //             },
+  //           },
+  //           data: {
+  //             productStock: {
+  //               update: {
+  //                 where: {
+  //                   id: item.productStockId,
+  //                 },
+  //                 data: { stock: { decrement: item.quantity } },
+  //               },
+  //             },
+  //           },
+  //         },
+  //       },
+  //     },
+  //   });
+  // });
+
+  const order = await prisma.order.create({
+    // where: { id: orderId },
+    data: {
+      trackingNumber: Math.floor(
+        10000000 + Math.random() * 90000000
+      ).toString(),
+      user: { connect: { id: req.user.id } },
+      status: UserOrderStatus.UNPAID,
+      // user: req.user,
+      deliveryFee: userCart.deliveryFee,
+      taxAmount: userCart.taxAmount,
+      subtotal: userCart.subtotal,
+      totalAmount: userCart.totalAmount,
+      notes: notes,
+      location: {
+        create: {
+          address: address,
+          state: { connect: { id: req.user.stateId } },
+        },
+      },
+      productOrder: {
+        createMany: { data: productOrder },
+      },
+      paymentMethod: paymentMethod,
+    },
+  });
+
+  if (!order) {
+    throw new BadRequestError("Order was not created. Please contact support");
+  }
+  console.log(order);
+  console.log(req.user.id);
+
+  return res.status(StatusCodes.CREATED).json({ isSuccess: true, data: order });
+};
+const createPaidOrder = async (req, res, next) => {
+  const { userId, orderId } = req.body;
+  const userCart = await prisma.userCart.findUnique({
+    where: {
+      userId: userId,
+    },
+    include: {
+      productCart: {
+        select: {
+          deliveryTaxes: true,
+          productStockId: true,
+          productStock: {
+            select: {
+              variant: {
+                select: {
+                  id: true,
+                  productId: true,
+                  color: true,
+                  product: {
+                    select: {
+                      price: true,
+                      productPrice: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          quantity: true,
+        },
+      },
+    },
+  });
   await prisma.userCart.delete({
-    where: { userId: req.user.id },
+    where: { userId: userId },
   });
   userCart.productCart.map(async (item) => {
     await prisma.product.update({
@@ -239,37 +358,24 @@ const createOrder = async (req, res, next) => {
       },
     });
   });
-
-  const order = await prisma.order.create({
-    // where: { id: orderId },
+  const order = await prisma.order.update({
+    where: { id: orderId },
     data: {
-      trackingNumber: Math.floor(
-        10000000 + Math.random() * 90000000
-      ).toString(),
-      user: { connect: { id: req.user.id } },
-      // user: req.user,
-      deliveryFee: userCart.deliveryFee,
-      taxAmount: userCart.taxAmount,
-      subtotal: userCart.subtotal,
-      totalAmount: userCart.totalAmount,
-      notes: notes,
-      location: {
-        create: {
-          address: address,
-          state: { connect: { id: req.user.stateId } },
-        },
-      },
-      productOrder: {
-        createMany: { data: productOrder },
-      },
-      paymentMethod: paymentMethod,
+      status: UserOrderStatus.PAID,
     },
   });
+  return res.status(StatusCodes.OK).json({ isSuccess: true, data: order });
+};
 
-  if (!order) {
-    throw new BadRequestError("Order was not created. Please contact support");
-  }
-  return res.status(StatusCodes.CREATED).json({ isSuccess: true, data: order });
+const deleteUnpaidOrder = async (req, res, next) => {
+  const { id: orderId } = req.params;
+
+  const order = await prisma.order.delete({
+    where: { id: orderId },
+  });
+  return res
+    .status(StatusCodes.OK)
+    .json({ isSuccess: true, message: "Order is not completed", data: order });
 };
 
 const changeOrderStatusAsConfirmedByStore = async (req, res, next) => {
@@ -628,6 +734,7 @@ const changeOrderStatusAsShippedByStore = async (req, res, next) => {
 const changeOrderStatusAsDeliveredByStore = async (req, res, next) => {
   const { id: orderId } = req.params;
   const { id: storeId } = req.body;
+  console.log(storeId);
 
   const order = await prisma.order.findMany({
     where: {
@@ -644,13 +751,12 @@ const changeOrderStatusAsDeliveredByStore = async (req, res, next) => {
       ],
     },
     select: {
-      status: true,
       productOrder: {
         select: {
           id: true,
           subtotal: true,
           quantity: true,
-          branchId: true,
+          // productStock: { select: { branchId: true } },
           status: true,
         },
       },
@@ -879,6 +985,8 @@ module.exports = {
   getAllUserOrders,
   getOrder,
   createOrder,
+  createPaidOrder,
+  deleteUnpaidOrder,
   changeOrderStatusAsDeliveredByStore,
   // updateOrderStatus,
   getAllStoreOrders,

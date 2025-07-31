@@ -8,6 +8,7 @@ const {
 const sendOtpHelper = async ({ name, phone, email }) => {
   const otp = crypto.randomInt(1000, 9999).toString();
   //send the mail
+  console.log("otp", otp);
   const emailTemplatePath = path.join(
     __dirname,
     "..",

@@ -1,5 +1,5 @@
 const { z } = require("zod");
-const { LocationZodModel } = require("./location-zod-model");
+const { CreateLocationZodModel } = require("./create-location-zod-model");
 
 const BranchZodModel = z.object({
   // address: z
@@ -9,7 +9,7 @@ const BranchZodModel = z.object({
   // storeId: z.string({ message: "Please enter a description" }),
   phone: z.string().optional(),
   // stateId: z.string({ message: "Please enter a state" }),
-  location: LocationZodModel,
+  location: CreateLocationZodModel,
   //work hours
 });
 module.exports = { BranchZodModel };

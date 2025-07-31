@@ -9,7 +9,6 @@ const {
   UnauthenticatedError,
 } = require("../errors");
 const { storeConstant } = require("../config/constants");
-const { messaging } = require("firebase-admin");
 const getAllStoreBranches = async (req, res, next) => {
   const id = req.query.id;
   // console.log(id);

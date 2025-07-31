@@ -747,12 +747,12 @@ const updateCartQuantity = async (req, res, next) => {
 //TODO is there a better impl?
 const deleteCartItem = async (req, res, next) => {
   // const { productId: productId, color: color } = req.query;
-  const productCartId = req.params.id;
+  const productStockId = req.params.id;
   // console.log(productId, color, userCartId);
   await prisma.productCart.delete({
     where: {
       userCartUserId_productStockId: {
-        productStockId: productCartId,
+        productStockId: productStockId,
         userCartUserId: req.user.id,
       },
       //AND: [{ id: req.user.id }, { productStockId: productStockId }],

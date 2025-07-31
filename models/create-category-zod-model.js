@@ -33,5 +33,5 @@ const CreateCategoryZodModel = z.object({
     )
     .default("true"),
 });
-// type UserModel = z.infer<typeof UserZodModel>;
+// type UserModel = z.infer<typeof CreateUserZodModel>;
 module.exports = { CreateCategoryZodModel };

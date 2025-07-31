@@ -8,5 +8,5 @@ const SupportZodModel = z.object({
     }),
   message: z.string({ message: "Please enter a description" }),
 });
-// type UserModel = z.infer<typeof UserZodModel>;
+// type UserModel = z.infer<typeof CreateUserZodModel>;
 module.exports = { SupportZodModel };

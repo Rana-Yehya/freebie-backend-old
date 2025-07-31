@@ -12,8 +12,8 @@ const UpdateUserProfileZodModel = z.object({
     .optional(),
   dateOfBirth: z.string().date("Invalid date of birth").optional(),
   gender: z.enum(["male", "female"], { message: "Invalid gender" }).optional(),
-  userCountry: z.string({ message: "Country is required" }).optional(),
-  userState: z.string({ message: "State is required" }).optional(),
+  // userCountry: z.string({ message: "Country is required" }).optional(),
+  // userState: z.string({ message: "State is required" }).optional(),
 });
-// type UserModel = z.infer<typeof UserZodModel>;
+// type UserModel = z.infer<typeof CreateUserZodModel>;
 module.exports = { UpdateUserProfileZodModel };

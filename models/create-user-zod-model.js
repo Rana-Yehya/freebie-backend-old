@@ -1,6 +1,6 @@
 const { z } = require("zod");
 
-const UserZodModel = z.object({
+const CreateUserZodModel = z.object({
   // avatar      Image?
   // createdAt   DateTime  @default(now())
   // updatedAt   DateTime  @updatedAt
@@ -18,5 +18,5 @@ const UserZodModel = z.object({
   password: z.string().optional(),
   fcmToken: z.string().optional(),
 });
-// type UserModel = z.infer<typeof UserZodModel>;
-module.exports = { UserZodModel };
+// type UserModel = z.infer<typeof CreateUserZodModel>;
+module.exports = { CreateUserZodModel };

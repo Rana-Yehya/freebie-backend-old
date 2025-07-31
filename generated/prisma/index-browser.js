@@ -256,6 +256,7 @@ exports.Prisma.OrderScalarFieldEnum = {
   paymentMethod: 'paymentMethod',
   locationId: 'locationId',
   notes: 'notes',
+  status: 'status',
   cancellationReason: 'cancellationReason',
   refundAmount: 'refundAmount',
   currencyId: 'currencyId',
@@ -445,6 +446,11 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.UserOrderStatus = exports.$Enums.UserOrderStatus = {
+  UNPAID: 'UNPAID',
+  PAID: 'PAID'
+};
+
 exports.ProductCartStatus = exports.$Enums.ProductCartStatus = {
   ACTIVE: 'ACTIVE',
   NODELIVERYSTATES: 'NODELIVERYSTATES',

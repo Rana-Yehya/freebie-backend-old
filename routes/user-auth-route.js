@@ -10,6 +10,10 @@ const {
   logout,
   sendCode,
   verifyCode,
+  changeUserMainLocation,
+  deleteUserLocation,
+  updateUserLocation,
+  createUserLocation,
 } = require("../controllers/user-auth-controller");
 const {
   authenticateUserMiddleware,
@@ -21,6 +25,7 @@ const {
 const {
   adminInvalidRegisterationMiddleware,
 } = require("../middleware/admin-invalid-registeration-middleware");
+const { userConstant } = require("../config/constants");
 
 const router = express.Router();
 // router.route("/send-code").post(adminInvalidRegisterationMiddleware, sendCode);
@@ -35,13 +40,48 @@ router.route("/verify-code").post(verifyCode);
 // router.route("/forgot-password").post(forgotPassword);
 
 // router.route("/reset-password").post(resetPassword);
-router.route("/user-info").get(authenticateUserMiddleware, showMe);
-router.route("/logout").get(authenticateUserMiddleware, logout);
+router
+  .route("/user-info")
+  .get(authenticateUserMiddleware, authorizeMiddleware(userConstant), showMe);
+router
+  .route("/logout")
+  .get(authenticateUserMiddleware, authorizeMiddleware(userConstant), logout);
 router
   .route("/update-profile")
-  .patch(authenticateUserMiddleware, updateProfile);
+  .patch(
+    authenticateUserMiddleware,
+    authorizeMiddleware(userConstant),
+    updateProfile
+  );
 router
   .route("/delete-user")
   .delete(optionalAuthenticateUserMiddleware, deleteAccount);
+
+router
+  .route("/location")
+  .post(
+    optionalAuthenticateUserMiddleware,
+    authorizeMiddleware(userConstant),
+    createUserLocation
+  );
+router
+  .route("/location/:id")
+  .patch(
+    optionalAuthenticateUserMiddleware,
+    authorizeMiddleware(userConstant),
+    updateUserLocation
+  )
+  .delete(
+    optionalAuthenticateUserMiddleware,
+    authorizeMiddleware(userConstant),
+    deleteUserLocation
+  );
+router
+  .route("/change-main-location/:id")
+  .patch(
+    optionalAuthenticateUserMiddleware,
+    authorizeMiddleware(userConstant),
+    changeUserMainLocation
+  );
 
 module.exports = router;

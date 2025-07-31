@@ -88,5 +88,5 @@ const StoreZodModel = z.object({
   //   ),
   type: z.string().optional(),
 });
-// type UserModel = z.infer<typeof UserZodModel>;
+// type UserModel = z.infer<typeof CreateUserZodModel>;
 module.exports = { StoreZodModel };

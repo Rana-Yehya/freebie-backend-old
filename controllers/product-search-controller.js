@@ -7,7 +7,11 @@ const {
   UnauthenticatedError,
 } = require("../errors");
 const { userConstant, adminConstant } = require("../config/constants");
-const { ProductTags, ProductStatus } = require("../generated/prisma");
+const {
+  ProductTags,
+  ProductStatus,
+  OrderStatus,
+} = require("../generated/prisma");
 
 const selectedQuery = {
   id: true,
@@ -407,6 +411,15 @@ const searchAllProducts = async (req, res, next) => {
   if (priceHigh && parseFloat(priceHigh) !== NaN) {
     priceHighFloat = parseFloat(priceHigh);
   }
+  console.log(
+    "isFeatured ",
+    isFeatured,
+    " isPopular",
+    isPopular,
+    " isBigSale",
+    isBigSale
+  );
+
   const tags =
     isFeatured == "true"
       ? ProductTags.FEATURED
@@ -415,7 +428,7 @@ const searchAllProducts = async (req, res, next) => {
       : isBigSale == "true"
       ? ProductTags.BIGSALE
       : ProductTags.NONE;
-  console.log(tags);
+  console.log("tags", tags);
   const colorList = req.query.colors
     ? decodeURIComponent(req.query.colors)
         .replace(/[\[\] ]/g, "")
@@ -575,7 +588,12 @@ const getProduct = async (req, res, next) => {
       productVariant: {
         include: {
           productStock: {
-            include: { branch: { include: { location: true } } },
+            include: {
+              productOrder: {
+                select: { status: true, order: { select: { userId: true } } },
+              },
+              branch: { include: { location: true } },
+            },
           },
         },
       },
@@ -583,21 +601,31 @@ const getProduct = async (req, res, next) => {
     },
   });
 
-  //  const productUser =  searchInCart ?
-  // await prisma.userCart.findMany({
-  //     where: {
-  //       userId: req.user.id,
-  //       productId: productId,
-  //     },
-  //   }) : undefined;
-
-  // const productStock = await prisma.productStock.findMany({
-  //   where: { productId: productId },
-  // });
   if (!product) {
     throw new BadRequestError("Product not found");
   }
-  return res.status(StatusCodes.OK).json({ isSuccess: true, data: product });
+  let orderUserIds = [];
+  product.productVariant.forEach((variant) => {
+    variant.productStock.forEach((stock) => {
+      stock.productOrder.forEach((order) => {
+        if (order.status == OrderStatus.DELIVERED) {
+          orderUserIds.push(order.order.userId);
+        }
+      });
+      // orderUserIds.push(stock.productOrder);
+    });
+  });
+  console.log(req.user);
+  let canBeReviewed = false;
+  if (req.user != undefined && orderUserIds.includes(req.user.id)) {
+    canBeReviewed = true;
+  }
+  console.log(orderUserIds);
+
+  // const orderUser = order.map((order) => order);
+  return res
+    .status(StatusCodes.OK)
+    .json({ isSuccess: true, canBeReviewed: canBeReviewed, data: product });
 };
 
 module.exports = {

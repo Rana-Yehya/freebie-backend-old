@@ -327,5 +327,5 @@ const UpdateProductZodModel = z
       });
     }
   });
-// type UserModel = z.infer<typeof UserZodModel>;
+// type UserModel = z.infer<typeof CreateUserZodModel>;
 module.exports = { UpdateProductZodModel };

@@ -4,6 +4,8 @@ const {
   getOrder,
   // updateOrderStatus,
   createOrder,
+  createPaidOrder,
+  deleteUnpaidOrder,
   getAllStoreOrders,
   cancelOrderByUser,
   changeOrderStatusAsConfirmedByStore,
@@ -26,7 +28,11 @@ const {
 } = require("../config/constants");
 
 const router = express.Router();
-//
+// payment gateway
+router.route("/create-paid-order").post(createPaidOrder);
+router
+  .route("/delete-unpaid-order/:id")
+  .delete(authenticateUserMiddleware, deleteUnpaidOrder);
 
 router.route("/").post(authenticateUserMiddleware, createOrder);
 router

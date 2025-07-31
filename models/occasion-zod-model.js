@@ -20,5 +20,5 @@ const OccasionZodModel = z.object({
       message: "Image is too large",
     }),
 });
-// type UserModel = z.infer<typeof UserZodModel>;
+// type UserModel = z.infer<typeof CreateUserZodModel>;
 module.exports = { OccasionZodModel };

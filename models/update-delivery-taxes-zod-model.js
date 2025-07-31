@@ -16,5 +16,5 @@ const UpdateDeliveryTaxesZodModel = z.object({
   //
   // gender: z.enum(["male", "female"], { message: "Invalid gender" }),
 });
-// type UserModel = z.infer<typeof UserZodModel>;
+// type UserModel = z.infer<typeof CreateUserZodModel>;
 module.exports = { UpdateDeliveryTaxesZodModel };

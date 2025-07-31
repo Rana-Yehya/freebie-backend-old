@@ -9,7 +9,7 @@ const {
   BadRequestError,
   UnauthenticatedError,
 } = require("../errors");
-const { UserZodModel } = require("../models/user-zod-model");
+const { CreateUserZodModel } = require("../models/create-user-zod-model");
 
 const {
   sendTokenToCookies,
@@ -28,6 +28,10 @@ const {
   UpdateUserProfileZodModel,
 } = require("../models/update-user-profile-zod-model");
 const { connect } = require("http2");
+const { OrderStatus } = require("../generated/prisma");
+const {
+  UpdateLocationZodModel,
+} = require("../models/update-location-zod-model");
 //TODO AM I IN NEED TO LOGIN
 
 const login = async (req, res) => {
@@ -69,10 +73,15 @@ const sendCode = async (req, res, next) => {
   if (isPhoneValid.isValid != true) {
     throw new BadRequestError("The phone number is not correct");
   }
-  const userInDB = await prisma.session.findFirst({
-    where: { user: { phone: phoneNumber } },
-    select: { user: true },
+  //TODO ENHANCEMENT
+  // const userInDB = await prisma.session.findFirst({
+  //   where: { user: { phone: phoneNumber } },
+  //   select: { user: true },
+  // });
+  const userInDB = await prisma.user.findFirst({
+    where: { phone: phoneNumber },
   });
+
   const storeInDB = await prisma.store.findFirst({
     where: { phone: phoneNumber },
   });
@@ -107,7 +116,7 @@ const sendCode = async (req, res, next) => {
 const register = async (req, res, next) => {
   const { name, phoneNumber, userState, dateOfBirth, gender, fcmToken, email } =
     req.body;
-  const zodModel = UserZodModel.safeParse({
+  const zodModel = CreateUserZodModel.safeParse({
     name: name,
     dateOfBirth: dateOfBirth,
     gender: gender,
@@ -125,22 +134,28 @@ const register = async (req, res, next) => {
   if (isPhoneValid.isValid != true) {
     throw new BadRequestError("The phone number is not correct");
   }
-  // const userInDB = await prisma.user.findFirst({
-  //   where: {
-  //     OR: [{ email }, { phone: phoneNumber }],
-  //   },
-  // });
-  const userInDB = await prisma.session.findFirst({
+  const userInDB = await prisma.user.findFirst({
     where: {
-      OR: [
-        { user: { OR: [{ email }, { phone: phoneNumber }] } },
-        { admin: { OR: [{ email }, { phone: phoneNumber }] } },
-        { store: { OR: [{ email }, { phone: phoneNumber }] } },
-      ],
+      OR: [{ email }, { phone: phoneNumber }],
     },
   });
+  const storeInDB = await prisma.store.findFirst({
+    where: {
+      OR: [{ email }, { phone: phoneNumber }],
+    },
+  });
+  // const userInDB = await prisma.session.findFirst({
+  //   where: {
+  //     OR: [
+  //       { user: { OR: [{ email }, { phone: phoneNumber }] } },
+  //       { admin: { OR: [{ email }, { phone: phoneNumber }] } },
+  //       { store: { OR: [{ email }, { phone: phoneNumber }] } },
+  //     ],
+  //   },
+  // });
+  console.log(userInDB);
   //storeInDB ||
-  if (userInDB) {
+  if (userInDB || storeInDB) {
     throw new BadRequestError(
       "Account already in use or has an individal account"
     );
@@ -184,6 +199,7 @@ const register = async (req, res, next) => {
       userLocations: {
         create: {
           state: { connect: { id: userState } },
+          isMain: true,
         },
       },
       state: { connect: { id: userState } },
@@ -299,12 +315,8 @@ const verifyCode = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  await prisma.user.update({
-    where: { id: req.user.id },
-    data: {
-      refreshTokenSecret: null,
-      accessTokenSecret: null,
-    },
+  await prisma.session.deleteMany({
+    where: { userId: req.user.id },
   });
   // res.cookie("accessToken", null, {
   //   expires: new Date(Date()),
@@ -326,8 +338,8 @@ const logout = async (req, res) => {
   });
 };
 
-const updateProfile = async (req, res) => {
-  const { dateOfBirth, gender, countryId, stateId, name } = req.body;
+const updateProfile = async (req, res, next) => {
+  const { dateOfBirth, gender, name, countryId, stateId } = req.body;
   const zodModel = UpdateUserProfileZodModel.safeParse({
     name: name,
     dateOfBirth: dateOfBirth,
@@ -374,16 +386,9 @@ const updateProfile = async (req, res) => {
         //   id: stateId || undefined,
         // },
       }),
-      // ...(countryId && {
-      //   userCountry:
-      //     countryId != undefined ? { connect: { id: countryId } } : {},
-
-      //   //  {
-      //   //   connect: {
-      //   //     id: countryId || undefined,
-      //   //   },
-      //   // },
-      // }),
+    },
+    include: {
+      state: { include: { name: true, country: { include: { name: true } } } },
     },
   });
 
@@ -392,25 +397,116 @@ const updateProfile = async (req, res) => {
     message: "Profile updated successfully",
     user: user,
   });
-  // if (!email || !name) {
-  //   throw new BadRequestError("Please enter all profile data");
-  // }
-  // const user = await User.findOne({ _id: req.user.userId });
-  // user.email = email;
-  // user.name = name;
-  // await user.save();
-  // const token = user.createJWT();
-  // return res.status(StatusCodes.OK).json({
-  //   isSuccess: true,
-  //   user: {
-  //     id: user.getId(),
-  //     name: user.getName(),
-  //     role: user.getRole(),
-  //     email: user.getEmail(),
-  //     token,
-  //   },
-  //   token,
-  // });
+};
+
+const updateUserLocation = async (req, res) => {
+  //countryId, stateId,
+  const { id: userLocationId } = req.params;
+  const { stateId } = req.body;
+  if (!userLocationId) {
+    throw new BadRequestError("User location id is required");
+  }
+  const zodModel = UpdateLocationZodModel.safeParse({
+    stateId: stateId,
+  });
+
+  if (!zodModel.success) {
+    throw new BadRequestError(zodModel.error.errors[0].message);
+  }
+
+  const userLocations = await prisma.userLocations.update({
+    where: {
+      id: userLocationId,
+    },
+    data: {
+      state: { connect: { id: stateId } },
+    },
+  });
+
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "Location updated successfully",
+    userLocations: userLocations,
+  });
+};
+
+const changeUserMainLocation = async (req, res) => {
+  //countryId, stateId,
+  const { id: userLocationId } = req.params;
+  if (!userLocationId) {
+    throw new BadRequestError("User location id is required");
+  }
+
+  const originalUserLocation = await prisma.userLocations.findFirst({
+    where: {
+      isMain: true,
+    },
+    select: {
+      id: true,
+    },
+  });
+  await prisma.userLocations.update({
+    where: {
+      id: originalUserLocation.id,
+    },
+    data: { isMain: false },
+  });
+  const userLocations = await prisma.userLocations.updateMany({
+    where: {
+      id: userLocationId,
+    },
+    data: { isMain: true },
+  });
+
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "Location updated successfully",
+    userLocations: userLocations,
+  });
+};
+
+const deleteUserLocation = async (req, res) => {
+  //countryId, stateId,
+  const { id: userLocationId } = req.params;
+  if (!userLocationId) {
+    throw new BadRequestError("User location id is required");
+  }
+
+  await prisma.userLocations.delete({
+    where: {
+      id: userLocationId,
+    },
+  });
+
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "Location deleted successfully",
+  });
+};
+
+const createUserLocation = async (req, res) => {
+  const { stateId } = req.body;
+
+  const zodModel = UpdateLocationZodModel.safeParse({
+    stateId: stateId,
+  });
+
+  if (!zodModel.success) {
+    throw new BadRequestError(zodModel.error.errors[0].message);
+  }
+
+  const userLocations = await prisma.userLocations.create({
+    data: {
+      user: { connect: { id: req.user.id } },
+      state: { connect: { id: stateId } },
+    },
+  });
+
+  return res.status(StatusCodes.CREATED).json({
+    isSuccess: true,
+    message: "Location created successfully",
+    userLocations: userLocations,
+  });
 };
 
 const showMe = async (req, res) => {
@@ -442,7 +538,7 @@ const deleteAccount = async (req, res) => {
           }, //  email || req.user.id
         },
         {
-          productOrder: { every: { status: { not: "delivered" } } },
+          productOrder: { every: { status: { not: OrderStatus.DELIVERED } } },
         },
       ],
     },
@@ -474,4 +570,8 @@ module.exports = {
   showMe,
   deleteAccount,
   sendCode,
+  changeUserMainLocation,
+  deleteUserLocation,
+  updateUserLocation,
+  createUserLocation,
 };
