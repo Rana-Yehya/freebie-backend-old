@@ -1,4 +1,4 @@
-const { CountryZodModel } = require("../models/country-zod-model");
+const { CreateCountryZodModel } = require("../models/create-country-zod-model");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
 const {
@@ -6,6 +6,7 @@ const {
   BadRequestError,
   UnauthenticatedError,
 } = require("../errors");
+const { UpdateCountryZodModel } = require("../models/update-country-zod-model");
 const getAllCountries = async (req, res, next) => {
   const country = await prisma.country.findMany({
     include: { name: true },
@@ -16,12 +17,15 @@ const getAllCountries = async (req, res, next) => {
 };
 const getCountry = async (req, res, next) => {
   const { id: countryId } = req.params;
+  if (!countryId) {
+    throw new BadRequestError("Please enter a country id");
+  }
   const country = await prisma.country.findUnique({
     where: { id: countryId },
     include: { name: true },
   });
   if (!country) {
-    throw new BadRequestError("Country not found");
+    throw new NotFoundError("Country not found");
   }
   return res.status(StatusCodes.OK).json({ isSuccess: true, data: country });
 };
@@ -34,7 +38,7 @@ const createCountry = async (req, res, next) => {
     // currencyCode,
     countryIsoCode,
   } = req.body;
-  const zodModel = CountryZodModel.safeParse({
+  const zodModel = CreateCountryZodModel.safeParse({
     countryName: {
       default: countryName,
       en: countryNameEn,
@@ -62,7 +66,6 @@ const createCountry = async (req, res, next) => {
       countryIsoCode: countryIsoCode,
     },
   });
-  console.log(createdCountry);
 
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
@@ -81,8 +84,20 @@ const updateCountry = async (req, res, next) => {
     countryIsoCode,
   } = req.body;
 
-  if (!id) {
-    throw new BadRequestError("Please send a country ID");
+  const zodModel = UpdateCountryZodModel.safeParse({
+    id: id,
+    countryName: {
+      default: countryName,
+      en: countryNameEn,
+      ar: countryNameAr,
+    },
+    // currencyCode: currencyCode,
+    countryIsoCode: countryIsoCode,
+  });
+
+  console.log(zodModel);
+  if (!zodModel.success) {
+    throw new BadRequestError(zodModel.error.errors[0].message);
   }
   const updatedCountry = await prisma.country.update({
     where: { id: id },
@@ -98,8 +113,9 @@ const updateCountry = async (req, res, next) => {
       countryIsoCode: countryIsoCode || undefined,
     },
   });
-  console.log(updatedCountry);
-
+  if (!updatedCountry) {
+    throw new NotFoundError("Country not found");
+  }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     message: "Country updated successfully",
@@ -109,11 +125,14 @@ const updateCountry = async (req, res, next) => {
 
 const deleteCountry = async (req, res, next) => {
   const { id: CountryId } = req.params;
+  if (!CountryId) {
+    throw new BadRequestError("Please send a country ID");
+  }
   const country = await prisma.country.delete({
     where: { id: CountryId },
   });
   if (!country) {
-    throw new BadRequestError("Country not found");
+    throw new NotFoundError("Country not found");
   }
   return res
     .status(StatusCodes.OK)

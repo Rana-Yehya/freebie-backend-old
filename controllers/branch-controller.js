@@ -1,7 +1,6 @@
 const { prisma } = require("../config/prisma");
-const { phone } = require("phone");
 
-const { BranchZodModel } = require("../models/branch-zod-model");
+const { CreateBranchZodModel } = require("../models/create-branch-zod-model");
 const { StatusCodes } = require("http-status-codes");
 const {
   NotFoundError,
@@ -9,21 +8,24 @@ const {
   UnauthenticatedError,
 } = require("../errors");
 const { storeConstant } = require("../config/constants");
+const { UpdateBranchZodModel } = require("../models/update-branch-zod-model");
+const { OrderStatus } = require("../generated/prisma");
 const getAllStoreBranches = async (req, res, next) => {
-  const id = req.query.id;
-  // console.log(id);
-  // console.log(req.query);
-  // console.log(req.user);
-
-  if (!(req.user != undefined && req.user.role === storeConstant)) {
-    if (!id) {
-      // console.log("here");
-      throw new BadRequestError("Please provide store id");
-    }
+  let id = req.query.id;
+  if (req.user != undefined && req.user.role === storeConstant) {
+    id = req.user.id;
+    // if (!id) {
+    //   throw new BadRequestError("Please provide store ID");
+    // }
   }
+  if (!id) {
+    // console.log("here");
+    throw new BadRequestError("Please provide store id");
+  }
+
   const branches = await prisma.branch.findMany({
     where: {
-      storeId: id || req.user.id,
+      storeId: id,
     },
     include: {
       location: true,
@@ -35,6 +37,9 @@ const getAllStoreBranches = async (req, res, next) => {
 };
 const getBranch = async (req, res, next) => {
   const { id: branchId } = req.params;
+  if (!branchId) {
+    throw new BadRequestError("Please enter a branch id");
+  }
   const branch = await prisma.branch.findUnique({
     where: { id: branchId },
     include: {
@@ -42,48 +47,31 @@ const getBranch = async (req, res, next) => {
     },
   });
   if (!branch) {
-    throw new BadRequestError("Branch not found");
+    throw new NotFoundError("Branch not found");
   }
   return res.status(StatusCodes.OK).json({ isSuccess: true, data: branch });
 };
 
 const createBranch = async (req, res, next) => {
-  const id = req.query.id;
-  if (!(req.user != undefined && req.user.role === storeConstant)) {
-    if (!id) {
-      throw new BadRequestError("Please provide store ID");
-    }
+  let id = req.query.id;
+  if (req.user != undefined && req.user.role === storeConstant) {
+    id = req.user.id;
   }
-  // if (!(req.user && req.user.role === store)) {
-  //   throw new BadRequestError("Please provide store id");
-  // } else {
-  // 4025e15e-d6ce-4a6b-8afa-8cf9fdf06d1c
-
-  // }
   const { address, phone: phoneNumber, stateId } = req.body;
-  const zodModel = BranchZodModel.safeParse({
-    // address: address,
-    // countryId: countryId,
+  const zodModel = CreateBranchZodModel.safeParse({
+    storeId: id,
     phone: phoneNumber,
     location: {
       address: address,
       stateId: stateId,
     },
-
-    // stateId: stateId,
   });
 
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
-  const isPhoneValid = phone(phoneNumber.toString());
-
-  if (isPhoneValid.isValid != true) {
-    throw new BadRequestError("The phone number is not correct");
-  }
   const createdBranch = await prisma.branch.create({
     data: {
-      // countryId: countryId,
       phone: phoneNumber,
       location: {
         create: {
@@ -91,10 +79,7 @@ const createBranch = async (req, res, next) => {
           address: address,
         },
       },
-      store: { connect: { id: id || req.user.id } },
-      // stateId: stateId,
-
-      // workHours: [],
+      store: { connect: { id: id } },
     },
   });
 
@@ -109,8 +94,17 @@ const updateBranch = async (req, res, next) => {
   const { id } = req.params;
   const { address, phone: phoneNumber, stateId } = req.body;
 
-  if (!id) {
-    throw new BadRequestError("Please send a branch ID");
+  const zodModel = UpdateBranchZodModel.safeParse({
+    branchId: id,
+    phone: phoneNumber,
+    location: {
+      address: address,
+      stateId: stateId,
+    },
+  });
+
+  if (!zodModel.success) {
+    throw new BadRequestError(zodModel.error.errors[0].message);
   }
   const updatedBranch = await prisma.branch.update({
     where: { id: id },
@@ -122,20 +116,11 @@ const updateBranch = async (req, res, next) => {
           address: address || undefined,
         },
       },
-      // storeId: id || req.user.id,
     },
   });
-  // if (updatedBranch && stateId != undefined) {
-  //   const productCart = await prisma.productCart.deleteMany({
-  //     where: {
-  //       productStock: { branchId: id },
-  //     },
-  //     include: {productStock: true}
-  //   });
-  //   productCart.map((stock) => {
-
-  //   })
-  // }
+  if (!updatedBranch) {
+    throw new NotFoundError("Branch not found");
+  }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     message: "Branch updated successfully",
@@ -145,11 +130,22 @@ const updateBranch = async (req, res, next) => {
 
 const deleteBranch = async (req, res, next) => {
   const { id: branchId } = req.params;
+  // TODO SHOULD I CHECK ON THE ONGOING ORDERS
+  // const productOrder = await prisma.productOrder.findFirst({
+  //  where: {
+  //   status: {notIn: [OrderStatus.DELIVERED, OrderStatus.CANCELLED]},
+  //   variant:
+  //  }
+  // }
+  // )
+  if (!branchId) {
+    throw new BadRequestError("Please enter a branch id");
+  }
   const branch = await prisma.branch.delete({
     where: { id: branchId },
   });
   if (!branch) {
-    throw new BadRequestError("Branch not found");
+    throw new NotFoundError("Branch not found");
   }
   return res
     .status(StatusCodes.OK)

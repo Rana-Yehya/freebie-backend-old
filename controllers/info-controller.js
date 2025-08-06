@@ -1,4 +1,3 @@
-const { UserCartZodModel } = require("../models/user-cart-zod-model");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
 const {
@@ -26,8 +25,6 @@ const createInfo = async (req, res, next) => {
     data: data,
   });
   if (!zodModel.success) {
-    console.log(zodModel.error.errors[0]);
-
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
   const aboutInfo = await prisma.info.upsert({
@@ -82,10 +79,23 @@ const refundPolicy = async (req, res, next) => {
   return res.status(StatusCodes.OK).json({ isSuccess: true, data: refundInfo });
 };
 
+const shippingPolicy = async (req, res, next) => {
+  // }
+  // productUser[i].userCartId = req.user.id;
+  const refundInfo = await prisma.info.findUnique({
+    where: {
+      slug: "shipping",
+    },
+  });
+
+  return res.status(StatusCodes.OK).json({ isSuccess: true, data: refundInfo });
+};
+
 module.exports = {
   aboutApp,
   privacyPolicy,
   refundPolicy,
   termsAndConditions,
   createInfo,
+  shippingPolicy,
 };

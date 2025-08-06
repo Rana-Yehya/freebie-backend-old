@@ -5,9 +5,15 @@ const UpdateDeliveryTaxesZodModel = z.object({
   // createdAt   DateTime  @default(now())
   // updatedAt   DateTime  @updatedAt
   // imageId     String    @db.ObjectId
-
-  originStateId: z.string().optional(),
-  destinationStateId: z.string().optional(),
+  id: z
+    .string({
+      message: "Please enter a delivery taxes id",
+    })
+    .uuid({
+      message: "Please enter a valid delivery taxes id",
+    }),
+  originStateId: z.string().uuid().optional(),
+  destinationStateId: z.string().uuid().optional(),
   baseFee: z.number().optional(),
   additionalFeesAfterKg: z.number().optional(),
   feePerKg: z.number().optional(),

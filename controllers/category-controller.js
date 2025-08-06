@@ -25,6 +25,9 @@ const getAllCategories = async (req, res, next) => {
 };
 const getCategory = async (req, res, next) => {
   const { id: categoryId } = req.params;
+  if (!categoryId) {
+    throw new BadRequestError("Please enter a category id");
+  }
   const category = await prisma.category.findUnique({
     where: { id: categoryId },
     include: {
@@ -32,7 +35,7 @@ const getCategory = async (req, res, next) => {
     },
   });
   if (!category) {
-    throw new BadRequestError("Category not found");
+    throw new NotFoundError("Category not found");
   }
   return res.status(StatusCodes.OK).json({ isSuccess: true, data: category });
 };
@@ -94,6 +97,7 @@ const updateCategory = async (req, res, next) => {
   const { name, nameAr, nameEn, canBeDeliveredOutsideState } = req.body;
   const image = req.files == undefined ? undefined : req.files.image;
   const zodModel = UpdateCategoryZodModel.safeParse({
+    id: id,
     name: {
       default: name,
       ar: nameAr,
@@ -104,9 +108,6 @@ const updateCategory = async (req, res, next) => {
   });
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
-  }
-  if (!id) {
-    throw new BadRequestError("Please send a category ID");
   }
   let imageUploadedSecureUrl = undefined;
   let imageUploadedPublicId = undefined;
@@ -119,7 +120,7 @@ const updateCategory = async (req, res, next) => {
       },
     });
     if (!category) {
-      throw new BadRequestError("Category not found");
+      throw new NotFoundError("Category not found");
     }
     [imageUploadedSecureUrl, imageUploadedPublicId] = await uploadImage({
       req: req,
@@ -154,6 +155,9 @@ const updateCategory = async (req, res, next) => {
       image: true, // Include the image in the return object
     },
   });
+  if (!updatedCategory) {
+    throw new NotFoundError("Category not found");
+  }
   if (image) {
     await destroyImage({ imagePublicId: category.image.publicId });
   }
@@ -166,6 +170,9 @@ const updateCategory = async (req, res, next) => {
 
 const deleteCategory = async (req, res, next) => {
   const { id: CategoryId } = req.params;
+  if (!CategoryId) {
+    throw new BadRequestError("Please enter a category id");
+  }
   const category = await prisma.category.delete({
     where: { id: CategoryId },
     include: {
@@ -173,7 +180,7 @@ const deleteCategory = async (req, res, next) => {
     },
   });
   if (!category) {
-    throw new BadRequestError("Category not found");
+    throw new NotFoundError("Category not found");
   }
   await destroyImage({ imagePublicId: category.image.publicId });
 

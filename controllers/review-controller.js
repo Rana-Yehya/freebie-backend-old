@@ -7,14 +7,16 @@ const {
 } = require("../errors");
 const { uploadImage } = require("../helpers/cloudinary/upload-image");
 const { destroyImage } = require("../helpers/cloudinary/delete-image");
-const { ReviewZodModel } = require("../models/review-zod-model");
+const { CreateReviewZodModel } = require("../models/create-review-zod-model");
 const { OrderStatus } = require("../generated/prisma");
 const getAllProductReviews = async (req, res, next) => {
+  const { id: productId } = req.params;
+  if (!productId) {
+    throw new BadRequestError("Please send a product id");
+  }
   const reviews = await prisma.review.findMany({
-    where: { productId: req.params.id },
-    select: {
-      comment: true,
-      stars: true,
+    where: { productId: productId },
+    include: {
       user: {
         select: {
           id: true,
@@ -22,9 +24,6 @@ const getAllProductReviews = async (req, res, next) => {
           name: true,
         },
       },
-      userId: {},
-      createdAt: true,
-      updatedAt: true,
     },
     orderBy: [
       {
@@ -44,7 +43,8 @@ const getAllProductReviews = async (req, res, next) => {
 const createReview = async (req, res, next) => {
   const { stars, comment } = req.body;
   const { id: productId } = req.params;
-  const zodModel = ReviewZodModel.safeParse({
+  const zodModel = CreateReviewZodModel.safeParse({
+    productId: productId,
     stars: stars,
     comment: comment,
   });
@@ -88,10 +88,17 @@ const createReview = async (req, res, next) => {
   /*
 922ca900-a832-4dea-a255-d7b60daa31f9
 */
-  const createdReview = await prisma.review.create({
-    data: {
-      stars: stars,
-      comment: comment,
+  const createdReview = await prisma.review.upsert({
+    where: { userId_productId: { userId: req.user.id, productId: productId } },
+    update: {
+      stars: stars || undefined,
+      comment: comment || undefined,
+      // userId: req.user.id,
+      //productId: productId,
+    },
+    create: {
+      stars: stars || undefined,
+      comment: comment || undefined,
       userId: req.user.id,
       productId: productId,
     },
@@ -103,42 +110,16 @@ const createReview = async (req, res, next) => {
   });
 };
 
-const updateReview = async (req, res, next) => {
+const deleteReview = async (req, res, next) => {
   const { id: productId } = req.params;
-  const { stars, comment } = req.body;
-
   if (!productId) {
     throw new BadRequestError("Please send a review ID");
   }
-  const zodModel = ReviewZodModel.safeParse({
-    stars: stars,
-    comment: comment,
-  });
-  if (!zodModel.success) {
-    throw new BadRequestError(zodModel.error.errors[0].message);
-  }
-  const updatedReview = await prisma.review.update({
-    where: { userId: req.user.id, productId: productId },
-    data: {
-      stars: stars || undefined,
-      comment: comment || undefined,
-    },
-  });
-
-  return res.status(StatusCodes.OK).json({
-    isSuccess: true,
-    message: "Review updated successfully",
-    data: updatedReview,
-  });
-};
-
-const deleteReview = async (req, res, next) => {
-  const { id: productId } = req.params;
   const review = await prisma.review.delete({
-    where: { userId: req.user.id, productId: productId },
+    where: { userId_productId: { userId: req.user.id, productId: productId } },
   });
   if (!review) {
-    throw new BadRequestError("Review not found");
+    throw new NotFoundError("Review not found");
   }
 
   return res
@@ -149,6 +130,5 @@ const deleteReview = async (req, res, next) => {
 module.exports = {
   getAllProductReviews,
   createReview,
-  updateReview,
   deleteReview,
 };

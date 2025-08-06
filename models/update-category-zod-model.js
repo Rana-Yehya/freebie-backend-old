@@ -2,6 +2,13 @@ const { z } = require("zod");
 const { UpdateLocaleZodModel } = require("./update-locale-zod-model");
 
 const UpdateCategoryZodModel = z.object({
+  id: z
+    .string({
+      message: "Please enter a category id",
+    })
+    .uuid({
+      message: "Please enter a valid category id",
+    }),
   name: UpdateLocaleZodModel, //z.string({ message: "Name is required" }).optional(),
   image: z
     .any()

@@ -15728,7 +15728,7 @@ export namespace Prisma {
   export type InfoMinAggregateOutputType = {
     id: string | null
     slug: string | null
-    data: string | null
+    nameId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -15736,7 +15736,7 @@ export namespace Prisma {
   export type InfoMaxAggregateOutputType = {
     id: string | null
     slug: string | null
-    data: string | null
+    nameId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -15744,7 +15744,7 @@ export namespace Prisma {
   export type InfoCountAggregateOutputType = {
     id: number
     slug: number
-    data: number
+    nameId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -15754,7 +15754,7 @@ export namespace Prisma {
   export type InfoMinAggregateInputType = {
     id?: true
     slug?: true
-    data?: true
+    nameId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -15762,7 +15762,7 @@ export namespace Prisma {
   export type InfoMaxAggregateInputType = {
     id?: true
     slug?: true
-    data?: true
+    nameId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -15770,7 +15770,7 @@ export namespace Prisma {
   export type InfoCountAggregateInputType = {
     id?: true
     slug?: true
-    data?: true
+    nameId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -15851,7 +15851,7 @@ export namespace Prisma {
   export type InfoGroupByOutputType = {
     id: string
     slug: string
-    data: string
+    nameId: string
     createdAt: Date
     updatedAt: Date
     _count: InfoCountAggregateOutputType | null
@@ -15876,44 +15876,58 @@ export namespace Prisma {
   export type infoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     slug?: boolean
-    data?: boolean
+    nameId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    name?: boolean | localeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["info"]>
 
   export type infoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     slug?: boolean
-    data?: boolean
+    nameId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    name?: boolean | localeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["info"]>
 
   export type infoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     slug?: boolean
-    data?: boolean
+    nameId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    name?: boolean | localeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["info"]>
 
   export type infoSelectScalar = {
     id?: boolean
     slug?: boolean
-    data?: boolean
+    nameId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type infoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "data" | "createdAt" | "updatedAt", ExtArgs["result"]["info"]>
+  export type infoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "nameId" | "createdAt" | "updatedAt", ExtArgs["result"]["info"]>
+  export type infoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name?: boolean | localeDefaultArgs<ExtArgs>
+  }
+  export type infoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name?: boolean | localeDefaultArgs<ExtArgs>
+  }
+  export type infoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name?: boolean | localeDefaultArgs<ExtArgs>
+  }
 
   export type $infoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "info"
-    objects: {}
+    objects: {
+      name: Prisma.$localePayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       slug: string
-      data: string
+      nameId: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["info"]>
@@ -16310,6 +16324,7 @@ export namespace Prisma {
    */
   export interface Prisma__infoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    name<T extends localeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, localeDefaultArgs<ExtArgs>>): Prisma__localeClient<$Result.GetResult<Prisma.$localePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16341,7 +16356,7 @@ export namespace Prisma {
   interface infoFieldRefs {
     readonly id: FieldRef<"info", 'String'>
     readonly slug: FieldRef<"info", 'String'>
-    readonly data: FieldRef<"info", 'String'>
+    readonly nameId: FieldRef<"info", 'String'>
     readonly createdAt: FieldRef<"info", 'DateTime'>
     readonly updatedAt: FieldRef<"info", 'DateTime'>
   }
@@ -16361,6 +16376,10 @@ export namespace Prisma {
      */
     omit?: infoOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: infoInclude<ExtArgs> | null
+    /**
      * Filter, which info to fetch.
      */
     where: infoWhereUniqueInput
@@ -16379,6 +16398,10 @@ export namespace Prisma {
      */
     omit?: infoOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: infoInclude<ExtArgs> | null
+    /**
      * Filter, which info to fetch.
      */
     where: infoWhereUniqueInput
@@ -16396,6 +16419,10 @@ export namespace Prisma {
      * Omit specific fields from the info
      */
     omit?: infoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: infoInclude<ExtArgs> | null
     /**
      * Filter, which info to fetch.
      */
@@ -16445,6 +16472,10 @@ export namespace Prisma {
      */
     omit?: infoOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: infoInclude<ExtArgs> | null
+    /**
      * Filter, which info to fetch.
      */
     where?: infoWhereInput
@@ -16493,6 +16524,10 @@ export namespace Prisma {
      */
     omit?: infoOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: infoInclude<ExtArgs> | null
+    /**
      * Filter, which infos to fetch.
      */
     where?: infoWhereInput
@@ -16536,6 +16571,10 @@ export namespace Prisma {
      */
     omit?: infoOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: infoInclude<ExtArgs> | null
+    /**
      * The data needed to create a info.
      */
     data: XOR<infoCreateInput, infoUncheckedCreateInput>
@@ -16569,6 +16608,10 @@ export namespace Prisma {
      */
     data: infoCreateManyInput | infoCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: infoIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -16583,6 +16626,10 @@ export namespace Prisma {
      * Omit specific fields from the info
      */
     omit?: infoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: infoInclude<ExtArgs> | null
     /**
      * The data needed to update a info.
      */
@@ -16635,6 +16682,10 @@ export namespace Prisma {
      * Limit how many infos to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: infoIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -16649,6 +16700,10 @@ export namespace Prisma {
      * Omit specific fields from the info
      */
     omit?: infoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: infoInclude<ExtArgs> | null
     /**
      * The filter to search for the info to update in case it exists.
      */
@@ -16675,6 +16730,10 @@ export namespace Prisma {
      * Omit specific fields from the info
      */
     omit?: infoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: infoInclude<ExtArgs> | null
     /**
      * Filter which info to delete.
      */
@@ -16707,6 +16766,10 @@ export namespace Prisma {
      * Omit specific fields from the info
      */
     omit?: infoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: infoInclude<ExtArgs> | null
   }
 
 
@@ -16874,6 +16937,7 @@ export namespace Prisma {
     currencyAbbLocale?: boolean | locale$currencyAbbLocaleArgs<ExtArgs>
     currencyName?: boolean | locale$currencyNameArgs<ExtArgs>
     city?: boolean | locale$cityArgs<ExtArgs>
+    info?: boolean | locale$infoArgs<ExtArgs>
     category?: boolean | locale$categoryArgs<ExtArgs>
     occasion?: boolean | locale$occasionArgs<ExtArgs>
     descriptionProduct?: boolean | locale$descriptionProductArgs<ExtArgs>
@@ -16911,6 +16975,7 @@ export namespace Prisma {
     currencyAbbLocale?: boolean | locale$currencyAbbLocaleArgs<ExtArgs>
     currencyName?: boolean | locale$currencyNameArgs<ExtArgs>
     city?: boolean | locale$cityArgs<ExtArgs>
+    info?: boolean | locale$infoArgs<ExtArgs>
     category?: boolean | locale$categoryArgs<ExtArgs>
     occasion?: boolean | locale$occasionArgs<ExtArgs>
     descriptionProduct?: boolean | locale$descriptionProductArgs<ExtArgs>
@@ -16930,6 +16995,7 @@ export namespace Prisma {
       currencyAbbLocale: Prisma.$currencyPayload<ExtArgs> | null
       currencyName: Prisma.$currencyPayload<ExtArgs> | null
       city: Prisma.$cityPayload<ExtArgs> | null
+      info: Prisma.$infoPayload<ExtArgs> | null
       category: Prisma.$categoryPayload<ExtArgs> | null
       occasion: Prisma.$occasionPayload<ExtArgs> | null
       descriptionProduct: Prisma.$productPayload<ExtArgs> | null
@@ -17342,6 +17408,7 @@ export namespace Prisma {
     currencyAbbLocale<T extends locale$currencyAbbLocaleArgs<ExtArgs> = {}>(args?: Subset<T, locale$currencyAbbLocaleArgs<ExtArgs>>): Prisma__currencyClient<$Result.GetResult<Prisma.$currencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     currencyName<T extends locale$currencyNameArgs<ExtArgs> = {}>(args?: Subset<T, locale$currencyNameArgs<ExtArgs>>): Prisma__currencyClient<$Result.GetResult<Prisma.$currencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     city<T extends locale$cityArgs<ExtArgs> = {}>(args?: Subset<T, locale$cityArgs<ExtArgs>>): Prisma__cityClient<$Result.GetResult<Prisma.$cityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    info<T extends locale$infoArgs<ExtArgs> = {}>(args?: Subset<T, locale$infoArgs<ExtArgs>>): Prisma__infoClient<$Result.GetResult<Prisma.$infoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     category<T extends locale$categoryArgs<ExtArgs> = {}>(args?: Subset<T, locale$categoryArgs<ExtArgs>>): Prisma__categoryClient<$Result.GetResult<Prisma.$categoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     occasion<T extends locale$occasionArgs<ExtArgs> = {}>(args?: Subset<T, locale$occasionArgs<ExtArgs>>): Prisma__occasionClient<$Result.GetResult<Prisma.$occasionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     descriptionProduct<T extends locale$descriptionProductArgs<ExtArgs> = {}>(args?: Subset<T, locale$descriptionProductArgs<ExtArgs>>): Prisma__productClient<$Result.GetResult<Prisma.$productPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -17916,6 +17983,25 @@ export namespace Prisma {
      */
     include?: cityInclude<ExtArgs> | null
     where?: cityWhereInput
+  }
+
+  /**
+   * locale.info
+   */
+  export type locale$infoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the info
+     */
+    select?: infoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the info
+     */
+    omit?: infoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: infoInclude<ExtArgs> | null
+    where?: infoWhereInput
   }
 
   /**
@@ -28788,6 +28874,7 @@ export namespace Prisma {
   }
 
   export type ReviewMinAggregateOutputType = {
+    id: string | null
     userId: string | null
     productId: string | null
     stars: number | null
@@ -28797,6 +28884,7 @@ export namespace Prisma {
   }
 
   export type ReviewMaxAggregateOutputType = {
+    id: string | null
     userId: string | null
     productId: string | null
     stars: number | null
@@ -28806,6 +28894,7 @@ export namespace Prisma {
   }
 
   export type ReviewCountAggregateOutputType = {
+    id: number
     userId: number
     productId: number
     stars: number
@@ -28825,6 +28914,7 @@ export namespace Prisma {
   }
 
   export type ReviewMinAggregateInputType = {
+    id?: true
     userId?: true
     productId?: true
     stars?: true
@@ -28834,6 +28924,7 @@ export namespace Prisma {
   }
 
   export type ReviewMaxAggregateInputType = {
+    id?: true
     userId?: true
     productId?: true
     stars?: true
@@ -28843,6 +28934,7 @@ export namespace Prisma {
   }
 
   export type ReviewCountAggregateInputType = {
+    id?: true
     userId?: true
     productId?: true
     stars?: true
@@ -28939,6 +29031,7 @@ export namespace Prisma {
   }
 
   export type ReviewGroupByOutputType = {
+    id: string
     userId: string
     productId: string
     stars: number
@@ -28967,6 +29060,7 @@ export namespace Prisma {
 
 
   export type reviewSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
     userId?: boolean
     productId?: boolean
     stars?: boolean
@@ -28978,6 +29072,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["review"]>
 
   export type reviewSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
     userId?: boolean
     productId?: boolean
     stars?: boolean
@@ -28989,6 +29084,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["review"]>
 
   export type reviewSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
     userId?: boolean
     productId?: boolean
     stars?: boolean
@@ -29000,6 +29096,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["review"]>
 
   export type reviewSelectScalar = {
+    id?: boolean
     userId?: boolean
     productId?: boolean
     stars?: boolean
@@ -29008,7 +29105,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type reviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"userId" | "productId" | "stars" | "comment" | "createdAt" | "updatedAt", ExtArgs["result"]["review"]>
+  export type reviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "productId" | "stars" | "comment" | "createdAt" | "updatedAt", ExtArgs["result"]["review"]>
   export type reviewInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | userDefaultArgs<ExtArgs>
     product?: boolean | productDefaultArgs<ExtArgs>
@@ -29029,6 +29126,7 @@ export namespace Prisma {
       product: Prisma.$productPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
+      id: string
       userId: string
       productId: string
       stars: number
@@ -29118,8 +29216,8 @@ export namespace Prisma {
      * // Get first 10 Reviews
      * const reviews = await prisma.review.findMany({ take: 10 })
      * 
-     * // Only select the `userId`
-     * const reviewWithUserIdOnly = await prisma.review.findMany({ select: { userId: true } })
+     * // Only select the `id`
+     * const reviewWithIdOnly = await prisma.review.findMany({ select: { id: true } })
      * 
      */
     findMany<T extends reviewFindManyArgs>(args?: SelectSubset<T, reviewFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$reviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -29163,9 +29261,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many Reviews and only return the `userId`
-     * const reviewWithUserIdOnly = await prisma.review.createManyAndReturn({
-     *   select: { userId: true },
+     * // Create many Reviews and only return the `id`
+     * const reviewWithIdOnly = await prisma.review.createManyAndReturn({
+     *   select: { id: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -29254,9 +29352,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Reviews and only return the `userId`
-     * const reviewWithUserIdOnly = await prisma.review.updateManyAndReturn({
-     *   select: { userId: true },
+     * // Update zero or more Reviews and only return the `id`
+     * const reviewWithIdOnly = await prisma.review.updateManyAndReturn({
+     *   select: { id: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -29460,6 +29558,7 @@ export namespace Prisma {
    * Fields of the review model
    */
   interface reviewFieldRefs {
+    readonly id: FieldRef<"review", 'String'>
     readonly userId: FieldRef<"review", 'String'>
     readonly productId: FieldRef<"review", 'String'>
     readonly stars: FieldRef<"review", 'Int'>
@@ -32290,6 +32389,7 @@ export namespace Prisma {
     email: string | null
     password: string | null
     moneyInPocket: Decimal | null
+    passwordChangeBefore: Date | null
     role: string | null
     status: $Enums.StoreStatus | null
     createdAt: Date | null
@@ -32306,6 +32406,7 @@ export namespace Prisma {
     email: string | null
     password: string | null
     moneyInPocket: Decimal | null
+    passwordChangeBefore: Date | null
     role: string | null
     status: $Enums.StoreStatus | null
     createdAt: Date | null
@@ -32322,6 +32423,7 @@ export namespace Prisma {
     email: number
     password: number
     moneyInPocket: number
+    passwordChangeBefore: number
     role: number
     status: number
     createdAt: number
@@ -32348,6 +32450,7 @@ export namespace Prisma {
     email?: true
     password?: true
     moneyInPocket?: true
+    passwordChangeBefore?: true
     role?: true
     status?: true
     createdAt?: true
@@ -32364,6 +32467,7 @@ export namespace Prisma {
     email?: true
     password?: true
     moneyInPocket?: true
+    passwordChangeBefore?: true
     role?: true
     status?: true
     createdAt?: true
@@ -32380,6 +32484,7 @@ export namespace Prisma {
     email?: true
     password?: true
     moneyInPocket?: true
+    passwordChangeBefore?: true
     role?: true
     status?: true
     createdAt?: true
@@ -32483,6 +32588,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket: Decimal
+    passwordChangeBefore: Date | null
     role: string
     status: $Enums.StoreStatus
     createdAt: Date
@@ -32518,6 +32624,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     moneyInPocket?: boolean
+    passwordChangeBefore?: boolean
     role?: boolean
     status?: boolean
     createdAt?: boolean
@@ -32543,6 +32650,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     moneyInPocket?: boolean
+    passwordChangeBefore?: boolean
     role?: boolean
     status?: boolean
     createdAt?: boolean
@@ -32563,6 +32671,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     moneyInPocket?: boolean
+    passwordChangeBefore?: boolean
     role?: boolean
     status?: boolean
     createdAt?: boolean
@@ -32583,13 +32692,14 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     moneyInPocket?: boolean
+    passwordChangeBefore?: boolean
     role?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type storeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nameId" | "bioId" | "logoId" | "bannerId" | "phone" | "email" | "password" | "moneyInPocket" | "role" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["store"]>
+  export type storeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nameId" | "bioId" | "logoId" | "bannerId" | "phone" | "email" | "password" | "moneyInPocket" | "passwordChangeBefore" | "role" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["store"]>
   export type storeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name?: boolean | localeDefaultArgs<ExtArgs>
     bio?: boolean | localeDefaultArgs<ExtArgs>
@@ -32636,6 +32746,7 @@ export namespace Prisma {
       email: string
       password: string
       moneyInPocket: Prisma.Decimal
+      passwordChangeBefore: Date | null
       role: string
       status: $Enums.StoreStatus
       createdAt: Date
@@ -33080,6 +33191,7 @@ export namespace Prisma {
     readonly email: FieldRef<"store", 'String'>
     readonly password: FieldRef<"store", 'String'>
     readonly moneyInPocket: FieldRef<"store", 'Decimal'>
+    readonly passwordChangeBefore: FieldRef<"store", 'DateTime'>
     readonly role: FieldRef<"store", 'String'>
     readonly status: FieldRef<"store", 'StoreStatus'>
     readonly createdAt: FieldRef<"store", 'DateTime'>
@@ -39671,7 +39783,7 @@ export namespace Prisma {
   export const InfoScalarFieldEnum: {
     id: 'id',
     slug: 'slug',
-    data: 'data',
+    nameId: 'nameId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -39822,6 +39934,7 @@ export namespace Prisma {
 
 
   export const ReviewScalarFieldEnum: {
+    id: 'id',
     userId: 'userId',
     productId: 'productId',
     stars: 'stars',
@@ -39866,6 +39979,7 @@ export namespace Prisma {
     email: 'email',
     password: 'password',
     moneyInPocket: 'moneyInPocket',
+    passwordChangeBefore: 'passwordChangeBefore',
     role: 'role',
     status: 'status',
     createdAt: 'createdAt',
@@ -40853,34 +40967,37 @@ export namespace Prisma {
     NOT?: infoWhereInput | infoWhereInput[]
     id?: StringFilter<"info"> | string
     slug?: StringFilter<"info"> | string
-    data?: StringFilter<"info"> | string
+    nameId?: StringFilter<"info"> | string
     createdAt?: DateTimeFilter<"info"> | Date | string
     updatedAt?: DateTimeFilter<"info"> | Date | string
+    name?: XOR<LocaleScalarRelationFilter, localeWhereInput>
   }
 
   export type infoOrderByWithRelationInput = {
     id?: SortOrder
     slug?: SortOrder
-    data?: SortOrder
+    nameId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    name?: localeOrderByWithRelationInput
   }
 
   export type infoWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     slug?: string
+    nameId?: string
     AND?: infoWhereInput | infoWhereInput[]
     OR?: infoWhereInput[]
     NOT?: infoWhereInput | infoWhereInput[]
-    data?: StringFilter<"info"> | string
     createdAt?: DateTimeFilter<"info"> | Date | string
     updatedAt?: DateTimeFilter<"info"> | Date | string
-  }, "id" | "id" | "slug">
+    name?: XOR<LocaleScalarRelationFilter, localeWhereInput>
+  }, "id" | "id" | "slug" | "nameId">
 
   export type infoOrderByWithAggregationInput = {
     id?: SortOrder
     slug?: SortOrder
-    data?: SortOrder
+    nameId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: infoCountOrderByAggregateInput
@@ -40894,7 +41011,7 @@ export namespace Prisma {
     NOT?: infoScalarWhereWithAggregatesInput | infoScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"info"> | string
     slug?: StringWithAggregatesFilter<"info"> | string
-    data?: StringWithAggregatesFilter<"info"> | string
+    nameId?: StringWithAggregatesFilter<"info"> | string
     createdAt?: DateTimeWithAggregatesFilter<"info"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"info"> | Date | string
   }
@@ -40915,6 +41032,7 @@ export namespace Prisma {
     currencyAbbLocale?: XOR<CurrencyNullableScalarRelationFilter, currencyWhereInput> | null
     currencyName?: XOR<CurrencyNullableScalarRelationFilter, currencyWhereInput> | null
     city?: XOR<CityNullableScalarRelationFilter, cityWhereInput> | null
+    info?: XOR<InfoNullableScalarRelationFilter, infoWhereInput> | null
     category?: XOR<CategoryNullableScalarRelationFilter, categoryWhereInput> | null
     occasion?: XOR<OccasionNullableScalarRelationFilter, occasionWhereInput> | null
     descriptionProduct?: XOR<ProductNullableScalarRelationFilter, productWhereInput> | null
@@ -40934,6 +41052,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyOrderByWithRelationInput
     currencyName?: currencyOrderByWithRelationInput
     city?: cityOrderByWithRelationInput
+    info?: infoOrderByWithRelationInput
     category?: categoryOrderByWithRelationInput
     occasion?: occasionOrderByWithRelationInput
     descriptionProduct?: productOrderByWithRelationInput
@@ -40956,6 +41075,7 @@ export namespace Prisma {
     currencyAbbLocale?: XOR<CurrencyNullableScalarRelationFilter, currencyWhereInput> | null
     currencyName?: XOR<CurrencyNullableScalarRelationFilter, currencyWhereInput> | null
     city?: XOR<CityNullableScalarRelationFilter, cityWhereInput> | null
+    info?: XOR<InfoNullableScalarRelationFilter, infoWhereInput> | null
     category?: XOR<CategoryNullableScalarRelationFilter, categoryWhereInput> | null
     occasion?: XOR<OccasionNullableScalarRelationFilter, occasionWhereInput> | null
     descriptionProduct?: XOR<ProductNullableScalarRelationFilter, productWhereInput> | null
@@ -41735,6 +41855,7 @@ export namespace Prisma {
     AND?: reviewWhereInput | reviewWhereInput[]
     OR?: reviewWhereInput[]
     NOT?: reviewWhereInput | reviewWhereInput[]
+    id?: StringFilter<"review"> | string
     userId?: StringFilter<"review"> | string
     productId?: StringFilter<"review"> | string
     stars?: IntFilter<"review"> | number
@@ -41746,6 +41867,7 @@ export namespace Prisma {
   }
 
   export type reviewOrderByWithRelationInput = {
+    id?: SortOrder
     userId?: SortOrder
     productId?: SortOrder
     stars?: SortOrder
@@ -41757,21 +41879,23 @@ export namespace Prisma {
   }
 
   export type reviewWhereUniqueInput = Prisma.AtLeast<{
-    userId?: string
-    productId?: string
+    id?: string
     userId_productId?: reviewUserIdProductIdCompoundUniqueInput
     AND?: reviewWhereInput | reviewWhereInput[]
     OR?: reviewWhereInput[]
     NOT?: reviewWhereInput | reviewWhereInput[]
+    userId?: StringFilter<"review"> | string
+    productId?: StringFilter<"review"> | string
     stars?: IntFilter<"review"> | number
     comment?: StringNullableFilter<"review"> | string | null
     createdAt?: DateTimeFilter<"review"> | Date | string
     updatedAt?: DateTimeFilter<"review"> | Date | string
     user?: XOR<UserScalarRelationFilter, userWhereInput>
     product?: XOR<ProductScalarRelationFilter, productWhereInput>
-  }, "userId" | "productId" | "userId_productId">
+  }, "id" | "id" | "userId_productId">
 
   export type reviewOrderByWithAggregationInput = {
+    id?: SortOrder
     userId?: SortOrder
     productId?: SortOrder
     stars?: SortOrder
@@ -41789,6 +41913,7 @@ export namespace Prisma {
     AND?: reviewScalarWhereWithAggregatesInput | reviewScalarWhereWithAggregatesInput[]
     OR?: reviewScalarWhereWithAggregatesInput[]
     NOT?: reviewScalarWhereWithAggregatesInput | reviewScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"review"> | string
     userId?: StringWithAggregatesFilter<"review"> | string
     productId?: StringWithAggregatesFilter<"review"> | string
     stars?: IntWithAggregatesFilter<"review"> | number
@@ -41952,6 +42077,7 @@ export namespace Prisma {
     email?: StringFilter<"store"> | string
     password?: StringFilter<"store"> | string
     moneyInPocket?: DecimalFilter<"store"> | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: DateTimeNullableFilter<"store"> | Date | string | null
     role?: StringFilter<"store"> | string
     status?: EnumStoreStatusFilter<"store"> | $Enums.StoreStatus
     createdAt?: DateTimeFilter<"store"> | Date | string
@@ -41976,6 +42102,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     moneyInPocket?: SortOrder
+    passwordChangeBefore?: SortOrderInput | SortOrder
     role?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -42003,6 +42130,7 @@ export namespace Prisma {
     NOT?: storeWhereInput | storeWhereInput[]
     password?: StringFilter<"store"> | string
     moneyInPocket?: DecimalFilter<"store"> | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: DateTimeNullableFilter<"store"> | Date | string | null
     role?: StringFilter<"store"> | string
     status?: EnumStoreStatusFilter<"store"> | $Enums.StoreStatus
     createdAt?: DateTimeFilter<"store"> | Date | string
@@ -42027,6 +42155,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     moneyInPocket?: SortOrder
+    passwordChangeBefore?: SortOrderInput | SortOrder
     role?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -42051,6 +42180,7 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"store"> | string
     password?: StringWithAggregatesFilter<"store"> | string
     moneyInPocket?: DecimalWithAggregatesFilter<"store"> | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: DateTimeNullableWithAggregatesFilter<"store"> | Date | string | null
     role?: StringWithAggregatesFilter<"store"> | string
     status?: EnumStoreStatusWithAggregatesFilter<"store"> | $Enums.StoreStatus
     createdAt?: DateTimeWithAggregatesFilter<"store"> | Date | string
@@ -43163,15 +43293,15 @@ export namespace Prisma {
   export type infoCreateInput = {
     id?: string
     slug: string
-    data: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    name: localeCreateNestedOneWithoutInfoInput
   }
 
   export type infoUncheckedCreateInput = {
     id?: string
     slug: string
-    data: string
+    nameId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -43179,15 +43309,15 @@ export namespace Prisma {
   export type infoUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    data?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: localeUpdateOneRequiredWithoutInfoNestedInput
   }
 
   export type infoUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    data?: StringFieldUpdateOperationsInput | string
+    nameId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -43195,7 +43325,7 @@ export namespace Prisma {
   export type infoCreateManyInput = {
     id?: string
     slug: string
-    data: string
+    nameId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -43203,7 +43333,6 @@ export namespace Prisma {
   export type infoUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    data?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -43211,7 +43340,7 @@ export namespace Prisma {
   export type infoUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    data?: StringFieldUpdateOperationsInput | string
+    nameId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -43229,6 +43358,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyCreateNestedOneWithoutNameInput
     city?: cityCreateNestedOneWithoutNameInput
+    info?: infoCreateNestedOneWithoutNameInput
     category?: categoryCreateNestedOneWithoutNameInput
     occasion?: occasionCreateNestedOneWithoutNameInput
     descriptionProduct?: productCreateNestedOneWithoutDescriptionInput
@@ -43248,6 +43378,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyUncheckedCreateNestedOneWithoutNameInput
     city?: cityUncheckedCreateNestedOneWithoutNameInput
+    info?: infoUncheckedCreateNestedOneWithoutNameInput
     category?: categoryUncheckedCreateNestedOneWithoutNameInput
     occasion?: occasionUncheckedCreateNestedOneWithoutNameInput
     descriptionProduct?: productUncheckedCreateNestedOneWithoutDescriptionInput
@@ -43267,6 +43398,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUpdateOneWithoutNameNestedInput
     city?: cityUpdateOneWithoutNameNestedInput
+    info?: infoUpdateOneWithoutNameNestedInput
     category?: categoryUpdateOneWithoutNameNestedInput
     occasion?: occasionUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUpdateOneWithoutDescriptionNestedInput
@@ -43286,6 +43418,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUncheckedUpdateOneWithoutNameNestedInput
     city?: cityUncheckedUpdateOneWithoutNameNestedInput
+    info?: infoUncheckedUpdateOneWithoutNameNestedInput
     category?: categoryUncheckedUpdateOneWithoutNameNestedInput
     occasion?: occasionUncheckedUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUncheckedUpdateOneWithoutDescriptionNestedInput
@@ -44080,6 +44213,7 @@ export namespace Prisma {
   }
 
   export type reviewCreateInput = {
+    id?: string
     stars: number
     comment?: string | null
     createdAt?: Date | string
@@ -44089,6 +44223,7 @@ export namespace Prisma {
   }
 
   export type reviewUncheckedCreateInput = {
+    id?: string
     userId: string
     productId: string
     stars: number
@@ -44098,6 +44233,7 @@ export namespace Prisma {
   }
 
   export type reviewUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
     stars?: IntFieldUpdateOperationsInput | number
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44107,6 +44243,7 @@ export namespace Prisma {
   }
 
   export type reviewUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     stars?: IntFieldUpdateOperationsInput | number
@@ -44116,6 +44253,7 @@ export namespace Prisma {
   }
 
   export type reviewCreateManyInput = {
+    id?: string
     userId: string
     productId: string
     stars: number
@@ -44125,6 +44263,7 @@ export namespace Prisma {
   }
 
   export type reviewUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
     stars?: IntFieldUpdateOperationsInput | number
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44132,6 +44271,7 @@ export namespace Prisma {
   }
 
   export type reviewUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     stars?: IntFieldUpdateOperationsInput | number
@@ -44284,6 +44424,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -44308,6 +44449,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -44324,6 +44466,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44348,6 +44491,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44368,6 +44512,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -44380,6 +44525,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44396,6 +44542,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45519,7 +45666,7 @@ export namespace Prisma {
   export type infoCountOrderByAggregateInput = {
     id?: SortOrder
     slug?: SortOrder
-    data?: SortOrder
+    nameId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -45527,7 +45674,7 @@ export namespace Prisma {
   export type infoMaxOrderByAggregateInput = {
     id?: SortOrder
     slug?: SortOrder
-    data?: SortOrder
+    nameId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -45535,7 +45682,7 @@ export namespace Prisma {
   export type infoMinOrderByAggregateInput = {
     id?: SortOrder
     slug?: SortOrder
-    data?: SortOrder
+    nameId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -45553,6 +45700,11 @@ export namespace Prisma {
   export type CityNullableScalarRelationFilter = {
     is?: cityWhereInput | null
     isNot?: cityWhereInput | null
+  }
+
+  export type InfoNullableScalarRelationFilter = {
+    is?: infoWhereInput | null
+    isNot?: infoWhereInput | null
   }
 
   export type CategoryNullableScalarRelationFilter = {
@@ -46211,6 +46363,7 @@ export namespace Prisma {
   }
 
   export type reviewCountOrderByAggregateInput = {
+    id?: SortOrder
     userId?: SortOrder
     productId?: SortOrder
     stars?: SortOrder
@@ -46224,6 +46377,7 @@ export namespace Prisma {
   }
 
   export type reviewMaxOrderByAggregateInput = {
+    id?: SortOrder
     userId?: SortOrder
     productId?: SortOrder
     stars?: SortOrder
@@ -46233,6 +46387,7 @@ export namespace Prisma {
   }
 
   export type reviewMinOrderByAggregateInput = {
+    id?: SortOrder
     userId?: SortOrder
     productId?: SortOrder
     stars?: SortOrder
@@ -46399,6 +46554,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     moneyInPocket?: SortOrder
+    passwordChangeBefore?: SortOrder
     role?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -46419,6 +46575,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     moneyInPocket?: SortOrder
+    passwordChangeBefore?: SortOrder
     role?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -46435,6 +46592,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     moneyInPocket?: SortOrder
+    passwordChangeBefore?: SortOrder
     role?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -47602,6 +47760,20 @@ export namespace Prisma {
     deleteMany?: storeScalarWhereInput | storeScalarWhereInput[]
   }
 
+  export type localeCreateNestedOneWithoutInfoInput = {
+    create?: XOR<localeCreateWithoutInfoInput, localeUncheckedCreateWithoutInfoInput>
+    connectOrCreate?: localeCreateOrConnectWithoutInfoInput
+    connect?: localeWhereUniqueInput
+  }
+
+  export type localeUpdateOneRequiredWithoutInfoNestedInput = {
+    create?: XOR<localeCreateWithoutInfoInput, localeUncheckedCreateWithoutInfoInput>
+    connectOrCreate?: localeCreateOrConnectWithoutInfoInput
+    upsert?: localeUpsertWithoutInfoInput
+    connect?: localeWhereUniqueInput
+    update?: XOR<XOR<localeUpdateToOneWithWhereWithoutInfoInput, localeUpdateWithoutInfoInput>, localeUncheckedUpdateWithoutInfoInput>
+  }
+
   export type productCreateNestedOneWithoutNameInput = {
     create?: XOR<productCreateWithoutNameInput, productUncheckedCreateWithoutNameInput>
     connectOrCreate?: productCreateOrConnectWithoutNameInput
@@ -47648,6 +47820,12 @@ export namespace Prisma {
     create?: XOR<cityCreateWithoutNameInput, cityUncheckedCreateWithoutNameInput>
     connectOrCreate?: cityCreateOrConnectWithoutNameInput
     connect?: cityWhereUniqueInput
+  }
+
+  export type infoCreateNestedOneWithoutNameInput = {
+    create?: XOR<infoCreateWithoutNameInput, infoUncheckedCreateWithoutNameInput>
+    connectOrCreate?: infoCreateOrConnectWithoutNameInput
+    connect?: infoWhereUniqueInput
   }
 
   export type categoryCreateNestedOneWithoutNameInput = {
@@ -47720,6 +47898,12 @@ export namespace Prisma {
     create?: XOR<cityCreateWithoutNameInput, cityUncheckedCreateWithoutNameInput>
     connectOrCreate?: cityCreateOrConnectWithoutNameInput
     connect?: cityWhereUniqueInput
+  }
+
+  export type infoUncheckedCreateNestedOneWithoutNameInput = {
+    create?: XOR<infoCreateWithoutNameInput, infoUncheckedCreateWithoutNameInput>
+    connectOrCreate?: infoCreateOrConnectWithoutNameInput
+    connect?: infoWhereUniqueInput
   }
 
   export type categoryUncheckedCreateNestedOneWithoutNameInput = {
@@ -47824,6 +48008,16 @@ export namespace Prisma {
     delete?: cityWhereInput | boolean
     connect?: cityWhereUniqueInput
     update?: XOR<XOR<cityUpdateToOneWithWhereWithoutNameInput, cityUpdateWithoutNameInput>, cityUncheckedUpdateWithoutNameInput>
+  }
+
+  export type infoUpdateOneWithoutNameNestedInput = {
+    create?: XOR<infoCreateWithoutNameInput, infoUncheckedCreateWithoutNameInput>
+    connectOrCreate?: infoCreateOrConnectWithoutNameInput
+    upsert?: infoUpsertWithoutNameInput
+    disconnect?: infoWhereInput | boolean
+    delete?: infoWhereInput | boolean
+    connect?: infoWhereUniqueInput
+    update?: XOR<XOR<infoUpdateToOneWithWhereWithoutNameInput, infoUpdateWithoutNameInput>, infoUncheckedUpdateWithoutNameInput>
   }
 
   export type categoryUpdateOneWithoutNameNestedInput = {
@@ -47944,6 +48138,16 @@ export namespace Prisma {
     delete?: cityWhereInput | boolean
     connect?: cityWhereUniqueInput
     update?: XOR<XOR<cityUpdateToOneWithWhereWithoutNameInput, cityUpdateWithoutNameInput>, cityUncheckedUpdateWithoutNameInput>
+  }
+
+  export type infoUncheckedUpdateOneWithoutNameNestedInput = {
+    create?: XOR<infoCreateWithoutNameInput, infoUncheckedCreateWithoutNameInput>
+    connectOrCreate?: infoCreateOrConnectWithoutNameInput
+    upsert?: infoUpsertWithoutNameInput
+    disconnect?: infoWhereInput | boolean
+    delete?: infoWhereInput | boolean
+    connect?: infoWhereUniqueInput
+    update?: XOR<XOR<infoUpdateToOneWithWhereWithoutNameInput, infoUpdateWithoutNameInput>, infoUncheckedUpdateWithoutNameInput>
   }
 
   export type categoryUncheckedUpdateOneWithoutNameNestedInput = {
@@ -50393,6 +50597,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -50416,6 +50621,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -50522,6 +50728,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50545,6 +50752,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50709,6 +50917,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyCreateNestedOneWithoutNameInput
     city?: cityCreateNestedOneWithoutNameInput
+    info?: infoCreateNestedOneWithoutNameInput
     occasion?: occasionCreateNestedOneWithoutNameInput
     descriptionProduct?: productCreateNestedOneWithoutDescriptionInput
     detailedDescriptionProduct?: productCreateNestedOneWithoutDetailedDescriptionInput
@@ -50727,6 +50936,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyUncheckedCreateNestedOneWithoutNameInput
     city?: cityUncheckedCreateNestedOneWithoutNameInput
+    info?: infoUncheckedCreateNestedOneWithoutNameInput
     occasion?: occasionUncheckedCreateNestedOneWithoutNameInput
     descriptionProduct?: productUncheckedCreateNestedOneWithoutDescriptionInput
     detailedDescriptionProduct?: productUncheckedCreateNestedOneWithoutDetailedDescriptionInput
@@ -50852,6 +51062,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUpdateOneWithoutNameNestedInput
     city?: cityUpdateOneWithoutNameNestedInput
+    info?: infoUpdateOneWithoutNameNestedInput
     occasion?: occasionUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUpdateOneWithoutDescriptionNestedInput
     detailedDescriptionProduct?: productUpdateOneWithoutDetailedDescriptionNestedInput
@@ -50870,6 +51081,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUncheckedUpdateOneWithoutNameNestedInput
     city?: cityUncheckedUpdateOneWithoutNameNestedInput
+    info?: infoUncheckedUpdateOneWithoutNameNestedInput
     occasion?: occasionUncheckedUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUncheckedUpdateOneWithoutDescriptionNestedInput
     detailedDescriptionProduct?: productUncheckedUpdateOneWithoutDetailedDescriptionNestedInput
@@ -50962,6 +51174,7 @@ export namespace Prisma {
     storeBio?: storeCreateNestedOneWithoutBioInput
     currencyAbbLocale?: currencyCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyCreateNestedOneWithoutNameInput
+    info?: infoCreateNestedOneWithoutNameInput
     category?: categoryCreateNestedOneWithoutNameInput
     occasion?: occasionCreateNestedOneWithoutNameInput
     descriptionProduct?: productCreateNestedOneWithoutDescriptionInput
@@ -50980,6 +51193,7 @@ export namespace Prisma {
     storeBio?: storeUncheckedCreateNestedOneWithoutBioInput
     currencyAbbLocale?: currencyUncheckedCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyUncheckedCreateNestedOneWithoutNameInput
+    info?: infoUncheckedCreateNestedOneWithoutNameInput
     category?: categoryUncheckedCreateNestedOneWithoutNameInput
     occasion?: occasionUncheckedCreateNestedOneWithoutNameInput
     descriptionProduct?: productUncheckedCreateNestedOneWithoutDescriptionInput
@@ -51045,6 +51259,7 @@ export namespace Prisma {
     storeBio?: storeUpdateOneWithoutBioNestedInput
     currencyAbbLocale?: currencyUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUpdateOneWithoutNameNestedInput
+    info?: infoUpdateOneWithoutNameNestedInput
     category?: categoryUpdateOneWithoutNameNestedInput
     occasion?: occasionUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUpdateOneWithoutDescriptionNestedInput
@@ -51063,6 +51278,7 @@ export namespace Prisma {
     storeBio?: storeUncheckedUpdateOneWithoutBioNestedInput
     currencyAbbLocale?: currencyUncheckedUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUncheckedUpdateOneWithoutNameNestedInput
+    info?: infoUncheckedUpdateOneWithoutNameNestedInput
     category?: categoryUncheckedUpdateOneWithoutNameNestedInput
     occasion?: occasionUncheckedUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUncheckedUpdateOneWithoutDescriptionNestedInput
@@ -51118,6 +51334,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyCreateNestedOneWithoutNameInput
     city?: cityCreateNestedOneWithoutNameInput
+    info?: infoCreateNestedOneWithoutNameInput
     category?: categoryCreateNestedOneWithoutNameInput
     occasion?: occasionCreateNestedOneWithoutNameInput
     descriptionProduct?: productCreateNestedOneWithoutDescriptionInput
@@ -51136,6 +51353,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyUncheckedCreateNestedOneWithoutNameInput
     city?: cityUncheckedCreateNestedOneWithoutNameInput
+    info?: infoUncheckedCreateNestedOneWithoutNameInput
     category?: categoryUncheckedCreateNestedOneWithoutNameInput
     occasion?: occasionUncheckedCreateNestedOneWithoutNameInput
     descriptionProduct?: productUncheckedCreateNestedOneWithoutDescriptionInput
@@ -51267,6 +51485,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUpdateOneWithoutNameNestedInput
     city?: cityUpdateOneWithoutNameNestedInput
+    info?: infoUpdateOneWithoutNameNestedInput
     category?: categoryUpdateOneWithoutNameNestedInput
     occasion?: occasionUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUpdateOneWithoutDescriptionNestedInput
@@ -51285,6 +51504,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUncheckedUpdateOneWithoutNameNestedInput
     city?: cityUncheckedUpdateOneWithoutNameNestedInput
+    info?: infoUncheckedUpdateOneWithoutNameNestedInput
     category?: categoryUncheckedUpdateOneWithoutNameNestedInput
     occasion?: occasionUncheckedUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUncheckedUpdateOneWithoutDescriptionNestedInput
@@ -51392,6 +51612,7 @@ export namespace Prisma {
     storeBio?: storeCreateNestedOneWithoutBioInput
     currencyAbbLocale?: currencyCreateNestedOneWithoutCurrencyAbbInput
     city?: cityCreateNestedOneWithoutNameInput
+    info?: infoCreateNestedOneWithoutNameInput
     category?: categoryCreateNestedOneWithoutNameInput
     occasion?: occasionCreateNestedOneWithoutNameInput
     descriptionProduct?: productCreateNestedOneWithoutDescriptionInput
@@ -51410,6 +51631,7 @@ export namespace Prisma {
     storeBio?: storeUncheckedCreateNestedOneWithoutBioInput
     currencyAbbLocale?: currencyUncheckedCreateNestedOneWithoutCurrencyAbbInput
     city?: cityUncheckedCreateNestedOneWithoutNameInput
+    info?: infoUncheckedCreateNestedOneWithoutNameInput
     category?: categoryUncheckedCreateNestedOneWithoutNameInput
     occasion?: occasionUncheckedCreateNestedOneWithoutNameInput
     descriptionProduct?: productUncheckedCreateNestedOneWithoutDescriptionInput
@@ -51433,6 +51655,7 @@ export namespace Prisma {
     storeBio?: storeCreateNestedOneWithoutBioInput
     currencyName?: currencyCreateNestedOneWithoutNameInput
     city?: cityCreateNestedOneWithoutNameInput
+    info?: infoCreateNestedOneWithoutNameInput
     category?: categoryCreateNestedOneWithoutNameInput
     occasion?: occasionCreateNestedOneWithoutNameInput
     descriptionProduct?: productCreateNestedOneWithoutDescriptionInput
@@ -51451,6 +51674,7 @@ export namespace Prisma {
     storeBio?: storeUncheckedCreateNestedOneWithoutBioInput
     currencyName?: currencyUncheckedCreateNestedOneWithoutNameInput
     city?: cityUncheckedCreateNestedOneWithoutNameInput
+    info?: infoUncheckedCreateNestedOneWithoutNameInput
     category?: categoryUncheckedCreateNestedOneWithoutNameInput
     occasion?: occasionUncheckedCreateNestedOneWithoutNameInput
     descriptionProduct?: productUncheckedCreateNestedOneWithoutDescriptionInput
@@ -51592,6 +51816,7 @@ export namespace Prisma {
     storeBio?: storeUpdateOneWithoutBioNestedInput
     currencyAbbLocale?: currencyUpdateOneWithoutCurrencyAbbNestedInput
     city?: cityUpdateOneWithoutNameNestedInput
+    info?: infoUpdateOneWithoutNameNestedInput
     category?: categoryUpdateOneWithoutNameNestedInput
     occasion?: occasionUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUpdateOneWithoutDescriptionNestedInput
@@ -51610,6 +51835,7 @@ export namespace Prisma {
     storeBio?: storeUncheckedUpdateOneWithoutBioNestedInput
     currencyAbbLocale?: currencyUncheckedUpdateOneWithoutCurrencyAbbNestedInput
     city?: cityUncheckedUpdateOneWithoutNameNestedInput
+    info?: infoUncheckedUpdateOneWithoutNameNestedInput
     category?: categoryUncheckedUpdateOneWithoutNameNestedInput
     occasion?: occasionUncheckedUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUncheckedUpdateOneWithoutDescriptionNestedInput
@@ -51639,6 +51865,7 @@ export namespace Prisma {
     storeBio?: storeUpdateOneWithoutBioNestedInput
     currencyName?: currencyUpdateOneWithoutNameNestedInput
     city?: cityUpdateOneWithoutNameNestedInput
+    info?: infoUpdateOneWithoutNameNestedInput
     category?: categoryUpdateOneWithoutNameNestedInput
     occasion?: occasionUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUpdateOneWithoutDescriptionNestedInput
@@ -51657,6 +51884,7 @@ export namespace Prisma {
     storeBio?: storeUncheckedUpdateOneWithoutBioNestedInput
     currencyName?: currencyUncheckedUpdateOneWithoutNameNestedInput
     city?: cityUncheckedUpdateOneWithoutNameNestedInput
+    info?: infoUncheckedUpdateOneWithoutNameNestedInput
     category?: categoryUncheckedUpdateOneWithoutNameNestedInput
     occasion?: occasionUncheckedUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUncheckedUpdateOneWithoutDescriptionNestedInput
@@ -52122,6 +52350,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -52144,6 +52373,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -52170,6 +52400,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -52192,6 +52423,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -52426,6 +52658,7 @@ export namespace Prisma {
     email?: StringFilter<"store"> | string
     password?: StringFilter<"store"> | string
     moneyInPocket?: DecimalFilter<"store"> | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: DateTimeNullableFilter<"store"> | Date | string | null
     role?: StringFilter<"store"> | string
     status?: EnumStoreStatusFilter<"store"> | $Enums.StoreStatus
     createdAt?: DateTimeFilter<"store"> | Date | string
@@ -52446,6 +52679,98 @@ export namespace Prisma {
   export type storeUpdateManyWithWhereWithoutBannerInput = {
     where: storeScalarWhereInput
     data: XOR<storeUpdateManyMutationInput, storeUncheckedUpdateManyWithoutBannerInput>
+  }
+
+  export type localeCreateWithoutInfoInput = {
+    id?: string
+    default?: string | null
+    en?: string | null
+    ar?: string | null
+    nameProduct?: productCreateNestedOneWithoutNameInput
+    country?: countryCreateNestedOneWithoutNameInput
+    state?: stateCreateNestedOneWithoutNameInput
+    storeName?: storeCreateNestedOneWithoutNameInput
+    storeBio?: storeCreateNestedOneWithoutBioInput
+    currencyAbbLocale?: currencyCreateNestedOneWithoutCurrencyAbbInput
+    currencyName?: currencyCreateNestedOneWithoutNameInput
+    city?: cityCreateNestedOneWithoutNameInput
+    category?: categoryCreateNestedOneWithoutNameInput
+    occasion?: occasionCreateNestedOneWithoutNameInput
+    descriptionProduct?: productCreateNestedOneWithoutDescriptionInput
+    detailedDescriptionProduct?: productCreateNestedOneWithoutDetailedDescriptionInput
+  }
+
+  export type localeUncheckedCreateWithoutInfoInput = {
+    id?: string
+    default?: string | null
+    en?: string | null
+    ar?: string | null
+    nameProduct?: productUncheckedCreateNestedOneWithoutNameInput
+    country?: countryUncheckedCreateNestedOneWithoutNameInput
+    state?: stateUncheckedCreateNestedOneWithoutNameInput
+    storeName?: storeUncheckedCreateNestedOneWithoutNameInput
+    storeBio?: storeUncheckedCreateNestedOneWithoutBioInput
+    currencyAbbLocale?: currencyUncheckedCreateNestedOneWithoutCurrencyAbbInput
+    currencyName?: currencyUncheckedCreateNestedOneWithoutNameInput
+    city?: cityUncheckedCreateNestedOneWithoutNameInput
+    category?: categoryUncheckedCreateNestedOneWithoutNameInput
+    occasion?: occasionUncheckedCreateNestedOneWithoutNameInput
+    descriptionProduct?: productUncheckedCreateNestedOneWithoutDescriptionInput
+    detailedDescriptionProduct?: productUncheckedCreateNestedOneWithoutDetailedDescriptionInput
+  }
+
+  export type localeCreateOrConnectWithoutInfoInput = {
+    where: localeWhereUniqueInput
+    create: XOR<localeCreateWithoutInfoInput, localeUncheckedCreateWithoutInfoInput>
+  }
+
+  export type localeUpsertWithoutInfoInput = {
+    update: XOR<localeUpdateWithoutInfoInput, localeUncheckedUpdateWithoutInfoInput>
+    create: XOR<localeCreateWithoutInfoInput, localeUncheckedCreateWithoutInfoInput>
+    where?: localeWhereInput
+  }
+
+  export type localeUpdateToOneWithWhereWithoutInfoInput = {
+    where?: localeWhereInput
+    data: XOR<localeUpdateWithoutInfoInput, localeUncheckedUpdateWithoutInfoInput>
+  }
+
+  export type localeUpdateWithoutInfoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    default?: NullableStringFieldUpdateOperationsInput | string | null
+    en?: NullableStringFieldUpdateOperationsInput | string | null
+    ar?: NullableStringFieldUpdateOperationsInput | string | null
+    nameProduct?: productUpdateOneWithoutNameNestedInput
+    country?: countryUpdateOneWithoutNameNestedInput
+    state?: stateUpdateOneWithoutNameNestedInput
+    storeName?: storeUpdateOneWithoutNameNestedInput
+    storeBio?: storeUpdateOneWithoutBioNestedInput
+    currencyAbbLocale?: currencyUpdateOneWithoutCurrencyAbbNestedInput
+    currencyName?: currencyUpdateOneWithoutNameNestedInput
+    city?: cityUpdateOneWithoutNameNestedInput
+    category?: categoryUpdateOneWithoutNameNestedInput
+    occasion?: occasionUpdateOneWithoutNameNestedInput
+    descriptionProduct?: productUpdateOneWithoutDescriptionNestedInput
+    detailedDescriptionProduct?: productUpdateOneWithoutDetailedDescriptionNestedInput
+  }
+
+  export type localeUncheckedUpdateWithoutInfoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    default?: NullableStringFieldUpdateOperationsInput | string | null
+    en?: NullableStringFieldUpdateOperationsInput | string | null
+    ar?: NullableStringFieldUpdateOperationsInput | string | null
+    nameProduct?: productUncheckedUpdateOneWithoutNameNestedInput
+    country?: countryUncheckedUpdateOneWithoutNameNestedInput
+    state?: stateUncheckedUpdateOneWithoutNameNestedInput
+    storeName?: storeUncheckedUpdateOneWithoutNameNestedInput
+    storeBio?: storeUncheckedUpdateOneWithoutBioNestedInput
+    currencyAbbLocale?: currencyUncheckedUpdateOneWithoutCurrencyAbbNestedInput
+    currencyName?: currencyUncheckedUpdateOneWithoutNameNestedInput
+    city?: cityUncheckedUpdateOneWithoutNameNestedInput
+    category?: categoryUncheckedUpdateOneWithoutNameNestedInput
+    occasion?: occasionUncheckedUpdateOneWithoutNameNestedInput
+    descriptionProduct?: productUncheckedUpdateOneWithoutDescriptionNestedInput
+    detailedDescriptionProduct?: productUncheckedUpdateOneWithoutDetailedDescriptionNestedInput
   }
 
   export type productCreateWithoutNameInput = {
@@ -52569,6 +52894,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -52591,6 +52917,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -52612,6 +52939,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -52634,6 +52962,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -52716,6 +53045,25 @@ export namespace Prisma {
   export type cityCreateOrConnectWithoutNameInput = {
     where: cityWhereUniqueInput
     create: XOR<cityCreateWithoutNameInput, cityUncheckedCreateWithoutNameInput>
+  }
+
+  export type infoCreateWithoutNameInput = {
+    id?: string
+    slug: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type infoUncheckedCreateWithoutNameInput = {
+    id?: string
+    slug: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type infoCreateOrConnectWithoutNameInput = {
+    where: infoWhereUniqueInput
+    create: XOR<infoCreateWithoutNameInput, infoUncheckedCreateWithoutNameInput>
   }
 
   export type categoryCreateWithoutNameInput = {
@@ -53030,6 +53378,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53052,6 +53401,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53079,6 +53429,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53101,6 +53452,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53194,6 +53546,31 @@ export namespace Prisma {
   export type cityUncheckedUpdateWithoutNameInput = {
     id?: StringFieldUpdateOperationsInput | string
     stateId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type infoUpsertWithoutNameInput = {
+    update: XOR<infoUpdateWithoutNameInput, infoUncheckedUpdateWithoutNameInput>
+    create: XOR<infoCreateWithoutNameInput, infoUncheckedCreateWithoutNameInput>
+    where?: infoWhereInput
+  }
+
+  export type infoUpdateToOneWithWhereWithoutNameInput = {
+    where?: infoWhereInput
+    data: XOR<infoUpdateWithoutNameInput, infoUncheckedUpdateWithoutNameInput>
+  }
+
+  export type infoUpdateWithoutNameInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type infoUncheckedUpdateWithoutNameInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -53617,6 +53994,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyCreateNestedOneWithoutNameInput
     city?: cityCreateNestedOneWithoutNameInput
+    info?: infoCreateNestedOneWithoutNameInput
     category?: categoryCreateNestedOneWithoutNameInput
     descriptionProduct?: productCreateNestedOneWithoutDescriptionInput
     detailedDescriptionProduct?: productCreateNestedOneWithoutDetailedDescriptionInput
@@ -53635,6 +54013,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyUncheckedCreateNestedOneWithoutNameInput
     city?: cityUncheckedCreateNestedOneWithoutNameInput
+    info?: infoUncheckedCreateNestedOneWithoutNameInput
     category?: categoryUncheckedCreateNestedOneWithoutNameInput
     descriptionProduct?: productUncheckedCreateNestedOneWithoutDescriptionInput
     detailedDescriptionProduct?: productUncheckedCreateNestedOneWithoutDetailedDescriptionInput
@@ -53755,6 +54134,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUpdateOneWithoutNameNestedInput
     city?: cityUpdateOneWithoutNameNestedInput
+    info?: infoUpdateOneWithoutNameNestedInput
     category?: categoryUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUpdateOneWithoutDescriptionNestedInput
     detailedDescriptionProduct?: productUpdateOneWithoutDetailedDescriptionNestedInput
@@ -53773,6 +54153,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUncheckedUpdateOneWithoutNameNestedInput
     city?: cityUncheckedUpdateOneWithoutNameNestedInput
+    info?: infoUncheckedUpdateOneWithoutNameNestedInput
     category?: categoryUncheckedUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUncheckedUpdateOneWithoutDescriptionNestedInput
     detailedDescriptionProduct?: productUncheckedUpdateOneWithoutDetailedDescriptionNestedInput
@@ -55032,6 +55413,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyCreateNestedOneWithoutNameInput
     city?: cityCreateNestedOneWithoutNameInput
+    info?: infoCreateNestedOneWithoutNameInput
     category?: categoryCreateNestedOneWithoutNameInput
     occasion?: occasionCreateNestedOneWithoutNameInput
     descriptionProduct?: productCreateNestedOneWithoutDescriptionInput
@@ -55050,6 +55432,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyUncheckedCreateNestedOneWithoutNameInput
     city?: cityUncheckedCreateNestedOneWithoutNameInput
+    info?: infoUncheckedCreateNestedOneWithoutNameInput
     category?: categoryUncheckedCreateNestedOneWithoutNameInput
     occasion?: occasionUncheckedCreateNestedOneWithoutNameInput
     descriptionProduct?: productUncheckedCreateNestedOneWithoutDescriptionInput
@@ -55133,6 +55516,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyCreateNestedOneWithoutNameInput
     city?: cityCreateNestedOneWithoutNameInput
+    info?: infoCreateNestedOneWithoutNameInput
     category?: categoryCreateNestedOneWithoutNameInput
     occasion?: occasionCreateNestedOneWithoutNameInput
     detailedDescriptionProduct?: productCreateNestedOneWithoutDetailedDescriptionInput
@@ -55151,6 +55535,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyUncheckedCreateNestedOneWithoutNameInput
     city?: cityUncheckedCreateNestedOneWithoutNameInput
+    info?: infoUncheckedCreateNestedOneWithoutNameInput
     category?: categoryUncheckedCreateNestedOneWithoutNameInput
     occasion?: occasionUncheckedCreateNestedOneWithoutNameInput
     detailedDescriptionProduct?: productUncheckedCreateNestedOneWithoutDetailedDescriptionInput
@@ -55174,6 +55559,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyCreateNestedOneWithoutNameInput
     city?: cityCreateNestedOneWithoutNameInput
+    info?: infoCreateNestedOneWithoutNameInput
     category?: categoryCreateNestedOneWithoutNameInput
     occasion?: occasionCreateNestedOneWithoutNameInput
     descriptionProduct?: productCreateNestedOneWithoutDescriptionInput
@@ -55192,6 +55578,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyUncheckedCreateNestedOneWithoutNameInput
     city?: cityUncheckedCreateNestedOneWithoutNameInput
+    info?: infoUncheckedCreateNestedOneWithoutNameInput
     category?: categoryUncheckedCreateNestedOneWithoutNameInput
     occasion?: occasionUncheckedCreateNestedOneWithoutNameInput
     descriptionProduct?: productUncheckedCreateNestedOneWithoutDescriptionInput
@@ -55290,6 +55677,7 @@ export namespace Prisma {
   }
 
   export type reviewCreateWithoutProductInput = {
+    id?: string
     stars: number
     comment?: string | null
     createdAt?: Date | string
@@ -55298,6 +55686,7 @@ export namespace Prisma {
   }
 
   export type reviewUncheckedCreateWithoutProductInput = {
+    id?: string
     userId: string
     stars: number
     comment?: string | null
@@ -55338,6 +55727,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUpdateOneWithoutNameNestedInput
     city?: cityUpdateOneWithoutNameNestedInput
+    info?: infoUpdateOneWithoutNameNestedInput
     category?: categoryUpdateOneWithoutNameNestedInput
     occasion?: occasionUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUpdateOneWithoutDescriptionNestedInput
@@ -55356,6 +55746,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUncheckedUpdateOneWithoutNameNestedInput
     city?: cityUncheckedUpdateOneWithoutNameNestedInput
+    info?: infoUncheckedUpdateOneWithoutNameNestedInput
     category?: categoryUncheckedUpdateOneWithoutNameNestedInput
     occasion?: occasionUncheckedUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUncheckedUpdateOneWithoutDescriptionNestedInput
@@ -55445,6 +55836,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUpdateOneWithoutNameNestedInput
     city?: cityUpdateOneWithoutNameNestedInput
+    info?: infoUpdateOneWithoutNameNestedInput
     category?: categoryUpdateOneWithoutNameNestedInput
     occasion?: occasionUpdateOneWithoutNameNestedInput
     detailedDescriptionProduct?: productUpdateOneWithoutDetailedDescriptionNestedInput
@@ -55463,6 +55855,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUncheckedUpdateOneWithoutNameNestedInput
     city?: cityUncheckedUpdateOneWithoutNameNestedInput
+    info?: infoUncheckedUpdateOneWithoutNameNestedInput
     category?: categoryUncheckedUpdateOneWithoutNameNestedInput
     occasion?: occasionUncheckedUpdateOneWithoutNameNestedInput
     detailedDescriptionProduct?: productUncheckedUpdateOneWithoutDetailedDescriptionNestedInput
@@ -55492,6 +55885,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUpdateOneWithoutNameNestedInput
     city?: cityUpdateOneWithoutNameNestedInput
+    info?: infoUpdateOneWithoutNameNestedInput
     category?: categoryUpdateOneWithoutNameNestedInput
     occasion?: occasionUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUpdateOneWithoutDescriptionNestedInput
@@ -55510,6 +55904,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUncheckedUpdateOneWithoutNameNestedInput
     city?: cityUncheckedUpdateOneWithoutNameNestedInput
+    info?: infoUncheckedUpdateOneWithoutNameNestedInput
     category?: categoryUncheckedUpdateOneWithoutNameNestedInput
     occasion?: occasionUncheckedUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUncheckedUpdateOneWithoutDescriptionNestedInput
@@ -55630,6 +56025,7 @@ export namespace Prisma {
     AND?: reviewScalarWhereInput | reviewScalarWhereInput[]
     OR?: reviewScalarWhereInput[]
     NOT?: reviewScalarWhereInput | reviewScalarWhereInput[]
+    id?: StringFilter<"review"> | string
     userId?: StringFilter<"review"> | string
     productId?: StringFilter<"review"> | string
     stars?: IntFilter<"review"> | number
@@ -55909,6 +56305,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -55932,6 +56329,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -56045,6 +56443,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56068,6 +56467,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56126,6 +56526,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyCreateNestedOneWithoutNameInput
     city?: cityCreateNestedOneWithoutNameInput
+    info?: infoCreateNestedOneWithoutNameInput
     category?: categoryCreateNestedOneWithoutNameInput
     occasion?: occasionCreateNestedOneWithoutNameInput
     descriptionProduct?: productCreateNestedOneWithoutDescriptionInput
@@ -56144,6 +56545,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyUncheckedCreateNestedOneWithoutNameInput
     city?: cityUncheckedCreateNestedOneWithoutNameInput
+    info?: infoUncheckedCreateNestedOneWithoutNameInput
     category?: categoryUncheckedCreateNestedOneWithoutNameInput
     occasion?: occasionUncheckedCreateNestedOneWithoutNameInput
     descriptionProduct?: productUncheckedCreateNestedOneWithoutDescriptionInput
@@ -56401,6 +56803,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUpdateOneWithoutNameNestedInput
     city?: cityUpdateOneWithoutNameNestedInput
+    info?: infoUpdateOneWithoutNameNestedInput
     category?: categoryUpdateOneWithoutNameNestedInput
     occasion?: occasionUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUpdateOneWithoutDescriptionNestedInput
@@ -56419,6 +56822,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUncheckedUpdateOneWithoutNameNestedInput
     city?: cityUncheckedUpdateOneWithoutNameNestedInput
+    info?: infoUncheckedUpdateOneWithoutNameNestedInput
     category?: categoryUncheckedUpdateOneWithoutNameNestedInput
     occasion?: occasionUncheckedUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUncheckedUpdateOneWithoutDescriptionNestedInput
@@ -56630,6 +57034,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyCreateNestedOneWithoutNameInput
     city?: cityCreateNestedOneWithoutNameInput
+    info?: infoCreateNestedOneWithoutNameInput
     category?: categoryCreateNestedOneWithoutNameInput
     occasion?: occasionCreateNestedOneWithoutNameInput
     descriptionProduct?: productCreateNestedOneWithoutDescriptionInput
@@ -56648,6 +57053,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyUncheckedCreateNestedOneWithoutNameInput
     city?: cityUncheckedCreateNestedOneWithoutNameInput
+    info?: infoUncheckedCreateNestedOneWithoutNameInput
     category?: categoryUncheckedCreateNestedOneWithoutNameInput
     occasion?: occasionUncheckedCreateNestedOneWithoutNameInput
     descriptionProduct?: productUncheckedCreateNestedOneWithoutDescriptionInput
@@ -56671,6 +57077,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyCreateNestedOneWithoutNameInput
     city?: cityCreateNestedOneWithoutNameInput
+    info?: infoCreateNestedOneWithoutNameInput
     category?: categoryCreateNestedOneWithoutNameInput
     occasion?: occasionCreateNestedOneWithoutNameInput
     descriptionProduct?: productCreateNestedOneWithoutDescriptionInput
@@ -56689,6 +57096,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedCreateNestedOneWithoutCurrencyAbbInput
     currencyName?: currencyUncheckedCreateNestedOneWithoutNameInput
     city?: cityUncheckedCreateNestedOneWithoutNameInput
+    info?: infoUncheckedCreateNestedOneWithoutNameInput
     category?: categoryUncheckedCreateNestedOneWithoutNameInput
     occasion?: occasionUncheckedCreateNestedOneWithoutNameInput
     descriptionProduct?: productUncheckedCreateNestedOneWithoutDescriptionInput
@@ -56892,6 +57300,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUpdateOneWithoutNameNestedInput
     city?: cityUpdateOneWithoutNameNestedInput
+    info?: infoUpdateOneWithoutNameNestedInput
     category?: categoryUpdateOneWithoutNameNestedInput
     occasion?: occasionUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUpdateOneWithoutDescriptionNestedInput
@@ -56910,6 +57319,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUncheckedUpdateOneWithoutNameNestedInput
     city?: cityUncheckedUpdateOneWithoutNameNestedInput
+    info?: infoUncheckedUpdateOneWithoutNameNestedInput
     category?: categoryUncheckedUpdateOneWithoutNameNestedInput
     occasion?: occasionUncheckedUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUncheckedUpdateOneWithoutDescriptionNestedInput
@@ -56939,6 +57349,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUpdateOneWithoutNameNestedInput
     city?: cityUpdateOneWithoutNameNestedInput
+    info?: infoUpdateOneWithoutNameNestedInput
     category?: categoryUpdateOneWithoutNameNestedInput
     occasion?: occasionUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUpdateOneWithoutDescriptionNestedInput
@@ -56957,6 +57368,7 @@ export namespace Prisma {
     currencyAbbLocale?: currencyUncheckedUpdateOneWithoutCurrencyAbbNestedInput
     currencyName?: currencyUncheckedUpdateOneWithoutNameNestedInput
     city?: cityUncheckedUpdateOneWithoutNameNestedInput
+    info?: infoUncheckedUpdateOneWithoutNameNestedInput
     category?: categoryUncheckedUpdateOneWithoutNameNestedInput
     occasion?: occasionUncheckedUpdateOneWithoutNameNestedInput
     descriptionProduct?: productUncheckedUpdateOneWithoutDescriptionNestedInput
@@ -57125,6 +57537,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -57148,6 +57561,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -57179,6 +57593,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57202,6 +57617,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57262,6 +57678,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -57285,6 +57702,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -57423,6 +57841,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57446,6 +57865,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57804,6 +58224,7 @@ export namespace Prisma {
   }
 
   export type reviewCreateWithoutUserInput = {
+    id?: string
     stars: number
     comment?: string | null
     createdAt?: Date | string
@@ -57812,6 +58233,7 @@ export namespace Prisma {
   }
 
   export type reviewUncheckedCreateWithoutUserInput = {
+    id?: string
     productId: string
     stars: number
     comment?: string | null
@@ -58705,6 +59127,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -58720,6 +59143,7 @@ export namespace Prisma {
     email: string
     password: string
     moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
     role?: string
     status?: $Enums.StoreStatus
     createdAt?: Date | string
@@ -58781,6 +59205,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -58803,6 +59228,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -58822,6 +59248,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -58834,6 +59261,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -58856,6 +59284,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -58875,6 +59304,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -59202,6 +59632,7 @@ export namespace Prisma {
   }
 
   export type reviewCreateManyProductInput = {
+    id?: string
     userId: string
     stars: number
     comment?: string | null
@@ -59281,6 +59712,7 @@ export namespace Prisma {
   }
 
   export type reviewUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
     stars?: IntFieldUpdateOperationsInput | number
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -59289,6 +59721,7 @@ export namespace Prisma {
   }
 
   export type reviewUncheckedUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     stars?: IntFieldUpdateOperationsInput | number
     comment?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59297,6 +59730,7 @@ export namespace Prisma {
   }
 
   export type reviewUncheckedUpdateManyWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     stars?: IntFieldUpdateOperationsInput | number
     comment?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59747,6 +60181,7 @@ export namespace Prisma {
   }
 
   export type reviewCreateManyUserInput = {
+    id?: string
     productId: string
     stars: number
     comment?: string | null
@@ -59851,6 +60286,7 @@ export namespace Prisma {
   }
 
   export type reviewUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
     stars?: IntFieldUpdateOperationsInput | number
     comment?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -59859,6 +60295,7 @@ export namespace Prisma {
   }
 
   export type reviewUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     stars?: IntFieldUpdateOperationsInput | number
     comment?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59867,6 +60304,7 @@ export namespace Prisma {
   }
 
   export type reviewUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     stars?: IntFieldUpdateOperationsInput | number
     comment?: NullableStringFieldUpdateOperationsInput | string | null

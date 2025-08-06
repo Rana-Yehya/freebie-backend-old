@@ -1,12 +1,9 @@
 const { StatusCodes } = require("http-status-codes");
 const { prisma } = require("../config/prisma");
-const crypto = require("crypto");
 
 const { createAccessJWT, createRefreshJWT } = require("../utils/jwt-utils");
 const { passwordEncrypt, passwordCompare } = require("../utils/password-utils");
 const { adminConstant } = require("../config/constants");
-
-const { phone } = require("phone");
 
 const {
   NotFoundError,
@@ -159,9 +156,9 @@ const login = async (req, res) => {
 //   });
 // };
 const logout = async (req, res) => {
-  await prisma.session.updateMany({
-    where: { adminId: req.user.id },
-    data: { isActive: false },
+  await prisma.session.delete({
+    where: { id: req.session },
+    // data: { isActive: false },
   });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,

@@ -22,9 +22,7 @@ const {
 const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
-const {
-  adminInvalidRegisterationMiddleware,
-} = require("../middleware/admin-invalid-registeration-middleware");
+
 const { userConstant } = require("../config/constants");
 
 const router = express.Router();
@@ -41,45 +39,45 @@ router.route("/verify-code").post(verifyCode);
 
 // router.route("/reset-password").post(resetPassword);
 router
-  .route("/user-info")
+  .route("/info")
   .get(authenticateUserMiddleware, authorizeMiddleware(userConstant), showMe);
 router
   .route("/logout")
   .get(authenticateUserMiddleware, authorizeMiddleware(userConstant), logout);
 router
-  .route("/update-profile")
+  .route("/update")
   .patch(
     authenticateUserMiddleware,
     authorizeMiddleware(userConstant),
     updateProfile
   );
 router
-  .route("/delete-user")
+  .route("/delete")
   .delete(optionalAuthenticateUserMiddleware, deleteAccount);
 
 router
   .route("/location")
   .post(
-    optionalAuthenticateUserMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(userConstant),
     createUserLocation
   );
 router
   .route("/location/:id")
   .patch(
-    optionalAuthenticateUserMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(userConstant),
     updateUserLocation
   )
   .delete(
-    optionalAuthenticateUserMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(userConstant),
     deleteUserLocation
   );
 router
   .route("/change-main-location/:id")
   .patch(
-    optionalAuthenticateUserMiddleware,
+    authenticateUserMiddleware,
     authorizeMiddleware(userConstant),
     changeUserMainLocation
   );

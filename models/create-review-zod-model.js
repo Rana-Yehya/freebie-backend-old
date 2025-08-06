@@ -1,6 +1,13 @@
 const { z } = require("zod");
 
-const ReviewZodModel = z.object({
+const CreateReviewZodModel = z.object({
+  productId: z
+    .string({
+      message: "Please enter a product id",
+    })
+    .uuid({
+      message: "Please enter a valid product id",
+    }),
   stars: z
     .number({ message: "Rating is required" })
     .refine((rate) => rate >= 1 && rate <= 5, {
@@ -9,4 +16,4 @@ const ReviewZodModel = z.object({
   comment: z.string().optional(),
 });
 // type UserModel = z.infer<typeof CreateUserZodModel>;
-module.exports = { ReviewZodModel };
+module.exports = { CreateReviewZodModel };

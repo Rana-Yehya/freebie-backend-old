@@ -11,12 +11,6 @@ const {
 const {
   authenticateUserMiddleware,
 } = require("../middleware/authentication-middleware");
-const {
-  authorizeMiddleware,
-} = require("../middleware/authorization-middleware");
-const {
-  adminInvalidRegisterationMiddleware,
-} = require("../middleware/admin-invalid-registeration-middleware");
 
 const router = express.Router();
 

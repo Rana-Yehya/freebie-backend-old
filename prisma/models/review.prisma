@@ -1,9 +1,9 @@
 model review {
-  // id                       String    @id @unique @default(uuid())
+  id        String   @id @unique @default(uuid())
   user      user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId    String   @unique
+  userId    String
   product   product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  productId String   @unique
+  productId String
   stars     Int
   comment   String?
   createdAt DateTime @default(now())

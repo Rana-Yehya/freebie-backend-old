@@ -6,12 +6,16 @@ const CreateDeliveryTaxesZodModel = z.object({
   // updatedAt   DateTime  @updatedAt
   // imageId     String    @db.ObjectId
 
-  originStateId: z.string({
-    message: "Origin State is required",
-  }),
-  destinationStateId: z.string({
-    message: "Destination State is required",
-  }),
+  originStateId: z
+    .string({
+      message: "Origin State is required",
+    })
+    .uuid(),
+  destinationStateId: z
+    .string({
+      message: "Destination State is required",
+    })
+    .uuid(),
   baseFee: z.number({
     message: "Base Fee is required",
   }),

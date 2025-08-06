@@ -1,13 +1,15 @@
 const { z } = require("zod");
-const { ProductStockZodModel } = require("./product-stock-zod-model");
-const { LocaleZodModel } = require("./locole-zod-model");
+const {
+  CreateProductStockZodModel,
+} = require("./create-product-stock-zod-model");
+const { CreateLocaleZodModel } = require("./create-locole-zod-model");
 
 const CreateProductZodModel = z
   .object({
     // isAvailable              Boolean   @default(true)
     // isFeatured               Boolean   @default(false)
     // isPopular                Boolean   @default(false)
-    name: LocaleZodModel, //z.string({ message: "Name is required" }),
+    name: CreateLocaleZodModel, //z.string({ message: "Name is required" }),
     mainImage: z
       .any()
       .refine(
@@ -49,8 +51,8 @@ const CreateProductZodModel = z
       .nonempty({
         message: "Images can't be empty",
       }),
-    description: LocaleZodModel, //z.string({ message: "Description is required" }),
-    detailedDescription: LocaleZodModel,
+    description: CreateLocaleZodModel, //z.string({ message: "Description is required" }),
+    detailedDescription: CreateLocaleZodModel,
     //  z.string({
     //   message: "Detailed Description is required",
     // }),
@@ -144,7 +146,7 @@ const CreateProductZodModel = z
       })
       .optional(),
     productStock: z
-      .array(ProductStockZodModel, {
+      .array(CreateProductStockZodModel, {
         message: "Product Stock can't be empty",
       })
       .nonempty({

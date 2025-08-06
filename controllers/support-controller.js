@@ -1,4 +1,3 @@
-const { UserCartZodModel } = require("../models/user-cart-zod-model");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
 const {
@@ -6,7 +5,6 @@ const {
   BadRequestError,
   UnauthenticatedError,
 } = require("../errors");
-const { InfoZodModel } = require("../models/info-zod-model");
 const { SupportZodModel } = require("../models/support-zod-model");
 const getInboxes = async (req, res, next) => {
   const inbox = await prisma.inbox.findMany({
@@ -25,25 +23,14 @@ const getInboxes = async (req, res, next) => {
 
 const getSingleInbox = async (req, res, next) => {
   const { id: inboxId } = req.params;
-  // const searchInCart =
-  //   req.user != null && req.user.role === userConstant ? true : false;
+  if (!inboxId) {
+    throw new BadRequestError("Please enter an inbox id");
+  }
   const inbox = await prisma.inbox.findUnique({
     where: { id: inboxId },
   });
-
-  //  const productUser =  searchInCart ?
-  // await prisma.userCart.findMany({
-  //     where: {
-  //       userId: req.user.id,
-  //       productId: productId,
-  //     },
-  //   }) : undefined;
-
-  // const productStock = await prisma.productStock.findMany({
-  //   where: { productId: productId },
-  // });
   if (!inbox) {
-    throw new BadRequestError("Inbox not found");
+    throw new NotFoundError("Inbox not found");
   }
   return res.status(StatusCodes.OK).json({ isSuccess: true, data: inbox });
 };
@@ -54,8 +41,6 @@ const sendInbox = async (req, res, next) => {
     message: message,
   });
   if (!zodModel.success) {
-    console.log(zodModel.error.errors[0]);
-
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
   // console.log(req.user);
@@ -74,9 +59,13 @@ const sendInbox = async (req, res, next) => {
 };
 
 const deleteInbox = async (req, res, next) => {
+  const { id: inboxId } = req.params;
+  if (!inboxId) {
+    throw new BadRequestError("Please enter an inbox id");
+  }
   await prisma.inbox.delete({
     where: {
-      id: req.params.id,
+      id: inboxId,
     },
   });
 

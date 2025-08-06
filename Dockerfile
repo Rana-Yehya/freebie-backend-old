@@ -1,8 +1,13 @@
 FROM node:22
 WORKDIR /docker
+#WORKDIR /usr/src/app
 COPY package.json .
+#COPY package*.json ./
 RUN npm install
+#RUN npm ci --only=production
 COPY . .
-EXPOSE 5003
+#ENV NODE_ENV=production
+EXPOSE 5003 
+#3000
 # CMD ["node", "index.js", "--watch"]
 CMD ["npm", "run", "dev"]

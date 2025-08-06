@@ -1,38 +1,48 @@
 const { z } = require("zod");
 
-const SocialMediaZodModel = z
+const CreateSocialMediaZodModel = z
   .object({
     // store - restaurant - place for weddings
     tiktok: z
       .string()
+      .url({
+        message: "It does not seem a valid link",
+      })
       .includes("tiktok", { message: "It does not seem a valid tiktok link" })
-      .url()
       .optional(),
     youtube: z
       .string()
+      .url({
+        message: "It does not seem a valid link",
+      })
       .includes("youtube", {
         message: "It does not seem a valid youtube link",
       })
-      .url()
       .optional(),
     facebook: z
       .string()
+      .url({
+        message: "It does not seem a valid link",
+      })
       .includes("facebook", {
         message: "It does not seem a valid facebook link",
       })
-      .url()
       .optional(),
     x: z
       .string()
+      .url({
+        message: "It does not seem a valid link",
+      })
       .includes("x", { message: "It does not seem a valid X link" })
-      .url()
       .optional(),
     instagram: z
       .string()
+      .url({
+        message: "It does not seem a valid link",
+      })
       .includes("instagram", {
         message: "It does not seem a valid instagram link",
       })
-      .url()
       .optional(),
   })
   .refine(
@@ -45,4 +55,4 @@ const SocialMediaZodModel = z
     { message: "One of the social media links must be provided" }
   );
 // type UserModel = z.infer<typeof CreateUserZodModel>;
-module.exports = { SocialMediaZodModel };
+module.exports = { CreateSocialMediaZodModel };

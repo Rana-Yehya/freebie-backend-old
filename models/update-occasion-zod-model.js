@@ -1,8 +1,15 @@
 const { z } = require("zod");
-const { LocaleZodModel } = require("./locole-zod-model");
+const { UpdateLocaleZodModel } = require("./update-locole-zod-model");
 
-const OccasionZodModel = z.object({
-  name: LocaleZodModel, // z.string({ message: "Name is required" }),
+const UpdateOccasionZodModel = z.object({
+  id: z
+    .string({
+      message: "Please enter an occasion id",
+    })
+    .uuid({
+      message: "Please enter a valid occasion id",
+    }),
+  name: UpdateLocaleZodModel, // z.string({ message: "Name is required" }),
   image: z
     .any()
     .refine(
@@ -18,7 +25,8 @@ const OccasionZodModel = z.object({
     )
     .refine((file) => file.size <= 1024 * 1024, {
       message: "Image is too large",
-    }),
+    })
+    .optional(),
 });
 // type UserModel = z.infer<typeof CreateUserZodModel>;
-module.exports = { OccasionZodModel };
+module.exports = { UpdateOccasionZodModel };

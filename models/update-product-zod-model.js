@@ -1,12 +1,24 @@
 const { z } = require("zod");
-const { ProductStockZodModel } = require("./product-stock-zod-model");
+const {
+  CreateProductStockZodModel,
+} = require("./create-product-stock-zod-model");
 const { UpdateLocaleZodModel } = require("./update-locale-zod-model");
+const {
+  UpdateProductStockZodModel,
+} = require("./update-product-stock-zod-model");
 
 const UpdateProductZodModel = z
   .object({
     // isAvailable              Boolean   @default(true)
     // isFeatured               Boolean   @default(false)
     // isPopular                Boolean   @default(false)
+    id: z
+      .string({
+        message: "Please enter a product id",
+      })
+      .uuid({
+        message: "Please enter a valid product id",
+      }),
     name: UpdateLocaleZodModel,
     mainImage: z
       .any()
@@ -160,7 +172,7 @@ const UpdateProductZodModel = z
       }
       */
     productStock: z
-      .array(ProductStockZodModel)
+      .array(UpdateProductStockZodModel)
       // .nonempty({
       //   message: "Branches can't be empty!",
       // })

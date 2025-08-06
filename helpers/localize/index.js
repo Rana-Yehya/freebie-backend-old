@@ -857,6 +857,111 @@ const appLocalize = new Localize({
     en: "Location deleted successfully",
     ar: "تم حذف الموقع بنجاح",
   },
+  "It does not seem a valid link": {
+    en: "It does not seem a valid link",
+    ar: "لا يبدو أن هذا رابط صالح",
+  },
+  "Store updated successfully": {
+    en: "Store updated successfully",
+    ar: "تم تحديث المتجر بنجاح",
+  },
+  "Passwords do not match": {
+    en: "Passwords do not match",
+    ar: "كلمات المرور غير متطابقة",
+  },
+  "Store password updated successfully": {
+    en: "Store password updated successfully",
+    ar: "تم تحديث كلمة المرور للمتجر بنجاح",
+  },
+  "Account does not exist. Please register first": {
+    en: "Account does not exist. Please register first",
+    ar: "الحساب غير موجود. يرجى التسجيل أولاً",
+  },
+  "Your account is not approved yet": {
+    en: "Your account is not approved yet",
+    ar: "حسابك لم يتم الموافقة عليه بعد",
+  },
+  "Please enter valid phone and passwords": {
+    en: "Please enter valid phone and passwords",
+    ar: "الرجاء إدخال رقم الهاتف وكلمة المرور الصحيحين",
+  },
+  "Password reset time has expired": {
+    en: "Password reset time has expired",
+    ar: "انتهت مهلة إعادة تعيين كلمة المرور",
+  },
+  "Password changed successfully": {
+    en: "Password changed successfully",
+    ar: "تم تغيير كلمة المرور بنجاح",
+  },
+  "Invalid OTP": {
+    en: "Invalid OTP",
+    ar: "OTP غير صالح",
+  },
+  "Please enter a country id": {
+    en: "Please enter a country id",
+    ar: "الرجاء إدخال معرف الدولة",
+  },
+  "Please enter a valid country id": {
+    en: "Please enter a valid country id",
+    ar: "الرجاء إدخال معرف دولة صالح",
+  },
+  "Please enter an occasion id": {
+    en: "Please enter an occasion id",
+    ar: "الرجاء إدخال معرف المناسبة",
+  },
+  "Please enter a valid occasion id": {
+    en: "Please enter a valid occasion id",
+    ar: "الرجاء إدخال معرف مناسبة صالح",
+  },
+
+  "Store freezed successfully": {
+    en: "Store freezed successfully",
+    ar: "تم تجميد المتجر بنجاح",
+  },
+  "Please enter a branch id": {
+    en: "Please enter a branch id",
+    ar: "الرجاء إدخال معرف الفرع",
+  },
+  "Please enter a valid store id": {
+    en: "Please enter a valid store id",
+    ar: "الرجاء إدخال معرف متجر صالح",
+  },
+  "Please enter a category id": {
+    en: "Please enter a category id",
+    ar: "الرجاء إدخال معرف الفئة",
+  },
+  "Please enter a valid category id": {
+    en: "Please enter a valid category id",
+    ar: "الرجاء إدخال معرف فئة صالح",
+  },
+  "Please enter a delivery taxes id": {
+    en: "Please enter a delivery taxes id",
+    ar: "الرجاء إدخال معرف ضريبة التوصيل",
+  },
+  "Please enter an inbox id": {
+    en: "Please enter an inbox id",
+    ar: "الرجاء إدخال معرف صندوق الوارد",
+  },
+  "Please enter a location id": {
+    en: "Please enter a location id",
+    ar: "الرجاء إدخال معرف الموقع",
+  },
+  "Please enter a valid location id": {
+    en: "Please enter a valid location id",
+    ar: "الرجاء إدخال معرف موقع صالح",
+  },
+  "User location not found": {
+    en: "User location not found",
+    ar: "لم يتم العثور على موقع المستخدم",
+  },
+  "Please enter a valid product id": {
+    en: "Please enter a valid product id",
+    ar: "الرجاء إدخال معرف منتج صالح",
+  },
+  "Please enter a product stock id": {
+    en: "Please enter a product stock id",
+    ar: "الرجاء إدخال معرف مخزون المنتج",
+  },
 });
 
 module.exports = { appLocalize };

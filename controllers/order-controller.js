@@ -1,4 +1,3 @@
-const { UserCartZodModel } = require("../models/user-cart-zod-model");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
 const {
@@ -6,10 +5,6 @@ const {
   BadRequestError,
   UnauthenticatedError,
 } = require("../errors");
-const { UserProductZodModel } = require("../models/user-product-zod-model");
-const {
-  UpdateUserProductZodModel,
-} = require("../models/update-user-product-zod-model");
 const { createDepositPayment } = require("./transaction-controller");
 const {
   OrderStatus,

@@ -2,7 +2,6 @@ const express = require("express");
 const {
   getAllProductReviews,
   createReview,
-  updateReview,
   deleteReview,
 } = require("../controllers/review-controller");
 const {
@@ -12,7 +11,7 @@ const {
 const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
-const { adminConstant, userConstant } = require("../config/constants");
+const { userConstant } = require("../config/constants");
 
 const router = express.Router();
 //
@@ -27,7 +26,7 @@ router
   .patch(
     authenticateUserMiddleware,
     authorizeMiddleware(userConstant),
-    updateReview
+    createReview
   )
   .delete(
     authenticateUserMiddleware,

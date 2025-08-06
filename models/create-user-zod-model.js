@@ -1,4 +1,5 @@
 const { z } = require("zod");
+const { phone } = require("phone");
 
 const CreateUserZodModel = z.object({
   // avatar      Image?
@@ -14,7 +15,16 @@ const CreateUserZodModel = z.object({
   email: z.string().email({ message: "Invalid email address" }),
   // userCountry: z.string({ message: "Country is required" }),
   userState: z.string({ message: "State is required" }),
-  phone: z.string({ message: "Phone number is required" }),
+  phone: z
+    .string({ message: "Phone number is required" })
+    .refine(
+      (phoneNumber) =>
+        phoneNumber != undefined &&
+        phone(phoneNumber.toString()).isValid == true,
+      {
+        message: "The phone number is not correct",
+      }
+    ),
   password: z.string().optional(),
   fcmToken: z.string().optional(),
 });

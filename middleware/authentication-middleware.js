@@ -33,8 +33,12 @@ const authenticateUserMiddleware = async (req, res, next) => {
               },
             },
           },
-          store: true,
-          admin: { include: { country: { include: { name: true } } } },
+          store: {
+            include: { name: true, bio: true, logo: true, banner: true },
+          },
+          admin: {
+            include: { country: { include: { name: true } } },
+          },
         },
       });
       if (!session) {

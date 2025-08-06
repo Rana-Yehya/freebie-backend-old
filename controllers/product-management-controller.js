@@ -1,13 +1,16 @@
 const { CreateProductZodModel } = require("../models/create-product-zod-model");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
-const { BadRequestError } = require("../errors");
+const { BadRequestError, NotFoundError } = require("../errors");
 const { UpdateProductZodModel } = require("../models/update-product-zod-model");
 const {
   uploadMultipleImages,
   uploadImage,
 } = require("../helpers/cloudinary/upload-image");
-const { destroyMultipleImages } = require("../helpers/cloudinary/delete-image");
+const {
+  destroyMultipleImages,
+  destroyImage,
+} = require("../helpers/cloudinary/delete-image");
 const { ProductTags, ProductStatus } = require("../generated/prisma");
 const getAllProducts = async (req, res, next) => {
   const products = await prisma.product.findMany({
@@ -89,15 +92,13 @@ const createProduct = async (req, res, next) => {
     weightInKg: weightInKg,
   });
   if (!zodModel.success) {
-    console.log(zodModel.error.errors[0]);
-
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
   const category = await prisma.category.findUnique({
     where: { id: categoryId },
   });
   if (!category) {
-    throw new BadRequestError("Category not found");
+    throw new NotFoundError("Category not found");
   }
   // if (occasions) {
   //   const occasionCount = await prisma.occasion.count({
@@ -315,10 +316,6 @@ const createProduct = async (req, res, next) => {
 
 const updateProduct = async (req, res, next) => {
   const { id } = req.params;
-
-  if (!id) {
-    throw new BadRequestError("Please send a product ID");
-  }
   const {
     name,
     nameEn,
@@ -353,6 +350,7 @@ const updateProduct = async (req, res, next) => {
   const occasionsList = occasions == undefined ? [] : JSON.parse(occasions);
 
   const zodModel = UpdateProductZodModel.safeParse({
+    id: id,
     name: {
       default: name,
       ar: nameAr,
@@ -449,7 +447,7 @@ const updateProduct = async (req, res, next) => {
       mainImage: true,
       image: true,
       category: true,
-      productVariant: true,
+      // productVariant: true,
     },
   });
   if (!product) {
@@ -621,6 +619,23 @@ const updateProduct = async (req, res, next) => {
       dimensionsLCm:
         dimensionsLCm == undefined ? undefined : parseFloat(dimensionsLCm),
       weightInKg: weightInKg == undefined ? undefined : parseFloat(weightInKg),
+      // productVariant: {
+      //   upsert: {
+      //     where: {
+
+      //     },
+      //     update: {
+      //       productStock: {
+      //         upsert: {
+      //           where: {
+
+      //           }
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
+
       productVariant: {
         // productStockList.map((productIndex) => ({
         // productStockList.map((productIndex) => (
@@ -635,10 +650,10 @@ const updateProduct = async (req, res, next) => {
             productStock: {
               upsert: {
                 where: {
-                  id_branchId: {
-                    branchId: productIndex.branchId || "",
-                    id: productIndex.productStockId || "",
-                  },
+                  // id_branchId: {
+                  branchId: productIndex.branchId || "",
+                  id: productIndex.productStockId || "",
+                  // },
                 },
                 update: {
                   stock: productIndex.stock || undefined,
@@ -664,6 +679,7 @@ const updateProduct = async (req, res, next) => {
           },
         })),
       },
+
       // isFeatured: isFeatured || undefined,
       // isPopular: isPopular || undefined,
     },
@@ -674,60 +690,16 @@ const updateProduct = async (req, res, next) => {
       image: true,
     },
   });
-  // if (image) {
-  //   console.log(product.image);
-  //   const publicIds = product.image.map((image) => image.publicId);
-  //   console.log(publicIds);
-
-  //   await destroyMultipleImages({ imagesPublicIds: publicIds });
-  // }
-  /*
-  if (productStockList) {
-    for (
-      let productStockIndex = 0;
-      productStockIndex < productStockList.length;
-      productStockIndex++
-    ) {
-      // if (
-      //   productStockToUpdate.map(
-      //     (p) => p.branchId == productStockToUpdate[productStockIndex].branchId
-      //   )
-      // ) {
-      await prisma.productStock.upsert({
-        where: {
-          productId_branchId_color: {
-            productId: id,
-            branchId: productStockList[productStockIndex].branchId,
-            color: productStockList[productStockIndex].color,
-          },
-        },
-        update: {
-          // branchId: productStock[productStockIndex].branchId,
-          stock: productStockList[productStockIndex].stock || undefined,
-          // color: productStock[productStockIndex].color || undefined,
-          // color: productStock[productStockIndex].color,
-
-          // productId: id,
-        },
-        create: {
-          branchId: productStockList[productStockIndex].branchId,
-          stock: productStockList[productStockIndex].stock,
-          color: productStockList[productStockIndex].color,
-          productId: id,
-        },
-      });
-      // } else {
-      //   await prisma.productStock.create({
-      //     data: {
-      //       branchId: productStockToUpdate[productStockIndex].branchId,
-      //       stock: productStockToUpdate[productStockIndex].stock,
-      //       productId: id,
-      //     },
-      //   });
-      // }
-    }
+  if (mainImage) {
+    await destroyImage({
+      imagePublicId: product.mainImage.publicId,
+    });
   }
-  */
+  // if (image) {
+  //   await destroyMultipleImages({
+  //     imagePublicId: product.image.map((image) => image.publicId),
+  //   });
+  // }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     message: "Product updated successfully",
@@ -737,7 +709,9 @@ const updateProduct = async (req, res, next) => {
 
 const deleteProduct = async (req, res, next) => {
   const { id: ProductId } = req.params;
-
+  if (!ProductId) {
+    throw new BadRequestError("Please send a product id");
+  }
   // const order = await prisma.order.findFirst({
   //   where: {
   //     productOrder: {
@@ -759,7 +733,7 @@ const deleteProduct = async (req, res, next) => {
     // select: { image: true },
   });
   if (!product) {
-    throw new BadRequestError("Product not found");
+    throw new NotFoundError("Product not found");
   }
   return res
     .status(StatusCodes.OK)

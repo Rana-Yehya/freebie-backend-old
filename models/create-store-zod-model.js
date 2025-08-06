@@ -1,11 +1,15 @@
 const { z } = require("zod");
-const { LocaleZodModel } = require("./locole-zod-model");
+const { CreateLocaleZodModel } = require("./create-locole-zod-model");
+const {
+  CreateSocialMediaZodModel,
+} = require("./create-social-media-zod-model");
+const { phone } = require("phone");
 
-const StoreZodModel = z.object({
+const CreateStoreZodModel = z.object({
   // store - restaurant - place for weddings
 
-  name: LocaleZodModel, //
-  bio: LocaleZodModel, // z.string({ message: "Please enter a description" }),
+  name: CreateLocaleZodModel, //
+  bio: CreateLocaleZodModel, // z.string({ message: "Please enter a description" }),
   logo: z
     .any()
     .refine(
@@ -39,10 +43,19 @@ const StoreZodModel = z.object({
     .refine((file) => file.size <= 1024 * 1024, {
       message: "Banner image is too large",
     }),
-  phone: z.string({ message: "Please enter a phone number" }),
+  phone: z
+    .string({ message: "Please enter a phone number" })
+    .refine(
+      (phoneNumber) =>
+        phoneNumber != undefined &&
+        phone(phoneNumber.toString()).isValid == true,
+      {
+        message: "The phone number is not correct",
+      }
+    ),
   email: z.string({ message: "Please enter an email" }),
   password: z.string({ message: "Please enter a password" }),
-  // socialLinks: SocialMediaZodModel,
+  socialLinks: CreateSocialMediaZodModel,
   // socialLinks: z
   //   .object({
   //     tiktok: z
@@ -89,4 +102,4 @@ const StoreZodModel = z.object({
   type: z.string().optional(),
 });
 // type UserModel = z.infer<typeof CreateUserZodModel>;
-module.exports = { StoreZodModel };
+module.exports = { CreateStoreZodModel };

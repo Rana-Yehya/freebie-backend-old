@@ -1,8 +1,8 @@
 const { z } = require("zod");
-const { LocaleZodModel } = require("./locole-zod-model");
+const { CreateLocaleZodModel } = require("./create-locole-zod-model");
 
 const CreateCategoryZodModel = z.object({
-  name: LocaleZodModel, //z.string({ message: "Name is required" }),
+  name: CreateLocaleZodModel, //z.string({ message: "Name is required" }),
   image: z
     .any()
     .refine(

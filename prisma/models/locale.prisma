@@ -24,6 +24,7 @@ model locale {
   currencyAbbLocale          currency? @relation("currencyAbbLocale")
   currencyName               currency? @relation("currencyName")
   city                       city?
+  info                       info?
   category                   category?
   occasion                   occasion?
   descriptionProduct         product?  @relation("descriptionProduct") //, references: [id], fields: [descriptionProductId])

@@ -9,14 +9,21 @@ const {
   BadRequestError,
   UnauthenticatedError,
 } = require("../errors");
-const { StoreZodModel } = require("../models/store-zod-model");
+const { CreateStoreZodModel } = require("../models/create-store-zod-model");
+const { UpdateStoreZodModel } = require("../models/update-store-zod-model");
 
 const { createAccessJWT, createRefreshJWT } = require("../utils/jwt-utils");
 const { passwordEncrypt, passwordCompare } = require("../utils/password-utils");
-const { userConstant, storeConstant } = require("../config/constants");
-const { SocialMediaZodModel } = require("../models/social-media-zod-model");
+const { storeConstant } = require("../config/constants");
 const { uploadImage } = require("../helpers/cloudinary/upload-image");
-const { StoreStatus } = require("../generated/prisma");
+const { StoreStatus, OrderStatus } = require("../generated/prisma");
+const {
+  checkOtpRestirictionsHelper,
+  spamOtpRequestHelper,
+  verifyOtpHelper,
+} = require("../helpers/redis");
+const { sendOtpHelper } = require("../helpers/redis/send-otp-helper");
+const { destroyImage } = require("../helpers/cloudinary/delete-image");
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -94,23 +101,12 @@ const register = async (req, res, next) => {
     // socialLinks,
     type,
   } = req.body;
-  const socialLinksZodModel = SocialMediaZodModel.safeParse({
-    tiktok: tiktok,
-    youtube: youtube,
-    facebook: facebook,
-    x: x,
-    instagram: instagram,
-  });
 
-  if (!socialLinksZodModel.success) {
-    throw new BadRequestError(socialLinksZodModel.error.errors[0].message);
-  }
-
-  const logo = req.files.logo;
-  const banner = req.files.banner;
+  const logo = req.files != undefined ? req.files.logo : undefined;
+  const banner = req.files != undefined ? req.files.banner : undefined;
 
   // console.log(logo);
-  const storeZodModel = StoreZodModel.safeParse({
+  const storeZodModel = CreateStoreZodModel.safeParse({
     name: {
       default: name,
       en: nameEn,
@@ -127,6 +123,13 @@ const register = async (req, res, next) => {
     email: email,
     password: password,
     type: type,
+    socialLinks: {
+      tiktok: tiktok,
+      youtube: youtube,
+      facebook: facebook,
+      x: x,
+      instagram: instagram,
+    },
     // socialLinks: socialLinksZodModel,
     /*
       tiktok,
@@ -137,17 +140,11 @@ const register = async (req, res, next) => {
     */
   });
   // console.log(phoneNumber);
-  const isPhoneValid = phone(phoneNumber.toString());
-
-  // console.log(isPhoneValid);
 
   if (!storeZodModel.success) {
     throw new BadRequestError(storeZodModel.error.errors[0].message);
   }
 
-  if (isPhoneValid.isValid != true) {
-    throw new BadRequestError("The phone number is not correct");
-  }
   // const storeInDB = await prisma.store.findUnique({
   //   where: { email: email, phone: phoneNumber },
   // });
@@ -227,27 +224,9 @@ const register = async (req, res, next) => {
 };
 
 const logout = async (req, res) => {
-  await prisma.store.update({
-    where: { id: req.user.id },
-    data: {
-      refreshTokenSecret: null,
-      accessTokenSecret: null,
-    },
+  await prisma.session.delete({
+    where: { id: req.session },
   });
-  // res.cookie("accessToken", null, {
-  //   expires: new Date(Date()),
-  //   httpOnly: true,
-  //   secure: process.env.NODE_ENV === "production",
-  //   signed: true,
-  //   // maxAge: new Date(Date()),
-  // });
-  // res.cookie("refreshToken", null, {
-  //   expires: new Date(Date()),
-  //   httpOnly: true,
-  //   secure: process.env.NODE_ENV === "production",
-  //   signed: true,
-  //   // maxAge: new Date(Date()),
-  // });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     message: "Logged out successfully",
@@ -255,23 +234,38 @@ const logout = async (req, res) => {
 };
 
 const deleteStore = async (req, res) => {
-  const storeId = req.user.role === storeConstant ? req.user.id : req.query.id;
+  const storeId = req.user.id; //req.user.role === storeConstant ? req.user.id : req.params.id
   const ordersInStore = await prisma.order.findFirst({
     where: {
       AND: [
-        { productOrder: { every: { branch: { storeId: storeId } } } },
-        { productOrder: { every: { status: "confirmed" } } },
+        {
+          productOrder: {
+            every: {
+              variant: {
+                productStock: { every: { branch: { storeId: storeId } } },
+              },
+            },
+          },
+        },
+        {
+          productOrder: {
+            every: {
+              status: { notIn: [OrderStatus.DELIVERED, OrderStatus.CANCELLED] },
+            },
+          },
+        },
         // { productOrder: { every: { status: { not: "pending" } } } },
       ],
     },
   });
   if (ordersInStore) {
-    throw new BadRequestError({
-      message: "Store has orders in progress",
-    });
+    throw new BadRequestError("Store has orders in progress");
   }
   await prisma.store.delete({
     where: { id: storeId },
+  });
+  await prisma.session.deleteMany({
+    where: { storeId: storeId },
   });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
@@ -279,92 +273,272 @@ const deleteStore = async (req, res) => {
   });
 };
 const updateProfile = async (req, res) => {
-  // const { email, name } = req.body;
-  // if (!email || !name) {
-  //   throw new BadRequestError("Please enter all profile data");
-  // }
-  // const user = await User.findOne({ _id: req.user.userId });
-  // user.email = email;
-  // user.name = name;
-  // await user.save();
-  // const token = user.createJWT();
-  // return res.status(StatusCodes.OK).json({
-  //   isSuccess: true,
-  //   user: {
-  //     id: user.getId(),
-  //     name: user.getName(),
-  //     role: user.getRole(),
-  //     email: user.getEmail(),
-  //     token,
-  //   },
-  //   token,
-  // });
+  const {
+    username: name,
+    nameEn,
+    nameAr,
+    bio,
+    bioEn,
+    bioAr,
+    phone: phoneNumber,
+    email,
+    password,
+    tiktok,
+    youtube,
+    facebook,
+    x,
+    instagram,
+    // socialLinks,
+    type,
+  } = req.body;
+
+  const logo = req.files != undefined ? req.files.logo : undefined;
+  const banner = req.files != undefined ? req.files.banner : undefined;
+
+  // console.log(logo);
+  const storeZodModel = UpdateStoreZodModel.safeParse({
+    name: {
+      default: name,
+      en: nameEn,
+      ar: nameAr,
+    },
+    bio: {
+      default: bio,
+      en: bioEn,
+      ar: bioAr,
+    },
+    logo: logo,
+    banner: banner,
+    phone: phoneNumber,
+    email: email,
+    password: password,
+    type: type,
+    socialLinks: {
+      tiktok: tiktok,
+      youtube: youtube,
+      facebook: facebook,
+      x: x,
+      instagram: instagram,
+    },
+  });
+
+  // console.log(isPhoneValid);
+
+  if (!storeZodModel.success) {
+    throw new BadRequestError(storeZodModel.error.errors[0].message);
+  }
+
+  let logoUploadedSecureUrl, logoUploadedPublicId;
+  if (logo) {
+    [logoUploadedSecureUrl, logoUploadedPublicId] = await uploadImage({
+      req: req,
+      image: logo,
+    });
+  }
+  let bannerUploadedSecureUrl, bannerUploadedPublicId;
+  if (banner) {
+    [bannerUploadedSecureUrl, bannerUploadedPublicId] = await uploadImage({
+      req: req,
+      image: banner,
+    });
+  }
+
+  const store = await prisma.store.update({
+    where: { id: req.user.id },
+    data: {
+      name: {
+        update: {
+          default: name || undefined,
+          en: nameEn || undefined,
+          ar: nameAr || undefined,
+        },
+      },
+      bio: {
+        update: {
+          default: bio || undefined,
+          en: bioEn || undefined,
+          ar: bioAr || undefined,
+        },
+      },
+      logo: {
+        update: {
+          publicId: logoUploadedPublicId || undefined,
+          secureUrl: logoUploadedSecureUrl || undefined,
+        },
+      },
+      banner: {
+        update: {
+          publicId: bannerUploadedPublicId || undefined,
+          secureUrl: bannerUploadedSecureUrl || undefined,
+        },
+      },
+      phone: phoneNumber || undefined,
+      email: email || undefined,
+      // socialLinksId: socialLinksDb.id,
+      // socialLinks: {},
+      socialLinks: {
+        update: {
+          tiktok: tiktok || undefined,
+          youtube: youtube || undefined,
+          facebook: facebook || undefined,
+          x: x || undefined,
+          instagram: instagram || undefined,
+        },
+      },
+      type: type || undefined,
+    },
+  });
+  if (logo) {
+    await destroyImage({
+      imagePublicId: req.user.logo.publicId,
+    });
+  }
+  if (banner) {
+    await destroyImage({
+      imagePublicId: req.user.banner.publicId,
+    });
+  }
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    store,
+    message: "Store updated successfully",
+  });
 };
-const resetPassword = async (req, res) => {
-  // const { email, token, password } = req.body;
-  // if (!email || !token || !password) {
-  //   throw new BadRequestError("Please enter valid values");
-  // }
-  // const userInDB = await User.findOne({ email });
-  // if (!userInDB) {
-  //   throw new BadRequestError("This user in not in the database");
-  // }
-  // console.log(userInDB.passwordTokenExpiresAt - Date());
-  // console.log(userInDB.passwordTokenExpiresAt - Date() < 1000 * 60 * 10);
-  // if (
-  //   !(
-  //     userInDB.passwordToken === token &&
-  //     userInDB.passwordTokenExpiresAt - Date() < 1000 * 60 * 10
-  //   )
-  // ) {
-  //   throw new BadRequestError("The password validation time is expired");
-  // }
-  // userInDB.password = password;
-  // userInDB.passwordToken = null;
-  // userInDB.passwordTokenExpiresAt = null;
-  // await userInDB.save();
-  // return res.status(StatusCodes.OK).json({
-  //   isSuccess: true,
-  //   message: "Your password has been reset successfully.",
-  // });
+const changePassword = async (req, res) => {
+  const { oldPassword, newPassword, confirmNewPassword } = req.body;
+  if (!oldPassword || !newPassword || !confirmNewPassword) {
+    throw new BadRequestError("Please enter valid passwords");
+  }
+  if (newPassword !== confirmNewPassword) {
+    throw new BadRequestError("Passwords do not match");
+  }
+  const doPasswordsMatch = await passwordCompare({
+    passwordToCmpare: oldPassword,
+    password: req.user.password,
+  });
+  if (!doPasswordsMatch) {
+    throw new BadRequestError("Old password is incorrect");
+  }
+  const hashedPassword = await passwordEncrypt(newPassword);
+  const store = await prisma.store.update({
+    where: { id: req.user.id },
+    data: {
+      password: hashedPassword,
+    },
+  });
+
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    store,
+    message: "Store password updated successfully",
+  });
+};
+
+const sendCode = async (req, res, next) => {
+  const { phoneNumber } = req.body;
+
+  const isPhoneValid = phone(phoneNumber.toString());
+
+  console.log(isPhoneValid);
+  console.log(phoneNumber);
+
+  if (isPhoneValid.isValid != true) {
+    throw new BadRequestError("The phone number is not correct");
+  }
+  const storeInDB = await prisma.store.findUnique({
+    where: { phone: phoneNumber },
+    include: { name: true },
+  });
+
+  if (!storeInDB) {
+    throw new BadRequestError("Account does not exist. Please register first");
+  }
+  if (storeInDB.status != StoreStatus.APPROVED) {
+    throw new BadRequestError("Your account is not approved yet");
+  }
+  await checkOtpRestirictionsHelper({ phone: phoneNumber, next });
+
+  await spamOtpRequestHelper({ phone: phoneNumber, next });
+  await sendOtpHelper({
+    name: storeInDB.name.default,
+    phone: phoneNumber,
+    email: "el_rana111@yahoo.com",
+  });
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "OTP sent. Please check your phone",
+  });
+};
+
+const verifyCode = async (req, res) => {
+  const { phoneNumber, verificationCode } = req.body;
+
+  if (!phoneNumber || !verificationCode || verificationCode.length != 4) {
+    throw new BadRequestError("Please enter all data correctly");
+  }
+  const isPhoneValid = phone(phoneNumber);
+
+  if (isPhoneValid.isValid != true) {
+    throw new BadRequestError("The phone number is not correct");
+  }
+
+  await verifyOtpHelper({ phone: phoneNumber, userOtp: verificationCode });
+  // user.isVerified = true;
+  const passwordChangeBefore = new Date(Date.now() + 1 * (60 * 60 * 1000));
+  const store = await prisma.store.update({
+    where: { phone: phoneNumber },
+    data: { passwordChangeBefore: passwordChangeBefore },
+  });
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "Account verified successfully",
+    store: store,
+  });
 };
 const forgotPassword = async (req, res) => {
-  // const { email } = req.body;
-  // if (!email) {
-  //   throw new BadRequestError("Please enter a valid email");
-  // }
-  // const userInDB = await User.findOne({ email });
-  // if (!userInDB) {
-  //   throw new BadRequestError("This user in not in the database");
-  // }
-  // if (
-  //   userInDB.passwordToken &&
-  //   Date() - userInDB.passwordTokenExpiresAt < 1000 * 60 * 10
-  // ) {
-  //   return res.status(StatusCodes.OK).json({
-  //     isSuccess: true,
-  //     message: "We have sent you an email. Please check your email",
-  //   });
-  // }
-  // const passwordToken = crypto.randomBytes(70).toString("hex");
-  // userInDB.passwordToken = passwordToken;
-  // userInDB.passwordTokenExpiresAt = new Date(Date() + 1000 * 60 * 10); // ten mins
-  // await userInDB.save();
-  // const protocol = req.protocol;
-  // const host = req.get("host");
-  // // const origin = `http://${req.headers.host}`;
-  // const origin = `${protocol}://${host}`;
-  // // console.log(origin);
-  // await sendResetPasswordEmail({
-  //   email,
-  //   name: userInDB.name,
-  //   passwordToken,
-  //   origin,
-  // });
-  // return res.status(StatusCodes.OK).json({
-  //   isSuccess: true,
-  //   message: "Please check your email",
-  // });
+  const { phoneNumber, newPassword, confirmNewPassword } = req.body;
+  if (!phoneNumber || !newPassword || !confirmNewPassword) {
+    throw new BadRequestError("Please enter valid phone and passwords");
+  }
+  if (newPassword !== confirmNewPassword) {
+    throw new BadRequestError("Passwords do not match");
+  }
+
+  const isPhoneValid = phone(phoneNumber);
+
+  if (isPhoneValid.isValid != true) {
+    throw new BadRequestError("The phone number is not correct");
+  }
+  const storeInDB = await prisma.store.findUnique({
+    where: { phone: phoneNumber },
+  });
+
+  if (!storeInDB) {
+    throw new BadRequestError("Account does not exist. Please register first");
+  }
+  if (storeInDB.status != StoreStatus.APPROVED) {
+    throw new BadRequestError("Your account is not approved yet");
+  }
+  if (
+    storeInDB.passwordChangeBefore == undefined ||
+    storeInDB.passwordChangeBefore <= new Date()
+  ) {
+    throw new BadRequestError("Password reset time has expired");
+  }
+  const hashedPassword = await passwordEncrypt(newPassword);
+
+  const store = await prisma.store.update({
+    where: { id: storeInDB.id },
+    data: {
+      password: hashedPassword,
+      passwordChangeBefore: null,
+    },
+  });
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "Password changed successfully",
+    store: store,
+  });
 };
 const showMe = async (req, res) => {
   return res.status(StatusCodes.OK).json({
@@ -379,7 +553,9 @@ module.exports = {
   logout,
   updateProfile,
   showMe,
-  resetPassword,
+  sendCode,
+  changePassword,
+  verifyCode,
   forgotPassword,
   deleteStore,
 };

@@ -449,6 +449,7 @@ const searchAllProducts = async (req, res, next) => {
         .replace(/[\[\] ]/g, "")
         .split(",")
     : undefined;
+  console.log(colorList);
   let productQuerySearch = {
     AND: [
       {
@@ -561,9 +562,12 @@ const getAllProductsPerStoreBranch = async (req, res, next) => {
 
 const getProduct = async (req, res, next) => {
   const { id: productId } = req.params;
+  if (!productId) {
+    throw new BadRequestError("Please send a product id");
+  }
   // const searchInCart =
   //   req.user != null && req.user.role === userConstant ? true : false;
-  const product = await prisma.product.findUnique({
+  let product = await prisma.product.findUnique({
     where: { id: productId },
     include: {
       name: true,
@@ -602,25 +606,35 @@ const getProduct = async (req, res, next) => {
   });
 
   if (!product) {
-    throw new BadRequestError("Product not found");
+    throw new NotFoundError("Product not found");
   }
+  // console.log(product);
+
   let orderUserIds = [];
-  product.productVariant.forEach((variant) => {
-    variant.productStock.forEach((stock) => {
-      stock.productOrder.forEach((order) => {
-        if (order.status == OrderStatus.DELIVERED) {
-          orderUserIds.push(order.order.userId);
+  for (let i = 0; i < product.productVariant.length; i = i + 1) {
+    for (
+      let j = 0;
+      j < product.productVariant[i].productStock.length;
+      j = j + 1
+    ) {
+      const stock = product.productVariant[i].productStock[j];
+      if (stock != undefined && stock.productOrder != undefined) {
+        for (let k = 0; k < stock.productOrder.length; k = k + 1) {
+          const order = stock.productOrder[k];
+          if (order.status == OrderStatus.DELIVERED) {
+            orderUserIds.push(order.order.userId);
+          }
         }
-      });
+        product.productVariant[i].productStock[j].productOrder = undefined;
+      }
+
       // orderUserIds.push(stock.productOrder);
-    });
-  });
-  console.log(req.user);
+    }
+  }
   let canBeReviewed = false;
   if (req.user != undefined && orderUserIds.includes(req.user.id)) {
     canBeReviewed = true;
   }
-  console.log(orderUserIds);
 
   // const orderUser = order.map((order) => order);
   return res

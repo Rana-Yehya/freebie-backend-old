@@ -1,4 +1,3 @@
-const { UserCartZodModel } = require("../models/user-cart-zod-model");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
 const {
@@ -7,10 +6,9 @@ const {
   UnauthenticatedError,
 } = require("../errors");
 const { UserProductZodModel } = require("../models/user-product-zod-model");
-const {
-  UpdateUserProductZodModel,
-} = require("../models/update-user-product-zod-model");
-const { connect } = require("../routes/country-route");
+// const {
+//   UpdateUserProductZodModel,
+// } = require("../models/update-user-product-zod-model");
 const { ProductCartStatus } = require("../generated/prisma");
 const getAllCartItems = async (req, res, next) => {
   const userCart = await prisma.userCart.findUnique({
@@ -292,9 +290,6 @@ const createUpdateCartItem = async (req, res, next) => {
               id: true,
               stock: true,
               branch: { select: { id: true, location: true } },
-              // branch: {
-              //   select: { id: true, location: { select: { stateId: true } } },
-              // },
             },
           },
         },
@@ -302,7 +297,7 @@ const createUpdateCartItem = async (req, res, next) => {
     },
   });
   if (!product) {
-    throw new BadRequestError("Product not found");
+    throw new NotFoundError("Product not found");
   }
   // console.log(product.productVariant[0].productStock[0].branch);
 
@@ -313,11 +308,6 @@ const createUpdateCartItem = async (req, res, next) => {
   let productStocks = [];
   console.log(productVariants);
   console.log(productVariants.length);
-
-  // console.log(productVariants[0].productStock);
-  // console.log(productVariants[0].productStock.branch);
-
-  // console.log(productVariants[0].productStock.branch.location);
   let statesIds = [];
   if (productVariants.length == undefined) {
     //&& productVariants != undefined
@@ -337,19 +327,8 @@ const createUpdateCartItem = async (req, res, next) => {
         productStocks.push(stock);
         statesIds.push(stock.branch.location.stateId);
       });
-      // for (let j = 0; j < productStock[i].length; j++) {
-
-      //   statesIds.push(productStock[i][j].branch.stateId);
-      // }
     }
   }
-  // const statesIds = productStock.map((stock) => stock.branch.stateId);
-  // console.log(productStock);
-  // console.log(statesIds);
-  // console.log(req.user.stateId);
-  // console.log(statesIds);
-  // console.log(statesIds.includes(req.user.stateId));
-  // console.log(product.canBeDeliveredOutsideState);
   if (
     product.canBeDeliveredOutsideState == false &&
     !statesIds.includes(req.user.stateId)
@@ -361,38 +340,12 @@ const createUpdateCartItem = async (req, res, next) => {
   let coloredProductStock = [];
   // productVariants.map((element) => {
   if (!product.doesNeedPreparation) {
-    // if (element.stock != undefined && element.stock > 0) {
-    //   if (element.stock < quantity) {
-    //     //  throw new BadRequestError("Not enough stock");
-    //   }
-    // }
-    // console.log("productVariants[i]");
-
-    // console.log(productVariants.productStock[i]);
     productVariants.productStock.map((stock) => {
       stock.stock >= quantity ? coloredProductStock.push(stock) : undefined;
     });
-
-    // console.log(element);
-    // element.color == color && element.stock >= quantity
-    //   ? coloredProductStock.push(element)
-    //   : undefined;
   } else {
     coloredProductStock.push(productVariants.productStock);
   }
-  // console.log("coloredProductStock");
-  // console.log(coloredProductStock);
-  // product.productStock.map((element) => {
-  //   element.color == color ? coloredProductStock.push(element) : undefined;
-  // });
-  // console.log(coloredProductStock);
-  // console.log(req.user);
-  // console.log({
-  //   originStateId: {
-  //     in: branchWithStates.map((element) => element.branch.stateId),
-  //   },
-  //   destinationStateId: req.user.stateId,
-  // });
   const deliveryStates = await prisma.deliveryTaxes.findFirst({
     where: {
       originStateId: {
@@ -415,7 +368,7 @@ const createUpdateCartItem = async (req, res, next) => {
 
   // console.log(deliveryStates);
   if (!deliveryStates) {
-    throw new BadRequestError("No delivery state found");
+    throw new NotFoundError("No delivery state found");
   }
   let productStock = [];
   for (let i = 0; i < coloredProductStock.length; i++) {
@@ -430,38 +383,6 @@ const createUpdateCartItem = async (req, res, next) => {
     }
   }
   console.log(productStock);
-
-  // const userCart = await prisma.userCart.findUnique({
-  //   where: { userId: req.user.id },
-  //   select: {
-  //     deliveryFee: true,
-  //     subtotal: true,
-  //   },
-  // });
-  // let deliveryFee = deliveryStates.baseFee;
-  // let subtotal = quantity * product.actualPrice;
-  // if (userCart) {
-  //   subtotal = userCart.subtotal + subtotal;
-
-  //   if (deliveryFee < userCart.deliveryFee) {
-  //     deliveryFee = userCart.deliveryFee;
-  //   }
-  // }
-  // const productUser = {
-  //   // productId: productId,
-  //   // color: color,
-  //   quantity: quantity,
-  //   deliveryTaxesId: deliveryStates.id,
-  //   productStockId: productStock[0].id,
-  //   // branchId: branch.branchId,
-  // };
-  // const userCart = await prisma.userCart.findUnique({
-  //   where: { userId: req.user.id },
-  //   select: { productCart: { select: { id: true, productStockId: true } } },
-  // });
-  // const productInCart = userCart.productCart.find(
-  //   (product) => product.productStockId == productStock[0].id
-  // );
   console.log("userCart", req.user.id);
   console.log("productStock", productStock[0].id);
   const createdOrUpdatedUserCart = await prisma.userCart.upsert({
@@ -558,67 +479,68 @@ const createUpdateCartItem = async (req, res, next) => {
     data: createdOrUpdatedUserCart,
   });
 };
-const updateCartQuantity = async (req, res, next) => {
-  const { productId, color, quantity, productStockId } = req.body;
-  const zodModel = UpdateUserProductZodModel.safeParse({
-    // productId: productId,
-    // color: color,
-    quantity: quantity,
-    productStockId: productStockId,
-  });
-  if (!zodModel.success) {
-    throw new BadRequestError(zodModel.error.errors[0].message);
-  }
-  const userCartId = req.user.id;
-  // if(userCart.)
-  //TODO SHOULD I CHECK FOR THE STOCK AND THE BRANCH IF IT EXISTS OR NOT
-  const updatedUserCart = await prisma.userCart.update({
-    where: { userId: userCartId },
-    data: {
-      productCart: {
-        update: {
-          where: {
-            userCartUserId_productStockId: {
-              userCartUserId: req.user.id,
-              productStockId: productStockId,
-              // productStock: {
-              //   variant: { productId: productId, color: color },
-              //   id: productStockId,
-              // },
-            },
-          },
-          data: {
-            quantity: quantity,
-          },
-        },
-      },
-    },
-  });
-  return res.status(StatusCodes.OK).json({
-    isSuccess: true,
-    message: "Cart updated successfully",
-    data: updatedUserCart,
-  });
-  // if (stateId) {
-  //   const country = await prisma.state.findUnique({
-  //     where: { id: stateId },
-  //   });
-  //   if (!country) {
-  //     throw new BadRequestError("State not found");
-  //   }
-  // }
-  // const updatedUserCart = await prisma.userCart.update({
-  //   where: { id: id },
-  //   data: {
-  //     name: name || undefined,
-  //     stateId: stateId || undefined,
-  //   },
-  // });
-  // console.log(updatedUserCart);
-  // return res
-  //   .status(StatusCodes.CREATED)
-  //   .json({ isSuccess: true, data: updatedUserCart });
-};
+
+// const updateCartQuantity = async (req, res, next) => {
+//   const { productId, color, quantity, productStockId } = req.body;
+//   const zodModel = UpdateUserProductZodModel.safeParse({
+//     // productId: productId,
+//     // color: color,
+//     quantity: quantity,
+//     productStockId: productStockId,
+//   });
+//   if (!zodModel.success) {
+//     throw new BadRequestError(zodModel.error.errors[0].message);
+//   }
+//   const userCartId = req.user.id;
+//   // if(userCart.)
+//   //TODO SHOULD I CHECK FOR THE STOCK AND THE BRANCH IF IT EXISTS OR NOT
+//   const updatedUserCart = await prisma.userCart.update({
+//     where: { userId: userCartId },
+//     data: {
+//       productCart: {
+//         update: {
+//           where: {
+//             userCartUserId_productStockId: {
+//               userCartUserId: req.user.id,
+//               productStockId: productStockId,
+//               // productStock: {
+//               //   variant: { productId: productId, color: color },
+//               //   id: productStockId,
+//               // },
+//             },
+//           },
+//           data: {
+//             quantity: quantity,
+//           },
+//         },
+//       },
+//     },
+//   });
+//   return res.status(StatusCodes.OK).json({
+//     isSuccess: true,
+//     message: "Cart updated successfully",
+//     data: updatedUserCart,
+//   });
+//   // if (stateId) {
+//   //   const country = await prisma.state.findUnique({
+//   //     where: { id: stateId },
+//   //   });
+//   //   if (!country) {
+//   //     throw new BadRequestError("State not found");
+//   //   }
+//   // }
+//   // const updatedUserCart = await prisma.userCart.update({
+//   //   where: { id: id },
+//   //   data: {
+//   //     name: name || undefined,
+//   //     stateId: stateId || undefined,
+//   //   },
+//   // });
+//   // console.log(updatedUserCart);
+//   // return res
+//   //   .status(StatusCodes.CREATED)
+//   //   .json({ isSuccess: true, data: updatedUserCart });
+// };
 // const updateCartQuantity = async (req, res, next) => {
 //   const { productId, color, quantity, branchId } = req.body;
 //   const zodModel = UpdateUserProductZodModel.safeParse({
@@ -748,6 +670,9 @@ const updateCartQuantity = async (req, res, next) => {
 const deleteCartItem = async (req, res, next) => {
   // const { productId: productId, color: color } = req.query;
   const productStockId = req.params.id;
+  if (!productStockId) {
+    throw new BadRequestError("Please enter a product stock id");
+  }
   // console.log(productId, color, userCartId);
   await prisma.productCart.delete({
     where: {
@@ -758,22 +683,6 @@ const deleteCartItem = async (req, res, next) => {
       //AND: [{ id: req.user.id }, { productStockId: productStockId }],
     },
   });
-  // const userCart = await prisma.userCart.findUnique({
-  //   where: { id: userCartId },
-  //   select: {
-  //     product: true,
-  //   },
-  // });
-
-  // if (userCart.product.length == 0) {
-  //   await prisma.userCart.delete({
-  //     where: { id: userCartId },
-  //   });
-  // }
-
-  // await prisma.userCart.delete({
-  //   where: { id: userCartId },
-  // });
   return res
     .status(StatusCodes.OK)
     .json({ isSuccess: true, message: "User Cart Item deleted successfully" });
@@ -896,12 +805,11 @@ const calculateDeliveryFees = async (req, res, next) => {
     sum += item.deliveryTaxes.baseFee;
     if (
       item.deliveryTaxes.additionalFeesAfterKg <
-      item.productStock.variant.product.weightInKg
+      item.productStock.variant.product.weightInKg * item.quantity
     ) {
       sum +=
-        (item.productStock.variant.product.weightInKg -
+        (item.productStock.variant.product.weightInKg * item.quantity -
           item.deliveryTaxes.additionalFeesAfterKg) *
-        item.quantity *
         item.deliveryTaxes.feePerKg;
     }
   });
@@ -929,7 +837,7 @@ module.exports = {
   getAllCartItems,
   deleteCartItem,
   createUpdateCartItem,
-  updateCartQuantity,
+  // updateCartQuantity,
   calculateSubTotal,
   calculateDeliveryFees,
   deleteCart,

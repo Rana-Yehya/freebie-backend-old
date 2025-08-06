@@ -31,7 +31,7 @@ const createCountry = async (req, res, next) => {
     currencyCode,
     countryIsoCode,
   } = req.body;
-  const zodModel = CountryZodModel.safeParse({
+  const zodModel = CreateCountryZodModel.safeParse({
     countryName: {
       default: countryName,
       en: countryNameEn,

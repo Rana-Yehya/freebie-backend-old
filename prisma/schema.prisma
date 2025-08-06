@@ -214,7 +214,9 @@ model info {
   id        String   @id @unique @default(uuid())
   // buy something or take money from wallet -> false = buy, true = take
   slug      String   @unique
-  data      String
+  // data      String
+  nameId    String   @unique
+  name      locale   @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -247,6 +249,7 @@ model locale {
   currencyAbbLocale          currency? @relation("currencyAbbLocale")
   currencyName               currency? @relation("currencyName")
   city                       city?
+  info                       info?
   category                   category?
   occasion                   occasion?
   descriptionProduct         product?  @relation("descriptionProduct") //, references: [id], fields: [descriptionProductId])
@@ -546,11 +549,11 @@ enum ProductStatus {
 
 // ===== review.prisma =====
 model review {
-  // id                       String    @id @unique @default(uuid())
+  id        String   @id @unique @default(uuid())
   user      user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId    String   @unique
+  userId    String
   product   product  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  productId String   @unique
+  productId String
   stars     Int
   comment   String?
   createdAt DateTime @default(now())
@@ -605,24 +608,24 @@ model store {
 
   // name               String
   // bio                String
-  logoId        String        @unique
-  logo          image         @relation("storeLogo", fields: [logoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  bannerId      String        @unique
-  banner        image         @relation("storeBanner", fields: [bannerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  phone         String        @unique
-  email         String        @unique
-  password      String
+  logoId               String        @unique
+  logo                 image         @relation("storeLogo", fields: [logoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bannerId             String        @unique
+  banner               image         @relation("storeBanner", fields: [bannerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  phone                String        @unique
+  email                String        @unique
+  password             String
   // socialLinksId      String    
-  socialLinks   socialLink? //  @relation(fields: [socialLinksId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  branches      branch[]
-  transactions  transaction[]
-  moneyInPocket Decimal       @default(0)
-  sessions      session[]     @relation("storeSession")
-
+  socialLinks          socialLink? //  @relation(fields: [socialLinksId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  branches             branch[]
+  transactions         transaction[]
+  moneyInPocket        Decimal       @default(0)
+  sessions             session[]     @relation("storeSession")
+  passwordChangeBefore DateTime?
   // product            product[]
   // store - restaurant - place for weddings
-  role   String      @default("store")
-  status StoreStatus @default(PENDING)
+  role                 String        @default("store")
+  status               StoreStatus   @default(PENDING)
 
   // isApprovedByAdmin Boolean  @default(false)
   // isFreezed         Boolean  @default(false)

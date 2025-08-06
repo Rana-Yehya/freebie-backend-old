@@ -5,10 +5,11 @@ const {
   refundPolicy,
   termsAndConditions,
   createInfo,
+  shippingPolicy,
   // deleteCity,
 } = require("../controllers/info-controller");
 
-const { userConstant, adminConstant } = require("../config/constants");
+const { adminConstant } = require("../config/constants");
 const {
   authenticateUserMiddleware,
 } = require("../middleware/authentication-middleware");
@@ -22,6 +23,7 @@ router.route("/about-app").get(aboutApp);
 router.route("/privacy-and-policy").get(privacyPolicy);
 router.route("/refund-policy").get(refundPolicy);
 router.route("/terms-and-conditions").get(termsAndConditions);
+router.route("/shipping-policy").get(shippingPolicy);
 
 router
   .route("/create-info")

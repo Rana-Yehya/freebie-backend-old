@@ -1,4 +1,4 @@
-const { StateZodModel } = require("../models/state-zod-model");
+const { CreateStateZodModel } = require("../models/create-state-zod-model");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
 const {
@@ -35,7 +35,7 @@ const getState = async (req, res, next) => {
 
 const createState = async (req, res, next) => {
   const { name, nameEn, nameAr, countryId } = req.body;
-  const zodModel = StateZodModel.safeParse({
+  const zodModel = CreateStateZodModel.safeParse({
     name: {
       default: name,
       en: nameEn,

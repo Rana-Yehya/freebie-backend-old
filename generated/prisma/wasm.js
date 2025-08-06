@@ -218,7 +218,7 @@ exports.Prisma.InboxScalarFieldEnum = {
 exports.Prisma.InfoScalarFieldEnum = {
   id: 'id',
   slug: 'slug',
-  data: 'data',
+  nameId: 'nameId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -336,6 +336,7 @@ exports.Prisma.ProductScalarFieldEnum = {
 };
 
 exports.Prisma.ReviewScalarFieldEnum = {
+  id: 'id',
   userId: 'userId',
   productId: 'productId',
   stars: 'stars',
@@ -371,6 +372,7 @@ exports.Prisma.StoreScalarFieldEnum = {
   email: 'email',
   password: 'password',
   moneyInPocket: 'moneyInPocket',
+  passwordChangeBefore: 'passwordChangeBefore',
   role: 'role',
   status: 'status',
   createdAt: 'createdAt',

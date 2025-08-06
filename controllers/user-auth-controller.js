@@ -1,5 +1,3 @@
-const crypto = require("crypto");
-
 const { StatusCodes } = require("http-status-codes");
 const { phone } = require("phone");
 const { prisma } = require("../config/prisma");
@@ -11,11 +9,7 @@ const {
 } = require("../errors");
 const { CreateUserZodModel } = require("../models/create-user-zod-model");
 
-const {
-  sendTokenToCookies,
-  createAccessJWT,
-  createRefreshJWT,
-} = require("../utils/jwt-utils");
+const { createAccessJWT, createRefreshJWT } = require("../utils/jwt-utils");
 const {
   checkOtpRestirictionsHelper,
   sendValidationEmail,
@@ -27,40 +21,13 @@ const { userConstant } = require("../config/constants");
 const {
   UpdateUserProfileZodModel,
 } = require("../models/update-user-profile-zod-model");
-const { connect } = require("http2");
 const { OrderStatus } = require("../generated/prisma");
 const {
   UpdateLocationZodModel,
 } = require("../models/update-location-zod-model");
 //TODO AM I IN NEED TO LOGIN
 
-const login = async (req, res) => {
-  // console.log(req.ip);
-  // const { email, phoneNumber } = req.body;
-  // //TODO AM I IN NEED TO CHECK EMAIL
-  // if (!email || !phoneNumber) {
-  //   throw new BadRequestError("Invalid email or phone number");
-  // }
-  // const user = await prisma.user.findUnique({
-  //   where: { phone: phoneNumber }, // email: email,
-  // });
-  // if (!user) {
-  //   throw new UnauthenticatedError("Invalid Credentials");
-  // }
-  // if (!user.isVerified) {
-  //   throw new UnauthenticatedError("Please verify your credentials");
-  // }
-  // const accessTokenJWT = createAccessJWT({ payload: { userId: user.id } });
-  // const refreshTokenJWT = createRefreshJWT({
-  //   payload: { userId: user.id },
-  // });
-  // return res.status(StatusCodes.OK).json({
-  //   isSuccess: true,
-  //   accessToken: accessTokenJWT,
-  //   refreshToken: refreshTokenJWT,
-  //   user: user,
-  // });
-};
+const login = async (req, res) => {};
 
 const sendCode = async (req, res, next) => {
   const { phoneNumber } = req.body;
@@ -125,15 +92,11 @@ const register = async (req, res, next) => {
     phone: phoneNumber,
     fcmToken: fcmToken,
   });
-  const isPhoneValid = phone(phoneNumber.toString());
 
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
 
-  if (isPhoneValid.isValid != true) {
-    throw new BadRequestError("The phone number is not correct");
-  }
   const userInDB = await prisma.user.findFirst({
     where: {
       OR: [{ email }, { phone: phoneNumber }],
@@ -144,36 +107,13 @@ const register = async (req, res, next) => {
       OR: [{ email }, { phone: phoneNumber }],
     },
   });
-  // const userInDB = await prisma.session.findFirst({
-  //   where: {
-  //     OR: [
-  //       { user: { OR: [{ email }, { phone: phoneNumber }] } },
-  //       { admin: { OR: [{ email }, { phone: phoneNumber }] } },
-  //       { store: { OR: [{ email }, { phone: phoneNumber }] } },
-  //     ],
-  //   },
-  // });
-  console.log(userInDB);
   //storeInDB ||
   if (userInDB || storeInDB) {
     throw new BadRequestError(
       "Account already in use or has an individal account"
     );
   }
-  // const country = await prisma.country.findUnique({
-  //   where: { countryIsoCode: userCountry },
-  // });
-  // const state = await prisma.state.findUnique({
-  //   where: { countryId: userCountry, id: userState },
-  // });
-  // // if (!country) {
-  // //   throw new BadRequestError("Country not found");
-  // // }
-  // if (!state) {
-  //   throw new BadRequestError(
-  //     "State not found or does not belong to this country"
-  //   );
-  // }
+
   const parse = Date.parse(dateOfBirth);
 
   const date = new Date(parse);
@@ -306,17 +246,13 @@ const verifyCode = async (req, res) => {
     return res.status(StatusCodes.OK).json({
       isSuccess: true,
       message: "Account verified successfully",
-
-      // accessToken: accessTokenJWT,
-      // refreshToken: refreshTokenJWT,
-      // user: user,
     });
   }
 };
 
 const logout = async (req, res) => {
-  await prisma.session.deleteMany({
-    where: { userId: req.user.id },
+  await prisma.session.delete({
+    where: { id: req.session },
   });
   // res.cookie("accessToken", null, {
   //   expires: new Date(Date()),
@@ -351,12 +287,6 @@ const updateProfile = async (req, res, next) => {
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
-  // const state = await prisma.state.findFirst({
-  //   where: { id: stateId, countryId: countryId },
-  // });
-  // if (!state) {
-  //   throw new BadRequestError("State not found");
-  // }
   let parse;
   let date;
   if (dateOfBirth) {
@@ -407,6 +337,7 @@ const updateUserLocation = async (req, res) => {
     throw new BadRequestError("User location id is required");
   }
   const zodModel = UpdateLocationZodModel.safeParse({
+    userLocationId: userLocationId,
     stateId: stateId,
   });
 
@@ -457,7 +388,9 @@ const changeUserMainLocation = async (req, res) => {
     },
     data: { isMain: true },
   });
-
+  if (!userLocations) {
+    throw new NotFoundError("User location not found");
+  }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     message: "Location updated successfully",
@@ -472,12 +405,14 @@ const deleteUserLocation = async (req, res) => {
     throw new BadRequestError("User location id is required");
   }
 
-  await prisma.userLocations.delete({
+  const userLocations = await prisma.userLocations.delete({
     where: {
       id: userLocationId,
     },
   });
-
+  if (!userLocations) {
+    throw new NotFoundError("User location not found");
+  }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     message: "Location deleted successfully",
@@ -510,7 +445,6 @@ const createUserLocation = async (req, res) => {
 };
 
 const showMe = async (req, res) => {
-  console.log(req.user);
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     user: req.user,
@@ -518,27 +452,29 @@ const showMe = async (req, res) => {
 };
 
 const deleteAccount = async (req, res) => {
-  const email = req.query.email;
-  const phone = req.query.phone;
+  const phone = req.query != undefined ? req.query.phone : undefined;
+  const email = req.query != undefined ? req.query.email : undefined;
   if (!(req.user != undefined && req.user.role === userConstant)) {
     if (!(email || phone)) {
       throw new BadRequestError("Please provide an email or phone");
     }
   }
-
+  const userQuery =
+    email != undefined
+      ? { email: email || req.user.email }
+      : { phone: phone || req.user.phone };
   const order = await prisma.order.findFirst({
     where: {
       AND: [
         {
-          user: {
-            OR: [
-              { email: email || req.user.email },
-              { phone: phone || req.user.phone },
-            ],
-          }, //  email || req.user.id
+          user: userQuery,
         },
         {
-          productOrder: { every: { status: { not: OrderStatus.DELIVERED } } },
+          productOrder: {
+            every: {
+              status: { notIn: [OrderStatus.DELIVERED, OrderStatus.CANCELLED] },
+            },
+          },
         },
       ],
     },
@@ -549,12 +485,7 @@ const deleteAccount = async (req, res) => {
     );
   }
   await prisma.user.delete({
-    where: {
-      OR: [
-        { email: email || req.user.email },
-        { phone: phone || req.user.phone },
-      ],
-    },
+    where: userQuery,
   });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,

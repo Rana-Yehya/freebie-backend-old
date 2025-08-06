@@ -1,4 +1,6 @@
-const { OccasionZodModel } = require("../models/occasion-zod-model");
+const {
+  CreateOccasionZodModel,
+} = require("../models/create-occasion-zod-model");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
 const {
@@ -8,29 +10,37 @@ const {
 } = require("../errors");
 const { uploadImage } = require("../helpers/cloudinary/upload-image");
 const { destroyImage } = require("../helpers/cloudinary/delete-image");
+const {
+  UpdateOccasionZodModel,
+} = require("../models/update-occasion-zod-model");
 const getAllOccasions = async (req, res, next) => {
-  const occasion = await prisma.occasion.findMany({ include: { image: true } });
+  const occasion = await prisma.occasion.findMany({
+    include: { name: true, image: true },
+  });
   return res
     .status(StatusCodes.OK)
     .json({ isSuccess: true, count: occasion.length, data: occasion });
 };
 const getOccasion = async (req, res, next) => {
   const { id: occasionId } = req.params;
+  if (!occasionId) {
+    throw new BadRequestError("Please enter an occasion id");
+  }
   const occasion = await prisma.occasion.findUnique({
     where: { id: occasionId },
-    include: { image: true },
+    include: { name: true, image: true },
   });
   if (!occasion) {
-    throw new BadRequestError("Occasion not found");
+    throw new NotFoundError("Occasion not found");
   }
   return res.status(StatusCodes.OK).json({ isSuccess: true, data: occasion });
 };
 
 const createOccasion = async (req, res, next) => {
   const { nameAr, nameEn, name } = req.body;
-  const image = req.files.image;
+  const image = req.files != undefined ? req.files.image : undefined;
 
-  const zodModel = OccasionZodModel.safeParse({
+  const zodModel = CreateOccasionZodModel.safeParse({
     name: {
       default: name,
       ar: nameAr,
@@ -62,6 +72,7 @@ const createOccasion = async (req, res, next) => {
         },
       },
     },
+    include: { name: true, image: true },
   });
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
@@ -73,9 +84,20 @@ const createOccasion = async (req, res, next) => {
 const updateOccasion = async (req, res, next) => {
   const { id } = req.params;
   const { nameAr, nameEn, name } = req.body;
-  const image = req.files == undefined ? undefined : req.files.image;
-  if (!id) {
-    throw new BadRequestError("Please send an occasion ID");
+  const image = req.files != undefined ? req.files.image : undefined;
+
+  const zodModel = UpdateOccasionZodModel.safeParse({
+    id: id,
+    name: {
+      default: name,
+      ar: nameAr,
+      en: nameEn,
+    },
+    image: image,
+  });
+
+  if (!zodModel.success) {
+    throw new BadRequestError(zodModel.error.errors[0].message);
   }
   let imageUploadedSecureUrl = undefined;
   let imageUploadedPublicId = undefined;
@@ -88,7 +110,7 @@ const updateOccasion = async (req, res, next) => {
       },
     });
     if (!occasion) {
-      throw new BadRequestError("Occasion not found");
+      throw new NotFoundError("Occasion not found");
     }
     [imageUploadedSecureUrl, imageUploadedPublicId] = await uploadImage({
       req: req,
@@ -114,9 +136,7 @@ const updateOccasion = async (req, res, next) => {
         },
       },
     },
-    include: {
-      image: true, // Include the image in the return object
-    },
+    include: { name: true, image: true },
   });
   if (image) {
     await destroyImage({ imagePublicId: occasion.image.publicId });
@@ -130,6 +150,9 @@ const updateOccasion = async (req, res, next) => {
 
 const deleteOccasion = async (req, res, next) => {
   const { id: occasionId } = req.params;
+  if (!occasionId) {
+    throw new BadRequestError("Please enter an occasion id");
+  }
   const occasion = await prisma.occasion.delete({
     where: { id: occasionId },
     include: {
@@ -137,7 +160,7 @@ const deleteOccasion = async (req, res, next) => {
     },
   });
   if (!occasion) {
-    throw new BadRequestError("Occasion not found");
+    throw new NotFoundError("Occasion not found");
   }
   await destroyImage({ imagePublicId: occasion.image.publicId });
 
