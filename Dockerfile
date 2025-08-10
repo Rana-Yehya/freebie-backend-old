@@ -2,6 +2,7 @@ FROM node:22
 WORKDIR /docker
 #WORKDIR /usr/src/app
 COPY package.json .
+COPY prisma ./prisma/
 #COPY package*.json ./
 RUN npm install
 

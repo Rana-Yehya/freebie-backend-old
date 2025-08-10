@@ -7,8 +7,8 @@ services:
       - PORT=5000
       - NODE_ENV=development
       # - DATABASE_URL=postgresql://postgres:postgres@db:5432/blissy?schema=public
-      # - DATABASE_URL=postgresql://blissy_user:wx8NbTqASnL1XjqCuIqAOSMcijLNj4aH@dpg-d2ceekbuibrs738e6s80-a/blissy
-      - DATABASE_URL=postgresql://blissy_user:wx8NbTqASnL1XjqCuIqAOSMcijLNj4aH@dpg-d2ceekbuibrs738e6s80-a.oregon-postgres.render.com/blissy
+      - DATABASE_URL=postgresql://blissy_user:wx8NbTqASnL1XjqCuIqAOSMcijLNj4aH@dpg-d2ceekbuibrs738e6s80-a/blissy
+      # - DATABASE_URL=postgresql://blissy_user:wx8NbTqASnL1XjqCuIqAOSMcijLNj4aH@dpg-d2ceekbuibrs738e6s80-a.oregon-postgres.render.com/blissy
     ports: 
       - "5000:5000"
     depends_on:
