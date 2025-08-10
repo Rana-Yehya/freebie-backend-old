@@ -6,7 +6,7 @@ COPY package.json .
 RUN npm install
 
 # Generate Prisma client & run migrations
-RUN npx prisma generate
+# RUN npx prisma generate
 RUN npx prisma migrate dev --name=init
 #RUN npm ci --only=production
 COPY . .
