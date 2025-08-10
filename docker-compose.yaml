@@ -2,11 +2,12 @@ services:
   app:
     build:
       context: .
-    container_name: freebie
+    container_name: blissy
     environment:
       - PORT=5000
       - NODE_ENV=development
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/freebie?schema=public
+      # - DATABASE_URL=postgresql://postgres:postgres@db:5432/blissy?schema=public
+      - DATABASE_URL=postgresql://blissy_user:wx8NbTqASnL1XjqCuIqAOSMcijLNj4aH@dpg-d2ceekbuibrs738e6s80-a/blissy
     ports: 
       - "5000:5000"
     depends_on:
@@ -21,11 +22,11 @@ services:
       - .:/docker
   db:
     image: postgres:16
-    container_name: postgres
+    container_name: blissy
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=freebie
+      - POSTGRES_USER=blissy_user
+      - POSTGRES_PASSWORD=wx8NbTqASnL1XjqCuIqAOSMcijLNj4aH
+      - POSTGRES_DB=blissy
     ports:
       - "5432:5432"
     volumes:
