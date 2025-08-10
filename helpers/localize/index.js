@@ -962,6 +962,10 @@ const appLocalize = new Localize({
     en: "Please enter a product stock id",
     ar: "الرجاء إدخال معرف مخزون المنتج",
   },
+  "Please enter a cancellation reason": {
+    en: "Please enter a cancellation reason",
+    ar: "الرجاء إدخال سبب الإلغاء",
+  },
 });
 
 module.exports = { appLocalize };

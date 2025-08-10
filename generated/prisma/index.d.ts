@@ -185,12 +185,20 @@ export const ProductCartStatus: {
 export type ProductCartStatus = (typeof ProductCartStatus)[keyof typeof ProductCartStatus]
 
 
+export const OrderCancelBy: {
+  USER: 'USER',
+  STORE: 'STORE'
+};
+
+export type OrderCancelBy = (typeof OrderCancelBy)[keyof typeof OrderCancelBy]
+
+
 export const OrderStatus: {
   PENDING: 'PENDING',
+  CANCELLED: 'CANCELLED',
   CONFIRMED: 'CONFIRMED',
   SHIPPED: 'SHIPPED',
   DELIVERED: 'DELIVERED',
-  CANCELLED: 'CANCELLED',
   REFUNDED: 'REFUNDED'
 };
 
@@ -246,6 +254,10 @@ export const UserOrderStatus: typeof $Enums.UserOrderStatus
 export type ProductCartStatus = $Enums.ProductCartStatus
 
 export const ProductCartStatus: typeof $Enums.ProductCartStatus
+
+export type OrderCancelBy = $Enums.OrderCancelBy
+
+export const OrderCancelBy: typeof $Enums.OrderCancelBy
 
 export type OrderStatus = $Enums.OrderStatus
 
@@ -3994,12 +4006,10 @@ export namespace Prisma {
 
   export type ProductVariantCountOutputType = {
     productStock: number
-    productOrder: number
   }
 
   export type ProductVariantCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     productStock?: boolean | ProductVariantCountOutputTypeCountProductStockArgs
-    productOrder?: boolean | ProductVariantCountOutputTypeCountProductOrderArgs
   }
 
   // Custom InputTypes
@@ -4018,13 +4028,6 @@ export namespace Prisma {
    */
   export type ProductVariantCountOutputTypeCountProductStockArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: productStockWhereInput
-  }
-
-  /**
-   * ProductVariantCountOutputType without action
-   */
-  export type ProductVariantCountOutputTypeCountProductOrderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: productOrderWhereInput
   }
 
 
@@ -22789,7 +22792,8 @@ export namespace Prisma {
     price: number | null
     deliveryFee: number | null
     subtotal: number | null
-    refundAmount: number | null
+    userRefundAmount: number | null
+    storerRefundAmount: number | null
   }
 
   export type ProductOrderSumAggregateOutputType = {
@@ -22797,13 +22801,13 @@ export namespace Prisma {
     price: number | null
     deliveryFee: number | null
     subtotal: number | null
-    refundAmount: number | null
+    userRefundAmount: number | null
+    storerRefundAmount: number | null
   }
 
   export type ProductOrderMinAggregateOutputType = {
     id: string | null
     orderId: string | null
-    variantId: string | null
     productStockId: string | null
     quantity: number | null
     price: number | null
@@ -22811,13 +22815,14 @@ export namespace Prisma {
     subtotal: number | null
     status: $Enums.OrderStatus | null
     cancellationReason: string | null
-    refundAmount: number | null
+    userRefundAmount: number | null
+    storerRefundAmount: number | null
+    cancelledBy: $Enums.OrderCancelBy | null
   }
 
   export type ProductOrderMaxAggregateOutputType = {
     id: string | null
     orderId: string | null
-    variantId: string | null
     productStockId: string | null
     quantity: number | null
     price: number | null
@@ -22825,13 +22830,14 @@ export namespace Prisma {
     subtotal: number | null
     status: $Enums.OrderStatus | null
     cancellationReason: string | null
-    refundAmount: number | null
+    userRefundAmount: number | null
+    storerRefundAmount: number | null
+    cancelledBy: $Enums.OrderCancelBy | null
   }
 
   export type ProductOrderCountAggregateOutputType = {
     id: number
     orderId: number
-    variantId: number
     productStockId: number
     quantity: number
     price: number
@@ -22839,7 +22845,9 @@ export namespace Prisma {
     subtotal: number
     status: number
     cancellationReason: number
-    refundAmount: number
+    userRefundAmount: number
+    storerRefundAmount: number
+    cancelledBy: number
     _all: number
   }
 
@@ -22849,7 +22857,8 @@ export namespace Prisma {
     price?: true
     deliveryFee?: true
     subtotal?: true
-    refundAmount?: true
+    userRefundAmount?: true
+    storerRefundAmount?: true
   }
 
   export type ProductOrderSumAggregateInputType = {
@@ -22857,13 +22866,13 @@ export namespace Prisma {
     price?: true
     deliveryFee?: true
     subtotal?: true
-    refundAmount?: true
+    userRefundAmount?: true
+    storerRefundAmount?: true
   }
 
   export type ProductOrderMinAggregateInputType = {
     id?: true
     orderId?: true
-    variantId?: true
     productStockId?: true
     quantity?: true
     price?: true
@@ -22871,13 +22880,14 @@ export namespace Prisma {
     subtotal?: true
     status?: true
     cancellationReason?: true
-    refundAmount?: true
+    userRefundAmount?: true
+    storerRefundAmount?: true
+    cancelledBy?: true
   }
 
   export type ProductOrderMaxAggregateInputType = {
     id?: true
     orderId?: true
-    variantId?: true
     productStockId?: true
     quantity?: true
     price?: true
@@ -22885,13 +22895,14 @@ export namespace Prisma {
     subtotal?: true
     status?: true
     cancellationReason?: true
-    refundAmount?: true
+    userRefundAmount?: true
+    storerRefundAmount?: true
+    cancelledBy?: true
   }
 
   export type ProductOrderCountAggregateInputType = {
     id?: true
     orderId?: true
-    variantId?: true
     productStockId?: true
     quantity?: true
     price?: true
@@ -22899,7 +22910,9 @@ export namespace Prisma {
     subtotal?: true
     status?: true
     cancellationReason?: true
-    refundAmount?: true
+    userRefundAmount?: true
+    storerRefundAmount?: true
+    cancelledBy?: true
     _all?: true
   }
 
@@ -22992,7 +23005,6 @@ export namespace Prisma {
   export type ProductOrderGroupByOutputType = {
     id: string
     orderId: string
-    variantId: string
     productStockId: string | null
     quantity: number
     price: number
@@ -23000,7 +23012,9 @@ export namespace Prisma {
     subtotal: number
     status: $Enums.OrderStatus
     cancellationReason: string | null
-    refundAmount: number | null
+    userRefundAmount: number | null
+    storerRefundAmount: number | null
+    cancelledBy: $Enums.OrderCancelBy | null
     _count: ProductOrderCountAggregateOutputType | null
     _avg: ProductOrderAvgAggregateOutputType | null
     _sum: ProductOrderSumAggregateOutputType | null
@@ -23025,7 +23039,6 @@ export namespace Prisma {
   export type productOrderSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     orderId?: boolean
-    variantId?: boolean
     productStockId?: boolean
     quantity?: boolean
     price?: boolean
@@ -23033,16 +23046,16 @@ export namespace Prisma {
     subtotal?: boolean
     status?: boolean
     cancellationReason?: boolean
-    refundAmount?: boolean
+    userRefundAmount?: boolean
+    storerRefundAmount?: boolean
+    cancelledBy?: boolean
     order?: boolean | orderDefaultArgs<ExtArgs>
-    variant?: boolean | productVariantDefaultArgs<ExtArgs>
     productStock?: boolean | productOrder$productStockArgs<ExtArgs>
   }, ExtArgs["result"]["productOrder"]>
 
   export type productOrderSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     orderId?: boolean
-    variantId?: boolean
     productStockId?: boolean
     quantity?: boolean
     price?: boolean
@@ -23050,16 +23063,16 @@ export namespace Prisma {
     subtotal?: boolean
     status?: boolean
     cancellationReason?: boolean
-    refundAmount?: boolean
+    userRefundAmount?: boolean
+    storerRefundAmount?: boolean
+    cancelledBy?: boolean
     order?: boolean | orderDefaultArgs<ExtArgs>
-    variant?: boolean | productVariantDefaultArgs<ExtArgs>
     productStock?: boolean | productOrder$productStockArgs<ExtArgs>
   }, ExtArgs["result"]["productOrder"]>
 
   export type productOrderSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     orderId?: boolean
-    variantId?: boolean
     productStockId?: boolean
     quantity?: boolean
     price?: boolean
@@ -23067,16 +23080,16 @@ export namespace Prisma {
     subtotal?: boolean
     status?: boolean
     cancellationReason?: boolean
-    refundAmount?: boolean
+    userRefundAmount?: boolean
+    storerRefundAmount?: boolean
+    cancelledBy?: boolean
     order?: boolean | orderDefaultArgs<ExtArgs>
-    variant?: boolean | productVariantDefaultArgs<ExtArgs>
     productStock?: boolean | productOrder$productStockArgs<ExtArgs>
   }, ExtArgs["result"]["productOrder"]>
 
   export type productOrderSelectScalar = {
     id?: boolean
     orderId?: boolean
-    variantId?: boolean
     productStockId?: boolean
     quantity?: boolean
     price?: boolean
@@ -23084,23 +23097,22 @@ export namespace Prisma {
     subtotal?: boolean
     status?: boolean
     cancellationReason?: boolean
-    refundAmount?: boolean
+    userRefundAmount?: boolean
+    storerRefundAmount?: boolean
+    cancelledBy?: boolean
   }
 
-  export type productOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "variantId" | "productStockId" | "quantity" | "price" | "deliveryFee" | "subtotal" | "status" | "cancellationReason" | "refundAmount", ExtArgs["result"]["productOrder"]>
+  export type productOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "productStockId" | "quantity" | "price" | "deliveryFee" | "subtotal" | "status" | "cancellationReason" | "userRefundAmount" | "storerRefundAmount" | "cancelledBy", ExtArgs["result"]["productOrder"]>
   export type productOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     order?: boolean | orderDefaultArgs<ExtArgs>
-    variant?: boolean | productVariantDefaultArgs<ExtArgs>
     productStock?: boolean | productOrder$productStockArgs<ExtArgs>
   }
   export type productOrderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     order?: boolean | orderDefaultArgs<ExtArgs>
-    variant?: boolean | productVariantDefaultArgs<ExtArgs>
     productStock?: boolean | productOrder$productStockArgs<ExtArgs>
   }
   export type productOrderIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     order?: boolean | orderDefaultArgs<ExtArgs>
-    variant?: boolean | productVariantDefaultArgs<ExtArgs>
     productStock?: boolean | productOrder$productStockArgs<ExtArgs>
   }
 
@@ -23108,13 +23120,11 @@ export namespace Prisma {
     name: "productOrder"
     objects: {
       order: Prisma.$orderPayload<ExtArgs>
-      variant: Prisma.$productVariantPayload<ExtArgs>
       productStock: Prisma.$productStockPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       orderId: string
-      variantId: string
       productStockId: string | null
       quantity: number
       price: number
@@ -23122,7 +23132,9 @@ export namespace Prisma {
       subtotal: number
       status: $Enums.OrderStatus
       cancellationReason: string | null
-      refundAmount: number | null
+      userRefundAmount: number | null
+      storerRefundAmount: number | null
+      cancelledBy: $Enums.OrderCancelBy | null
     }, ExtArgs["result"]["productOrder"]>
     composites: {}
   }
@@ -23518,7 +23530,6 @@ export namespace Prisma {
   export interface Prisma__productOrderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     order<T extends orderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, orderDefaultArgs<ExtArgs>>): Prisma__orderClient<$Result.GetResult<Prisma.$orderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    variant<T extends productVariantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, productVariantDefaultArgs<ExtArgs>>): Prisma__productVariantClient<$Result.GetResult<Prisma.$productVariantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     productStock<T extends productOrder$productStockArgs<ExtArgs> = {}>(args?: Subset<T, productOrder$productStockArgs<ExtArgs>>): Prisma__productStockClient<$Result.GetResult<Prisma.$productStockPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -23551,7 +23562,6 @@ export namespace Prisma {
   interface productOrderFieldRefs {
     readonly id: FieldRef<"productOrder", 'String'>
     readonly orderId: FieldRef<"productOrder", 'String'>
-    readonly variantId: FieldRef<"productOrder", 'String'>
     readonly productStockId: FieldRef<"productOrder", 'String'>
     readonly quantity: FieldRef<"productOrder", 'Int'>
     readonly price: FieldRef<"productOrder", 'Float'>
@@ -23559,7 +23569,9 @@ export namespace Prisma {
     readonly subtotal: FieldRef<"productOrder", 'Float'>
     readonly status: FieldRef<"productOrder", 'OrderStatus'>
     readonly cancellationReason: FieldRef<"productOrder", 'String'>
-    readonly refundAmount: FieldRef<"productOrder", 'Float'>
+    readonly userRefundAmount: FieldRef<"productOrder", 'Float'>
+    readonly storerRefundAmount: FieldRef<"productOrder", 'Float'>
+    readonly cancelledBy: FieldRef<"productOrder", 'OrderCancelBy'>
   }
     
 
@@ -26410,7 +26422,6 @@ export namespace Prisma {
     color?: boolean
     product?: boolean | productDefaultArgs<ExtArgs>
     productStock?: boolean | productVariant$productStockArgs<ExtArgs>
-    productOrder?: boolean | productVariant$productOrderArgs<ExtArgs>
     _count?: boolean | ProductVariantCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productVariant"]>
 
@@ -26438,7 +26449,6 @@ export namespace Prisma {
   export type productVariantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | productDefaultArgs<ExtArgs>
     productStock?: boolean | productVariant$productStockArgs<ExtArgs>
-    productOrder?: boolean | productVariant$productOrderArgs<ExtArgs>
     _count?: boolean | ProductVariantCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type productVariantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -26453,7 +26463,6 @@ export namespace Prisma {
     objects: {
       product: Prisma.$productPayload<ExtArgs>
       productStock: Prisma.$productStockPayload<ExtArgs>[]
-      productOrder: Prisma.$productOrderPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -26855,7 +26864,6 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     product<T extends productDefaultArgs<ExtArgs> = {}>(args?: Subset<T, productDefaultArgs<ExtArgs>>): Prisma__productClient<$Result.GetResult<Prisma.$productPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     productStock<T extends productVariant$productStockArgs<ExtArgs> = {}>(args?: Subset<T, productVariant$productStockArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$productStockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    productOrder<T extends productVariant$productOrderArgs<ExtArgs> = {}>(args?: Subset<T, productVariant$productOrderArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$productOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -27305,30 +27313,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProductStockScalarFieldEnum | ProductStockScalarFieldEnum[]
-  }
-
-  /**
-   * productVariant.productOrder
-   */
-  export type productVariant$productOrderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the productOrder
-     */
-    select?: productOrderSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the productOrder
-     */
-    omit?: productOrderOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: productOrderInclude<ExtArgs> | null
-    where?: productOrderWhereInput
-    orderBy?: productOrderOrderByWithRelationInput | productOrderOrderByWithRelationInput[]
-    cursor?: productOrderWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ProductOrderScalarFieldEnum | ProductOrderScalarFieldEnum[]
   }
 
   /**
@@ -39861,7 +39845,6 @@ export namespace Prisma {
   export const ProductOrderScalarFieldEnum: {
     id: 'id',
     orderId: 'orderId',
-    variantId: 'variantId',
     productStockId: 'productStockId',
     quantity: 'quantity',
     price: 'price',
@@ -39869,7 +39852,9 @@ export namespace Prisma {
     subtotal: 'subtotal',
     status: 'status',
     cancellationReason: 'cancellationReason',
-    refundAmount: 'refundAmount'
+    userRefundAmount: 'userRefundAmount',
+    storerRefundAmount: 'storerRefundAmount',
+    cancelledBy: 'cancelledBy'
   };
 
   export type ProductOrderScalarFieldEnum = (typeof ProductOrderScalarFieldEnum)[keyof typeof ProductOrderScalarFieldEnum]
@@ -40190,6 +40175,20 @@ export namespace Prisma {
    * Reference to a field of type 'OrderStatus[]'
    */
   export type ListEnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'OrderCancelBy'
+   */
+  export type EnumOrderCancelByFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderCancelBy'>
+    
+
+
+  /**
+   * Reference to a field of type 'OrderCancelBy[]'
+   */
+  export type ListEnumOrderCancelByFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderCancelBy[]'>
     
 
 
@@ -41425,7 +41424,6 @@ export namespace Prisma {
     NOT?: productOrderWhereInput | productOrderWhereInput[]
     id?: StringFilter<"productOrder"> | string
     orderId?: StringFilter<"productOrder"> | string
-    variantId?: StringFilter<"productOrder"> | string
     productStockId?: StringNullableFilter<"productOrder"> | string | null
     quantity?: IntFilter<"productOrder"> | number
     price?: FloatFilter<"productOrder"> | number
@@ -41433,16 +41431,16 @@ export namespace Prisma {
     subtotal?: FloatFilter<"productOrder"> | number
     status?: EnumOrderStatusFilter<"productOrder"> | $Enums.OrderStatus
     cancellationReason?: StringNullableFilter<"productOrder"> | string | null
-    refundAmount?: FloatNullableFilter<"productOrder"> | number | null
+    userRefundAmount?: FloatNullableFilter<"productOrder"> | number | null
+    storerRefundAmount?: FloatNullableFilter<"productOrder"> | number | null
+    cancelledBy?: EnumOrderCancelByNullableFilter<"productOrder"> | $Enums.OrderCancelBy | null
     order?: XOR<OrderScalarRelationFilter, orderWhereInput>
-    variant?: XOR<ProductVariantScalarRelationFilter, productVariantWhereInput>
     productStock?: XOR<ProductStockNullableScalarRelationFilter, productStockWhereInput> | null
   }
 
   export type productOrderOrderByWithRelationInput = {
     id?: SortOrder
     orderId?: SortOrder
-    variantId?: SortOrder
     productStockId?: SortOrderInput | SortOrder
     quantity?: SortOrder
     price?: SortOrder
@@ -41450,9 +41448,10 @@ export namespace Prisma {
     subtotal?: SortOrder
     status?: SortOrder
     cancellationReason?: SortOrderInput | SortOrder
-    refundAmount?: SortOrderInput | SortOrder
+    userRefundAmount?: SortOrderInput | SortOrder
+    storerRefundAmount?: SortOrderInput | SortOrder
+    cancelledBy?: SortOrderInput | SortOrder
     order?: orderOrderByWithRelationInput
-    variant?: productVariantOrderByWithRelationInput
     productStock?: productStockOrderByWithRelationInput
   }
 
@@ -41462,7 +41461,6 @@ export namespace Prisma {
     OR?: productOrderWhereInput[]
     NOT?: productOrderWhereInput | productOrderWhereInput[]
     orderId?: StringFilter<"productOrder"> | string
-    variantId?: StringFilter<"productOrder"> | string
     productStockId?: StringNullableFilter<"productOrder"> | string | null
     quantity?: IntFilter<"productOrder"> | number
     price?: FloatFilter<"productOrder"> | number
@@ -41470,16 +41468,16 @@ export namespace Prisma {
     subtotal?: FloatFilter<"productOrder"> | number
     status?: EnumOrderStatusFilter<"productOrder"> | $Enums.OrderStatus
     cancellationReason?: StringNullableFilter<"productOrder"> | string | null
-    refundAmount?: FloatNullableFilter<"productOrder"> | number | null
+    userRefundAmount?: FloatNullableFilter<"productOrder"> | number | null
+    storerRefundAmount?: FloatNullableFilter<"productOrder"> | number | null
+    cancelledBy?: EnumOrderCancelByNullableFilter<"productOrder"> | $Enums.OrderCancelBy | null
     order?: XOR<OrderScalarRelationFilter, orderWhereInput>
-    variant?: XOR<ProductVariantScalarRelationFilter, productVariantWhereInput>
     productStock?: XOR<ProductStockNullableScalarRelationFilter, productStockWhereInput> | null
   }, "id" | "id">
 
   export type productOrderOrderByWithAggregationInput = {
     id?: SortOrder
     orderId?: SortOrder
-    variantId?: SortOrder
     productStockId?: SortOrderInput | SortOrder
     quantity?: SortOrder
     price?: SortOrder
@@ -41487,7 +41485,9 @@ export namespace Prisma {
     subtotal?: SortOrder
     status?: SortOrder
     cancellationReason?: SortOrderInput | SortOrder
-    refundAmount?: SortOrderInput | SortOrder
+    userRefundAmount?: SortOrderInput | SortOrder
+    storerRefundAmount?: SortOrderInput | SortOrder
+    cancelledBy?: SortOrderInput | SortOrder
     _count?: productOrderCountOrderByAggregateInput
     _avg?: productOrderAvgOrderByAggregateInput
     _max?: productOrderMaxOrderByAggregateInput
@@ -41501,7 +41501,6 @@ export namespace Prisma {
     NOT?: productOrderScalarWhereWithAggregatesInput | productOrderScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"productOrder"> | string
     orderId?: StringWithAggregatesFilter<"productOrder"> | string
-    variantId?: StringWithAggregatesFilter<"productOrder"> | string
     productStockId?: StringNullableWithAggregatesFilter<"productOrder"> | string | null
     quantity?: IntWithAggregatesFilter<"productOrder"> | number
     price?: FloatWithAggregatesFilter<"productOrder"> | number
@@ -41509,7 +41508,9 @@ export namespace Prisma {
     subtotal?: FloatWithAggregatesFilter<"productOrder"> | number
     status?: EnumOrderStatusWithAggregatesFilter<"productOrder"> | $Enums.OrderStatus
     cancellationReason?: StringNullableWithAggregatesFilter<"productOrder"> | string | null
-    refundAmount?: FloatNullableWithAggregatesFilter<"productOrder"> | number | null
+    userRefundAmount?: FloatNullableWithAggregatesFilter<"productOrder"> | number | null
+    storerRefundAmount?: FloatNullableWithAggregatesFilter<"productOrder"> | number | null
+    cancelledBy?: EnumOrderCancelByNullableWithAggregatesFilter<"productOrder"> | $Enums.OrderCancelBy | null
   }
 
   export type productPriceWhereInput = {
@@ -41649,7 +41650,6 @@ export namespace Prisma {
     color?: StringFilter<"productVariant"> | string
     product?: XOR<ProductScalarRelationFilter, productWhereInput>
     productStock?: ProductStockListRelationFilter
-    productOrder?: ProductOrderListRelationFilter
   }
 
   export type productVariantOrderByWithRelationInput = {
@@ -41658,7 +41658,6 @@ export namespace Prisma {
     color?: SortOrder
     product?: productOrderByWithRelationInput
     productStock?: productStockOrderByRelationAggregateInput
-    productOrder?: productOrderOrderByRelationAggregateInput
   }
 
   export type productVariantWhereUniqueInput = Prisma.AtLeast<{
@@ -41671,7 +41670,6 @@ export namespace Prisma {
     color?: StringFilter<"productVariant"> | string
     product?: XOR<ProductScalarRelationFilter, productWhereInput>
     productStock?: ProductStockListRelationFilter
-    productOrder?: ProductOrderListRelationFilter
   }, "id" | "id" | "productId_color">
 
   export type productVariantOrderByWithAggregationInput = {
@@ -43776,16 +43774,16 @@ export namespace Prisma {
     subtotal?: number
     status?: $Enums.OrderStatus
     cancellationReason?: string | null
-    refundAmount?: number | null
+    userRefundAmount?: number | null
+    storerRefundAmount?: number | null
+    cancelledBy?: $Enums.OrderCancelBy | null
     order: orderCreateNestedOneWithoutProductOrderInput
-    variant: productVariantCreateNestedOneWithoutProductOrderInput
     productStock?: productStockCreateNestedOneWithoutProductOrderInput
   }
 
   export type productOrderUncheckedCreateInput = {
     id?: string
     orderId: string
-    variantId: string
     productStockId?: string | null
     quantity?: number
     price?: number
@@ -43793,7 +43791,9 @@ export namespace Prisma {
     subtotal?: number
     status?: $Enums.OrderStatus
     cancellationReason?: string | null
-    refundAmount?: number | null
+    userRefundAmount?: number | null
+    storerRefundAmount?: number | null
+    cancelledBy?: $Enums.OrderCancelBy | null
   }
 
   export type productOrderUpdateInput = {
@@ -43804,16 +43804,16 @@ export namespace Prisma {
     subtotal?: FloatFieldUpdateOperationsInput | number
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
-    refundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    userRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    storerRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    cancelledBy?: NullableEnumOrderCancelByFieldUpdateOperationsInput | $Enums.OrderCancelBy | null
     order?: orderUpdateOneRequiredWithoutProductOrderNestedInput
-    variant?: productVariantUpdateOneRequiredWithoutProductOrderNestedInput
     productStock?: productStockUpdateOneWithoutProductOrderNestedInput
   }
 
   export type productOrderUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     orderId?: StringFieldUpdateOperationsInput | string
-    variantId?: StringFieldUpdateOperationsInput | string
     productStockId?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
@@ -43821,13 +43821,14 @@ export namespace Prisma {
     subtotal?: FloatFieldUpdateOperationsInput | number
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
-    refundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    userRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    storerRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    cancelledBy?: NullableEnumOrderCancelByFieldUpdateOperationsInput | $Enums.OrderCancelBy | null
   }
 
   export type productOrderCreateManyInput = {
     id?: string
     orderId: string
-    variantId: string
     productStockId?: string | null
     quantity?: number
     price?: number
@@ -43835,7 +43836,9 @@ export namespace Prisma {
     subtotal?: number
     status?: $Enums.OrderStatus
     cancellationReason?: string | null
-    refundAmount?: number | null
+    userRefundAmount?: number | null
+    storerRefundAmount?: number | null
+    cancelledBy?: $Enums.OrderCancelBy | null
   }
 
   export type productOrderUpdateManyMutationInput = {
@@ -43846,13 +43849,14 @@ export namespace Prisma {
     subtotal?: FloatFieldUpdateOperationsInput | number
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
-    refundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    userRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    storerRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    cancelledBy?: NullableEnumOrderCancelByFieldUpdateOperationsInput | $Enums.OrderCancelBy | null
   }
 
   export type productOrderUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     orderId?: StringFieldUpdateOperationsInput | string
-    variantId?: StringFieldUpdateOperationsInput | string
     productStockId?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
@@ -43860,7 +43864,9 @@ export namespace Prisma {
     subtotal?: FloatFieldUpdateOperationsInput | number
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
-    refundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    userRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    storerRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    cancelledBy?: NullableEnumOrderCancelByFieldUpdateOperationsInput | $Enums.OrderCancelBy | null
   }
 
   export type productPriceCreateInput = {
@@ -43992,7 +43998,6 @@ export namespace Prisma {
     color: string
     product: productCreateNestedOneWithoutProductVariantInput
     productStock?: productStockCreateNestedManyWithoutVariantInput
-    productOrder?: productOrderCreateNestedManyWithoutVariantInput
   }
 
   export type productVariantUncheckedCreateInput = {
@@ -44000,7 +44005,6 @@ export namespace Prisma {
     productId: string
     color: string
     productStock?: productStockUncheckedCreateNestedManyWithoutVariantInput
-    productOrder?: productOrderUncheckedCreateNestedManyWithoutVariantInput
   }
 
   export type productVariantUpdateInput = {
@@ -44008,7 +44012,6 @@ export namespace Prisma {
     color?: StringFieldUpdateOperationsInput | string
     product?: productUpdateOneRequiredWithoutProductVariantNestedInput
     productStock?: productStockUpdateManyWithoutVariantNestedInput
-    productOrder?: productOrderUpdateManyWithoutVariantNestedInput
   }
 
   export type productVariantUncheckedUpdateInput = {
@@ -44016,7 +44019,6 @@ export namespace Prisma {
     productId?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
     productStock?: productStockUncheckedUpdateManyWithoutVariantNestedInput
-    productOrder?: productOrderUncheckedUpdateManyWithoutVariantNestedInput
   }
 
   export type productVariantCreateManyInput = {
@@ -46017,14 +46019,16 @@ export namespace Prisma {
     not?: NestedEnumOrderStatusFilter<$PrismaModel> | $Enums.OrderStatus
   }
 
+  export type EnumOrderCancelByNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderCancelBy | EnumOrderCancelByFieldRefInput<$PrismaModel> | null
+    in?: $Enums.OrderCancelBy[] | ListEnumOrderCancelByFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.OrderCancelBy[] | ListEnumOrderCancelByFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumOrderCancelByNullableFilter<$PrismaModel> | $Enums.OrderCancelBy | null
+  }
+
   export type OrderScalarRelationFilter = {
     is?: orderWhereInput
     isNot?: orderWhereInput
-  }
-
-  export type ProductVariantScalarRelationFilter = {
-    is?: productVariantWhereInput
-    isNot?: productVariantWhereInput
   }
 
   export type ProductStockNullableScalarRelationFilter = {
@@ -46035,7 +46039,6 @@ export namespace Prisma {
   export type productOrderCountOrderByAggregateInput = {
     id?: SortOrder
     orderId?: SortOrder
-    variantId?: SortOrder
     productStockId?: SortOrder
     quantity?: SortOrder
     price?: SortOrder
@@ -46043,7 +46046,9 @@ export namespace Prisma {
     subtotal?: SortOrder
     status?: SortOrder
     cancellationReason?: SortOrder
-    refundAmount?: SortOrder
+    userRefundAmount?: SortOrder
+    storerRefundAmount?: SortOrder
+    cancelledBy?: SortOrder
   }
 
   export type productOrderAvgOrderByAggregateInput = {
@@ -46051,13 +46056,13 @@ export namespace Prisma {
     price?: SortOrder
     deliveryFee?: SortOrder
     subtotal?: SortOrder
-    refundAmount?: SortOrder
+    userRefundAmount?: SortOrder
+    storerRefundAmount?: SortOrder
   }
 
   export type productOrderMaxOrderByAggregateInput = {
     id?: SortOrder
     orderId?: SortOrder
-    variantId?: SortOrder
     productStockId?: SortOrder
     quantity?: SortOrder
     price?: SortOrder
@@ -46065,13 +46070,14 @@ export namespace Prisma {
     subtotal?: SortOrder
     status?: SortOrder
     cancellationReason?: SortOrder
-    refundAmount?: SortOrder
+    userRefundAmount?: SortOrder
+    storerRefundAmount?: SortOrder
+    cancelledBy?: SortOrder
   }
 
   export type productOrderMinOrderByAggregateInput = {
     id?: SortOrder
     orderId?: SortOrder
-    variantId?: SortOrder
     productStockId?: SortOrder
     quantity?: SortOrder
     price?: SortOrder
@@ -46079,7 +46085,9 @@ export namespace Prisma {
     subtotal?: SortOrder
     status?: SortOrder
     cancellationReason?: SortOrder
-    refundAmount?: SortOrder
+    userRefundAmount?: SortOrder
+    storerRefundAmount?: SortOrder
+    cancelledBy?: SortOrder
   }
 
   export type productOrderSumOrderByAggregateInput = {
@@ -46087,7 +46095,8 @@ export namespace Prisma {
     price?: SortOrder
     deliveryFee?: SortOrder
     subtotal?: SortOrder
-    refundAmount?: SortOrder
+    userRefundAmount?: SortOrder
+    storerRefundAmount?: SortOrder
   }
 
   export type EnumOrderStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -46098,6 +46107,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumOrderStatusFilter<$PrismaModel>
     _max?: NestedEnumOrderStatusFilter<$PrismaModel>
+  }
+
+  export type EnumOrderCancelByNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderCancelBy | EnumOrderCancelByFieldRefInput<$PrismaModel> | null
+    in?: $Enums.OrderCancelBy[] | ListEnumOrderCancelByFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.OrderCancelBy[] | ListEnumOrderCancelByFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumOrderCancelByNullableWithAggregatesFilter<$PrismaModel> | $Enums.OrderCancelBy | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumOrderCancelByNullableFilter<$PrismaModel>
+    _max?: NestedEnumOrderCancelByNullableFilter<$PrismaModel>
   }
 
   export type ProductScalarRelationFilter = {
@@ -46137,6 +46156,11 @@ export namespace Prisma {
   export type productPriceSumOrderByAggregateInput = {
     actualPrice?: SortOrder
     discountPercent?: SortOrder
+  }
+
+  export type ProductVariantScalarRelationFilter = {
+    is?: productVariantWhereInput
+    isNot?: productVariantWhereInput
   }
 
   export type productStockCountOrderByAggregateInput = {
@@ -48486,12 +48510,6 @@ export namespace Prisma {
     connect?: orderWhereUniqueInput
   }
 
-  export type productVariantCreateNestedOneWithoutProductOrderInput = {
-    create?: XOR<productVariantCreateWithoutProductOrderInput, productVariantUncheckedCreateWithoutProductOrderInput>
-    connectOrCreate?: productVariantCreateOrConnectWithoutProductOrderInput
-    connect?: productVariantWhereUniqueInput
-  }
-
   export type productStockCreateNestedOneWithoutProductOrderInput = {
     create?: XOR<productStockCreateWithoutProductOrderInput, productStockUncheckedCreateWithoutProductOrderInput>
     connectOrCreate?: productStockCreateOrConnectWithoutProductOrderInput
@@ -48502,20 +48520,16 @@ export namespace Prisma {
     set?: $Enums.OrderStatus
   }
 
+  export type NullableEnumOrderCancelByFieldUpdateOperationsInput = {
+    set?: $Enums.OrderCancelBy | null
+  }
+
   export type orderUpdateOneRequiredWithoutProductOrderNestedInput = {
     create?: XOR<orderCreateWithoutProductOrderInput, orderUncheckedCreateWithoutProductOrderInput>
     connectOrCreate?: orderCreateOrConnectWithoutProductOrderInput
     upsert?: orderUpsertWithoutProductOrderInput
     connect?: orderWhereUniqueInput
     update?: XOR<XOR<orderUpdateToOneWithWhereWithoutProductOrderInput, orderUpdateWithoutProductOrderInput>, orderUncheckedUpdateWithoutProductOrderInput>
-  }
-
-  export type productVariantUpdateOneRequiredWithoutProductOrderNestedInput = {
-    create?: XOR<productVariantCreateWithoutProductOrderInput, productVariantUncheckedCreateWithoutProductOrderInput>
-    connectOrCreate?: productVariantCreateOrConnectWithoutProductOrderInput
-    upsert?: productVariantUpsertWithoutProductOrderInput
-    connect?: productVariantWhereUniqueInput
-    update?: XOR<XOR<productVariantUpdateToOneWithWhereWithoutProductOrderInput, productVariantUpdateWithoutProductOrderInput>, productVariantUncheckedUpdateWithoutProductOrderInput>
   }
 
   export type productStockUpdateOneWithoutProductOrderNestedInput = {
@@ -48667,25 +48681,11 @@ export namespace Prisma {
     connect?: productStockWhereUniqueInput | productStockWhereUniqueInput[]
   }
 
-  export type productOrderCreateNestedManyWithoutVariantInput = {
-    create?: XOR<productOrderCreateWithoutVariantInput, productOrderUncheckedCreateWithoutVariantInput> | productOrderCreateWithoutVariantInput[] | productOrderUncheckedCreateWithoutVariantInput[]
-    connectOrCreate?: productOrderCreateOrConnectWithoutVariantInput | productOrderCreateOrConnectWithoutVariantInput[]
-    createMany?: productOrderCreateManyVariantInputEnvelope
-    connect?: productOrderWhereUniqueInput | productOrderWhereUniqueInput[]
-  }
-
   export type productStockUncheckedCreateNestedManyWithoutVariantInput = {
     create?: XOR<productStockCreateWithoutVariantInput, productStockUncheckedCreateWithoutVariantInput> | productStockCreateWithoutVariantInput[] | productStockUncheckedCreateWithoutVariantInput[]
     connectOrCreate?: productStockCreateOrConnectWithoutVariantInput | productStockCreateOrConnectWithoutVariantInput[]
     createMany?: productStockCreateManyVariantInputEnvelope
     connect?: productStockWhereUniqueInput | productStockWhereUniqueInput[]
-  }
-
-  export type productOrderUncheckedCreateNestedManyWithoutVariantInput = {
-    create?: XOR<productOrderCreateWithoutVariantInput, productOrderUncheckedCreateWithoutVariantInput> | productOrderCreateWithoutVariantInput[] | productOrderUncheckedCreateWithoutVariantInput[]
-    connectOrCreate?: productOrderCreateOrConnectWithoutVariantInput | productOrderCreateOrConnectWithoutVariantInput[]
-    createMany?: productOrderCreateManyVariantInputEnvelope
-    connect?: productOrderWhereUniqueInput | productOrderWhereUniqueInput[]
   }
 
   export type productUpdateOneRequiredWithoutProductVariantNestedInput = {
@@ -48710,20 +48710,6 @@ export namespace Prisma {
     deleteMany?: productStockScalarWhereInput | productStockScalarWhereInput[]
   }
 
-  export type productOrderUpdateManyWithoutVariantNestedInput = {
-    create?: XOR<productOrderCreateWithoutVariantInput, productOrderUncheckedCreateWithoutVariantInput> | productOrderCreateWithoutVariantInput[] | productOrderUncheckedCreateWithoutVariantInput[]
-    connectOrCreate?: productOrderCreateOrConnectWithoutVariantInput | productOrderCreateOrConnectWithoutVariantInput[]
-    upsert?: productOrderUpsertWithWhereUniqueWithoutVariantInput | productOrderUpsertWithWhereUniqueWithoutVariantInput[]
-    createMany?: productOrderCreateManyVariantInputEnvelope
-    set?: productOrderWhereUniqueInput | productOrderWhereUniqueInput[]
-    disconnect?: productOrderWhereUniqueInput | productOrderWhereUniqueInput[]
-    delete?: productOrderWhereUniqueInput | productOrderWhereUniqueInput[]
-    connect?: productOrderWhereUniqueInput | productOrderWhereUniqueInput[]
-    update?: productOrderUpdateWithWhereUniqueWithoutVariantInput | productOrderUpdateWithWhereUniqueWithoutVariantInput[]
-    updateMany?: productOrderUpdateManyWithWhereWithoutVariantInput | productOrderUpdateManyWithWhereWithoutVariantInput[]
-    deleteMany?: productOrderScalarWhereInput | productOrderScalarWhereInput[]
-  }
-
   export type productStockUncheckedUpdateManyWithoutVariantNestedInput = {
     create?: XOR<productStockCreateWithoutVariantInput, productStockUncheckedCreateWithoutVariantInput> | productStockCreateWithoutVariantInput[] | productStockUncheckedCreateWithoutVariantInput[]
     connectOrCreate?: productStockCreateOrConnectWithoutVariantInput | productStockCreateOrConnectWithoutVariantInput[]
@@ -48736,20 +48722,6 @@ export namespace Prisma {
     update?: productStockUpdateWithWhereUniqueWithoutVariantInput | productStockUpdateWithWhereUniqueWithoutVariantInput[]
     updateMany?: productStockUpdateManyWithWhereWithoutVariantInput | productStockUpdateManyWithWhereWithoutVariantInput[]
     deleteMany?: productStockScalarWhereInput | productStockScalarWhereInput[]
-  }
-
-  export type productOrderUncheckedUpdateManyWithoutVariantNestedInput = {
-    create?: XOR<productOrderCreateWithoutVariantInput, productOrderUncheckedCreateWithoutVariantInput> | productOrderCreateWithoutVariantInput[] | productOrderUncheckedCreateWithoutVariantInput[]
-    connectOrCreate?: productOrderCreateOrConnectWithoutVariantInput | productOrderCreateOrConnectWithoutVariantInput[]
-    upsert?: productOrderUpsertWithWhereUniqueWithoutVariantInput | productOrderUpsertWithWhereUniqueWithoutVariantInput[]
-    createMany?: productOrderCreateManyVariantInputEnvelope
-    set?: productOrderWhereUniqueInput | productOrderWhereUniqueInput[]
-    disconnect?: productOrderWhereUniqueInput | productOrderWhereUniqueInput[]
-    delete?: productOrderWhereUniqueInput | productOrderWhereUniqueInput[]
-    connect?: productOrderWhereUniqueInput | productOrderWhereUniqueInput[]
-    update?: productOrderUpdateWithWhereUniqueWithoutVariantInput | productOrderUpdateWithWhereUniqueWithoutVariantInput[]
-    updateMany?: productOrderUpdateManyWithWhereWithoutVariantInput | productOrderUpdateManyWithWhereWithoutVariantInput[]
-    deleteMany?: productOrderScalarWhereInput | productOrderScalarWhereInput[]
   }
 
   export type localeCreateNestedOneWithoutNameProductInput = {
@@ -50310,6 +50282,13 @@ export namespace Prisma {
     not?: NestedEnumOrderStatusFilter<$PrismaModel> | $Enums.OrderStatus
   }
 
+  export type NestedEnumOrderCancelByNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderCancelBy | EnumOrderCancelByFieldRefInput<$PrismaModel> | null
+    in?: $Enums.OrderCancelBy[] | ListEnumOrderCancelByFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.OrderCancelBy[] | ListEnumOrderCancelByFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumOrderCancelByNullableFilter<$PrismaModel> | $Enums.OrderCancelBy | null
+  }
+
   export type NestedEnumOrderStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
     in?: $Enums.OrderStatus[] | ListEnumOrderStatusFieldRefInput<$PrismaModel>
@@ -50318,6 +50297,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumOrderStatusFilter<$PrismaModel>
     _max?: NestedEnumOrderStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumOrderCancelByNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderCancelBy | EnumOrderCancelByFieldRefInput<$PrismaModel> | null
+    in?: $Enums.OrderCancelBy[] | ListEnumOrderCancelByFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.OrderCancelBy[] | ListEnumOrderCancelByFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumOrderCancelByNullableWithAggregatesFilter<$PrismaModel> | $Enums.OrderCancelBy | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumOrderCancelByNullableFilter<$PrismaModel>
+    _max?: NestedEnumOrderCancelByNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumProductStatusFilter<$PrismaModel = never> = {
@@ -54261,14 +54250,14 @@ export namespace Prisma {
     subtotal?: number
     status?: $Enums.OrderStatus
     cancellationReason?: string | null
-    refundAmount?: number | null
-    variant: productVariantCreateNestedOneWithoutProductOrderInput
+    userRefundAmount?: number | null
+    storerRefundAmount?: number | null
+    cancelledBy?: $Enums.OrderCancelBy | null
     productStock?: productStockCreateNestedOneWithoutProductOrderInput
   }
 
   export type productOrderUncheckedCreateWithoutOrderInput = {
     id?: string
-    variantId: string
     productStockId?: string | null
     quantity?: number
     price?: number
@@ -54276,7 +54265,9 @@ export namespace Prisma {
     subtotal?: number
     status?: $Enums.OrderStatus
     cancellationReason?: string | null
-    refundAmount?: number | null
+    userRefundAmount?: number | null
+    storerRefundAmount?: number | null
+    cancelledBy?: $Enums.OrderCancelBy | null
   }
 
   export type productOrderCreateOrConnectWithoutOrderInput = {
@@ -54408,7 +54399,6 @@ export namespace Prisma {
     NOT?: productOrderScalarWhereInput | productOrderScalarWhereInput[]
     id?: StringFilter<"productOrder"> | string
     orderId?: StringFilter<"productOrder"> | string
-    variantId?: StringFilter<"productOrder"> | string
     productStockId?: StringNullableFilter<"productOrder"> | string | null
     quantity?: IntFilter<"productOrder"> | number
     price?: FloatFilter<"productOrder"> | number
@@ -54416,7 +54406,9 @@ export namespace Prisma {
     subtotal?: FloatFilter<"productOrder"> | number
     status?: EnumOrderStatusFilter<"productOrder"> | $Enums.OrderStatus
     cancellationReason?: StringNullableFilter<"productOrder"> | string | null
-    refundAmount?: FloatNullableFilter<"productOrder"> | number | null
+    userRefundAmount?: FloatNullableFilter<"productOrder"> | number | null
+    storerRefundAmount?: FloatNullableFilter<"productOrder"> | number | null
+    cancelledBy?: EnumOrderCancelByNullableFilter<"productOrder"> | $Enums.OrderCancelBy | null
   }
 
   export type locationUpsertWithoutOrderInput = {
@@ -54704,25 +54696,6 @@ export namespace Prisma {
     create: XOR<orderCreateWithoutProductOrderInput, orderUncheckedCreateWithoutProductOrderInput>
   }
 
-  export type productVariantCreateWithoutProductOrderInput = {
-    id?: string
-    color: string
-    product: productCreateNestedOneWithoutProductVariantInput
-    productStock?: productStockCreateNestedManyWithoutVariantInput
-  }
-
-  export type productVariantUncheckedCreateWithoutProductOrderInput = {
-    id?: string
-    productId: string
-    color: string
-    productStock?: productStockUncheckedCreateNestedManyWithoutVariantInput
-  }
-
-  export type productVariantCreateOrConnectWithoutProductOrderInput = {
-    where: productVariantWhereUniqueInput
-    create: XOR<productVariantCreateWithoutProductOrderInput, productVariantUncheckedCreateWithoutProductOrderInput>
-  }
-
   export type productStockCreateWithoutProductOrderInput = {
     id?: string
     stock?: number | null
@@ -54795,31 +54768,6 @@ export namespace Prisma {
     currencyId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type productVariantUpsertWithoutProductOrderInput = {
-    update: XOR<productVariantUpdateWithoutProductOrderInput, productVariantUncheckedUpdateWithoutProductOrderInput>
-    create: XOR<productVariantCreateWithoutProductOrderInput, productVariantUncheckedCreateWithoutProductOrderInput>
-    where?: productVariantWhereInput
-  }
-
-  export type productVariantUpdateToOneWithWhereWithoutProductOrderInput = {
-    where?: productVariantWhereInput
-    data: XOR<productVariantUpdateWithoutProductOrderInput, productVariantUncheckedUpdateWithoutProductOrderInput>
-  }
-
-  export type productVariantUpdateWithoutProductOrderInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
-    product?: productUpdateOneRequiredWithoutProductVariantNestedInput
-    productStock?: productStockUpdateManyWithoutVariantNestedInput
-  }
-
-  export type productVariantUncheckedUpdateWithoutProductOrderInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    productId?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
-    productStock?: productStockUncheckedUpdateManyWithoutVariantNestedInput
   }
 
   export type productStockUpsertWithoutProductOrderInput = {
@@ -55012,22 +54960,24 @@ export namespace Prisma {
     subtotal?: number
     status?: $Enums.OrderStatus
     cancellationReason?: string | null
-    refundAmount?: number | null
+    userRefundAmount?: number | null
+    storerRefundAmount?: number | null
+    cancelledBy?: $Enums.OrderCancelBy | null
     order: orderCreateNestedOneWithoutProductOrderInput
-    variant: productVariantCreateNestedOneWithoutProductOrderInput
   }
 
   export type productOrderUncheckedCreateWithoutProductStockInput = {
     id?: string
     orderId: string
-    variantId: string
     quantity?: number
     price?: number
     deliveryFee?: number
     subtotal?: number
     status?: $Enums.OrderStatus
     cancellationReason?: string | null
-    refundAmount?: number | null
+    userRefundAmount?: number | null
+    storerRefundAmount?: number | null
+    cancelledBy?: $Enums.OrderCancelBy | null
   }
 
   export type productOrderCreateOrConnectWithoutProductStockInput = {
@@ -55074,14 +55024,12 @@ export namespace Prisma {
     id?: string
     color: string
     product: productCreateNestedOneWithoutProductVariantInput
-    productOrder?: productOrderCreateNestedManyWithoutVariantInput
   }
 
   export type productVariantUncheckedCreateWithoutProductStockInput = {
     id?: string
     productId: string
     color: string
-    productOrder?: productOrderUncheckedCreateNestedManyWithoutVariantInput
   }
 
   export type productVariantCreateOrConnectWithoutProductStockInput = {
@@ -55169,14 +55117,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
     product?: productUpdateOneRequiredWithoutProductVariantNestedInput
-    productOrder?: productOrderUpdateManyWithoutVariantNestedInput
   }
 
   export type productVariantUncheckedUpdateWithoutProductStockInput = {
     id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
-    productOrder?: productOrderUncheckedUpdateManyWithoutVariantNestedInput
   }
 
   export type productCreateWithoutProductVariantInput = {
@@ -55268,42 +55214,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type productOrderCreateWithoutVariantInput = {
-    id?: string
-    quantity?: number
-    price?: number
-    deliveryFee?: number
-    subtotal?: number
-    status?: $Enums.OrderStatus
-    cancellationReason?: string | null
-    refundAmount?: number | null
-    order: orderCreateNestedOneWithoutProductOrderInput
-    productStock?: productStockCreateNestedOneWithoutProductOrderInput
-  }
-
-  export type productOrderUncheckedCreateWithoutVariantInput = {
-    id?: string
-    orderId: string
-    productStockId?: string | null
-    quantity?: number
-    price?: number
-    deliveryFee?: number
-    subtotal?: number
-    status?: $Enums.OrderStatus
-    cancellationReason?: string | null
-    refundAmount?: number | null
-  }
-
-  export type productOrderCreateOrConnectWithoutVariantInput = {
-    where: productOrderWhereUniqueInput
-    create: XOR<productOrderCreateWithoutVariantInput, productOrderUncheckedCreateWithoutVariantInput>
-  }
-
-  export type productOrderCreateManyVariantInputEnvelope = {
-    data: productOrderCreateManyVariantInput | productOrderCreateManyVariantInput[]
-    skipDuplicates?: boolean
-  }
-
   export type productUpsertWithoutProductVariantInput = {
     update: XOR<productUpdateWithoutProductVariantInput, productUncheckedUpdateWithoutProductVariantInput>
     create: XOR<productCreateWithoutProductVariantInput, productUncheckedCreateWithoutProductVariantInput>
@@ -55383,22 +55293,6 @@ export namespace Prisma {
   export type productStockUpdateManyWithWhereWithoutVariantInput = {
     where: productStockScalarWhereInput
     data: XOR<productStockUpdateManyMutationInput, productStockUncheckedUpdateManyWithoutVariantInput>
-  }
-
-  export type productOrderUpsertWithWhereUniqueWithoutVariantInput = {
-    where: productOrderWhereUniqueInput
-    update: XOR<productOrderUpdateWithoutVariantInput, productOrderUncheckedUpdateWithoutVariantInput>
-    create: XOR<productOrderCreateWithoutVariantInput, productOrderUncheckedCreateWithoutVariantInput>
-  }
-
-  export type productOrderUpdateWithWhereUniqueWithoutVariantInput = {
-    where: productOrderWhereUniqueInput
-    data: XOR<productOrderUpdateWithoutVariantInput, productOrderUncheckedUpdateWithoutVariantInput>
-  }
-
-  export type productOrderUpdateManyWithWhereWithoutVariantInput = {
-    where: productOrderScalarWhereInput
-    data: XOR<productOrderUpdateManyMutationInput, productOrderUncheckedUpdateManyWithoutVariantInput>
   }
 
   export type localeCreateWithoutNameProductInput = {
@@ -55612,14 +55506,12 @@ export namespace Prisma {
     id?: string
     color: string
     productStock?: productStockCreateNestedManyWithoutVariantInput
-    productOrder?: productOrderCreateNestedManyWithoutVariantInput
   }
 
   export type productVariantUncheckedCreateWithoutProductInput = {
     id?: string
     color: string
     productStock?: productStockUncheckedCreateNestedManyWithoutVariantInput
-    productOrder?: productOrderUncheckedCreateNestedManyWithoutVariantInput
   }
 
   export type productVariantCreateOrConnectWithoutProductInput = {
@@ -59390,7 +59282,6 @@ export namespace Prisma {
 
   export type productOrderCreateManyOrderInput = {
     id?: string
-    variantId: string
     productStockId?: string | null
     quantity?: number
     price?: number
@@ -59398,7 +59289,9 @@ export namespace Prisma {
     subtotal?: number
     status?: $Enums.OrderStatus
     cancellationReason?: string | null
-    refundAmount?: number | null
+    userRefundAmount?: number | null
+    storerRefundAmount?: number | null
+    cancelledBy?: $Enums.OrderCancelBy | null
   }
 
   export type productOrderUpdateWithoutOrderInput = {
@@ -59409,14 +59302,14 @@ export namespace Prisma {
     subtotal?: FloatFieldUpdateOperationsInput | number
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
-    refundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
-    variant?: productVariantUpdateOneRequiredWithoutProductOrderNestedInput
+    userRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    storerRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    cancelledBy?: NullableEnumOrderCancelByFieldUpdateOperationsInput | $Enums.OrderCancelBy | null
     productStock?: productStockUpdateOneWithoutProductOrderNestedInput
   }
 
   export type productOrderUncheckedUpdateWithoutOrderInput = {
     id?: StringFieldUpdateOperationsInput | string
-    variantId?: StringFieldUpdateOperationsInput | string
     productStockId?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
@@ -59424,12 +59317,13 @@ export namespace Prisma {
     subtotal?: FloatFieldUpdateOperationsInput | number
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
-    refundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    userRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    storerRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    cancelledBy?: NullableEnumOrderCancelByFieldUpdateOperationsInput | $Enums.OrderCancelBy | null
   }
 
   export type productOrderUncheckedUpdateManyWithoutOrderInput = {
     id?: StringFieldUpdateOperationsInput | string
-    variantId?: StringFieldUpdateOperationsInput | string
     productStockId?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
@@ -59437,20 +59331,23 @@ export namespace Prisma {
     subtotal?: FloatFieldUpdateOperationsInput | number
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
-    refundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    userRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    storerRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    cancelledBy?: NullableEnumOrderCancelByFieldUpdateOperationsInput | $Enums.OrderCancelBy | null
   }
 
   export type productOrderCreateManyProductStockInput = {
     id?: string
     orderId: string
-    variantId: string
     quantity?: number
     price?: number
     deliveryFee?: number
     subtotal?: number
     status?: $Enums.OrderStatus
     cancellationReason?: string | null
-    refundAmount?: number | null
+    userRefundAmount?: number | null
+    storerRefundAmount?: number | null
+    cancelledBy?: $Enums.OrderCancelBy | null
   }
 
   export type productCartCreateManyProductStockInput = {
@@ -59471,35 +59368,38 @@ export namespace Prisma {
     subtotal?: FloatFieldUpdateOperationsInput | number
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
-    refundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    userRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    storerRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    cancelledBy?: NullableEnumOrderCancelByFieldUpdateOperationsInput | $Enums.OrderCancelBy | null
     order?: orderUpdateOneRequiredWithoutProductOrderNestedInput
-    variant?: productVariantUpdateOneRequiredWithoutProductOrderNestedInput
   }
 
   export type productOrderUncheckedUpdateWithoutProductStockInput = {
     id?: StringFieldUpdateOperationsInput | string
     orderId?: StringFieldUpdateOperationsInput | string
-    variantId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
     deliveryFee?: FloatFieldUpdateOperationsInput | number
     subtotal?: FloatFieldUpdateOperationsInput | number
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
-    refundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    userRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    storerRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    cancelledBy?: NullableEnumOrderCancelByFieldUpdateOperationsInput | $Enums.OrderCancelBy | null
   }
 
   export type productOrderUncheckedUpdateManyWithoutProductStockInput = {
     id?: StringFieldUpdateOperationsInput | string
     orderId?: StringFieldUpdateOperationsInput | string
-    variantId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
     deliveryFee?: FloatFieldUpdateOperationsInput | number
     subtotal?: FloatFieldUpdateOperationsInput | number
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
-    refundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    userRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    storerRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    cancelledBy?: NullableEnumOrderCancelByFieldUpdateOperationsInput | $Enums.OrderCancelBy | null
   }
 
   export type productCartUpdateWithoutProductStockInput = {
@@ -59540,19 +59440,6 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type productOrderCreateManyVariantInput = {
-    id?: string
-    orderId: string
-    productStockId?: string | null
-    quantity?: number
-    price?: number
-    deliveryFee?: number
-    subtotal?: number
-    status?: $Enums.OrderStatus
-    cancellationReason?: string | null
-    refundAmount?: number | null
-  }
-
   export type productStockUpdateWithoutVariantInput = {
     id?: StringFieldUpdateOperationsInput | string
     stock?: NullableIntFieldUpdateOperationsInput | number | null
@@ -59579,45 +59466,6 @@ export namespace Prisma {
     stock?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type productOrderUpdateWithoutVariantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    quantity?: IntFieldUpdateOperationsInput | number
-    price?: FloatFieldUpdateOperationsInput | number
-    deliveryFee?: FloatFieldUpdateOperationsInput | number
-    subtotal?: FloatFieldUpdateOperationsInput | number
-    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
-    refundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
-    order?: orderUpdateOneRequiredWithoutProductOrderNestedInput
-    productStock?: productStockUpdateOneWithoutProductOrderNestedInput
-  }
-
-  export type productOrderUncheckedUpdateWithoutVariantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    orderId?: StringFieldUpdateOperationsInput | string
-    productStockId?: NullableStringFieldUpdateOperationsInput | string | null
-    quantity?: IntFieldUpdateOperationsInput | number
-    price?: FloatFieldUpdateOperationsInput | number
-    deliveryFee?: FloatFieldUpdateOperationsInput | number
-    subtotal?: FloatFieldUpdateOperationsInput | number
-    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
-    refundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
-  }
-
-  export type productOrderUncheckedUpdateManyWithoutVariantInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    orderId?: StringFieldUpdateOperationsInput | string
-    productStockId?: NullableStringFieldUpdateOperationsInput | string | null
-    quantity?: IntFieldUpdateOperationsInput | number
-    price?: FloatFieldUpdateOperationsInput | number
-    deliveryFee?: FloatFieldUpdateOperationsInput | number
-    subtotal?: FloatFieldUpdateOperationsInput | number
-    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
-    cancellationReason?: NullableStringFieldUpdateOperationsInput | string | null
-    refundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type imageCreateManyProductInput = {
@@ -59672,14 +59520,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
     productStock?: productStockUpdateManyWithoutVariantNestedInput
-    productOrder?: productOrderUpdateManyWithoutVariantNestedInput
   }
 
   export type productVariantUncheckedUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
     productStock?: productStockUncheckedUpdateManyWithoutVariantNestedInput
-    productOrder?: productOrderUncheckedUpdateManyWithoutVariantNestedInput
   }
 
   export type productVariantUncheckedUpdateManyWithoutProductInput = {

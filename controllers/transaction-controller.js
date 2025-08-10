@@ -102,13 +102,22 @@ const getAllTransactions = async (req, res, next) => {
     req.role == userConstant
       ? await prisma.transaction.findMany({
           where: { userId: req.user.id },
+          orderBy: {
+            createdAt: "desc",
+          },
         })
       : req.role == adminConstant
       ? await prisma.transaction.findMany({
           where: { adminId: req.user.id },
+          orderBy: {
+            createdAt: "desc",
+          },
         })
       : await prisma.transaction.findMany({
           where: { storeId: req.user.id },
+          orderBy: {
+            createdAt: "desc",
+          },
         });
 
   return res.status(StatusCodes.OK).json({

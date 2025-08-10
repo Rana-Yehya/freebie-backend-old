@@ -445,6 +445,8 @@ const createUserLocation = async (req, res) => {
 };
 
 const showMe = async (req, res) => {
+  // throw new BadRequestError("error");
+
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     user: req.user,

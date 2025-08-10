@@ -278,7 +278,6 @@ exports.Prisma.ProductCartScalarFieldEnum = {
 exports.Prisma.ProductOrderScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
-  variantId: 'variantId',
   productStockId: 'productStockId',
   quantity: 'quantity',
   price: 'price',
@@ -286,7 +285,9 @@ exports.Prisma.ProductOrderScalarFieldEnum = {
   subtotal: 'subtotal',
   status: 'status',
   cancellationReason: 'cancellationReason',
-  refundAmount: 'refundAmount'
+  userRefundAmount: 'userRefundAmount',
+  storerRefundAmount: 'storerRefundAmount',
+  cancelledBy: 'cancelledBy'
 };
 
 exports.Prisma.ProductPriceScalarFieldEnum = {
@@ -461,11 +462,16 @@ exports.ProductCartStatus = exports.$Enums.ProductCartStatus = {
 
 exports.OrderStatus = exports.$Enums.OrderStatus = {
   PENDING: 'PENDING',
+  CANCELLED: 'CANCELLED',
   CONFIRMED: 'CONFIRMED',
   SHIPPED: 'SHIPPED',
   DELIVERED: 'DELIVERED',
-  CANCELLED: 'CANCELLED',
   REFUNDED: 'REFUNDED'
+};
+
+exports.OrderCancelBy = exports.$Enums.OrderCancelBy = {
+  USER: 'USER',
+  STORE: 'STORE'
 };
 
 exports.ProductStatus = exports.$Enums.ProductStatus = {

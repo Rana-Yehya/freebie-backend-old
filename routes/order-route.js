@@ -7,12 +7,13 @@ const {
   createPaidOrder,
   deleteUnpaidOrder,
   getAllStoreOrders,
-  cancelOrderByUser,
-  changeOrderStatusAsConfirmedByStore,
-  changeOrderStatusAsShippedByStore,
-  changeOrderStatusAsDeliveredByStore,
+  cancelProductOrderByUser,
+  changeOrderStatusByStore,
+  changeOrderStatusAsRefundedByAdmin,
+  // changeOrderStatusAsShippedByStore,
+  changeOrderStatusAsDeliveredByAdmin,
   // changeOrderStatusByStore,
-  changeOrderStatusAsCancelledByStore,
+  // changeOrderStatusAsCancelledByStore,
   // deleteCity,
 } = require("../controllers/order-controller");
 const {
@@ -60,27 +61,27 @@ router.route("/:id").get(authenticateUserMiddleware, getOrder);
 //     updateOrderStatus
 //   );
 router
-  .route("/user-cancel-order/:id")
+  .route("/user-cancel-order")
   .patch(
     authenticateUserMiddleware,
     authorizeMiddleware(userConstant),
-    cancelOrderByUser
+    cancelProductOrderByUser
   );
 router
-  .route("/store-confirm-order/:id")
+  .route("/store-change-order-status")
   .patch(
     authenticateUserMiddleware,
     authorizeMiddleware(storeConstant),
-    changeOrderStatusAsConfirmedByStore
+    changeOrderStatusByStore
   );
 
-router
-  .route("/store-ship-order/:id")
-  .patch(
-    authenticateUserMiddleware,
-    authorizeMiddleware(storeConstant),
-    changeOrderStatusAsShippedByStore
-  );
+// router
+//   .route("/store-ship-order/:id")
+//   .patch(
+//     authenticateUserMiddleware,
+//     authorizeMiddleware(storeConstant),
+//     changeOrderStatusAsShippedByStore
+//   );
 
 // router
 //   .route("/store-change-order-status/:id")
@@ -90,20 +91,27 @@ router
 //     changeOrderStatusByStore
 //   );
 
-router
-  .route("/store-cancel-order/:id")
-  .patch(
-    authenticateUserMiddleware,
-    authorizeMiddleware(storeConstant),
-    changeOrderStatusAsCancelledByStore
-  );
+// router
+//   .route("/store-cancel-order/:id")
+//   .patch(
+//     authenticateUserMiddleware,
+//     authorizeMiddleware(storeConstant),
+//     changeOrderStatusAsCancelledByStore
+//   );
 
 router
-  .route("/store-deliver-order/:id")
+  .route("/deliver-order")
   .patch(
     authenticateUserMiddleware,
     authorizeMiddleware(adminConstant),
-    changeOrderStatusAsDeliveredByStore
+    changeOrderStatusAsDeliveredByAdmin
+  );
+router
+  .route("/refund-order")
+  .patch(
+    authenticateUserMiddleware,
+    authorizeMiddleware(adminConstant),
+    changeOrderStatusAsRefundedByAdmin
   );
 
 module.exports = router;

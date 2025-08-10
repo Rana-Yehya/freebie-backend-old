@@ -9,7 +9,7 @@ model productVariant {
     // Inventory relationship
     productStock productStock[]
     // productCart  productCart[]
-    productOrder productOrder[]
+    // productOrder productOrder[]
 
     @@unique([productId, color])
     @@map("product_variant")

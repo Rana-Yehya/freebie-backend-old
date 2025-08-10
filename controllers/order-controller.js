@@ -15,7 +15,8 @@ const {
   createOrderHelper,
   verifyUserOrderHelper,
 } = require("../helpers/redis");
-
+const { OrderStatusZodModel } = require("../models/order-status-zod-model");
+let PERCENTAGE = 0.85;
 //for now create a function for each status
 
 //pending, confirmed, shipped, delivered, cancelled, refunded
@@ -86,22 +87,6 @@ const getAllStoreOrders = async (req, res, next) => {
     orderBy: {
       createdAt: "desc",
     },
-    // include: {
-    //   //    productOrder: {
-    //   //      include: {
-    //   //        product: {
-    //   //          include: { image: true },
-    //   //        },
-    //   //        branch: true,
-    //   //      },
-    //   //    },
-
-    //   // id: true,
-    //   userId: false,
-    //   user: false,
-    //   createdAt: false,
-    //   updatedAt: false,
-    // },
   });
 
   return res.status(StatusCodes.OK).json({
@@ -185,6 +170,7 @@ const createOrder = async (req, res, next) => {
                     select: {
                       price: true,
                       productPrice: true,
+                      weightInKg: true,
                     },
                   },
                 },
@@ -198,9 +184,23 @@ const createOrder = async (req, res, next) => {
   });
 
   const productOrder = userCart.productCart.map((item) => {
+    let deliverySum = item.deliveryTaxes.baseFee;
+    if (
+      item.deliveryTaxes.additionalFeesAfterKg <
+      item.productStock.variant.product.weightInKg * item.quantity
+    ) {
+      deliverySum +=
+        (item.productStock.variant.product.weightInKg * item.quantity -
+          item.deliveryTaxes.additionalFeesAfterKg) *
+        item.deliveryTaxes.feePerKg;
+    }
     return {
-      variantId: item.productStock.variant.id,
+      // variantId: item.productStock.variant.id,
       productStockId: item.productStockId,
+      price: item.productStock.variant.product.productPrice
+        ? item.productStock.variant.product.productPrice.actualPrice
+        : item.productStock.variant.product.price,
+      deliveryFee: deliverySum,
       subtotal:
         (item.productStock.variant.product.productPrice
           ? item.productStock.variant.product.productPrice.actualPrice
@@ -373,8 +373,32 @@ const deleteUnpaidOrder = async (req, res, next) => {
     .json({ isSuccess: true, message: "Order is not completed", data: order });
 };
 
-const changeOrderStatusAsConfirmedByStore = async (req, res, next) => {
-  const { id: orderId } = req.params;
+const changeOrderStatusByStore = async (req, res, next) => {
+  // const {} = req.params;
+  const { id: orderId, status, cancellationReason } = req.body;
+  const zodModel = OrderStatusZodModel.safeParse({
+    orderId: orderId,
+    status: status,
+    cancellationReason: cancellationReason,
+  });
+
+  if (!zodModel.success) {
+    throw new BadRequestError(zodModel.error.errors[0].message);
+  }
+
+  const statusIndex = Object.values(OrderStatus).indexOf(status.toUpperCase());
+  // console.log(Object.values(OrderStatus).every()[statusIndex]);
+  const orderStatus = Object.values(OrderStatus)[statusIndex];
+  let orderStatusOfInterest = [];
+  let refundToUser = false;
+  if (orderStatus == OrderStatus.CONFIRMED) {
+    orderStatusOfInterest = [OrderStatus.PENDING];
+  } else if (orderStatus == OrderStatus.CANCELLED) {
+    orderStatusOfInterest = [OrderStatus.PENDING];
+    refundToUser = true;
+  } else if (orderStatus == OrderStatus.SHIPPED) {
+    orderStatusOfInterest = [OrderStatus.CONFIRMED, OrderStatus.PENDING];
+  }
   const order = await prisma.order.findMany({
     where: {
       AND: [
@@ -386,36 +410,46 @@ const changeOrderStatusAsConfirmedByStore = async (req, res, next) => {
             },
           },
         },
-        { productOrder: { every: { status: OrderStatus.PENDING } } },
+        { productOrder: { every: { status: { in: orderStatusOfInterest } } } },
       ],
     },
     select: {
+      userId: true,
       productOrder: {
-        select: {
-          id: true,
+        include: {
+          // id: true,
+          // deliveryFee: true,
+          // subtotal: true,
           productStock: {
-            select: {
-              branchId: true,
+            include: {
+              variant: {
+                include: {
+                  product: true,
+                },
+              },
             },
           },
-          status: true,
+          // status: true,
         },
       },
     },
   });
-  console.log(order);
+  // console.log(order);
   if (order.length == 0) {
     throw new BadRequestError(
-      "The order is confirmed or you already confirmed it"
+      `The order is ${status} or you already ${status} it`
     );
   }
-  console.log(order[0].productOrder);
-
+  // console.log(order[0].productOrder);
   const productOrder = order[0].productOrder;
   let productOrderIds = [];
+  let refundSum = 0;
   for (let i = 0; i < productOrder.length; i++) {
     console.log(productOrder[i].id);
     productOrderIds.push(productOrder[i].id);
+    if (refundToUser == true) {
+      refundSum += productOrder[i].deliveryFee + productOrder[i].subtotal;
+    }
   }
   const updatedOrder = await prisma.order.update({
     where: {
@@ -433,13 +467,57 @@ const changeOrderStatusAsConfirmedByStore = async (req, res, next) => {
             //  productStock: { every: { branch: { storeId: req.user.id } } },
           },
           data: {
-            status: OrderStatus.CONFIRMED,
+            status: Object.values(OrderStatus)[statusIndex],
+            cancellationReason: cancellationReason || undefined,
           },
         },
       },
     },
   });
-
+  if (status == OrderStatus.CANCELLED) {
+    productOrder.map(async (item) => {
+      await prisma.product.update({
+        where: {
+          id: item.productStock.variant.productId,
+          // {
+          //   in: userCart.productCart.map((item) => item.productStock.productId),
+          // },
+        },
+        data: {
+          productVariant: {
+            update: {
+              where: {
+                productId_color: {
+                  productId: item.productStock.variant.productId,
+                  color: item.productStock.variant.color,
+                  // branchId: item.branchId,
+                },
+              },
+              data: {
+                productStock: {
+                  update: {
+                    where: {
+                      id: item.productStockId,
+                    },
+                    data: { stock: { increment: item.quantity } },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+    });
+  }
+  if (refundToUser == true) {
+    await createDepositPayment({
+      type: TransactionType.DEPOSIT,
+      isUser: true,
+      userId: order[0].userId,
+      amount: refundSum,
+      purpose: "cancel_order",
+    });
+  }
   // await createDepositPayment({
   //   isUser: false,
   //   userId: userCart.product[0].branch.storeId,
@@ -453,282 +531,8 @@ const changeOrderStatusAsConfirmedByStore = async (req, res, next) => {
   });
 };
 
-const changeOrderStatusAsCancelledByStore = async (req, res, next) => {
-  const { id: orderId } = req.params;
-  console.log(req.user.id);
-  const order = await prisma.order.findMany({
-    where: {
-      AND: [
-        { id: orderId },
-        {
-          productOrder: {
-            every: {
-              productStock: { branch: { storeId: req.user.id } },
-            },
-          },
-        },
-        { productOrder: { every: { status: OrderStatus.PENDING } } },
-      ],
-    },
-    select: {
-      userId: true,
-      productOrder: {
-        select: {
-          id: true,
-          status: true,
-        },
-      },
-    },
-  });
-
-  if (order.length == 0) {
-    throw new BadRequestError(
-      "The order is confirmed or you already confirmed it"
-    );
-  }
-  console.log(order);
-  const productOrder = order[0].productOrder;
-  let productOrderIds = [];
-  for (let i = 0; i < productOrder.length; i++) {
-    console.log(productOrder[i].id);
-    productOrderIds.push(productOrder[i].id);
-  }
-
-  // const updatedOrder = await prisma.order.update({
-  //   where: {
-  //     id: orderId,
-  //   },
-  //   data: {
-  //     productOrder: {
-  //       updateMany: {
-  //         // where: {
-  //         //   branchId: { in: productOrderBranches },
-  //         // },
-  //         where: {
-  //           id: { in: productOrderIds },
-  //           // productStock: { every: { id: { in: branchIds } } },
-  //           //  productStock: { every: { branch: { storeId: req.user.id } } },
-  //         },
-  //         data: {
-  //           status: OrderStatus.CANCELLED,
-  //         },
-  //       },
-  //     },
-  //   },
-  // });
-  console.log(productOrder.length + 1);
-  // if (order[0].productOrder.length == productOrder.length + 1) {
-  //   let sum = 0;
-  //   productOrderList.map((product) => {
-  //     sum = sum + product.price * product.quantity;
-  //   });
-  //   await createDepositPayment({
-  //     isUser: true,
-  //     userId: order[0].userId,
-  //     amount: sum + order[0].deliveryFee,
-  //     purpose: "cancel_order",
-  //   });
-  // } else {
-  //   let sum = 0;
-  //   productOrderList.map((product) => {
-  //     sum = sum + product.price * product.quantity;
-  //   });
-  //   await createDepositPayment({
-  //     isUser: true,
-  //     userId: order[0].userId,
-  //     amount: sum,
-  //     purpose: "cancel_order",
-  //   });
-  // }
-  return res.status(StatusCodes.OK).json({
-    isSuccess: true,
-    message: "Order Status Cancelled Successfully",
-    data: updatedOrder,
-  });
-};
-
-// //
-// const changeOrderStatusByStore = async (req, res, next) => {
-//   const { id: orderId } = req.params;
-//   const { status } = req.body;
-//   const order = await prisma.order.findUnique({
-//     where: {
-//       id: orderId,
-//       productOrder: {
-//         every: {
-//           branch: {
-//             storeId: req.user.id,
-//           },
-//         },
-//       },
-//     },
-//     select: {
-//       status: true,
-//       productOrder: {
-//         select: {
-//           branchId: true,
-//           status: true,
-//         },
-//       },
-//     },
-//   });
-//   const getStatusIndex = OrderStatus.indexOf(status);
-
-//   // console.log(order);
-//   const productOrder = order.productOrder.filter((product) => {
-//     const getIndex = OrderStatus.indexOf(product.status);
-//     // console.log(getIndex);
-//     // console.log(getStatusIndex);
-//     return getStatusIndex - 1 >= getIndex ? product : null;
-//   });
-//   const productOrderBranches = order.productOrder.map(
-//     (product) => product.branchId
-//   );
-//   // console.log(productOrder);
-
-//   // console.log(productOrder.length);
-//   const generalStatus =
-//     productOrder.length <= 1 ? status : OrderStatus[getStatusIndex - 1];
-
-//   const updatedOrder = await prisma.order.update({
-//     where: {
-//       id: orderId,
-//     },
-//     data: {
-//       status: generalStatus,
-//       productOrder: {
-//         updateMany: {
-//           where: {
-//             branchId: { in: productOrderBranches },
-//           },
-//           data: {
-//             status: status,
-//           },
-//         },
-//         // branch: {
-//         //   storeId: req.user.id,
-//         // },
-//       },
-//     },
-//     include: {
-//       productOrder: true,
-//     },
-//   });
-
-//   // await createDepositPayment({
-//   //   isUser: false,
-//   //   userId: userCart.product[0].branch.storeId,
-//   //   amount: order.subtotal - order.subtotal * 0.2,
-//   //   purpose: "create_order",
-//   // });
-//   return res.status(StatusCodes.OK).json({
-//     isSuccess: true,
-//     message: "Order Status Updated Successfully",
-//     data: updatedOrder,
-//   });
-// };
-
-const changeOrderStatusAsShippedByStore = async (req, res, next) => {
-  const { id: orderId } = req.params;
-  const order = await prisma.order.findMany({
-    where: {
-      AND: [
-        { id: orderId },
-        {
-          productOrder: {
-            every: {
-              productStock: { branch: { storeId: req.user.id } },
-            },
-          },
-        },
-        { productOrder: { every: { status: OrderStatus.CONFIRMED } } },
-      ],
-    },
-    select: {
-      productOrder: {
-        select: {
-          id: true,
-          subtotal: true,
-          // quantity: true,
-          // status: true,
-        },
-      },
-    },
-  });
-  console.log(order);
-  if (order.length == 0) {
-    throw new BadRequestError(
-      "Order has not been confirmed or it is already shipped"
-    );
-  }
-  const productOrder = order[0].productOrder;
-  let productOrderIds = [];
-  let sum = 0;
-
-  for (let i = 0; i < productOrder.length; i++) {
-    console.log(productOrder[i].id);
-    productOrderIds.push(productOrder[i].id);
-    sum = sum + productOrder[i].subtotal;
-  }
-
-  // let productOrderList = [];
-
-  // order.productOrder.map((product) => {
-  //   console.log(product.branch.storeId);
-  //   if (product.branch.storeId == req.user.id) {
-  //     productOrderList.push(product);
-  //   }
-  // });
-  // if (
-  //   productOrderList.map(
-  //     (product) =>
-  //       product.status === "confirmed" || product.status !== "pending"
-  //   )
-  // ) {
-  //   throw new BadRequestError(
-  //     "The order is confirmed or you already confirmed it"
-  //   );
-  // }
-
-  const updatedOrder = await prisma.order.update({
-    where: {
-      id: orderId,
-    },
-    data: {
-      // status: generalStatus,
-      productOrder: {
-        updateMany: {
-          where: {
-            id: { in: productOrderIds },
-          },
-          data: {
-            status: OrderStatus.SHIPPED,
-          },
-        },
-        // branch: {
-        //   storeId: req.user.id,
-        // },
-      },
-    },
-  });
-
-  await createDepositPayment({
-    type: TransactionType.DEPOSIT,
-    isUser: false,
-    userId: req.user.id,
-    amount: sum - sum * 0.2,
-    purpose: "order_shipped",
-  });
-  return res.status(StatusCodes.OK).json({
-    isSuccess: true,
-    message: "Order Status Shipped Successfully",
-    data: updatedOrder,
-  });
-};
-
-const changeOrderStatusAsDeliveredByStore = async (req, res, next) => {
-  const { id: orderId } = req.params;
-  const { id: storeId } = req.body;
+const changeOrderStatusAsDeliveredByAdmin = async (req, res, next) => {
+  const { orderId, storeId } = req.body;
   console.log(storeId);
 
   const order = await prisma.order.findMany({
@@ -785,9 +589,11 @@ const changeOrderStatusAsDeliveredByStore = async (req, res, next) => {
 
   const productOrder = order[0].productOrder;
   let productOrderIds = [];
+  let deliverSum = 0;
   for (let i = 0; i < productOrder.length; i++) {
     console.log(productOrder[i]);
     productOrderIds.push(productOrder[i].id);
+    deliverSum += productOrder[i].subtotal;
     // sum = sum + productOrder[i][0].subtotal;
   }
   const updatedOrder = await prisma.order.update({
@@ -811,7 +617,13 @@ const changeOrderStatusAsDeliveredByStore = async (req, res, next) => {
       },
     },
   });
-
+  await createDepositPayment({
+    type: TransactionType.DEPOSIT,
+    isUser: false,
+    userId: storeId,
+    amount: deliverSum * PERCENTAGE,
+    purpose: "deliver_order",
+  });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     message: "Order Status Updated Successfully",
@@ -819,111 +631,188 @@ const changeOrderStatusAsDeliveredByStore = async (req, res, next) => {
   });
 };
 
-// const updateOrderStatus = async (req, res, next) => {
-//   const { id: orderId } = req.params;
-//   const { status } = req.body;
-//   // console.log(Object.entries(OrderStatus));
-//   // console.log(status);
-//   // console.log(status.toString().toLowerCase());
-//   // console.log(OrderStatus.includes(status.toString().toLowerCase()));
-//   if (!OrderStatus.includes(status.toString().toLowerCase())) {
-//     throw new BadRequestError("Status is not correct..");
-//   }
-//   const order = await prisma.order.update({
-//     where: { id: orderId },
-//     data: {
-//       status: status.toString().toLowerCase(),
-//     },
-//   });
+const changeOrderStatusAsRefundedByAdmin = async (req, res, next) => {
+  const { orderId, storeId } = req.body;
+  console.log(storeId);
 
-//   if (!order) {
-//     throw new BadRequestError("Order not found.");
-//   }
-//   return res.status(StatusCodes.OK).json({
-//     isSuccess: true,
-//     message: "Order Status Updated Successfully",
-//     data: order,
-//   });
-// };
-
-const cancelOrderByUser = async (req, res, next) => {
-  const { id: orderId } = req.params;
-  const { cancellationReason } = req.body;
-  if (!cancellationReason) {
-    throw new BadRequestError("Please provide a reason for cancellation");
-  }
-  //TODO WHAT IF THE ORDER IS PREPARING OR DELIVERING
-  const order = await prisma.order.findUnique({
+  const order = await prisma.order.findMany({
     where: {
-      id: orderId,
-      // AND: [
-      //   { id: orderId },
-      //   // { productOrder: { every: { branch: { storeId: req.user.id } } } },
-      //   {
-      //     productOrder: {
-      //       every: {
-      //         status:
-      //           OrderStatus.CONFIRMED ||
-      //           OrderStatus.SHIPPED ||
-      //           OrderStatus.DELIVERED ||
-      //           OrderStatus.CANCELLED ||
-      //           OrderStatus.REFUNDED,
-      //       },
-      //     },
-      //   },
-      // ],
+      AND: [
+        { id: orderId },
+        {
+          productOrder: {
+            every: {
+              productStock: { branch: { storeId: storeId } },
+            },
+          },
+        },
+        { productOrder: { every: { status: OrderStatus.SHIPPED } } },
+      ],
     },
     select: {
-      taxAmount: true,
-      deliveryFee: true,
-      subtotal: true,
-      totalAmount: true,
+      userId: true,
       productOrder: {
         select: {
           id: true,
+          subtotal: true,
+          quantity: true,
+          deliveryFee: true,
+          // productStock: { select: { branchId: true } },
           status: true,
+        },
+      },
+    },
+  });
+  console.log(order);
+  if (order.length == 0) {
+    throw new BadRequestError(
+      "Order has not been confirmed or it is already delivered"
+    );
+  }
+
+  // let productOrderList = [];
+
+  // order.productOrder.map((product) => {
+  //   console.log(product.branch.storeId);
+  //   if (product.branch.storeId == req.user.id) {
+  //     productOrderList.push(product);
+  //   }
+  // });
+  // if (
+  //   productOrderList.map(
+  //     (product) =>
+  //       product.status === "confirmed" || product.status !== "pending"
+  //   )
+  // ) {
+  //   throw new BadRequestError(
+  //     "The order is confirmed or you already confirmed it"
+  //   );
+  // }
+
+  const productOrder = order[0].productOrder;
+  let productOrderIds = [];
+  let deliverSum = 0;
+  for (let i = 0; i < productOrder.length; i++) {
+    console.log(productOrder[i]);
+    productOrderIds.push(productOrder[i].id);
+    deliverSum += productOrder[i].subtotal + productOrder[i].deliveryFee;
+    // sum = sum + productOrder[i][0].subtotal;
+  }
+  const updatedOrder = await prisma.order.update({
+    where: {
+      id: orderId,
+    },
+    data: {
+      // status: generalStatus,
+      productOrder: {
+        updateMany: {
+          where: {
+            id: { in: productOrderIds },
+          },
+          data: {
+            status: OrderStatus.REFUNDED,
+          },
+        },
+        // branch: {
+        //   storeId: req.user.id,
+        // },
+      },
+    },
+  });
+  await createDepositPayment({
+    type: TransactionType.DEPOSIT,
+    isUser: true,
+    userId: order[0].userId,
+    amount: deliverSum,
+    purpose: "refund_order",
+  });
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: "Order Status Updated Successfully",
+    data: updatedOrder,
+  });
+};
+
+const cancelProductOrderByUser = async (req, res, next) => {
+  const { id: productOrderId, cancellationReason } = req.body;
+  const zodModel = OrderStatusZodModel.safeParse({
+    orderId: productOrderId, //
+    status: "cancelled",
+    cancellationReason: cancellationReason,
+  });
+
+  if (!zodModel.success) {
+    throw new BadRequestError(zodModel.error.errors[0].message);
+  }
+  //TODO WHAT IF THE ORDER IS PREPARING OR DELIVERING
+  const order = await prisma.productOrder.findUnique({
+    where: {
+      id: productOrderId,
+    },
+    include: {
+      productStock: {
+        select: {
           variant: {
-            select: {
-              product: {
-                select: {
-                  doesNeedPreparation: true,
-                },
-              },
+            include: {
+              product: { select: { doesNeedPreparation: true } },
             },
           },
-          productStock: {
+          branch: {
             select: {
-              branch: {
-                select: {
-                  storeId: true,
-                },
-              },
+              storeId: true,
             },
           },
         },
       },
     },
   });
-  const canOrderBeCancelled = order.productOrder.find(
-    (productOrder) =>
-      productOrder.status == OrderStatus.CONFIRMED ||
-      productOrder.status == OrderStatus.SHIPPED ||
-      productOrder.status == OrderStatus.DELIVERED ||
-      productOrder.status == OrderStatus.CANCELLED ||
-      productOrder.status == OrderStatus.REFUNDED
-  );
-  console.log(canOrderBeCancelled);
-  if (canOrderBeCancelled != undefined) {
+  if (!order) {
+    throw new NotFoundError("Order not found");
+  }
+  const canOrderBeCancelled =
+    order.status == OrderStatus.REFUNDED ||
+    order.status == OrderStatus.CANCELLED;
+  // console.log(canOrderBeCancelled);
+  if (canOrderBeCancelled == true) {
     throw new BadRequestError("Order can not be cancelled now");
+  }
+  let userRefundValue = 0;
+  let storeRefundValue = 0;
+
+  if (order.status == OrderStatus.CONFIRMED) {
+    if (order.productStock.variant.product.doesNeedPreparation == true) {
+      userRefundValue = order.subtotal * 0.9 + order.deliveryFee;
+      storeRefundValue = order.subtotal * 0.1;
+    } else {
+      userRefundValue = order.subtotal + order.deliveryFee;
+    }
+  } else if (order.status == OrderStatus.PENDING) {
+    userRefundValue = order.subtotal + order.deliveryFee;
+  } else if (order.status == OrderStatus.SHIPPED) {
+    if (order.productStock.variant.product.doesNeedPreparation == true) {
+      userRefundValue = order.subtotal * 0.75;
+      storeRefundValue = order.subtotal * 0.25;
+    } else {
+      userRefundValue = order.subtotal * 0.8;
+      storeRefundValue = order.subtotal * 0.2;
+    }
+  } else if (order.status == OrderStatus.DELIVERED) {
+    if (order.productStock.variant.product.doesNeedPreparation == true) {
+      userRefundValue = 0;
+      storeRefundValue = order.subtotal;
+    } else {
+      userRefundValue = order.subtotal * 0.75;
+      storeRefundValue = order.subtotal * 0.25;
+    }
   }
   // if (orderStatusListToNotAcceptCancellation.includes(order.status)) {
   //   throw new BadRequestError("Order cannot be cancelled.");
   // }
-  let productOrderIds = [];
-  for (let i = 0; i < order.productOrder.length; i++) {
-    console.log(order.productOrder[i].id);
-    productOrderIds.push(order.productOrder[i].id);
-  }
+  // let productOrderIds = [];
+  // for (let i = 0; i < order.productOrder.length; i++) {
+  //   console.log(order.productOrder[i].id);
+  //   productOrderIds.push(order.productOrder[i].id);
+  // }
   // if (doesNeedPreparation.includes(true)) {
   //   await createDepositPayment({
   //     type: TransactionType.DEPOSIT,
@@ -940,33 +829,68 @@ const cancelOrderByUser = async (req, res, next) => {
   //   //   purpose: "cancel_order",
   //   // });
   // } else {
-  await createDepositPayment({
-    type: TransactionType.DEPOSIT,
-    isUser: true,
-    userId: req.user.id,
-    amount: order.totalAmount,
-    purpose: "cancel_order",
-  });
+
   // }
-  const orderUpdated = await prisma.order.update({
-    where: { id: orderId },
+  const orderUpdated = await prisma.productOrder.update({
+    where: { id: productOrderId },
     data: {
       cancellationReason: cancellationReason,
-      refundAmount: order.totalAmount,
-      productOrder: {
-        updateMany: {
+      userRefundAmount: userRefundValue,
+      storerRefundAmount: storeRefundValue * PERCENTAGE,
+      status: OrderStatus.CANCELLED,
+    },
+  });
+  console.log(orderUpdated);
+
+  await prisma.product.update({
+    where: {
+      id: order.productStock.variant.productId,
+      // {
+      //   in: userCart.productCart.map((item) => item.productStock.productId),
+      // },
+    },
+    data: {
+      productVariant: {
+        update: {
           where: {
-            id: { in: productOrderIds },
+            productId_color: {
+              productId: order.productStock.variant.productId,
+              color: order.productStock.variant.color,
+              // branchId: item.branchId,
+            },
           },
           data: {
-            status: OrderStatus.CANCELLED,
+            productStock: {
+              update: {
+                where: {
+                  id: order.productStockId,
+                },
+                data: { stock: { increment: order.quantity } },
+              },
+            },
           },
         },
       },
     },
   });
-  console.log(orderUpdated);
-
+  if (userRefundValue != 0) {
+    await createDepositPayment({
+      type: TransactionType.DEPOSIT,
+      isUser: true,
+      userId: req.user.id,
+      amount: userRefundValue,
+      purpose: "cancel_order",
+    });
+  }
+  if (storeRefundValue != 0) {
+    await createDepositPayment({
+      type: TransactionType.DEPOSIT,
+      isUser: false,
+      userId: order.productStock.branch.storeId,
+      amount: storeRefundValue * PERCENTAGE,
+      purpose: "cancel_order",
+    });
+  }
   // if (!order) {
   //   throw new BadRequestError("Order not found.");
   // }
@@ -982,12 +906,13 @@ module.exports = {
   createOrder,
   createPaidOrder,
   deleteUnpaidOrder,
-  changeOrderStatusAsDeliveredByStore,
+  changeOrderStatusAsDeliveredByAdmin,
+  changeOrderStatusAsRefundedByAdmin,
   // updateOrderStatus,
   getAllStoreOrders,
-  changeOrderStatusAsConfirmedByStore,
-  changeOrderStatusAsCancelledByStore,
-  changeOrderStatusAsShippedByStore,
-  cancelOrderByUser,
+  changeOrderStatusByStore,
+  // changeOrderStatusAsCancelledByStore,
+  // changeOrderStatusAsShippedByStore,
+  cancelProductOrderByUser,
   // changeOrderStatusByStore,
 };
