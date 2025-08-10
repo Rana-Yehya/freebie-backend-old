@@ -10,7 +10,7 @@ RUN npm install
 RUN npx prisma generate --schema=./prisma/schema.prisma --data-proxy
 
 # RUN npx prisma generate
-# RUN npx prisma migrate dev --name=init
+RUN npx prisma migrate dev --name=init
 #RUN npm ci --only=production
 COPY . .
 #ENV NODE_ENV=production
