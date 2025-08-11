@@ -15,7 +15,7 @@ const { UpdateStoreZodModel } = require("../models/update-store-zod-model");
 const { createAccessJWT, createRefreshJWT } = require("../utils/jwt-utils");
 const { passwordEncrypt, passwordCompare } = require("../utils/password-utils");
 const { storeConstant } = require("../config/constants");
-const { uploadImage } = require("../helpers/cloudinary/upload-image");
+const { uploadImage } = require("../helpers/image-kit/upload-image");
 const { StoreStatus, OrderStatus } = require("../generated/prisma");
 const {
   checkOtpRestirictionsHelper,
@@ -23,7 +23,7 @@ const {
   verifyOtpHelper,
 } = require("../helpers/redis");
 const { sendOtpHelper } = require("../helpers/redis/send-otp-helper");
-const { destroyImage } = require("../helpers/cloudinary/delete-image");
+const { destroyImage } = require("../helpers/image-kit/delete-image");
 
 const login = async (req, res) => {
   const { email, password } = req.body;

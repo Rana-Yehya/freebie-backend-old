@@ -6,11 +6,11 @@ const { UpdateProductZodModel } = require("../models/update-product-zod-model");
 const {
   uploadMultipleImages,
   uploadImage,
-} = require("../helpers/cloudinary/upload-image");
+} = require("../helpers/image-kit/upload-image");
 const {
   destroyMultipleImages,
   destroyImage,
-} = require("../helpers/cloudinary/delete-image");
+} = require("../helpers/image-kit/delete-image");
 const { ProductTags, ProductStatus } = require("../generated/prisma");
 const getAllProducts = async (req, res, next) => {
   const products = await prisma.product.findMany({

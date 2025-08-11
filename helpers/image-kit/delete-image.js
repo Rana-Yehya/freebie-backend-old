@@ -1,9 +1,10 @@
-const { StatusCodes } = require("http-status-codes");
-const { BadRequestError, NotFoundError } = require("../../errors");
+// const { StatusCodes } = require("http-status-codes");
+// const { BadRequestError, NotFoundError } = require("../../errors");
 // const fileUpload = require("express-fileupload");
-const cloudinary = require("cloudinary").v2;
+// const cloudinary = require("cloudinary").v2;
 // const path = require("path");
-const fs = require("fs");
+// const fs = require("fs");
+const imagekit = require("../../config/image-kit");
 
 // const destroyImage = async (req, res, next) => {
 //   console.log(req.body.images);
@@ -46,15 +47,17 @@ const fs = require("fs");
 // };
 
 async function destroyImage({ imagePublicId }) {
-  await cloudinary.uploader.destroy(imagePublicId);
+  // await cloudinary.uploader.destroy(imagePublicId);
+  await imagekit.imagekit.deleteFile(imagePublicId);
 }
 
 async function destroyMultipleImages({ imagesPublicIds }) {
-  for (let imageIndex = 0; imageIndex < imagesPublicIds.length; imageIndex++) {
-    let imageToDestroy = imagesPublicIds[imageIndex];
+  // for (let imageIndex = 0; imageIndex < imagesPublicIds.length; imageIndex++) {
+  //   let imageToDestroy = imagesPublicIds[imageIndex];
 
-    await cloudinary.uploader.destroy(imageToDestroy);
-  }
+  //   await cloudinary.uploader.destroy(imageToDestroy);
+  // }
+  await imagekit.imagekit.bulkDeleteFiles(imagesPublicIds);
 }
 // const destroyMultipleImages = async (req, res, next) => {
 //   console.log(req.body.images);

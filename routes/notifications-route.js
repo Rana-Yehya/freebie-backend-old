@@ -1,17 +1,4 @@
 const express = require("express");
-const admin = require("firebase-admin");
-const { getMessaging } = require("firebase-admin/messaging");
-const {
-  uploadImage,
-  uploadMultipleImages,
-} = require("../helpers/cloudinary/upload-image");
-const {
-  destroyImage,
-  destroyMultipleImages,
-} = require("../helpers/cloudinary/delete-image");
-const { prisma } = require("../config/prisma");
-const { StatusCodes } = require("http-status-codes");
-
 const router = express.Router();
 //egR_fzaMRZ2V8RgFdDkPFU:APA91bGb9kcPUzh9PBVsQaVlLIvfYXsZYy6ymjrCBOMhtKDPUuBYSeHsbJosBiMb-CpW7B3RYIzk_Z3YYBJfFg2x1l0EyanfHDfLH5qi85K_Lzg6ValL5hY
 

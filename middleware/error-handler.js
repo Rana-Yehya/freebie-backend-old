@@ -3,7 +3,7 @@ const { StatusCodes } = require("http-status-codes");
 const {
   destroyImage,
   destroyMultipleImages,
-} = require("../helpers/cloudinary/delete-image");
+} = require("../helpers/image-kit/delete-image");
 const { appLocalize } = require("../helpers/localize");
 
 const errorHandler = async (err, req, res, next) => {
@@ -44,9 +44,19 @@ const errorHandler = async (err, req, res, next) => {
   //   message: err.message || 'Internal Server Error',
   // };
 
-  if (req.isSingleImage && req.isSingleImage == true) {
-    await destroyImage({ imagePublicId: req.singleImageUploadedData });
-  } else if (req.isMultiImage && req.isMultiImage == true) {
+  if (
+    req.isSingleImage &&
+    req.isSingleImage == true &&
+    req.singleImageUploadedData != undefined
+  ) {
+    await destroyMultipleImages({
+      imagesPublicIds: req.singleImageUploadedData,
+    });
+  } else if (
+    req.isMultiImage &&
+    req.isMultiImage == true &&
+    req.multiImageUploadedData != undefined
+  ) {
     await destroyMultipleImages({
       imagesPublicIds: req.multiImageUploadedData,
     });

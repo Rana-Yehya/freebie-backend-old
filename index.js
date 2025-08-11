@@ -15,7 +15,7 @@ const xss = require("xss-clean");
 require("dotenv").config();
 require("express-async-errors");
 require("./config/notification");
-require("./config/cloudinary");
+require("./config/image-kit");
 const { prisma } = require("./config/prisma");
 
 const adminAuthRouter = require("./routes/admin-auth-route");

@@ -5,8 +5,8 @@ const {
   BadRequestError,
   UnauthenticatedError,
 } = require("../errors");
-const { uploadImage } = require("../helpers/cloudinary/upload-image");
-const { destroyImage } = require("../helpers/cloudinary/delete-image");
+const { uploadImage } = require("../helpers/image-kit/upload-image");
+const { destroyImage } = require("../helpers/image-kit/delete-image");
 const { CreateReviewZodModel } = require("../models/create-review-zod-model");
 const { OrderStatus } = require("../generated/prisma");
 const getAllProductReviews = async (req, res, next) => {
