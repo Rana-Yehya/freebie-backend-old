@@ -14,15 +14,20 @@ const aboutApp = async (req, res, next) => {
     where: {
       slug: "about",
     },
+    include: { name: true },
   });
 
   return res.status(StatusCodes.OK).json({ isSuccess: true, data: aboutInfo });
 };
 const createInfo = async (req, res, next) => {
-  const { slug, data } = req.body;
+  const { slug, data, dataEn, dataAr } = req.body;
   const zodModel = InfoZodModel.safeParse({
     slug: slug,
-    data: data,
+    data: {
+      default: data,
+      en: dataEn,
+      ar: dataAr,
+    },
   });
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
@@ -33,11 +38,23 @@ const createInfo = async (req, res, next) => {
     },
     update: {
       // slug: slug,
-      data: data,
+      name: {
+        update: {
+          default: data || undefined,
+          en: dataEn || undefined,
+          ar: dataAr || undefined,
+        },
+      },
     },
     create: {
       slug: slug,
-      data: data,
+      name: {
+        create: {
+          default: data,
+          en: dataEn || data,
+          ar: dataAr || data,
+        },
+      },
     },
   });
 
@@ -50,6 +67,7 @@ const privacyPolicy = async (req, res, next) => {
     where: {
       slug: "privacy",
     },
+    include: { name: true },
   });
 
   return res
@@ -63,6 +81,7 @@ const termsAndConditions = async (req, res, next) => {
     where: {
       slug: "terms",
     },
+    include: { name: true },
   });
 
   return res.status(StatusCodes.OK).json({ isSuccess: true, data: terms });
@@ -74,6 +93,7 @@ const refundPolicy = async (req, res, next) => {
     where: {
       slug: "refund",
     },
+    include: { name: true },
   });
 
   return res.status(StatusCodes.OK).json({ isSuccess: true, data: refundInfo });
@@ -86,6 +106,7 @@ const shippingPolicy = async (req, res, next) => {
     where: {
       slug: "shipping",
     },
+    include: { name: true },
   });
 
   return res.status(StatusCodes.OK).json({ isSuccess: true, data: refundInfo });
