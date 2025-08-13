@@ -48,6 +48,11 @@ jobs:
       # Step 6: SSH into Hostinger and deploy
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.0
+        run: |
+          echo "### System Info ###"
+          whoami
+          pwd
+          ls -la
         with:
           host: ${{ secrets.HOSTINGER_HOST }}
           username: ${{ secrets.HOSTINGER_USERNAME }}
