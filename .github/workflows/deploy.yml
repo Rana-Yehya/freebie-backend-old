@@ -22,12 +22,13 @@ jobs:
 
       # Step 3: Build Docker image
       - name: Build Docker Image
-        run: docker build -t freebie .
+        run: docker build -t freebie:1.0  .
 
       # Step 4: Save Docker image as a .tar file (to transfer)
       - name: Save Docker Image
-        run: docker save freebie > freebie.tar
-
+        run: |
+          docker save freebie:1.0  > freebie.tar
+          ls -lh freebie.tar
       # Step 5: Transfer image to Hostinger via SCP
       - name: Upload Image to Hostinger
         uses: appleboy/scp-action@v0.1.4
@@ -59,4 +60,4 @@ jobs:
             docker run -d \
               --name freebie \
               --restart unless-stopped \
-              freebie
+              freebie:1.0
