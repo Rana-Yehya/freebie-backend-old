@@ -31,7 +31,7 @@ jobs:
       - name: Save Docker Image
         run: |
           mkdir -p ./docker-images
-          docker save -o ./docker-images/freebie.tar freebie  # Matches container_name
+          docker save -o ./docker-images/freebie.tar freebie-app  # Matches container_name
           docker save -o ./docker-images/postgres.tar postgres:16
           ls -lh ./docker-images/
       # Step 5: Transfer image to Hostinger via SCP
@@ -55,11 +55,11 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             # Load both images
-            docker load -i /home/rana/app.tar
+            docker load -i /home/rana/freebie.tar
             docker load -i /home/rana/postgres.tar
             
             # Create network if not exists
-            docker network create freebie-network || true
+            # docker network create freebie-network || true
             
             # Stop and remove existing containers
             docker stop freebie postgres || true
@@ -71,7 +71,6 @@ jobs:
             # Start services
             docker run -d \
               --name postgres \
-              --network freebie-network \
               -e POSTGRES_USER=postgres \
               -e POSTGRES_PASSWORD=postgres \
               -e POSTGRES_DB=freebie \
@@ -84,7 +83,6 @@ jobs:
             
             docker run -d \
               --name freebie \
-              --network freebie-network \
               -e PORT=5000 \
               -e NODE_ENV=development \
               -e DATABASE_URL=postgresql://postgres:postgres@postgres:5432/freebie?schema=public \
