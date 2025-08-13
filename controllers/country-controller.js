@@ -8,7 +8,7 @@ const {
 } = require("../errors");
 const { UpdateCountryZodModel } = require("../models/update-country-zod-model");
 const getAllCountries = async (req, res, next) => {
-  throw new NotFoundError("testing not found");
+  // throw new NotFoundError("testing not found");
   const country = await prisma.country.findMany({
     include: { name: true },
   });
