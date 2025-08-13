@@ -66,9 +66,9 @@ jobs:
             docker rm freebie postgres || true
             
             # Create volume if not exists
-            docker volume create postgres-data || true
+            # docker volume create postgres-data || true
             
-            docker run -d \
+            docker compose up -d \
               --name freebie-app \
               -e PORT=5000 \
               -e NODE_ENV=development \
