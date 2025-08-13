@@ -23,8 +23,8 @@ jobs:
       # Step 3: Build Docker image
       - name: Set up Docker Compose
         run: |
-          docker-compose -f docker-compose.yaml build
-          docker-compose -f docker-compose.yaml up -d
+          docker compose -f docker-compose.yaml build
+          docker compose -f docker-compose.yaml up -d
           docker ps -a
 
       # Step 4: Save Docker image as a .tar file (to transfer)
