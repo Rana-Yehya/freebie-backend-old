@@ -22,12 +22,12 @@ jobs:
 
       # Step 3: Build Docker image
       - name: Build Docker Image
-        run: docker build -t freebie .
+        run: docker build -t app .
 
       # Step 4: Save Docker image as a .tar file (to transfer)
       - name: Save Docker Image
-        run: docker save freebie > freebie.tar
-        
+        run: docker save app > app.tar
+
       # Step 5: Transfer image to Hostinger via SCP
       - name: Upload Image to Hostinger
         uses: appleboy/scp-action@v0.1.4
@@ -36,8 +36,8 @@ jobs:
           username: ${{ secrets.HOSTINGER_USERNAME }}
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          source: "freebie.tar"
-          target: "/home/rana/freebie.tar"
+          source: "app.tar"
+          target: "/home/rana/app.tar"
 
       # Step 6: SSH into Hostinger and deploy
       - name: Deploy via SSH
@@ -49,15 +49,14 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             # Load the Docker image
-            docker load < /home/rana/freebie.tar
+            docker load < /home/rana/app.tar
 
             # Stop & remove old container (if exists)
-            docker stop freebie || true
-            docker rm freebie || true
+            docker stop app || true
+            docker rm app || true
 
             # Run the new container
             docker run -d \
-              --name freebie \
-              -p 3000:3000 \
+              --name app \
               --restart unless-stopped \
-              freebie
+              app
