@@ -34,6 +34,7 @@ jobs:
           docker save -o ./docker-images/freebie.tar freebie-app  # Matches container_name
           docker save -o ./docker-images/postgres.tar postgres:16
           ls -lh ./docker-images/
+          pwd
       # Step 5: Transfer image to Hostinger via SCP
       - name: Upload Image to Hostinger
         uses: appleboy/scp-action@v0.1.4
@@ -42,10 +43,15 @@ jobs:
           username: ${{ secrets.HOSTINGER_USERNAME }}
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          source: "docker-images/*.tar"
-          target: "/home/rana/"
-
-          
+          source: "*"
+          target: "/home/rana/docker-images/"
+      - name: Verify Docker images exist
+        run: |
+          pwd
+          ls -lh ./docker-images/
+          test -f ./docker-images/freebie.tar && echo "freebie.tar exists" || echo "freebie.tar missing"
+          test -f ./docker-images/postgres.tar && echo "postgres.tar exists" || echo "postgres.tar missing"
+                
       # - name: Test Some Logs
       #   run: |
       #       echo "### System Info ###"
@@ -66,8 +72,8 @@ jobs:
             # Load both images
             # whoami
             # su - rana
-            docker load -i /home/rana/freebie.tar
-            docker load -i /home/rana/postgres.tar
+            docker load -i **/freebie.tar
+            docker load -i **/postgres.tar
             
             # Create network if not exists
             # docker network create freebie-network || true
