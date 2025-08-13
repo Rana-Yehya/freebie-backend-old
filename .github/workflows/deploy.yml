@@ -31,7 +31,7 @@ jobs:
       - name: Save Docker Image
         run: |
           mkdir -p ./docker-images
-          docker save -o ./docker-images/app.tar app
+          docker save -o ./docker-images/freebie.tar app
           docker save -o ./docker-images/postgres.tar postgres:16
           ls -lh ./docker-images/
       # Step 5: Transfer image to Hostinger via SCP
