@@ -66,7 +66,6 @@ jobs:
             # Load both images
             # whoami
             # su - rana
-            ls
             docker load -i /home/rana/freebie.tar
             docker load -i /home/rana/postgres.tar
             
@@ -74,8 +73,8 @@ jobs:
             # docker network create freebie-network || true
             # cd freebie-backend/
             # Stop and remove existing containers
-            docker stop freebie postgres || true
-            docker rm freebie postgres || true
+            # docker stop freebie postgres || true
+            # docker rm freebie postgres || true
             
             # Create volume if not exists
             # docker volume create postgres-data || true
