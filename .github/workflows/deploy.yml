@@ -30,7 +30,8 @@ jobs:
       # Step 4: Save Docker image as a .tar file (to transfer)
       - name: Save Docker Image
         run: |
-          docker save -o ./docker-images/freebie.tar app
+          mkdir -p ./docker-images
+          docker save -o ./docker-images/freebie.tar freebie  # Matches container_name
           docker save -o ./docker-images/postgres.tar postgres:16
           ls -lh ./docker-images/
       # Step 5: Transfer image to Hostinger via SCP
