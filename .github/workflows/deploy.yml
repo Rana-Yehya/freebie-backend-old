@@ -45,13 +45,16 @@ jobs:
           source: "docker-images/*.tar"
           target: "/home/rana/"
 
+          
+      - name: Test Some Logs
+        run: |
+            echo "### System Info ###"
+            whoami
+            pwd
+            ls -la
+
       # Step 6: SSH into Hostinger and deploy
       - name: Deploy via SSH
-        run: |
-          echo "### System Info ###"
-          whoami
-          pwd
-          ls -la
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.HOSTINGER_HOST }}
