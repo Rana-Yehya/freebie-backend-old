@@ -52,12 +52,12 @@ jobs:
             docker load -i /home/rana/freebie.tar
 
             # Stop & remove old container (if exists)
-            docker stop your-app-container || true
-            docker rm your-app-container || true
+            docker stop freebie || true
+            docker rm freebie || true
 
             # Run the new container
             docker run -d \
-              --name your-app-container \
+              --name freebie \
               -p 3000:3000 \
               --restart unless-stopped \
               freebie
