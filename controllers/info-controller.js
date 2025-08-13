@@ -69,8 +69,6 @@ const privacyPolicy = async (req, res, next) => {
     },
     include: { name: true },
   });
-  console.log("testing");
-
   return res
     .status(StatusCodes.OK)
     .json({ isSuccess: true, data: privacyInfo });

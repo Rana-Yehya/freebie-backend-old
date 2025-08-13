@@ -77,6 +77,8 @@ jobs:
             # Create network if not exists
             # docker network create freebie-network || true
             # cd freebie-backend/
+            cd /home/rana/freebie-backend
+
             # Stop and remove existing containers
             docker stop freebie* || true
             docker rm freebie* || true
@@ -84,10 +86,10 @@ jobs:
             # Create volume if not exists
             # docker volume create postgres-data || true
             # Start services
-            cd /home/rana/freebie-backend
 
             docker compose build
-            docker compose run app npx prisma migrate dev --name=test
+            # docker compose run app npx prisma generate
+            # docker compose run app npx prisma migrate dev --name=test
             docker compose up
 
             # Verify deployment
