@@ -80,8 +80,8 @@ jobs:
             # docker network create freebie-network || true
             # cd freebie-backend/
             # Stop and remove existing containers
-            docker stop freebie || true
-            docker rm freebie || true
+            docker stop freebie* || true
+            docker rm freebie* || true
             
             # Create volume if not exists
             # docker volume create postgres-data || true
