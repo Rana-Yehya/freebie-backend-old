@@ -99,7 +99,7 @@ jobs:
             sleep 10
 
             docker compose up -d \
-              --name freebie-app 
+              --name freebie-app \
               app
             # Verify deployment
             docker ps -a
