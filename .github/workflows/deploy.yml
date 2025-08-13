@@ -87,8 +87,9 @@ jobs:
             cd /home/rana/freebie-backend
 
             docker compose build
+            docker compose run app npx prisma migrate dev --name=test
             docker compose up
-            
+
             # Verify deployment
             docker ps -a
             # docker logs freebie
