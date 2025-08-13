@@ -46,13 +46,13 @@ jobs:
           target: "/home/rana/"
 
           
-      - name: Test Some Logs
-        run: |
-            echo "### System Info ###"
-            whoami
-            su - rana
-            cd freebie-backend/
-            git pull
+      # - name: Test Some Logs
+      #   run: |
+      #       echo "### System Info ###"
+      #       whoami
+      #       su - rana
+      #       cd freebie-backend/
+      #       git pull
 
       # Step 6: SSH into Hostinger and deploy
       - name: Deploy via SSH
@@ -64,14 +64,15 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             # Load both images
-            whoami
+            # whoami
             # su - rana
+            ls
             docker load -i /home/rana/freebie.tar
             docker load -i /home/rana/postgres.tar
             
             # Create network if not exists
             # docker network create freebie-network || true
-            cd freebie-backend/
+            # cd freebie-backend/
             # Stop and remove existing containers
             docker stop freebie postgres || true
             docker rm freebie postgres || true
