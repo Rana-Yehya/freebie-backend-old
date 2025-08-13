@@ -78,6 +78,7 @@ jobs:
             # docker network create freebie-network || true
             # cd freebie-backend/
             cd /home/rana/freebie-backend
+            docker-compose down --remove-orphans
 
             # Stop and remove existing containers
             docker stop freebie* || true
@@ -87,7 +88,7 @@ jobs:
             # docker volume create postgres-data || true
             # Start services
 
-            docker compose build  --remove-orphans
+            docker compose build
             # docker compose run app npx prisma generate
             # docker compose run app npx prisma migrate dev --name=test
             docker compose up
