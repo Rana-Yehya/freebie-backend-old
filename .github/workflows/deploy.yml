@@ -50,8 +50,9 @@ jobs:
         run: |
             echo "### System Info ###"
             whoami
-            pwd
-            ls -la
+            su - rana
+            cd freebie-backend/
+            git pull
 
       # Step 6: SSH into Hostinger and deploy
       - name: Deploy via SSH
