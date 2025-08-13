@@ -87,7 +87,7 @@ jobs:
             # docker volume create postgres-data || true
             # Start services
 
-            docker compose build
+            docker compose build  --remove-orphans
             # docker compose run app npx prisma generate
             # docker compose run app npx prisma migrate dev --name=test
             docker compose up
