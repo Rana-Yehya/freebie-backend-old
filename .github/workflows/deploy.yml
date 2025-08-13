@@ -68,6 +68,7 @@ jobs:
           username: ${{ secrets.HOSTINGER_USERNAME }}
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
+          source: "*"
           script: |
             # Load both images
             # whoami
@@ -79,20 +80,13 @@ jobs:
             # docker network create freebie-network || true
             # cd freebie-backend/
             # Stop and remove existing containers
-            # docker stop freebie postgres || true
-            # docker rm freebie postgres || true
+            docker stop freebie || true
+            docker rm freebie || true
             
             # Create volume if not exists
             # docker volume create postgres-data || true
             
-            docker compose up -d \
-              --name freebie-app \
-              -e PORT=5000 \
-              -e NODE_ENV=development \
-              -e DATABASE_URL=postgresql://postgres:postgres@postgres:5432/freebie?schema=public \
-              -p 5000:5000 \
-              -v /home/rana:/docker \
-              app
+            docker compose up
             
             # Verify deployment
             docker ps -a
