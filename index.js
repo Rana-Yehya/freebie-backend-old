@@ -11,7 +11,6 @@ const { rateLimit } = require("express-rate-limit");
 const helmet = require("helmet");
 const cors = require("cors");
 const xss = require("xss-clean");
-console.log("testing");
 require("dotenv").config();
 require("express-async-errors");
 require("./config/notification");
