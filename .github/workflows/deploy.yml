@@ -46,6 +46,7 @@ jobs:
           host: ${{ secrets.HOSTINGER_HOST }}
           username: ${{ secrets.HOSTINGER_USERNAME }}
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             # Load the Docker image
             docker load -i /home/rana/freebie.tar
