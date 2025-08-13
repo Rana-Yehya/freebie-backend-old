@@ -86,7 +86,8 @@ jobs:
             # Create volume if not exists
             # docker volume create postgres-data || true
             
-            docker compose up
+            docker compose up -d \
+              --name freebie-app 
             
             # Verify deployment
             docker ps -a
