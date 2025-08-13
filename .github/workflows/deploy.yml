@@ -86,21 +86,9 @@ jobs:
             # Create volume if not exists
             # docker volume create postgres-data || true
             # Start services
-            docker run -d \
-              --name postgres \
-              -e POSTGRES_USER=postgres \
-              -e POSTGRES_PASSWORD=postgres \
-              -e POSTGRES_DB=freebie \
-              -p 5439:5432 \
-              -v postgres-data:/var/lib/postgresql/data \
-              postgres:16
-            
-            # Wait for PostgreSQL to be ready
-            sleep 10
 
-            docker compose up -d \
-              --name freebie-app \
-              app
+            docker compose up -d --build
+
             # Verify deployment
             docker ps -a
             # docker logs freebie
