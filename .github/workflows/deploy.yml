@@ -21,19 +21,19 @@ jobs:
       #     password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
       # Step 3: Build Docker image
-      - name: Set up Docker Compose
-        run: |
-          docker compose -f docker-compose.yaml build
-          docker compose -f docker-compose.yaml up -d
-          docker ps -a
+      # - name: Set up Docker Compose
+      #   run: |
+      #     docker compose -f docker-compose.yaml build
+      #     docker compose -f docker-compose.yaml up -d
+      #     docker ps -a
 
       # Step 4: Save Docker image as a .tar file (to transfer)
       - name: Save Docker Image
         run: |
-          mkdir -p ./docker-images
-          docker save -o ./docker-images/freebie.tar freebie-app  # Matches container_name
-          docker save -o ./docker-images/postgres.tar postgres:16
-          ls -lh ./docker-images/
+          mkdir -p ./freebie-backend
+          # docker save -o ./docker/freebie.tar freebie-app  # Matches container_name
+          # docker save -o ./docker/postgres.tar postgres:16
+          ls -lh ./freebie-backend/
           pwd
       # Step 5: Transfer image to Hostinger via SCP
       - name: Upload Image to Hostinger
@@ -44,13 +44,13 @@ jobs:
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           source: "*"
-          target: "/home/rana/docker-images/"
-      - name: Verify Docker images exist
-        run: |
-          pwd
-          ls -lh ./docker-images/
-          test -f ./docker-images/freebie.tar && echo "freebie.tar exists" || echo "freebie.tar missing"
-          test -f ./docker-images/postgres.tar && echo "postgres.tar exists" || echo "postgres.tar missing"
+          target: "/home/rana/freebie-backend/"
+      # - name: Verify Docker images exist
+      #   run: |
+      #     pwd
+      #     ls -lh ./docker-images/
+      #     test -f ./docker-images/freebie.tar && echo "freebie.tar exists" || echo "freebie.tar missing"
+      #     test -f ./docker-images/postgres.tar && echo "postgres.tar exists" || echo "postgres.tar missing"
                 
       # - name: Test Some Logs
       #   run: |
@@ -68,14 +68,12 @@ jobs:
           username: ${{ secrets.HOSTINGER_USERNAME }}
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          source: "*"
           script: |
             # Load both images
             # whoami
             # su - rana
-            docker load -i **/freebie.tar
-            docker load -i **/postgres.tar
-            
+            # docker load -i **/freebie.tar
+            # docker load -i **/postgres.tar
             # Create network if not exists
             # docker network create freebie-network || true
             # cd freebie-backend/
@@ -86,9 +84,11 @@ jobs:
             # Create volume if not exists
             # docker volume create postgres-data || true
             # Start services
+            cd /home/rana/freebie-backend
 
-            docker compose up -d --build
-
+            docker compose build
+            docker compose up
+            
             # Verify deployment
             docker ps -a
             # docker logs freebie
