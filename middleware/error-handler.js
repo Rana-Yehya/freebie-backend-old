@@ -4,7 +4,7 @@ const {
   destroyImage,
   destroyMultipleImages,
 } = require("../helpers/image-kit/delete-image");
-const { appLocalize } = require("../helpers/localize");
+const i18n = require("i18n");
 
 const errorHandler = async (err, req, res, next) => {
   console.log(err);
@@ -94,7 +94,7 @@ const errorHandler = async (err, req, res, next) => {
   return res.status(customError.statusCode).json({
     isSuccess: false,
     // message: customError.message,
-    message: appLocalize.translate(customError.message),
+    message: i18n.__(customError.message),
     // ...(err.details && { details: err.details }),
   });
   // return res

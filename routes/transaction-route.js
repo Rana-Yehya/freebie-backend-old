@@ -9,15 +9,19 @@ const {
 const {
   authenticateUserMiddleware,
 } = require("../middleware/authentication-middleware");
-const {
-  authorizeMiddleware,
-} = require("../middleware/authorization-middleware");
-const { userConstant } = require("../config/constants");
-const { imagekitUploadFile } = require("../helpers/image-kit/upload-image");
 const imagekit = require("../config/image-kit");
 
 const router = express.Router();
 
+// const sendSMS = async (req, res) => {
+//   const message = await client.messages.create({
+//     body: "Hello from my friendly name!",
+//     from: "Freebie", // Alphanumeric sender ID or Twilio number
+//     to: "+201275559131", // Recipient's phone number
+//   });
+//   console.log(message);
+//   return res.status(200).json({ message: "SMS sent successfully" });
+// };
 const addImage = async (req, res, next) => {
   const files = req.files.file;
   // console.log(files);
@@ -94,7 +98,7 @@ router.route("/").get(authenticateUserMiddleware, getAllTransactions);
 router.route("/").post(authenticateUserMiddleware, createWithdrawTransaction);
 router.route("/add-image").post(addImage);
 router.route("/add-multi-image").post(addMultiImage);
-
+// router.route("/send-sms").post(sendSMS);
 router.route("/delete-image").post(deleteImage);
 router.route("/delete-multi-image").post(deleteMultiImage);
 

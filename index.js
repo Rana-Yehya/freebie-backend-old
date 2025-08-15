@@ -11,10 +11,13 @@ const { rateLimit } = require("express-rate-limit");
 const helmet = require("helmet");
 const cors = require("cors");
 const xss = require("xss-clean");
+const i18n = require("i18n");
+
 require("dotenv").config();
 require("express-async-errors");
 require("./config/notification");
 require("./config/image-kit");
+require("./helpers/cron/check-product-discount-job");
 const { prisma } = require("./config/prisma");
 
 const adminAuthRouter = require("./routes/admin-auth-route");
@@ -79,6 +82,17 @@ app.use(
     credentials: true,
   })
 );
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, //15
+  max: (req) => (req?.user ? 100000000000000 : 100000000), //1000 : 100
+  message: { error: "Too many requests" },
+  standardHeaders: true,
+  legacyHeaders: true,
+  keyGenerator: (req) => req.ip,
+});
+app.use(limiter);
+
 app.use(morgan("dev"));
 app.use(express.json({ limit: "100mb" }));
 app.use(express.urlencoded({ limit: "100mb", extended: true }));
@@ -92,42 +106,14 @@ app.use(
   })
 );
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, //15
-  max: (req) => (req?.user ? 100000000000000 : 100000000), //1000 : 100
-  message: { error: "Too many requests" },
-  standardHeaders: true,
-  legacyHeaders: true,
-  keyGenerator: (req) => req.ip,
+// Configure i18n
+i18n.configure({
+  locales: ["en", "ar"], // English and Spanish
+  directory: __dirname + "/locales",
+  defaultLocale: "en",
+  objectNotation: true,
 });
-app.use(limiter);
-var now = new Date();
-var night = new Date(
-  now.getFullYear(),
-  now.getMonth(),
-  now.getDate() + 1, // the next day, ...
-  0,
-  0,
-  0 // ...at 00:00:00 hours
-);
-var msTillMidnight = night.getTime() - now.getTime();
-setTimeout(function () {
-  reset(); //      <-- This is the function being called at midnight.
-  now = new Date();
-  night = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate() + 1, // the next day, ...
-    0,
-    0,
-    0 // ...at 00:00:00 hours
-  );
-}, msTillMidnight);
-async function reset() {
-  console.log(
-    "This function will check for the prices in products and update them every 24 hours based on the discount percentage"
-  );
-}
+
 app.use(localizationMiddleware);
 
 // app.use(cookieParser(process.env.JWT_SECRET));
