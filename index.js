@@ -153,8 +153,8 @@ const startServer = async () => {
       await prisma.admin.create({
         data: {
           name: "name",
-          email: "email@emal.com",
-          phone: "+201275559130",
+          email: "freebie.egypt@gmail.com",
+          phone: "+201225989865",
           password: await passwordEncrypt("password"),
         },
       });
