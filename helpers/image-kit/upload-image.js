@@ -126,7 +126,7 @@ async function uploadMultipleImages({ req, images, folder = "file-upload" }) {
         throw new BadRequestError("Please enter a smaller image");
       }
 
-      const file = fs.createReadStream(element.tempFilePath);
+      const file = fs.createReadStream(imageToUpload.tempFilePath);
 
       const result = await imagekit.imagekit.upload({
         file: file,

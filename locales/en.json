@@ -1,3 +1,6 @@
 {
-	"Invalid Credentials": "Invalid Credentials"
+	"Invalid Credentials": "Invalid Credentials",
+	"Unauthorizated": "Unauthorizated",
+	"Category not found": "Category not found",
+	"element is not defined": "element is not defined"
 }
