@@ -427,7 +427,7 @@ const searchAllProducts = async (req, res, next) => {
       ? ProductTags.POPULAR
       : isBigSale == "true"
       ? ProductTags.BIGSALE
-      : ProductTags.NONE;
+      : undefined;
   console.log("tags", tags);
   const colorList = req.query.colors
     ? decodeURIComponent(req.query.colors)
