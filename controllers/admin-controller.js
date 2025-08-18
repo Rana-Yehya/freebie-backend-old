@@ -85,6 +85,7 @@ const setStoreStatus = async (req, res) => {
       : status == "deleted"
       ? StoreStatus.DELETED
       : undefined;
+  console.log(storeStatus);
   if (storeStatus != StoreStatus.APPROVED) {
     await prisma.product.updateMany({
       where: {
@@ -97,7 +98,7 @@ const setStoreStatus = async (req, res) => {
   }
   const store = await prisma.store.update({
     where: { id: storeId },
-    data: { status: StoreStatus.FROZEN },
+    data: { status: storeStatus },
   });
 
   if (!store) {

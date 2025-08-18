@@ -81,8 +81,8 @@ jobs:
             docker-compose down --remove-orphans
 
             # Stop and remove existing containers
-            docker stop freebie* || true
-            docker rm freebie* || true
+            docker stop $(docker ps -q --filter ancestor=freebie) || true
+            docker rm $(docker ps -q --filter ancestor=freebie) || true
             
             # Create volume if not exists
             # docker volume create postgres-data || true
