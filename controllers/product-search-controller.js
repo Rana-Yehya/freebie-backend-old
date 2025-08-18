@@ -526,6 +526,7 @@ const searchAllProducts = async (req, res, next) => {
       ...{ status: ProductStatus.APPROVED },
     };
   }
+  console.log(productQuerySearch);
   const product = await prisma.product.findMany({
     take: parseInt(limit) || 10,
     skip: ((parseInt(page) || 1) - 1) * (parseInt(limit) || 10),

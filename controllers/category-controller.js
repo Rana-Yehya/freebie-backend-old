@@ -17,6 +17,7 @@ const getAllCategories = async (req, res, next) => {
   const category = await prisma.category.findMany({
     include: {
       image: true,
+      name: true,
     },
   });
   return res
