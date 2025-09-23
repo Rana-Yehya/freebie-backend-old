@@ -52,9 +52,6 @@ const createCountry = async (req, res, next) => {
   });
 
   console.log(zodModel);
-  console.log(zodModel.error);
-  console.log(zodModel.error.errors[0].message);
-
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }

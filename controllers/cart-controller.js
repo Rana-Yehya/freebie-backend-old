@@ -267,13 +267,13 @@ const getAllCartItems = async (req, res, next) => {
 // };
 
 const createUpdateCartItem = async (req, res, next) => {
-  const { productId, color, quantity } = req.body;
+  const { productVariantId, quantity } = req.body;
   const zodModel = UserProductZodModel.safeParse({
     // userCartId: userCartId,
     // userProducts: productUser,
     // stateId: stateId,
-    productId: productId,
-    color: color,
+    // productId: productId,
+    productVariantId: productVariantId,
     quantity: quantity,
   });
 
@@ -281,58 +281,55 @@ const createUpdateCartItem = async (req, res, next) => {
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
-  const product = await prisma.product.findUnique({
-    where: { id: productId },
-    include: {
-      productVariant: {
+  const productVariant = await prisma.productVariant.findUnique({
+    where: { id: productVariantId },
+    select: {
+      id: true,
+      color: true,
+      product: true,
+      productStock: {
         select: {
-          color: true,
-          productStock: {
-            select: {
-              id: true,
-              stock: true,
-              branch: { select: { id: true, location: true } },
-            },
-          },
+          id: true,
+          stock: true,
+          branch: { select: { id: true, location: true } },
         },
       },
     },
   });
-  if (!product) {
+  if (!productVariant) {
     throw new NotFoundError("Product not found");
   }
   // console.log(product.productVariant[0].productStock[0].branch);
 
-  const productVariants = product.productVariant.find(
-    (variant) => variant.color == color
-  );
+  // const productVariants = product.productVariant.find(
+  //   (variant) => variant.id == productVariantId // color
+  // );
   // console.log(productStock);
   let productStocks = [];
-  console.log(productVariants);
-  console.log(productVariants.length);
+  console.log(productVariant);
   let statesIds = [];
-  if (productVariants.length == undefined) {
-    //&& productVariants != undefined
-    productVariants.productStock.map((stock) => {
-      // console.log(stock);
-      productStocks.push(stock);
-      console.log(stock);
-      console.log(stock.branch.location);
+  // if (productVariants.length == undefined) {
+  //&& productVariants != undefined
+  productVariant.productStock.map((stock) => {
+    // console.log(stock);
+    productStocks.push(stock);
+    console.log(stock);
+    console.log(stock.branch.location);
 
-      statesIds.push(stock.branch.location.stateId);
-    });
-  } else {
-    for (let i = 0; i < productVariants.length; i++) {
-      // console.log(productStock[i]);
-      productVariants[i].map((stock) => {
-        // console.log(stock);
-        productStocks.push(stock);
-        statesIds.push(stock.branch.location.stateId);
-      });
-    }
-  }
+    statesIds.push(stock.branch.location.stateId);
+  });
+  // } else {
+  //   for (let i = 0; i < productVariants.length; i++) {
+  //     // console.log(productStock[i]);
+  //     productVariants[i].map((stock) => {
+  //       // console.log(stock);
+  //       productStocks.push(stock);
+  //       statesIds.push(stock.branch.location.stateId);
+  //     });
+  //   }
+  // }
   if (
-    product.canBeDeliveredOutsideState == false &&
+    productVariant.product.canBeDeliveredOutsideState == false &&
     !statesIds.includes(req.user.stateId)
   ) {
     throw new BadRequestError(
@@ -341,8 +338,8 @@ const createUpdateCartItem = async (req, res, next) => {
   }
   let coloredProductStock = [];
   // productVariants.map((element) => {
-  if (!product.doesNeedPreparation) {
-    productVariants.productStock.map((stock) => {
+  if (!productVariant.product.doesNeedPreparation) {
+    productVariant.productStock.map((stock) => {
       stock.stock >= quantity ? coloredProductStock.push(stock) : undefined;
     });
   } else {

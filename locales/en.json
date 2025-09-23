@@ -260,5 +260,11 @@
 	"Please enter a valid product stock id": "Please enter a valid product stock id",
 	"Please enter a valid origin state id": "Please enter a valid origin state id",
 	"Please enter a valid destination state id": "Please enter a valid destination state id",
-	"Please enter a logo": "Please enter a logo"
+	"Please enter a logo": "Please enter a logo",
+	"Cannot read properties of undefined (reading 'errors')": "Cannot read properties of undefined (reading 'errors')",
+	"Cannot read properties of undefined (reading 'mimetype')": "Cannot read properties of undefined (reading 'mimetype')",
+	"No 'state' record (needed to inline the relation on 'user' record(s)) was found for a nested connect on one-to-many relation 'stateTouser'.": "No 'state' record (needed to inline the relation on 'user' record(s)) was found for a nested connect on one-to-many relation 'stateTouser'.",
+	"Product is required": "Product is required",
+	"Product Variant is required": "Product Variant is required",
+	"Product Variant Id is not a valid UUID": "Product Variant Id is not a valid UUID"
 }
