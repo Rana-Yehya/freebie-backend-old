@@ -15,7 +15,7 @@ const CreateCountryZodModel = z.object({
   //   .max(4, { message: "Name must be at most 4 characters long" }),
 
   countryIsoCode: z
-    .string()
+    .string({ message: "Please enter a country iso code" })
     .min(1, { message: "Name must be at least 1 characters long" })
     .max(4, { message: "Name must be at most 4 characters long" }),
 

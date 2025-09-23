@@ -250,5 +250,15 @@
 	"Incorrect OTP. 2 attempts left": "Incorrect OTP. 2 attempts left",
 	"Incorrect OTP. 3 attempts left": "Incorrect OTP. 3 attempts left",
 	"Too many failed OTP requests. Wait half an hour and request again": "Too many failed OTP requests. Wait half an hour and request again",
-	"This resourse is locaked to this account. Please try again later": "This resourse is locaked to this account. Please try again later"
+	"This resourse is locaked to this account. Please try again later": "This resourse is locaked to this account. Please try again later",
+	"Please enter a country iso code": "Please enter a country iso code",
+	"Images are required": "Images are required",
+	"Please enter a valid state id": "Please enter a valid state id",
+	"Please enter a valid branch id": "Please enter a valid branch id",
+	"Image is required": "Image is required",
+	"Please enter a banner": "Please enter a banner",
+	"Please enter a valid product stock id": "Please enter a valid product stock id",
+	"Please enter a valid origin state id": "Please enter a valid origin state id",
+	"Please enter a valid destination state id": "Please enter a valid destination state id",
+	"Please enter a logo": "Please enter a logo"
 }

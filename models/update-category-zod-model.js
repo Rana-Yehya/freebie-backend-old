@@ -11,7 +11,9 @@ const UpdateCategoryZodModel = z.object({
     }),
   name: UpdateLocaleZodModel, //z.string({ message: "Name is required" }).optional(),
   image: z
-    .any()
+    .any({
+      message: "Images are required",
+    })
     .refine(
       (file) =>
         [
@@ -38,7 +40,6 @@ const UpdateCategoryZodModel = z.object({
           "Availablity to deliver outside the state does not equal to true or false",
       }
     )
-    .default("true")
     .optional(),
 });
 // type UserModel = z.infer<typeof CreateUserZodModel>;

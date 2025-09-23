@@ -86,7 +86,6 @@ const UpdateProductZodModel = z
           message: "Need Preparation property does not equal to true or false",
         }
       )
-      .default(false)
       .optional(),
     //{ message: "Is available is required" }
     isAvailable: z
@@ -97,7 +96,6 @@ const UpdateProductZodModel = z
           message: "Available property does not equal to true or false",
         }
       )
-      .default("true")
       .optional(),
     // isFeatured: z
     //   .string()
@@ -124,7 +122,6 @@ const UpdateProductZodModel = z
             "Availablity to deliver outside the state does not equal to true or false",
         }
       )
-      .default("true")
       .optional(),
     preparationTimeInMinutes: z.string().optional(),
     discountPercent: z.string().optional(),

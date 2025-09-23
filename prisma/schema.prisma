@@ -170,7 +170,7 @@ model deliveryTaxes {
   // government            government?   @relation(fields: [governmentId], references: [id])
   // governmentId          String?
   //currency String @default("USD") // Required for multi-currency
-  @@unique([originStateId, destinationStateId])
+  // @@unique([originStateId, destinationStateId])
   @@map("delivery_taxes")
 }
 
@@ -384,7 +384,7 @@ model productOrder {
   status             OrderStatus    @default(PENDING) //pending, confirmed, shipped, delivered, cancelled, refunded
   cancellationReason String?
   userRefundAmount   Float?
-  storerRefundAmount   Float?
+  storerRefundAmount Float?
   cancelledBy        OrderCancelBy?
 
   @@map("product_order")

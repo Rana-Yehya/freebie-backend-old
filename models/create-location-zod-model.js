@@ -7,7 +7,9 @@ const CreateLocationZodModel = z.object({
     .optional(),
   // countryId: z.string({ message: "Please enter a country" }),
   // storeId: z.string({ message: "Please enter a description" }),
-  stateId: z.string({ message: "Please enter a state" }).uuid(),
+  stateId: z
+    .string({ message: "Please enter a state" })
+    .uuid({ message: "Please enter a valid state id" }),
   //work hours
 });
 module.exports = { CreateLocationZodModel };

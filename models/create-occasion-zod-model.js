@@ -4,7 +4,9 @@ const { CreateLocaleZodModel } = require("./create-locole-zod-model");
 const CreateOccasionZodModel = z.object({
   name: CreateLocaleZodModel, // z.string({ message: "Name is required" }),
   image: z
-    .any()
+    .any({
+      message: "Images are required",
+    })
     .refine(
       (file) =>
         [

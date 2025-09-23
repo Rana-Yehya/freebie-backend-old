@@ -108,11 +108,23 @@ app.use(
 
 // Configure i18n
 i18n.configure({
-  locales: ["en", "ar"], // English and Spanish
-  directory: __dirname + "/locales",
+  locales: ["en", "ar"],
+  directory: path.join(__dirname, "locales"),
   defaultLocale: "en",
-  objectNotation: true,
+  autoReload: true,
+  syncFiles: true,
+  // objectNotation: true,
+  logWarnFn: function (msg) {
+    console.log("i18n Warning:", msg);
+  },
+  logDebugFn: function (msg) {
+    console.log("i18n Debug:", msg);
+  },
+  logErrorFn: function (msg) {
+    console.log("i18n Error:", msg);
+  },
 });
+app.use(i18n.init);
 
 app.use(localizationMiddleware);
 

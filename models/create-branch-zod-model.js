@@ -11,7 +11,9 @@ const CreateBranchZodModel = z.object({
       message: "Please enter a valid store id",
     }),
   phone: z
-    .string()
+    .string({
+      message: "Please enter a phone number",
+    })
     .refine(
       (phoneNumber) =>
         phoneNumber != undefined &&

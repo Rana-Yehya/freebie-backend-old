@@ -11,7 +11,9 @@ const CreateStoreZodModel = z.object({
   name: CreateLocaleZodModel, //
   bio: CreateLocaleZodModel, // z.string({ message: "Please enter a description" }),
   logo: z
-    .any()
+    .any({
+      message: "Please enter a logo",
+    })
     .refine(
       (file) =>
         [
@@ -28,7 +30,9 @@ const CreateStoreZodModel = z.object({
     }),
   // logo: z.string({ message: "Please enter a logo" }),
   banner: z
-    .any()
+    .any({
+      message: "Please enter a banner",
+    })
     .refine(
       (file) =>
         [
@@ -53,7 +57,9 @@ const CreateStoreZodModel = z.object({
         message: "The phone number is not correct",
       }
     ),
-  email: z.string({ message: "Please enter an email" }),
+  email: z
+    .string({ message: "Please enter an email" })
+    .email({ message: "Please enter a valid email" }),
   password: z.string({ message: "Please enter a password" }),
   socialLinks: CreateSocialMediaZodModel,
   // socialLinks: z

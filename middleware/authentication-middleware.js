@@ -1,16 +1,16 @@
 const { UnauthenticatedError } = require("../errors");
 const { isTokenValid } = require("../utils/jwt-utils");
 const { prisma } = require("../config/prisma");
+
 const {
   storeConstant,
   userConstant,
   adminConstant,
 } = require("../config/constants");
-const unauthorizated = i18n.__("Unauthorizated");
 const authenticateUserMiddleware = async (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization || !authorization.startsWith("Bearer ")) {
-    throw new UnauthenticatedError(unauthorizated);
+    throw new UnauthenticatedError("Unauthorizated");
   }
   const accessToken = authorization.split(" ")[1];
   // const { accessToken, refreshToken } = req.signedCookies;
@@ -42,7 +42,7 @@ const authenticateUserMiddleware = async (req, res, next) => {
         },
       });
       if (!session) {
-        throw new UnauthenticatedError(unauthorizated);
+        throw new UnauthenticatedError("Unauthorizated");
       }
       if (
         (session.admin &&
@@ -96,10 +96,10 @@ const authenticateUserMiddleware = async (req, res, next) => {
 
       return next();
     } else {
-      throw new UnauthenticatedError(unauthorizated);
+      throw new UnauthenticatedError("Unauthorizated");
     }
   } else {
-    throw new UnauthenticatedError(unauthorizated);
+    throw new UnauthenticatedError("Unauthorizated");
   }
 };
 
@@ -142,7 +142,7 @@ const optionalAuthenticateUserMiddleware = async (req, res, next) => {
         req.fcmToken = session.fcmToken;
         req.role = decoded.role;
       } else {
-        throw new UnauthenticatedError(unauthorizated);
+        throw new UnauthenticatedError("Unauthorizated");
       }
       // const { userId, email } = decoded;
 

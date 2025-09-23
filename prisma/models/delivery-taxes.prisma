@@ -17,7 +17,7 @@ model deliveryTaxes {
   // government            government?   @relation(fields: [governmentId], references: [id])
   // governmentId          String?
   //currency String @default("USD") // Required for multi-currency
-  @@unique([originStateId, destinationStateId])
+  // @@unique([originStateId, destinationStateId])
   @@map("delivery_taxes")
 }
 

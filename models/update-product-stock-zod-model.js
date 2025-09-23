@@ -3,7 +3,7 @@ const { z } = require("zod");
 const UpdateProductStockZodModel = z.object({
   productStockId: z
     .string({ message: "Please enter a product stock id" })
-    .uuid()
+    .uuid({ message: "Please enter a valid product stock id" })
     .optional(),
   stock: z.number().optional(),
   color: z

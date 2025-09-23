@@ -11,7 +11,9 @@ const CreateProductZodModel = z
     // isPopular                Boolean   @default(false)
     name: CreateLocaleZodModel, //z.string({ message: "Name is required" }),
     mainImage: z
-      .any()
+      .any({
+        message: "Image is required",
+      })
       .refine(
         (file) =>
           [

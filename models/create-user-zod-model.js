@@ -12,7 +12,9 @@ const CreateUserZodModel = z.object({
     .max(20, { message: "Name must be at most 20 characters long" }),
   dateOfBirth: z.string().date("Invalid date of birth"),
   gender: z.enum(["male", "female"], { message: "Invalid gender" }),
-  email: z.string().email({ message: "Invalid email address" }),
+  email: z
+    .string({ message: "Email is required" })
+    .email({ message: "Invalid email address" }),
   // userCountry: z.string({ message: "Country is required" }),
   userState: z.string({ message: "State is required" }),
   phone: z

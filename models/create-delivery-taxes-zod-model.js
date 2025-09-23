@@ -10,12 +10,16 @@ const CreateDeliveryTaxesZodModel = z.object({
     .string({
       message: "Origin State is required",
     })
-    .uuid(),
+    .uuid({
+      message: "Please enter a valid origin state id",
+    }),
   destinationStateId: z
     .string({
       message: "Destination State is required",
     })
-    .uuid(),
+    .uuid({
+      message: "Please enter a valid destination state id",
+    }),
   baseFee: z.number({
     message: "Base Fee is required",
   }),

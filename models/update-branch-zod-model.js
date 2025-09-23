@@ -16,7 +16,9 @@ const UpdateBranchZodModel = z.object({
   // countryId: z.string({ message: "Please enter a country" }),
   // storeId: z.string({ message: "Please enter a description" }),
   phone: z
-    .string()
+    .string({
+      message: "Please enter a phone number",
+    })
     .refine(
       (phoneNumber) =>
         phoneNumber != undefined &&
