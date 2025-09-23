@@ -1,0 +1,24 @@
+model PlanLimit {
+    id                   String             @id @default(uuid())
+    planName             PlanName           @unique @default(BASIC)
+    maxProducts          Int                @default(50)
+    maxBranches          Int                @default(2)
+    maxDiscountCodes     Int                @default(0)
+    notificationsPerWeek Int                @default(0)
+    adsPerWeek           Int                @default(0)
+    allowsBoxes          Boolean            @default(false)
+    allowsCollaborations Boolean            @default(false)
+    commissionRate       Float              @default(0.14) // 14%
+    monthlyPrice         Float? // null for commission-based plans
+    annualPrice          Float?
+    storeSubscription    StoreSubscription[]
+
+    @@map("plan_limits")
+}
+
+enum PlanName {
+    BASIC
+    SILVER
+    GOLD
+    DIAMOND
+}

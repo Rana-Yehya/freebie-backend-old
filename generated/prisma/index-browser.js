@@ -132,6 +132,54 @@ exports.Prisma.AdminScalarFieldEnum = {
   countryId: 'countryId'
 };
 
+exports.Prisma.AdCampaignScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  imageUrl: 'imageUrl',
+  targetUrl: 'targetUrl',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  clicks: 'clicks',
+  impressions: 'impressions',
+  storeId: 'storeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AdImpressionScalarFieldEnum = {
+  id: 'id',
+  adCampaignId: 'adCampaignId',
+  userId: 'userId',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.AdClickScalarFieldEnum = {
+  id: 'id',
+  adCampaignId: 'adCampaignId',
+  userId: 'userId',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.BranchDiscountCodeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  discountPercentage: 'discountPercentage',
+  discountAmount: 'discountAmount',
+  minOrderAmount: 'minOrderAmount',
+  usageLimit: 'usageLimit',
+  usedCount: 'usedCount',
+  isActive: 'isActive',
+  validFrom: 'validFrom',
+  validUntil: 'validUntil',
+  createdAt: 'createdAt',
+  branchId: 'branchId'
+};
+
 exports.Prisma.BranchScalarFieldEnum = {
   id: 'id',
   storeId: 'storeId',
@@ -264,6 +312,21 @@ exports.Prisma.OrderScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PlanLimitScalarFieldEnum = {
+  id: 'id',
+  planName: 'planName',
+  maxProducts: 'maxProducts',
+  maxBranches: 'maxBranches',
+  maxDiscountCodes: 'maxDiscountCodes',
+  notificationsPerWeek: 'notificationsPerWeek',
+  adsPerWeek: 'adsPerWeek',
+  allowsBoxes: 'allowsBoxes',
+  allowsCollaborations: 'allowsCollaborations',
+  commissionRate: 'commissionRate',
+  monthlyPrice: 'monthlyPrice',
+  annualPrice: 'annualPrice'
+};
+
 exports.Prisma.ProductCartScalarFieldEnum = {
   userCartUserId: 'userCartUserId',
   productStockId: 'productStockId',
@@ -363,6 +426,30 @@ exports.Prisma.StateScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.StoreSubscriptionScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  planLimitId: 'planLimitId',
+  status: 'status',
+  currentPeriodStart: 'currentPeriodStart',
+  currentPeriodEnd: 'currentPeriodEnd',
+  maxTotalProducts: 'maxTotalProducts',
+  maxBranches: 'maxBranches',
+  maxDiscountCodes: 'maxDiscountCodes',
+  notificationsPerWeek: 'notificationsPerWeek',
+  adsPerWeek: 'adsPerWeek',
+  allowsBoxes: 'allowsBoxes',
+  allowsCollaborations: 'allowsCollaborations',
+  commissionRate: 'commissionRate',
+  monthlyPrice: 'monthlyPrice',
+  annualPrice: 'annualPrice',
+  adsUsedThisPeriod: 'adsUsedThisPeriod',
+  adsResetAt: 'adsResetAt',
+  downgradeToPlan: 'downgradeToPlan',
+  downgradeScheduledAt: 'downgradeScheduledAt'
+};
+
 exports.Prisma.StoreScalarFieldEnum = {
   id: 'id',
   nameId: 'nameId',
@@ -388,6 +475,16 @@ exports.Prisma.SocialLinkScalarFieldEnum = {
   x: 'x',
   instagram: 'instagram',
   storeId: 'storeId'
+};
+
+exports.Prisma.SubscriptionPlanChangeScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  fromPlan: 'fromPlan',
+  toPlan: 'toPlan',
+  changeType: 'changeType',
+  reason: 'reason',
+  subscriptionId: 'subscriptionId'
 };
 
 exports.Prisma.TransactionScalarFieldEnum = {
@@ -454,6 +551,13 @@ exports.UserOrderStatus = exports.$Enums.UserOrderStatus = {
   PAID: 'PAID'
 };
 
+exports.PlanName = exports.$Enums.PlanName = {
+  BASIC: 'BASIC',
+  SILVER: 'SILVER',
+  GOLD: 'GOLD',
+  DIAMOND: 'DIAMOND'
+};
+
 exports.ProductCartStatus = exports.$Enums.ProductCartStatus = {
   ACTIVE: 'ACTIVE',
   NODELIVERYSTATES: 'NODELIVERYSTATES',
@@ -487,12 +591,25 @@ exports.ProductTags = exports.$Enums.ProductTags = {
   NONE: 'NONE'
 };
 
+exports.SubscriptionStatus = exports.$Enums.SubscriptionStatus = {
+  ACTIVE: 'ACTIVE',
+  PENDING_DOWNGRADE: 'PENDING_DOWNGRADE',
+  CANCELLED: 'CANCELLED',
+  EXPIRED: 'EXPIRED'
+};
+
 exports.StoreStatus = exports.$Enums.StoreStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
   FROZEN: 'FROZEN',
   BANNED: 'BANNED',
   DELETED: 'DELETED'
+};
+
+exports.ChangeType = exports.$Enums.ChangeType = {
+  UPGRADE: 'UPGRADE',
+  DOWNGRADE: 'DOWNGRADE',
+  RENEWAL: 'RENEWAL'
 };
 
 exports.TransactionType = exports.$Enums.TransactionType = {
@@ -505,6 +622,10 @@ exports.TransactionType = exports.$Enums.TransactionType = {
 
 exports.Prisma.ModelName = {
   admin: 'admin',
+  AdCampaign: 'AdCampaign',
+  AdImpression: 'AdImpression',
+  AdClick: 'AdClick',
+  BranchDiscountCode: 'BranchDiscountCode',
   branch: 'branch',
   workHour: 'workHour',
   category: 'category',
@@ -519,6 +640,7 @@ exports.Prisma.ModelName = {
   location: 'location',
   occasion: 'occasion',
   order: 'order',
+  PlanLimit: 'PlanLimit',
   productCart: 'productCart',
   productOrder: 'productOrder',
   productPrice: 'productPrice',
@@ -528,8 +650,10 @@ exports.Prisma.ModelName = {
   review: 'review',
   session: 'session',
   state: 'state',
+  StoreSubscription: 'StoreSubscription',
   store: 'store',
   socialLink: 'socialLink',
+  SubscriptionPlanChange: 'SubscriptionPlanChange',
   transaction: 'transaction',
   userCart: 'userCart',
   user: 'user',

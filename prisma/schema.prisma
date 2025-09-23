@@ -44,6 +44,109 @@ model admin {
 }
 
 
+// ===== ads.prisma =====
+// Add these to your existing schema
+
+model AdCampaign {
+    id          String  @id @default(uuid())
+    title       String
+    description String?
+    imageUrl    String
+    targetUrl   String // Where the ad clicks go (e.g., store page, product page)
+
+    // // Ad status and timing
+    // status       AdStatus  @default(PENDING)
+    // startDate    DateTime?
+    // endDate      DateTime?
+
+    // scheduledFor DateTime? // When the ad is scheduled to run
+    // Ad scheduling (independent of billing period)
+    startDate     DateTime? // 2024-11-05 (when ad should start showing)
+    endDate       DateTime? // 2024-11-12 (when ad should stop showing)
+    // Tracking
+    clicks        Int            @default(0)
+    impressions   Int            @default(0)
+    adImpressions AdImpression[]
+    adClick       AdClick[]
+
+    // budget      Float? // Maximum budget for the ad
+    // spent       Float  @default(0)
+
+    // Relations - Ad belongs to a specific store (not branch)
+    store   store  @relation(fields: [storeId], references: [id])
+    storeId String
+
+    // // Which branch this ad promotes (optional)
+    // branch   branch? @relation(fields: [branchId], references: [id])
+    // branchId String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("ad_campaigns")
+}
+
+model AdImpression {
+    id           String     @id @default(uuid())
+    adCampaign   AdCampaign @relation(fields: [adCampaignId], references: [id])
+    adCampaignId String
+    userId       String? // If user is logged in
+    ipAddress    String?
+    userAgent    String?
+    createdAt    DateTime   @default(now())
+
+    @@map("ad_impressions")
+}
+
+model AdClick {
+    id           String     @id @default(uuid())
+    adCampaign   AdCampaign @relation(fields: [adCampaignId], references: [id])
+    adCampaignId String
+    userId       String?
+    ipAddress    String?
+    userAgent    String?
+    createdAt    DateTime   @default(now())
+
+    @@map("ad_clicks")
+}
+
+// Add to your existing enums
+enum AdStatus {
+    DRAFT
+    PENDING
+    APPROVED
+    REJECTED
+    ACTIVE
+    PAUSED
+    COMPLETED
+    CANCELLED
+}
+
+
+// ===== branch-discount-codes.prisma =====
+model BranchDiscountCode {
+  id                 String    @id @default(uuid())
+  code               String // Unique per branch? or per store? Let's make it unique per store
+  discountPercentage Int?
+  discountAmount     Float?
+  minOrderAmount     Float? // Minimum order amount to apply discount
+  usageLimit         Int? // Maximum number of times this code can be used
+  usedCount          Int       @default(0) // How many times it's been used
+  isActive           Boolean   @default(true)
+  validFrom          DateTime?
+  validUntil         DateTime?
+  createdAt          DateTime  @default(now())
+
+  // Relations - code belongs to a specific branch
+  branch   branch @relation(fields: [branchId], references: [id])
+  branchId String
+
+  // Ensure code is unique per store (not globally)
+  @@unique([branchId, code])
+  @@map("branch_discount_codes")
+}
+
+
 // ===== branch.prisma =====
 model branch {
   id         String    @id @unique @default(uuid())
@@ -53,14 +156,16 @@ model branch {
   locationId String?   @unique
   // location     location?
 
-  phone        String?
-  isFreezed    Boolean        @default(false)
-  workHours    workHour[]
-  productStock productStock[]
+  phone         String?
+  isFreezed     Boolean              @default(false)
+  workHours     workHour[]
+  productStock  productStock[]
+  discountCodes BranchDiscountCode[]
+
   // productUser  productCart[]
   // productOrder productOrder[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   // branchCity        String
   // branchState       String
   // branchZip         String
@@ -323,6 +428,33 @@ enum UserOrderStatus {
 // totalAmount Decimal @default(0)
 // amountPaid Decimal @default(0)
 // amountDue Decimal @default(0) // Calculated as totalAmount - amountPaid
+
+
+// ===== plan-limits.prisma =====
+model PlanLimit {
+    id                   String             @id @default(uuid())
+    planName             PlanName           @unique @default(BASIC)
+    maxProducts          Int                @default(50)
+    maxBranches          Int                @default(2)
+    maxDiscountCodes     Int                @default(0)
+    notificationsPerWeek Int                @default(0)
+    adsPerWeek           Int                @default(0)
+    allowsBoxes          Boolean            @default(false)
+    allowsCollaborations Boolean            @default(false)
+    commissionRate       Float              @default(0.14) // 14%
+    monthlyPrice         Float? // null for commission-based plans
+    annualPrice          Float?
+    storeSubscription    StoreSubscription[]
+
+    @@map("plan_limits")
+}
+
+enum PlanName {
+    BASIC
+    SILVER
+    GOLD
+    DIAMOND
+}
 
 
 // ===== product-cart.prisma =====
@@ -605,6 +737,60 @@ model state {
 }
 
 
+// ===== store-subscriptions.prisma =====
+model StoreSubscription {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Current active plan
+  planLimit   PlanLimit?         @relation(fields: [planLimitId], references: [id], onDelete: SetNull)
+  planLimitId String?
+  status      SubscriptionStatus @default(ACTIVE)
+
+  // Billing period (Nov 1 - Nov 30)
+  currentPeriodStart DateTime // 2024-11-01
+  currentPeriodEnd   DateTime // 2024-11-30
+
+  // Plan limits are now PER STORE (aggregate of all branches)
+  maxTotalProducts     Int @default(50) // Total across all branches
+  maxBranches          Int @default(1) // How many branches allowed
+  maxDiscountCodes     Int @default(0) // Total discount codes across all branches
+  notificationsPerWeek Int @default(0)
+  adsPerWeek           Int @default(0)
+
+  // Features
+  allowsBoxes          Boolean @default(false)
+  allowsCollaborations Boolean @default(false)
+
+  // Pricing
+  commissionRate Float  @default(0.14)
+  monthlyPrice   Float?
+  annualPrice    Float?
+
+  // Simple ad counter - reset each period
+  adsUsedThisPeriod Int       @default(0) // Tracks 0, 1, 2...
+  adsResetAt        DateTime? // Set to currentPeriodEnd
+
+  // For pending downgrades
+  downgradeToPlan      PlanName?
+  downgradeScheduledAt DateTime?
+
+  // Relations
+  // store       store?
+  planChanges SubscriptionPlanChange[]
+
+  @@map("store_subscriptions")
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PENDING_DOWNGRADE
+  CANCELLED
+  EXPIRED
+}
+
+
 // ===== store.prisma =====
 model store {
   id     String @id @unique @default(uuid())
@@ -615,24 +801,28 @@ model store {
 
   // name               String
   // bio                String
-  logoId               String        @unique
-  logo                 image         @relation("storeLogo", fields: [logoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  bannerId             String        @unique
-  banner               image         @relation("storeBanner", fields: [bannerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  phone                String        @unique
-  email                String        @unique
+  logoId               String            @unique
+  logo                 image             @relation("storeLogo", fields: [logoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bannerId             String            @unique
+  banner               image             @relation("storeBanner", fields: [bannerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  phone                String            @unique
+  email                String            @unique
   password             String
   // socialLinksId      String    
   socialLinks          socialLink? //  @relation(fields: [socialLinksId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   branches             branch[]
   transactions         transaction[]
-  moneyInPocket        Decimal       @default(0)
-  sessions             session[]     @relation("storeSession")
+  moneyInPocket        Decimal           @default(0)
+  sessions             session[]         @relation("storeSession")
   passwordChangeBefore DateTime?
   // product            product[]
   // store - restaurant - place for weddings
-  role                 String        @default("store")
-  status               StoreStatus   @default(PENDING)
+  role                 String            @default("store")
+  status               StoreStatus       @default(PENDING)
+  // subscription         StoreSubscription @relation(fields: [subscriptionId], references: [id])
+  // subscriptionId       String            @unique
+  // Store can have multiple ad campaigns
+  adCampaigns          AdCampaign[]
 
   // isApprovedByAdmin Boolean  @default(false)
   // isFreezed         Boolean  @default(false)
@@ -662,6 +852,34 @@ model socialLink {
   store     store   @relation(fields: [storeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // twitter    String
   // store     store[]
+}
+
+
+// ===== subscription-plan-changes.prisma =====
+model SubscriptionPlanChange {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+
+    // What changed
+    fromPlan   PlanName
+    toPlan     PlanName
+    changeType ChangeType // UPGRADE, DOWNGRADE, RENEWAL
+
+    // Context
+    reason String?
+
+    // Relations
+    subscription   StoreSubscription @relation(fields: [subscriptionId], references: [id])
+    subscriptionId String
+
+    @@map("subscription_plan_changes")
+}
+
+
+enum ChangeType {
+    UPGRADE
+    DOWNGRADE
+    RENEWAL
 }
 
 

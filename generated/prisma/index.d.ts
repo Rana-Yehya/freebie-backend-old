@@ -19,6 +19,26 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type admin = $Result.DefaultSelection<Prisma.$adminPayload>
 /**
+ * Model AdCampaign
+ * 
+ */
+export type AdCampaign = $Result.DefaultSelection<Prisma.$AdCampaignPayload>
+/**
+ * Model AdImpression
+ * 
+ */
+export type AdImpression = $Result.DefaultSelection<Prisma.$AdImpressionPayload>
+/**
+ * Model AdClick
+ * 
+ */
+export type AdClick = $Result.DefaultSelection<Prisma.$AdClickPayload>
+/**
+ * Model BranchDiscountCode
+ * 
+ */
+export type BranchDiscountCode = $Result.DefaultSelection<Prisma.$BranchDiscountCodePayload>
+/**
  * Model branch
  * 
  */
@@ -89,6 +109,11 @@ export type occasion = $Result.DefaultSelection<Prisma.$occasionPayload>
  */
 export type order = $Result.DefaultSelection<Prisma.$orderPayload>
 /**
+ * Model PlanLimit
+ * 
+ */
+export type PlanLimit = $Result.DefaultSelection<Prisma.$PlanLimitPayload>
+/**
  * Model productCart
  * 
  */
@@ -134,6 +159,11 @@ export type session = $Result.DefaultSelection<Prisma.$sessionPayload>
  */
 export type state = $Result.DefaultSelection<Prisma.$statePayload>
 /**
+ * Model StoreSubscription
+ * 
+ */
+export type StoreSubscription = $Result.DefaultSelection<Prisma.$StoreSubscriptionPayload>
+/**
  * Model store
  * 
  */
@@ -143,6 +173,11 @@ export type store = $Result.DefaultSelection<Prisma.$storePayload>
  * 
  */
 export type socialLink = $Result.DefaultSelection<Prisma.$socialLinkPayload>
+/**
+ * Model SubscriptionPlanChange
+ * 
+ */
+export type SubscriptionPlanChange = $Result.DefaultSelection<Prisma.$SubscriptionPlanChangePayload>
 /**
  * Model transaction
  * 
@@ -168,12 +203,36 @@ export type userLocations = $Result.DefaultSelection<Prisma.$userLocationsPayloa
  * Enums
  */
 export namespace $Enums {
-  export const UserOrderStatus: {
+  export const AdStatus: {
+  DRAFT: 'DRAFT',
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  ACTIVE: 'ACTIVE',
+  PAUSED: 'PAUSED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+};
+
+export type AdStatus = (typeof AdStatus)[keyof typeof AdStatus]
+
+
+export const UserOrderStatus: {
   UNPAID: 'UNPAID',
   PAID: 'PAID'
 };
 
 export type UserOrderStatus = (typeof UserOrderStatus)[keyof typeof UserOrderStatus]
+
+
+export const PlanName: {
+  BASIC: 'BASIC',
+  SILVER: 'SILVER',
+  GOLD: 'GOLD',
+  DIAMOND: 'DIAMOND'
+};
+
+export type PlanName = (typeof PlanName)[keyof typeof PlanName]
 
 
 export const ProductCartStatus: {
@@ -224,6 +283,16 @@ export const ProductStatus: {
 export type ProductStatus = (typeof ProductStatus)[keyof typeof ProductStatus]
 
 
+export const SubscriptionStatus: {
+  ACTIVE: 'ACTIVE',
+  PENDING_DOWNGRADE: 'PENDING_DOWNGRADE',
+  CANCELLED: 'CANCELLED',
+  EXPIRED: 'EXPIRED'
+};
+
+export type SubscriptionStatus = (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus]
+
+
 export const StoreStatus: {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
@@ -233,6 +302,15 @@ export const StoreStatus: {
 };
 
 export type StoreStatus = (typeof StoreStatus)[keyof typeof StoreStatus]
+
+
+export const ChangeType: {
+  UPGRADE: 'UPGRADE',
+  DOWNGRADE: 'DOWNGRADE',
+  RENEWAL: 'RENEWAL'
+};
+
+export type ChangeType = (typeof ChangeType)[keyof typeof ChangeType]
 
 
 export const TransactionType: {
@@ -247,9 +325,17 @@ export type TransactionType = (typeof TransactionType)[keyof typeof TransactionT
 
 }
 
+export type AdStatus = $Enums.AdStatus
+
+export const AdStatus: typeof $Enums.AdStatus
+
 export type UserOrderStatus = $Enums.UserOrderStatus
 
 export const UserOrderStatus: typeof $Enums.UserOrderStatus
+
+export type PlanName = $Enums.PlanName
+
+export const PlanName: typeof $Enums.PlanName
 
 export type ProductCartStatus = $Enums.ProductCartStatus
 
@@ -271,9 +357,17 @@ export type ProductStatus = $Enums.ProductStatus
 
 export const ProductStatus: typeof $Enums.ProductStatus
 
+export type SubscriptionStatus = $Enums.SubscriptionStatus
+
+export const SubscriptionStatus: typeof $Enums.SubscriptionStatus
+
 export type StoreStatus = $Enums.StoreStatus
 
 export const StoreStatus: typeof $Enums.StoreStatus
+
+export type ChangeType = $Enums.ChangeType
+
+export const ChangeType: typeof $Enums.ChangeType
 
 export type TransactionType = $Enums.TransactionType
 
@@ -406,6 +500,46 @@ export class PrismaClient<
     * ```
     */
   get admin(): Prisma.adminDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.adCampaign`: Exposes CRUD operations for the **AdCampaign** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AdCampaigns
+    * const adCampaigns = await prisma.adCampaign.findMany()
+    * ```
+    */
+  get adCampaign(): Prisma.AdCampaignDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.adImpression`: Exposes CRUD operations for the **AdImpression** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AdImpressions
+    * const adImpressions = await prisma.adImpression.findMany()
+    * ```
+    */
+  get adImpression(): Prisma.AdImpressionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.adClick`: Exposes CRUD operations for the **AdClick** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AdClicks
+    * const adClicks = await prisma.adClick.findMany()
+    * ```
+    */
+  get adClick(): Prisma.AdClickDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.branchDiscountCode`: Exposes CRUD operations for the **BranchDiscountCode** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BranchDiscountCodes
+    * const branchDiscountCodes = await prisma.branchDiscountCode.findMany()
+    * ```
+    */
+  get branchDiscountCode(): Prisma.BranchDiscountCodeDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.branch`: Exposes CRUD operations for the **branch** model.
@@ -548,6 +682,16 @@ export class PrismaClient<
   get order(): Prisma.orderDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.planLimit`: Exposes CRUD operations for the **PlanLimit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PlanLimits
+    * const planLimits = await prisma.planLimit.findMany()
+    * ```
+    */
+  get planLimit(): Prisma.PlanLimitDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.productCart`: Exposes CRUD operations for the **productCart** model.
     * Example usage:
     * ```ts
@@ -638,6 +782,16 @@ export class PrismaClient<
   get state(): Prisma.stateDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.storeSubscription`: Exposes CRUD operations for the **StoreSubscription** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StoreSubscriptions
+    * const storeSubscriptions = await prisma.storeSubscription.findMany()
+    * ```
+    */
+  get storeSubscription(): Prisma.StoreSubscriptionDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.store`: Exposes CRUD operations for the **store** model.
     * Example usage:
     * ```ts
@@ -656,6 +810,16 @@ export class PrismaClient<
     * ```
     */
   get socialLink(): Prisma.socialLinkDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.subscriptionPlanChange`: Exposes CRUD operations for the **SubscriptionPlanChange** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SubscriptionPlanChanges
+    * const subscriptionPlanChanges = await prisma.subscriptionPlanChange.findMany()
+    * ```
+    */
+  get subscriptionPlanChange(): Prisma.SubscriptionPlanChangeDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.transaction`: Exposes CRUD operations for the **transaction** model.
@@ -1137,6 +1301,10 @@ export namespace Prisma {
 
   export const ModelName: {
     admin: 'admin',
+    AdCampaign: 'AdCampaign',
+    AdImpression: 'AdImpression',
+    AdClick: 'AdClick',
+    BranchDiscountCode: 'BranchDiscountCode',
     branch: 'branch',
     workHour: 'workHour',
     category: 'category',
@@ -1151,6 +1319,7 @@ export namespace Prisma {
     location: 'location',
     occasion: 'occasion',
     order: 'order',
+    PlanLimit: 'PlanLimit',
     productCart: 'productCart',
     productOrder: 'productOrder',
     productPrice: 'productPrice',
@@ -1160,8 +1329,10 @@ export namespace Prisma {
     review: 'review',
     session: 'session',
     state: 'state',
+    StoreSubscription: 'StoreSubscription',
     store: 'store',
     socialLink: 'socialLink',
+    SubscriptionPlanChange: 'SubscriptionPlanChange',
     transaction: 'transaction',
     userCart: 'userCart',
     user: 'user',
@@ -1184,7 +1355,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "admin" | "branch" | "workHour" | "category" | "city" | "country" | "currency" | "deliveryTaxes" | "image" | "inbox" | "info" | "locale" | "location" | "occasion" | "order" | "productCart" | "productOrder" | "productPrice" | "productStock" | "productVariant" | "product" | "review" | "session" | "state" | "store" | "socialLink" | "transaction" | "userCart" | "user" | "userLocations"
+      modelProps: "admin" | "adCampaign" | "adImpression" | "adClick" | "branchDiscountCode" | "branch" | "workHour" | "category" | "city" | "country" | "currency" | "deliveryTaxes" | "image" | "inbox" | "info" | "locale" | "location" | "occasion" | "order" | "planLimit" | "productCart" | "productOrder" | "productPrice" | "productStock" | "productVariant" | "product" | "review" | "session" | "state" | "storeSubscription" | "store" | "socialLink" | "subscriptionPlanChange" | "transaction" | "userCart" | "user" | "userLocations"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1259,6 +1430,302 @@ export namespace Prisma {
           count: {
             args: Prisma.adminCountArgs<ExtArgs>
             result: $Utils.Optional<AdminCountAggregateOutputType> | number
+          }
+        }
+      }
+      AdCampaign: {
+        payload: Prisma.$AdCampaignPayload<ExtArgs>
+        fields: Prisma.AdCampaignFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AdCampaignFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdCampaignPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AdCampaignFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdCampaignPayload>
+          }
+          findFirst: {
+            args: Prisma.AdCampaignFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdCampaignPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AdCampaignFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdCampaignPayload>
+          }
+          findMany: {
+            args: Prisma.AdCampaignFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdCampaignPayload>[]
+          }
+          create: {
+            args: Prisma.AdCampaignCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdCampaignPayload>
+          }
+          createMany: {
+            args: Prisma.AdCampaignCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AdCampaignCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdCampaignPayload>[]
+          }
+          delete: {
+            args: Prisma.AdCampaignDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdCampaignPayload>
+          }
+          update: {
+            args: Prisma.AdCampaignUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdCampaignPayload>
+          }
+          deleteMany: {
+            args: Prisma.AdCampaignDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AdCampaignUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AdCampaignUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdCampaignPayload>[]
+          }
+          upsert: {
+            args: Prisma.AdCampaignUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdCampaignPayload>
+          }
+          aggregate: {
+            args: Prisma.AdCampaignAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdCampaign>
+          }
+          groupBy: {
+            args: Prisma.AdCampaignGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdCampaignGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AdCampaignCountArgs<ExtArgs>
+            result: $Utils.Optional<AdCampaignCountAggregateOutputType> | number
+          }
+        }
+      }
+      AdImpression: {
+        payload: Prisma.$AdImpressionPayload<ExtArgs>
+        fields: Prisma.AdImpressionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AdImpressionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdImpressionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AdImpressionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdImpressionPayload>
+          }
+          findFirst: {
+            args: Prisma.AdImpressionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdImpressionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AdImpressionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdImpressionPayload>
+          }
+          findMany: {
+            args: Prisma.AdImpressionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdImpressionPayload>[]
+          }
+          create: {
+            args: Prisma.AdImpressionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdImpressionPayload>
+          }
+          createMany: {
+            args: Prisma.AdImpressionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AdImpressionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdImpressionPayload>[]
+          }
+          delete: {
+            args: Prisma.AdImpressionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdImpressionPayload>
+          }
+          update: {
+            args: Prisma.AdImpressionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdImpressionPayload>
+          }
+          deleteMany: {
+            args: Prisma.AdImpressionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AdImpressionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AdImpressionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdImpressionPayload>[]
+          }
+          upsert: {
+            args: Prisma.AdImpressionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdImpressionPayload>
+          }
+          aggregate: {
+            args: Prisma.AdImpressionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdImpression>
+          }
+          groupBy: {
+            args: Prisma.AdImpressionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdImpressionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AdImpressionCountArgs<ExtArgs>
+            result: $Utils.Optional<AdImpressionCountAggregateOutputType> | number
+          }
+        }
+      }
+      AdClick: {
+        payload: Prisma.$AdClickPayload<ExtArgs>
+        fields: Prisma.AdClickFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AdClickFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdClickPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AdClickFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdClickPayload>
+          }
+          findFirst: {
+            args: Prisma.AdClickFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdClickPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AdClickFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdClickPayload>
+          }
+          findMany: {
+            args: Prisma.AdClickFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdClickPayload>[]
+          }
+          create: {
+            args: Prisma.AdClickCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdClickPayload>
+          }
+          createMany: {
+            args: Prisma.AdClickCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AdClickCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdClickPayload>[]
+          }
+          delete: {
+            args: Prisma.AdClickDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdClickPayload>
+          }
+          update: {
+            args: Prisma.AdClickUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdClickPayload>
+          }
+          deleteMany: {
+            args: Prisma.AdClickDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AdClickUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AdClickUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdClickPayload>[]
+          }
+          upsert: {
+            args: Prisma.AdClickUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdClickPayload>
+          }
+          aggregate: {
+            args: Prisma.AdClickAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdClick>
+          }
+          groupBy: {
+            args: Prisma.AdClickGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdClickGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AdClickCountArgs<ExtArgs>
+            result: $Utils.Optional<AdClickCountAggregateOutputType> | number
+          }
+        }
+      }
+      BranchDiscountCode: {
+        payload: Prisma.$BranchDiscountCodePayload<ExtArgs>
+        fields: Prisma.BranchDiscountCodeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BranchDiscountCodeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchDiscountCodePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BranchDiscountCodeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchDiscountCodePayload>
+          }
+          findFirst: {
+            args: Prisma.BranchDiscountCodeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchDiscountCodePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BranchDiscountCodeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchDiscountCodePayload>
+          }
+          findMany: {
+            args: Prisma.BranchDiscountCodeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchDiscountCodePayload>[]
+          }
+          create: {
+            args: Prisma.BranchDiscountCodeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchDiscountCodePayload>
+          }
+          createMany: {
+            args: Prisma.BranchDiscountCodeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BranchDiscountCodeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchDiscountCodePayload>[]
+          }
+          delete: {
+            args: Prisma.BranchDiscountCodeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchDiscountCodePayload>
+          }
+          update: {
+            args: Prisma.BranchDiscountCodeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchDiscountCodePayload>
+          }
+          deleteMany: {
+            args: Prisma.BranchDiscountCodeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BranchDiscountCodeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BranchDiscountCodeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchDiscountCodePayload>[]
+          }
+          upsert: {
+            args: Prisma.BranchDiscountCodeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BranchDiscountCodePayload>
+          }
+          aggregate: {
+            args: Prisma.BranchDiscountCodeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBranchDiscountCode>
+          }
+          groupBy: {
+            args: Prisma.BranchDiscountCodeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BranchDiscountCodeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BranchDiscountCodeCountArgs<ExtArgs>
+            result: $Utils.Optional<BranchDiscountCodeCountAggregateOutputType> | number
           }
         }
       }
@@ -2298,6 +2765,80 @@ export namespace Prisma {
           }
         }
       }
+      PlanLimit: {
+        payload: Prisma.$PlanLimitPayload<ExtArgs>
+        fields: Prisma.PlanLimitFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PlanLimitFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanLimitPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PlanLimitFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanLimitPayload>
+          }
+          findFirst: {
+            args: Prisma.PlanLimitFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanLimitPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PlanLimitFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanLimitPayload>
+          }
+          findMany: {
+            args: Prisma.PlanLimitFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanLimitPayload>[]
+          }
+          create: {
+            args: Prisma.PlanLimitCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanLimitPayload>
+          }
+          createMany: {
+            args: Prisma.PlanLimitCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PlanLimitCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanLimitPayload>[]
+          }
+          delete: {
+            args: Prisma.PlanLimitDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanLimitPayload>
+          }
+          update: {
+            args: Prisma.PlanLimitUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanLimitPayload>
+          }
+          deleteMany: {
+            args: Prisma.PlanLimitDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PlanLimitUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PlanLimitUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanLimitPayload>[]
+          }
+          upsert: {
+            args: Prisma.PlanLimitUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlanLimitPayload>
+          }
+          aggregate: {
+            args: Prisma.PlanLimitAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePlanLimit>
+          }
+          groupBy: {
+            args: Prisma.PlanLimitGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PlanLimitGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PlanLimitCountArgs<ExtArgs>
+            result: $Utils.Optional<PlanLimitCountAggregateOutputType> | number
+          }
+        }
+      }
       productCart: {
         payload: Prisma.$productCartPayload<ExtArgs>
         fields: Prisma.productCartFieldRefs
@@ -2964,6 +3505,80 @@ export namespace Prisma {
           }
         }
       }
+      StoreSubscription: {
+        payload: Prisma.$StoreSubscriptionPayload<ExtArgs>
+        fields: Prisma.StoreSubscriptionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.StoreSubscriptionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StoreSubscriptionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.StoreSubscriptionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StoreSubscriptionPayload>
+          }
+          findFirst: {
+            args: Prisma.StoreSubscriptionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StoreSubscriptionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.StoreSubscriptionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StoreSubscriptionPayload>
+          }
+          findMany: {
+            args: Prisma.StoreSubscriptionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StoreSubscriptionPayload>[]
+          }
+          create: {
+            args: Prisma.StoreSubscriptionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StoreSubscriptionPayload>
+          }
+          createMany: {
+            args: Prisma.StoreSubscriptionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.StoreSubscriptionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StoreSubscriptionPayload>[]
+          }
+          delete: {
+            args: Prisma.StoreSubscriptionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StoreSubscriptionPayload>
+          }
+          update: {
+            args: Prisma.StoreSubscriptionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StoreSubscriptionPayload>
+          }
+          deleteMany: {
+            args: Prisma.StoreSubscriptionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.StoreSubscriptionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.StoreSubscriptionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StoreSubscriptionPayload>[]
+          }
+          upsert: {
+            args: Prisma.StoreSubscriptionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StoreSubscriptionPayload>
+          }
+          aggregate: {
+            args: Prisma.StoreSubscriptionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateStoreSubscription>
+          }
+          groupBy: {
+            args: Prisma.StoreSubscriptionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<StoreSubscriptionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.StoreSubscriptionCountArgs<ExtArgs>
+            result: $Utils.Optional<StoreSubscriptionCountAggregateOutputType> | number
+          }
+        }
+      }
       store: {
         payload: Prisma.$storePayload<ExtArgs>
         fields: Prisma.storeFieldRefs
@@ -3109,6 +3724,80 @@ export namespace Prisma {
           count: {
             args: Prisma.socialLinkCountArgs<ExtArgs>
             result: $Utils.Optional<SocialLinkCountAggregateOutputType> | number
+          }
+        }
+      }
+      SubscriptionPlanChange: {
+        payload: Prisma.$SubscriptionPlanChangePayload<ExtArgs>
+        fields: Prisma.SubscriptionPlanChangeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SubscriptionPlanChangeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanChangePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SubscriptionPlanChangeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanChangePayload>
+          }
+          findFirst: {
+            args: Prisma.SubscriptionPlanChangeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanChangePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SubscriptionPlanChangeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanChangePayload>
+          }
+          findMany: {
+            args: Prisma.SubscriptionPlanChangeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanChangePayload>[]
+          }
+          create: {
+            args: Prisma.SubscriptionPlanChangeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanChangePayload>
+          }
+          createMany: {
+            args: Prisma.SubscriptionPlanChangeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SubscriptionPlanChangeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanChangePayload>[]
+          }
+          delete: {
+            args: Prisma.SubscriptionPlanChangeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanChangePayload>
+          }
+          update: {
+            args: Prisma.SubscriptionPlanChangeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanChangePayload>
+          }
+          deleteMany: {
+            args: Prisma.SubscriptionPlanChangeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SubscriptionPlanChangeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SubscriptionPlanChangeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanChangePayload>[]
+          }
+          upsert: {
+            args: Prisma.SubscriptionPlanChangeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubscriptionPlanChangePayload>
+          }
+          aggregate: {
+            args: Prisma.SubscriptionPlanChangeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSubscriptionPlanChange>
+          }
+          groupBy: {
+            args: Prisma.SubscriptionPlanChangeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SubscriptionPlanChangeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SubscriptionPlanChangeCountArgs<ExtArgs>
+            result: $Utils.Optional<SubscriptionPlanChangeCountAggregateOutputType> | number
           }
         }
       }
@@ -3505,6 +4194,10 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     admin?: adminOmit
+    adCampaign?: AdCampaignOmit
+    adImpression?: AdImpressionOmit
+    adClick?: AdClickOmit
+    branchDiscountCode?: BranchDiscountCodeOmit
     branch?: branchOmit
     workHour?: workHourOmit
     category?: categoryOmit
@@ -3519,6 +4212,7 @@ export namespace Prisma {
     location?: locationOmit
     occasion?: occasionOmit
     order?: orderOmit
+    planLimit?: PlanLimitOmit
     productCart?: productCartOmit
     productOrder?: productOrderOmit
     productPrice?: productPriceOmit
@@ -3528,8 +4222,10 @@ export namespace Prisma {
     review?: reviewOmit
     session?: sessionOmit
     state?: stateOmit
+    storeSubscription?: StoreSubscriptionOmit
     store?: storeOmit
     socialLink?: socialLinkOmit
+    subscriptionPlanChange?: SubscriptionPlanChangeOmit
     transaction?: transactionOmit
     userCart?: userCartOmit
     user?: userOmit
@@ -3650,17 +4346,59 @@ export namespace Prisma {
 
 
   /**
+   * Count Type AdCampaignCountOutputType
+   */
+
+  export type AdCampaignCountOutputType = {
+    adImpressions: number
+    adClick: number
+  }
+
+  export type AdCampaignCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    adImpressions?: boolean | AdCampaignCountOutputTypeCountAdImpressionsArgs
+    adClick?: boolean | AdCampaignCountOutputTypeCountAdClickArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AdCampaignCountOutputType without action
+   */
+  export type AdCampaignCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdCampaignCountOutputType
+     */
+    select?: AdCampaignCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AdCampaignCountOutputType without action
+   */
+  export type AdCampaignCountOutputTypeCountAdImpressionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdImpressionWhereInput
+  }
+
+  /**
+   * AdCampaignCountOutputType without action
+   */
+  export type AdCampaignCountOutputTypeCountAdClickArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdClickWhereInput
+  }
+
+
+  /**
    * Count Type BranchCountOutputType
    */
 
   export type BranchCountOutputType = {
     workHours: number
     productStock: number
+    discountCodes: number
   }
 
   export type BranchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     workHours?: boolean | BranchCountOutputTypeCountWorkHoursArgs
     productStock?: boolean | BranchCountOutputTypeCountProductStockArgs
+    discountCodes?: boolean | BranchCountOutputTypeCountDiscountCodesArgs
   }
 
   // Custom InputTypes
@@ -3686,6 +4424,13 @@ export namespace Prisma {
    */
   export type BranchCountOutputTypeCountProductStockArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: productStockWhereInput
+  }
+
+  /**
+   * BranchCountOutputType without action
+   */
+  export type BranchCountOutputTypeCountDiscountCodesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BranchDiscountCodeWhereInput
   }
 
 
@@ -3952,6 +4697,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type PlanLimitCountOutputType
+   */
+
+  export type PlanLimitCountOutputType = {
+    storeSubscription: number
+  }
+
+  export type PlanLimitCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    storeSubscription?: boolean | PlanLimitCountOutputTypeCountStoreSubscriptionArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * PlanLimitCountOutputType without action
+   */
+  export type PlanLimitCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanLimitCountOutputType
+     */
+    select?: PlanLimitCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PlanLimitCountOutputType without action
+   */
+  export type PlanLimitCountOutputTypeCountStoreSubscriptionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StoreSubscriptionWhereInput
+  }
+
+
+  /**
    * Count Type ProductStockCountOutputType
    */
 
@@ -4157,6 +4933,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type StoreSubscriptionCountOutputType
+   */
+
+  export type StoreSubscriptionCountOutputType = {
+    planChanges: number
+  }
+
+  export type StoreSubscriptionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    planChanges?: boolean | StoreSubscriptionCountOutputTypeCountPlanChangesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * StoreSubscriptionCountOutputType without action
+   */
+  export type StoreSubscriptionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StoreSubscriptionCountOutputType
+     */
+    select?: StoreSubscriptionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * StoreSubscriptionCountOutputType without action
+   */
+  export type StoreSubscriptionCountOutputTypeCountPlanChangesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SubscriptionPlanChangeWhereInput
+  }
+
+
+  /**
    * Count Type StoreCountOutputType
    */
 
@@ -4164,12 +4971,14 @@ export namespace Prisma {
     branches: number
     transactions: number
     sessions: number
+    adCampaigns: number
   }
 
   export type StoreCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     branches?: boolean | StoreCountOutputTypeCountBranchesArgs
     transactions?: boolean | StoreCountOutputTypeCountTransactionsArgs
     sessions?: boolean | StoreCountOutputTypeCountSessionsArgs
+    adCampaigns?: boolean | StoreCountOutputTypeCountAdCampaignsArgs
   }
 
   // Custom InputTypes
@@ -4202,6 +5011,13 @@ export namespace Prisma {
    */
   export type StoreCountOutputTypeCountSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: sessionWhereInput
+  }
+
+  /**
+   * StoreCountOutputType without action
+   */
+  export type StoreCountOutputTypeCountAdCampaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdCampaignWhereInput
   }
 
 
@@ -5529,6 +6345,4592 @@ export namespace Prisma {
 
 
   /**
+   * Model AdCampaign
+   */
+
+  export type AggregateAdCampaign = {
+    _count: AdCampaignCountAggregateOutputType | null
+    _avg: AdCampaignAvgAggregateOutputType | null
+    _sum: AdCampaignSumAggregateOutputType | null
+    _min: AdCampaignMinAggregateOutputType | null
+    _max: AdCampaignMaxAggregateOutputType | null
+  }
+
+  export type AdCampaignAvgAggregateOutputType = {
+    clicks: number | null
+    impressions: number | null
+  }
+
+  export type AdCampaignSumAggregateOutputType = {
+    clicks: number | null
+    impressions: number | null
+  }
+
+  export type AdCampaignMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    description: string | null
+    imageUrl: string | null
+    targetUrl: string | null
+    startDate: Date | null
+    endDate: Date | null
+    clicks: number | null
+    impressions: number | null
+    storeId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdCampaignMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    description: string | null
+    imageUrl: string | null
+    targetUrl: string | null
+    startDate: Date | null
+    endDate: Date | null
+    clicks: number | null
+    impressions: number | null
+    storeId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdCampaignCountAggregateOutputType = {
+    id: number
+    title: number
+    description: number
+    imageUrl: number
+    targetUrl: number
+    startDate: number
+    endDate: number
+    clicks: number
+    impressions: number
+    storeId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AdCampaignAvgAggregateInputType = {
+    clicks?: true
+    impressions?: true
+  }
+
+  export type AdCampaignSumAggregateInputType = {
+    clicks?: true
+    impressions?: true
+  }
+
+  export type AdCampaignMinAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    imageUrl?: true
+    targetUrl?: true
+    startDate?: true
+    endDate?: true
+    clicks?: true
+    impressions?: true
+    storeId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdCampaignMaxAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    imageUrl?: true
+    targetUrl?: true
+    startDate?: true
+    endDate?: true
+    clicks?: true
+    impressions?: true
+    storeId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdCampaignCountAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    imageUrl?: true
+    targetUrl?: true
+    startDate?: true
+    endDate?: true
+    clicks?: true
+    impressions?: true
+    storeId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AdCampaignAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdCampaign to aggregate.
+     */
+    where?: AdCampaignWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdCampaigns to fetch.
+     */
+    orderBy?: AdCampaignOrderByWithRelationInput | AdCampaignOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AdCampaignWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdCampaigns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdCampaigns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AdCampaigns
+    **/
+    _count?: true | AdCampaignCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AdCampaignAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AdCampaignSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AdCampaignMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AdCampaignMaxAggregateInputType
+  }
+
+  export type GetAdCampaignAggregateType<T extends AdCampaignAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdCampaign]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdCampaign[P]>
+      : GetScalarType<T[P], AggregateAdCampaign[P]>
+  }
+
+
+
+
+  export type AdCampaignGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdCampaignWhereInput
+    orderBy?: AdCampaignOrderByWithAggregationInput | AdCampaignOrderByWithAggregationInput[]
+    by: AdCampaignScalarFieldEnum[] | AdCampaignScalarFieldEnum
+    having?: AdCampaignScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AdCampaignCountAggregateInputType | true
+    _avg?: AdCampaignAvgAggregateInputType
+    _sum?: AdCampaignSumAggregateInputType
+    _min?: AdCampaignMinAggregateInputType
+    _max?: AdCampaignMaxAggregateInputType
+  }
+
+  export type AdCampaignGroupByOutputType = {
+    id: string
+    title: string
+    description: string | null
+    imageUrl: string
+    targetUrl: string
+    startDate: Date | null
+    endDate: Date | null
+    clicks: number
+    impressions: number
+    storeId: string
+    createdAt: Date
+    updatedAt: Date
+    _count: AdCampaignCountAggregateOutputType | null
+    _avg: AdCampaignAvgAggregateOutputType | null
+    _sum: AdCampaignSumAggregateOutputType | null
+    _min: AdCampaignMinAggregateOutputType | null
+    _max: AdCampaignMaxAggregateOutputType | null
+  }
+
+  type GetAdCampaignGroupByPayload<T extends AdCampaignGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AdCampaignGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AdCampaignGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AdCampaignGroupByOutputType[P]>
+            : GetScalarType<T[P], AdCampaignGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AdCampaignSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    imageUrl?: boolean
+    targetUrl?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    clicks?: boolean
+    impressions?: boolean
+    storeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    adImpressions?: boolean | AdCampaign$adImpressionsArgs<ExtArgs>
+    adClick?: boolean | AdCampaign$adClickArgs<ExtArgs>
+    store?: boolean | storeDefaultArgs<ExtArgs>
+    _count?: boolean | AdCampaignCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adCampaign"]>
+
+  export type AdCampaignSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    imageUrl?: boolean
+    targetUrl?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    clicks?: boolean
+    impressions?: boolean
+    storeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    store?: boolean | storeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adCampaign"]>
+
+  export type AdCampaignSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    imageUrl?: boolean
+    targetUrl?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    clicks?: boolean
+    impressions?: boolean
+    storeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    store?: boolean | storeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adCampaign"]>
+
+  export type AdCampaignSelectScalar = {
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    imageUrl?: boolean
+    targetUrl?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    clicks?: boolean
+    impressions?: boolean
+    storeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AdCampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "imageUrl" | "targetUrl" | "startDate" | "endDate" | "clicks" | "impressions" | "storeId" | "createdAt" | "updatedAt", ExtArgs["result"]["adCampaign"]>
+  export type AdCampaignInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    adImpressions?: boolean | AdCampaign$adImpressionsArgs<ExtArgs>
+    adClick?: boolean | AdCampaign$adClickArgs<ExtArgs>
+    store?: boolean | storeDefaultArgs<ExtArgs>
+    _count?: boolean | AdCampaignCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type AdCampaignIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    store?: boolean | storeDefaultArgs<ExtArgs>
+  }
+  export type AdCampaignIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    store?: boolean | storeDefaultArgs<ExtArgs>
+  }
+
+  export type $AdCampaignPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AdCampaign"
+    objects: {
+      adImpressions: Prisma.$AdImpressionPayload<ExtArgs>[]
+      adClick: Prisma.$AdClickPayload<ExtArgs>[]
+      store: Prisma.$storePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      description: string | null
+      imageUrl: string
+      targetUrl: string
+      startDate: Date | null
+      endDate: Date | null
+      clicks: number
+      impressions: number
+      storeId: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["adCampaign"]>
+    composites: {}
+  }
+
+  type AdCampaignGetPayload<S extends boolean | null | undefined | AdCampaignDefaultArgs> = $Result.GetResult<Prisma.$AdCampaignPayload, S>
+
+  type AdCampaignCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AdCampaignFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AdCampaignCountAggregateInputType | true
+    }
+
+  export interface AdCampaignDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdCampaign'], meta: { name: 'AdCampaign' } }
+    /**
+     * Find zero or one AdCampaign that matches the filter.
+     * @param {AdCampaignFindUniqueArgs} args - Arguments to find a AdCampaign
+     * @example
+     * // Get one AdCampaign
+     * const adCampaign = await prisma.adCampaign.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AdCampaignFindUniqueArgs>(args: SelectSubset<T, AdCampaignFindUniqueArgs<ExtArgs>>): Prisma__AdCampaignClient<$Result.GetResult<Prisma.$AdCampaignPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AdCampaign that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AdCampaignFindUniqueOrThrowArgs} args - Arguments to find a AdCampaign
+     * @example
+     * // Get one AdCampaign
+     * const adCampaign = await prisma.adCampaign.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AdCampaignFindUniqueOrThrowArgs>(args: SelectSubset<T, AdCampaignFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdCampaignClient<$Result.GetResult<Prisma.$AdCampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdCampaign that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdCampaignFindFirstArgs} args - Arguments to find a AdCampaign
+     * @example
+     * // Get one AdCampaign
+     * const adCampaign = await prisma.adCampaign.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AdCampaignFindFirstArgs>(args?: SelectSubset<T, AdCampaignFindFirstArgs<ExtArgs>>): Prisma__AdCampaignClient<$Result.GetResult<Prisma.$AdCampaignPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdCampaign that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdCampaignFindFirstOrThrowArgs} args - Arguments to find a AdCampaign
+     * @example
+     * // Get one AdCampaign
+     * const adCampaign = await prisma.adCampaign.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AdCampaignFindFirstOrThrowArgs>(args?: SelectSubset<T, AdCampaignFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdCampaignClient<$Result.GetResult<Prisma.$AdCampaignPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AdCampaigns that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdCampaignFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AdCampaigns
+     * const adCampaigns = await prisma.adCampaign.findMany()
+     * 
+     * // Get first 10 AdCampaigns
+     * const adCampaigns = await prisma.adCampaign.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const adCampaignWithIdOnly = await prisma.adCampaign.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AdCampaignFindManyArgs>(args?: SelectSubset<T, AdCampaignFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdCampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AdCampaign.
+     * @param {AdCampaignCreateArgs} args - Arguments to create a AdCampaign.
+     * @example
+     * // Create one AdCampaign
+     * const AdCampaign = await prisma.adCampaign.create({
+     *   data: {
+     *     // ... data to create a AdCampaign
+     *   }
+     * })
+     * 
+     */
+    create<T extends AdCampaignCreateArgs>(args: SelectSubset<T, AdCampaignCreateArgs<ExtArgs>>): Prisma__AdCampaignClient<$Result.GetResult<Prisma.$AdCampaignPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AdCampaigns.
+     * @param {AdCampaignCreateManyArgs} args - Arguments to create many AdCampaigns.
+     * @example
+     * // Create many AdCampaigns
+     * const adCampaign = await prisma.adCampaign.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AdCampaignCreateManyArgs>(args?: SelectSubset<T, AdCampaignCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AdCampaigns and returns the data saved in the database.
+     * @param {AdCampaignCreateManyAndReturnArgs} args - Arguments to create many AdCampaigns.
+     * @example
+     * // Create many AdCampaigns
+     * const adCampaign = await prisma.adCampaign.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AdCampaigns and only return the `id`
+     * const adCampaignWithIdOnly = await prisma.adCampaign.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AdCampaignCreateManyAndReturnArgs>(args?: SelectSubset<T, AdCampaignCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdCampaignPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AdCampaign.
+     * @param {AdCampaignDeleteArgs} args - Arguments to delete one AdCampaign.
+     * @example
+     * // Delete one AdCampaign
+     * const AdCampaign = await prisma.adCampaign.delete({
+     *   where: {
+     *     // ... filter to delete one AdCampaign
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AdCampaignDeleteArgs>(args: SelectSubset<T, AdCampaignDeleteArgs<ExtArgs>>): Prisma__AdCampaignClient<$Result.GetResult<Prisma.$AdCampaignPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AdCampaign.
+     * @param {AdCampaignUpdateArgs} args - Arguments to update one AdCampaign.
+     * @example
+     * // Update one AdCampaign
+     * const adCampaign = await prisma.adCampaign.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AdCampaignUpdateArgs>(args: SelectSubset<T, AdCampaignUpdateArgs<ExtArgs>>): Prisma__AdCampaignClient<$Result.GetResult<Prisma.$AdCampaignPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AdCampaigns.
+     * @param {AdCampaignDeleteManyArgs} args - Arguments to filter AdCampaigns to delete.
+     * @example
+     * // Delete a few AdCampaigns
+     * const { count } = await prisma.adCampaign.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AdCampaignDeleteManyArgs>(args?: SelectSubset<T, AdCampaignDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdCampaigns.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdCampaignUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AdCampaigns
+     * const adCampaign = await prisma.adCampaign.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AdCampaignUpdateManyArgs>(args: SelectSubset<T, AdCampaignUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdCampaigns and returns the data updated in the database.
+     * @param {AdCampaignUpdateManyAndReturnArgs} args - Arguments to update many AdCampaigns.
+     * @example
+     * // Update many AdCampaigns
+     * const adCampaign = await prisma.adCampaign.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AdCampaigns and only return the `id`
+     * const adCampaignWithIdOnly = await prisma.adCampaign.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AdCampaignUpdateManyAndReturnArgs>(args: SelectSubset<T, AdCampaignUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdCampaignPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AdCampaign.
+     * @param {AdCampaignUpsertArgs} args - Arguments to update or create a AdCampaign.
+     * @example
+     * // Update or create a AdCampaign
+     * const adCampaign = await prisma.adCampaign.upsert({
+     *   create: {
+     *     // ... data to create a AdCampaign
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AdCampaign we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AdCampaignUpsertArgs>(args: SelectSubset<T, AdCampaignUpsertArgs<ExtArgs>>): Prisma__AdCampaignClient<$Result.GetResult<Prisma.$AdCampaignPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AdCampaigns.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdCampaignCountArgs} args - Arguments to filter AdCampaigns to count.
+     * @example
+     * // Count the number of AdCampaigns
+     * const count = await prisma.adCampaign.count({
+     *   where: {
+     *     // ... the filter for the AdCampaigns we want to count
+     *   }
+     * })
+    **/
+    count<T extends AdCampaignCountArgs>(
+      args?: Subset<T, AdCampaignCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AdCampaignCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AdCampaign.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdCampaignAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AdCampaignAggregateArgs>(args: Subset<T, AdCampaignAggregateArgs>): Prisma.PrismaPromise<GetAdCampaignAggregateType<T>>
+
+    /**
+     * Group by AdCampaign.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdCampaignGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AdCampaignGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AdCampaignGroupByArgs['orderBy'] }
+        : { orderBy?: AdCampaignGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AdCampaignGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdCampaignGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AdCampaign model
+   */
+  readonly fields: AdCampaignFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AdCampaign.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AdCampaignClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    adImpressions<T extends AdCampaign$adImpressionsArgs<ExtArgs> = {}>(args?: Subset<T, AdCampaign$adImpressionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdImpressionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    adClick<T extends AdCampaign$adClickArgs<ExtArgs> = {}>(args?: Subset<T, AdCampaign$adClickArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdClickPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    store<T extends storeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, storeDefaultArgs<ExtArgs>>): Prisma__storeClient<$Result.GetResult<Prisma.$storePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AdCampaign model
+   */
+  interface AdCampaignFieldRefs {
+    readonly id: FieldRef<"AdCampaign", 'String'>
+    readonly title: FieldRef<"AdCampaign", 'String'>
+    readonly description: FieldRef<"AdCampaign", 'String'>
+    readonly imageUrl: FieldRef<"AdCampaign", 'String'>
+    readonly targetUrl: FieldRef<"AdCampaign", 'String'>
+    readonly startDate: FieldRef<"AdCampaign", 'DateTime'>
+    readonly endDate: FieldRef<"AdCampaign", 'DateTime'>
+    readonly clicks: FieldRef<"AdCampaign", 'Int'>
+    readonly impressions: FieldRef<"AdCampaign", 'Int'>
+    readonly storeId: FieldRef<"AdCampaign", 'String'>
+    readonly createdAt: FieldRef<"AdCampaign", 'DateTime'>
+    readonly updatedAt: FieldRef<"AdCampaign", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AdCampaign findUnique
+   */
+  export type AdCampaignFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdCampaign
+     */
+    select?: AdCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdCampaign
+     */
+    omit?: AdCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdCampaignInclude<ExtArgs> | null
+    /**
+     * Filter, which AdCampaign to fetch.
+     */
+    where: AdCampaignWhereUniqueInput
+  }
+
+  /**
+   * AdCampaign findUniqueOrThrow
+   */
+  export type AdCampaignFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdCampaign
+     */
+    select?: AdCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdCampaign
+     */
+    omit?: AdCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdCampaignInclude<ExtArgs> | null
+    /**
+     * Filter, which AdCampaign to fetch.
+     */
+    where: AdCampaignWhereUniqueInput
+  }
+
+  /**
+   * AdCampaign findFirst
+   */
+  export type AdCampaignFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdCampaign
+     */
+    select?: AdCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdCampaign
+     */
+    omit?: AdCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdCampaignInclude<ExtArgs> | null
+    /**
+     * Filter, which AdCampaign to fetch.
+     */
+    where?: AdCampaignWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdCampaigns to fetch.
+     */
+    orderBy?: AdCampaignOrderByWithRelationInput | AdCampaignOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdCampaigns.
+     */
+    cursor?: AdCampaignWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdCampaigns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdCampaigns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdCampaigns.
+     */
+    distinct?: AdCampaignScalarFieldEnum | AdCampaignScalarFieldEnum[]
+  }
+
+  /**
+   * AdCampaign findFirstOrThrow
+   */
+  export type AdCampaignFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdCampaign
+     */
+    select?: AdCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdCampaign
+     */
+    omit?: AdCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdCampaignInclude<ExtArgs> | null
+    /**
+     * Filter, which AdCampaign to fetch.
+     */
+    where?: AdCampaignWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdCampaigns to fetch.
+     */
+    orderBy?: AdCampaignOrderByWithRelationInput | AdCampaignOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdCampaigns.
+     */
+    cursor?: AdCampaignWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdCampaigns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdCampaigns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdCampaigns.
+     */
+    distinct?: AdCampaignScalarFieldEnum | AdCampaignScalarFieldEnum[]
+  }
+
+  /**
+   * AdCampaign findMany
+   */
+  export type AdCampaignFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdCampaign
+     */
+    select?: AdCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdCampaign
+     */
+    omit?: AdCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdCampaignInclude<ExtArgs> | null
+    /**
+     * Filter, which AdCampaigns to fetch.
+     */
+    where?: AdCampaignWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdCampaigns to fetch.
+     */
+    orderBy?: AdCampaignOrderByWithRelationInput | AdCampaignOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AdCampaigns.
+     */
+    cursor?: AdCampaignWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdCampaigns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdCampaigns.
+     */
+    skip?: number
+    distinct?: AdCampaignScalarFieldEnum | AdCampaignScalarFieldEnum[]
+  }
+
+  /**
+   * AdCampaign create
+   */
+  export type AdCampaignCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdCampaign
+     */
+    select?: AdCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdCampaign
+     */
+    omit?: AdCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdCampaignInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AdCampaign.
+     */
+    data: XOR<AdCampaignCreateInput, AdCampaignUncheckedCreateInput>
+  }
+
+  /**
+   * AdCampaign createMany
+   */
+  export type AdCampaignCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AdCampaigns.
+     */
+    data: AdCampaignCreateManyInput | AdCampaignCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdCampaign createManyAndReturn
+   */
+  export type AdCampaignCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdCampaign
+     */
+    select?: AdCampaignSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdCampaign
+     */
+    omit?: AdCampaignOmit<ExtArgs> | null
+    /**
+     * The data used to create many AdCampaigns.
+     */
+    data: AdCampaignCreateManyInput | AdCampaignCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdCampaignIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdCampaign update
+   */
+  export type AdCampaignUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdCampaign
+     */
+    select?: AdCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdCampaign
+     */
+    omit?: AdCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdCampaignInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AdCampaign.
+     */
+    data: XOR<AdCampaignUpdateInput, AdCampaignUncheckedUpdateInput>
+    /**
+     * Choose, which AdCampaign to update.
+     */
+    where: AdCampaignWhereUniqueInput
+  }
+
+  /**
+   * AdCampaign updateMany
+   */
+  export type AdCampaignUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AdCampaigns.
+     */
+    data: XOR<AdCampaignUpdateManyMutationInput, AdCampaignUncheckedUpdateManyInput>
+    /**
+     * Filter which AdCampaigns to update
+     */
+    where?: AdCampaignWhereInput
+    /**
+     * Limit how many AdCampaigns to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdCampaign updateManyAndReturn
+   */
+  export type AdCampaignUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdCampaign
+     */
+    select?: AdCampaignSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdCampaign
+     */
+    omit?: AdCampaignOmit<ExtArgs> | null
+    /**
+     * The data used to update AdCampaigns.
+     */
+    data: XOR<AdCampaignUpdateManyMutationInput, AdCampaignUncheckedUpdateManyInput>
+    /**
+     * Filter which AdCampaigns to update
+     */
+    where?: AdCampaignWhereInput
+    /**
+     * Limit how many AdCampaigns to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdCampaignIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdCampaign upsert
+   */
+  export type AdCampaignUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdCampaign
+     */
+    select?: AdCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdCampaign
+     */
+    omit?: AdCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdCampaignInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AdCampaign to update in case it exists.
+     */
+    where: AdCampaignWhereUniqueInput
+    /**
+     * In case the AdCampaign found by the `where` argument doesn't exist, create a new AdCampaign with this data.
+     */
+    create: XOR<AdCampaignCreateInput, AdCampaignUncheckedCreateInput>
+    /**
+     * In case the AdCampaign was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AdCampaignUpdateInput, AdCampaignUncheckedUpdateInput>
+  }
+
+  /**
+   * AdCampaign delete
+   */
+  export type AdCampaignDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdCampaign
+     */
+    select?: AdCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdCampaign
+     */
+    omit?: AdCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdCampaignInclude<ExtArgs> | null
+    /**
+     * Filter which AdCampaign to delete.
+     */
+    where: AdCampaignWhereUniqueInput
+  }
+
+  /**
+   * AdCampaign deleteMany
+   */
+  export type AdCampaignDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdCampaigns to delete
+     */
+    where?: AdCampaignWhereInput
+    /**
+     * Limit how many AdCampaigns to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdCampaign.adImpressions
+   */
+  export type AdCampaign$adImpressionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdImpression
+     */
+    select?: AdImpressionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdImpression
+     */
+    omit?: AdImpressionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdImpressionInclude<ExtArgs> | null
+    where?: AdImpressionWhereInput
+    orderBy?: AdImpressionOrderByWithRelationInput | AdImpressionOrderByWithRelationInput[]
+    cursor?: AdImpressionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AdImpressionScalarFieldEnum | AdImpressionScalarFieldEnum[]
+  }
+
+  /**
+   * AdCampaign.adClick
+   */
+  export type AdCampaign$adClickArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdClick
+     */
+    select?: AdClickSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdClick
+     */
+    omit?: AdClickOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdClickInclude<ExtArgs> | null
+    where?: AdClickWhereInput
+    orderBy?: AdClickOrderByWithRelationInput | AdClickOrderByWithRelationInput[]
+    cursor?: AdClickWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AdClickScalarFieldEnum | AdClickScalarFieldEnum[]
+  }
+
+  /**
+   * AdCampaign without action
+   */
+  export type AdCampaignDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdCampaign
+     */
+    select?: AdCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdCampaign
+     */
+    omit?: AdCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdCampaignInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AdImpression
+   */
+
+  export type AggregateAdImpression = {
+    _count: AdImpressionCountAggregateOutputType | null
+    _min: AdImpressionMinAggregateOutputType | null
+    _max: AdImpressionMaxAggregateOutputType | null
+  }
+
+  export type AdImpressionMinAggregateOutputType = {
+    id: string | null
+    adCampaignId: string | null
+    userId: string | null
+    ipAddress: string | null
+    userAgent: string | null
+    createdAt: Date | null
+  }
+
+  export type AdImpressionMaxAggregateOutputType = {
+    id: string | null
+    adCampaignId: string | null
+    userId: string | null
+    ipAddress: string | null
+    userAgent: string | null
+    createdAt: Date | null
+  }
+
+  export type AdImpressionCountAggregateOutputType = {
+    id: number
+    adCampaignId: number
+    userId: number
+    ipAddress: number
+    userAgent: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type AdImpressionMinAggregateInputType = {
+    id?: true
+    adCampaignId?: true
+    userId?: true
+    ipAddress?: true
+    userAgent?: true
+    createdAt?: true
+  }
+
+  export type AdImpressionMaxAggregateInputType = {
+    id?: true
+    adCampaignId?: true
+    userId?: true
+    ipAddress?: true
+    userAgent?: true
+    createdAt?: true
+  }
+
+  export type AdImpressionCountAggregateInputType = {
+    id?: true
+    adCampaignId?: true
+    userId?: true
+    ipAddress?: true
+    userAgent?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type AdImpressionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdImpression to aggregate.
+     */
+    where?: AdImpressionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdImpressions to fetch.
+     */
+    orderBy?: AdImpressionOrderByWithRelationInput | AdImpressionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AdImpressionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdImpressions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdImpressions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AdImpressions
+    **/
+    _count?: true | AdImpressionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AdImpressionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AdImpressionMaxAggregateInputType
+  }
+
+  export type GetAdImpressionAggregateType<T extends AdImpressionAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdImpression]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdImpression[P]>
+      : GetScalarType<T[P], AggregateAdImpression[P]>
+  }
+
+
+
+
+  export type AdImpressionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdImpressionWhereInput
+    orderBy?: AdImpressionOrderByWithAggregationInput | AdImpressionOrderByWithAggregationInput[]
+    by: AdImpressionScalarFieldEnum[] | AdImpressionScalarFieldEnum
+    having?: AdImpressionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AdImpressionCountAggregateInputType | true
+    _min?: AdImpressionMinAggregateInputType
+    _max?: AdImpressionMaxAggregateInputType
+  }
+
+  export type AdImpressionGroupByOutputType = {
+    id: string
+    adCampaignId: string
+    userId: string | null
+    ipAddress: string | null
+    userAgent: string | null
+    createdAt: Date
+    _count: AdImpressionCountAggregateOutputType | null
+    _min: AdImpressionMinAggregateOutputType | null
+    _max: AdImpressionMaxAggregateOutputType | null
+  }
+
+  type GetAdImpressionGroupByPayload<T extends AdImpressionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AdImpressionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AdImpressionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AdImpressionGroupByOutputType[P]>
+            : GetScalarType<T[P], AdImpressionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AdImpressionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    adCampaignId?: boolean
+    userId?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    createdAt?: boolean
+    adCampaign?: boolean | AdCampaignDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adImpression"]>
+
+  export type AdImpressionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    adCampaignId?: boolean
+    userId?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    createdAt?: boolean
+    adCampaign?: boolean | AdCampaignDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adImpression"]>
+
+  export type AdImpressionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    adCampaignId?: boolean
+    userId?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    createdAt?: boolean
+    adCampaign?: boolean | AdCampaignDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adImpression"]>
+
+  export type AdImpressionSelectScalar = {
+    id?: boolean
+    adCampaignId?: boolean
+    userId?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    createdAt?: boolean
+  }
+
+  export type AdImpressionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "adCampaignId" | "userId" | "ipAddress" | "userAgent" | "createdAt", ExtArgs["result"]["adImpression"]>
+  export type AdImpressionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    adCampaign?: boolean | AdCampaignDefaultArgs<ExtArgs>
+  }
+  export type AdImpressionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    adCampaign?: boolean | AdCampaignDefaultArgs<ExtArgs>
+  }
+  export type AdImpressionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    adCampaign?: boolean | AdCampaignDefaultArgs<ExtArgs>
+  }
+
+  export type $AdImpressionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AdImpression"
+    objects: {
+      adCampaign: Prisma.$AdCampaignPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      adCampaignId: string
+      userId: string | null
+      ipAddress: string | null
+      userAgent: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["adImpression"]>
+    composites: {}
+  }
+
+  type AdImpressionGetPayload<S extends boolean | null | undefined | AdImpressionDefaultArgs> = $Result.GetResult<Prisma.$AdImpressionPayload, S>
+
+  type AdImpressionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AdImpressionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AdImpressionCountAggregateInputType | true
+    }
+
+  export interface AdImpressionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdImpression'], meta: { name: 'AdImpression' } }
+    /**
+     * Find zero or one AdImpression that matches the filter.
+     * @param {AdImpressionFindUniqueArgs} args - Arguments to find a AdImpression
+     * @example
+     * // Get one AdImpression
+     * const adImpression = await prisma.adImpression.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AdImpressionFindUniqueArgs>(args: SelectSubset<T, AdImpressionFindUniqueArgs<ExtArgs>>): Prisma__AdImpressionClient<$Result.GetResult<Prisma.$AdImpressionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AdImpression that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AdImpressionFindUniqueOrThrowArgs} args - Arguments to find a AdImpression
+     * @example
+     * // Get one AdImpression
+     * const adImpression = await prisma.adImpression.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AdImpressionFindUniqueOrThrowArgs>(args: SelectSubset<T, AdImpressionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdImpressionClient<$Result.GetResult<Prisma.$AdImpressionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdImpression that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdImpressionFindFirstArgs} args - Arguments to find a AdImpression
+     * @example
+     * // Get one AdImpression
+     * const adImpression = await prisma.adImpression.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AdImpressionFindFirstArgs>(args?: SelectSubset<T, AdImpressionFindFirstArgs<ExtArgs>>): Prisma__AdImpressionClient<$Result.GetResult<Prisma.$AdImpressionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdImpression that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdImpressionFindFirstOrThrowArgs} args - Arguments to find a AdImpression
+     * @example
+     * // Get one AdImpression
+     * const adImpression = await prisma.adImpression.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AdImpressionFindFirstOrThrowArgs>(args?: SelectSubset<T, AdImpressionFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdImpressionClient<$Result.GetResult<Prisma.$AdImpressionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AdImpressions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdImpressionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AdImpressions
+     * const adImpressions = await prisma.adImpression.findMany()
+     * 
+     * // Get first 10 AdImpressions
+     * const adImpressions = await prisma.adImpression.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const adImpressionWithIdOnly = await prisma.adImpression.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AdImpressionFindManyArgs>(args?: SelectSubset<T, AdImpressionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdImpressionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AdImpression.
+     * @param {AdImpressionCreateArgs} args - Arguments to create a AdImpression.
+     * @example
+     * // Create one AdImpression
+     * const AdImpression = await prisma.adImpression.create({
+     *   data: {
+     *     // ... data to create a AdImpression
+     *   }
+     * })
+     * 
+     */
+    create<T extends AdImpressionCreateArgs>(args: SelectSubset<T, AdImpressionCreateArgs<ExtArgs>>): Prisma__AdImpressionClient<$Result.GetResult<Prisma.$AdImpressionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AdImpressions.
+     * @param {AdImpressionCreateManyArgs} args - Arguments to create many AdImpressions.
+     * @example
+     * // Create many AdImpressions
+     * const adImpression = await prisma.adImpression.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AdImpressionCreateManyArgs>(args?: SelectSubset<T, AdImpressionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AdImpressions and returns the data saved in the database.
+     * @param {AdImpressionCreateManyAndReturnArgs} args - Arguments to create many AdImpressions.
+     * @example
+     * // Create many AdImpressions
+     * const adImpression = await prisma.adImpression.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AdImpressions and only return the `id`
+     * const adImpressionWithIdOnly = await prisma.adImpression.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AdImpressionCreateManyAndReturnArgs>(args?: SelectSubset<T, AdImpressionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdImpressionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AdImpression.
+     * @param {AdImpressionDeleteArgs} args - Arguments to delete one AdImpression.
+     * @example
+     * // Delete one AdImpression
+     * const AdImpression = await prisma.adImpression.delete({
+     *   where: {
+     *     // ... filter to delete one AdImpression
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AdImpressionDeleteArgs>(args: SelectSubset<T, AdImpressionDeleteArgs<ExtArgs>>): Prisma__AdImpressionClient<$Result.GetResult<Prisma.$AdImpressionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AdImpression.
+     * @param {AdImpressionUpdateArgs} args - Arguments to update one AdImpression.
+     * @example
+     * // Update one AdImpression
+     * const adImpression = await prisma.adImpression.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AdImpressionUpdateArgs>(args: SelectSubset<T, AdImpressionUpdateArgs<ExtArgs>>): Prisma__AdImpressionClient<$Result.GetResult<Prisma.$AdImpressionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AdImpressions.
+     * @param {AdImpressionDeleteManyArgs} args - Arguments to filter AdImpressions to delete.
+     * @example
+     * // Delete a few AdImpressions
+     * const { count } = await prisma.adImpression.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AdImpressionDeleteManyArgs>(args?: SelectSubset<T, AdImpressionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdImpressions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdImpressionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AdImpressions
+     * const adImpression = await prisma.adImpression.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AdImpressionUpdateManyArgs>(args: SelectSubset<T, AdImpressionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdImpressions and returns the data updated in the database.
+     * @param {AdImpressionUpdateManyAndReturnArgs} args - Arguments to update many AdImpressions.
+     * @example
+     * // Update many AdImpressions
+     * const adImpression = await prisma.adImpression.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AdImpressions and only return the `id`
+     * const adImpressionWithIdOnly = await prisma.adImpression.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AdImpressionUpdateManyAndReturnArgs>(args: SelectSubset<T, AdImpressionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdImpressionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AdImpression.
+     * @param {AdImpressionUpsertArgs} args - Arguments to update or create a AdImpression.
+     * @example
+     * // Update or create a AdImpression
+     * const adImpression = await prisma.adImpression.upsert({
+     *   create: {
+     *     // ... data to create a AdImpression
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AdImpression we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AdImpressionUpsertArgs>(args: SelectSubset<T, AdImpressionUpsertArgs<ExtArgs>>): Prisma__AdImpressionClient<$Result.GetResult<Prisma.$AdImpressionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AdImpressions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdImpressionCountArgs} args - Arguments to filter AdImpressions to count.
+     * @example
+     * // Count the number of AdImpressions
+     * const count = await prisma.adImpression.count({
+     *   where: {
+     *     // ... the filter for the AdImpressions we want to count
+     *   }
+     * })
+    **/
+    count<T extends AdImpressionCountArgs>(
+      args?: Subset<T, AdImpressionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AdImpressionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AdImpression.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdImpressionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AdImpressionAggregateArgs>(args: Subset<T, AdImpressionAggregateArgs>): Prisma.PrismaPromise<GetAdImpressionAggregateType<T>>
+
+    /**
+     * Group by AdImpression.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdImpressionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AdImpressionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AdImpressionGroupByArgs['orderBy'] }
+        : { orderBy?: AdImpressionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AdImpressionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdImpressionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AdImpression model
+   */
+  readonly fields: AdImpressionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AdImpression.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AdImpressionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    adCampaign<T extends AdCampaignDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdCampaignDefaultArgs<ExtArgs>>): Prisma__AdCampaignClient<$Result.GetResult<Prisma.$AdCampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AdImpression model
+   */
+  interface AdImpressionFieldRefs {
+    readonly id: FieldRef<"AdImpression", 'String'>
+    readonly adCampaignId: FieldRef<"AdImpression", 'String'>
+    readonly userId: FieldRef<"AdImpression", 'String'>
+    readonly ipAddress: FieldRef<"AdImpression", 'String'>
+    readonly userAgent: FieldRef<"AdImpression", 'String'>
+    readonly createdAt: FieldRef<"AdImpression", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AdImpression findUnique
+   */
+  export type AdImpressionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdImpression
+     */
+    select?: AdImpressionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdImpression
+     */
+    omit?: AdImpressionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdImpressionInclude<ExtArgs> | null
+    /**
+     * Filter, which AdImpression to fetch.
+     */
+    where: AdImpressionWhereUniqueInput
+  }
+
+  /**
+   * AdImpression findUniqueOrThrow
+   */
+  export type AdImpressionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdImpression
+     */
+    select?: AdImpressionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdImpression
+     */
+    omit?: AdImpressionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdImpressionInclude<ExtArgs> | null
+    /**
+     * Filter, which AdImpression to fetch.
+     */
+    where: AdImpressionWhereUniqueInput
+  }
+
+  /**
+   * AdImpression findFirst
+   */
+  export type AdImpressionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdImpression
+     */
+    select?: AdImpressionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdImpression
+     */
+    omit?: AdImpressionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdImpressionInclude<ExtArgs> | null
+    /**
+     * Filter, which AdImpression to fetch.
+     */
+    where?: AdImpressionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdImpressions to fetch.
+     */
+    orderBy?: AdImpressionOrderByWithRelationInput | AdImpressionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdImpressions.
+     */
+    cursor?: AdImpressionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdImpressions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdImpressions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdImpressions.
+     */
+    distinct?: AdImpressionScalarFieldEnum | AdImpressionScalarFieldEnum[]
+  }
+
+  /**
+   * AdImpression findFirstOrThrow
+   */
+  export type AdImpressionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdImpression
+     */
+    select?: AdImpressionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdImpression
+     */
+    omit?: AdImpressionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdImpressionInclude<ExtArgs> | null
+    /**
+     * Filter, which AdImpression to fetch.
+     */
+    where?: AdImpressionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdImpressions to fetch.
+     */
+    orderBy?: AdImpressionOrderByWithRelationInput | AdImpressionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdImpressions.
+     */
+    cursor?: AdImpressionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdImpressions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdImpressions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdImpressions.
+     */
+    distinct?: AdImpressionScalarFieldEnum | AdImpressionScalarFieldEnum[]
+  }
+
+  /**
+   * AdImpression findMany
+   */
+  export type AdImpressionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdImpression
+     */
+    select?: AdImpressionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdImpression
+     */
+    omit?: AdImpressionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdImpressionInclude<ExtArgs> | null
+    /**
+     * Filter, which AdImpressions to fetch.
+     */
+    where?: AdImpressionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdImpressions to fetch.
+     */
+    orderBy?: AdImpressionOrderByWithRelationInput | AdImpressionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AdImpressions.
+     */
+    cursor?: AdImpressionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdImpressions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdImpressions.
+     */
+    skip?: number
+    distinct?: AdImpressionScalarFieldEnum | AdImpressionScalarFieldEnum[]
+  }
+
+  /**
+   * AdImpression create
+   */
+  export type AdImpressionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdImpression
+     */
+    select?: AdImpressionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdImpression
+     */
+    omit?: AdImpressionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdImpressionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AdImpression.
+     */
+    data: XOR<AdImpressionCreateInput, AdImpressionUncheckedCreateInput>
+  }
+
+  /**
+   * AdImpression createMany
+   */
+  export type AdImpressionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AdImpressions.
+     */
+    data: AdImpressionCreateManyInput | AdImpressionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdImpression createManyAndReturn
+   */
+  export type AdImpressionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdImpression
+     */
+    select?: AdImpressionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdImpression
+     */
+    omit?: AdImpressionOmit<ExtArgs> | null
+    /**
+     * The data used to create many AdImpressions.
+     */
+    data: AdImpressionCreateManyInput | AdImpressionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdImpressionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdImpression update
+   */
+  export type AdImpressionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdImpression
+     */
+    select?: AdImpressionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdImpression
+     */
+    omit?: AdImpressionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdImpressionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AdImpression.
+     */
+    data: XOR<AdImpressionUpdateInput, AdImpressionUncheckedUpdateInput>
+    /**
+     * Choose, which AdImpression to update.
+     */
+    where: AdImpressionWhereUniqueInput
+  }
+
+  /**
+   * AdImpression updateMany
+   */
+  export type AdImpressionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AdImpressions.
+     */
+    data: XOR<AdImpressionUpdateManyMutationInput, AdImpressionUncheckedUpdateManyInput>
+    /**
+     * Filter which AdImpressions to update
+     */
+    where?: AdImpressionWhereInput
+    /**
+     * Limit how many AdImpressions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdImpression updateManyAndReturn
+   */
+  export type AdImpressionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdImpression
+     */
+    select?: AdImpressionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdImpression
+     */
+    omit?: AdImpressionOmit<ExtArgs> | null
+    /**
+     * The data used to update AdImpressions.
+     */
+    data: XOR<AdImpressionUpdateManyMutationInput, AdImpressionUncheckedUpdateManyInput>
+    /**
+     * Filter which AdImpressions to update
+     */
+    where?: AdImpressionWhereInput
+    /**
+     * Limit how many AdImpressions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdImpressionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdImpression upsert
+   */
+  export type AdImpressionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdImpression
+     */
+    select?: AdImpressionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdImpression
+     */
+    omit?: AdImpressionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdImpressionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AdImpression to update in case it exists.
+     */
+    where: AdImpressionWhereUniqueInput
+    /**
+     * In case the AdImpression found by the `where` argument doesn't exist, create a new AdImpression with this data.
+     */
+    create: XOR<AdImpressionCreateInput, AdImpressionUncheckedCreateInput>
+    /**
+     * In case the AdImpression was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AdImpressionUpdateInput, AdImpressionUncheckedUpdateInput>
+  }
+
+  /**
+   * AdImpression delete
+   */
+  export type AdImpressionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdImpression
+     */
+    select?: AdImpressionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdImpression
+     */
+    omit?: AdImpressionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdImpressionInclude<ExtArgs> | null
+    /**
+     * Filter which AdImpression to delete.
+     */
+    where: AdImpressionWhereUniqueInput
+  }
+
+  /**
+   * AdImpression deleteMany
+   */
+  export type AdImpressionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdImpressions to delete
+     */
+    where?: AdImpressionWhereInput
+    /**
+     * Limit how many AdImpressions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdImpression without action
+   */
+  export type AdImpressionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdImpression
+     */
+    select?: AdImpressionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdImpression
+     */
+    omit?: AdImpressionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdImpressionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AdClick
+   */
+
+  export type AggregateAdClick = {
+    _count: AdClickCountAggregateOutputType | null
+    _min: AdClickMinAggregateOutputType | null
+    _max: AdClickMaxAggregateOutputType | null
+  }
+
+  export type AdClickMinAggregateOutputType = {
+    id: string | null
+    adCampaignId: string | null
+    userId: string | null
+    ipAddress: string | null
+    userAgent: string | null
+    createdAt: Date | null
+  }
+
+  export type AdClickMaxAggregateOutputType = {
+    id: string | null
+    adCampaignId: string | null
+    userId: string | null
+    ipAddress: string | null
+    userAgent: string | null
+    createdAt: Date | null
+  }
+
+  export type AdClickCountAggregateOutputType = {
+    id: number
+    adCampaignId: number
+    userId: number
+    ipAddress: number
+    userAgent: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type AdClickMinAggregateInputType = {
+    id?: true
+    adCampaignId?: true
+    userId?: true
+    ipAddress?: true
+    userAgent?: true
+    createdAt?: true
+  }
+
+  export type AdClickMaxAggregateInputType = {
+    id?: true
+    adCampaignId?: true
+    userId?: true
+    ipAddress?: true
+    userAgent?: true
+    createdAt?: true
+  }
+
+  export type AdClickCountAggregateInputType = {
+    id?: true
+    adCampaignId?: true
+    userId?: true
+    ipAddress?: true
+    userAgent?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type AdClickAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdClick to aggregate.
+     */
+    where?: AdClickWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdClicks to fetch.
+     */
+    orderBy?: AdClickOrderByWithRelationInput | AdClickOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AdClickWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdClicks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdClicks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AdClicks
+    **/
+    _count?: true | AdClickCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AdClickMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AdClickMaxAggregateInputType
+  }
+
+  export type GetAdClickAggregateType<T extends AdClickAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdClick]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdClick[P]>
+      : GetScalarType<T[P], AggregateAdClick[P]>
+  }
+
+
+
+
+  export type AdClickGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdClickWhereInput
+    orderBy?: AdClickOrderByWithAggregationInput | AdClickOrderByWithAggregationInput[]
+    by: AdClickScalarFieldEnum[] | AdClickScalarFieldEnum
+    having?: AdClickScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AdClickCountAggregateInputType | true
+    _min?: AdClickMinAggregateInputType
+    _max?: AdClickMaxAggregateInputType
+  }
+
+  export type AdClickGroupByOutputType = {
+    id: string
+    adCampaignId: string
+    userId: string | null
+    ipAddress: string | null
+    userAgent: string | null
+    createdAt: Date
+    _count: AdClickCountAggregateOutputType | null
+    _min: AdClickMinAggregateOutputType | null
+    _max: AdClickMaxAggregateOutputType | null
+  }
+
+  type GetAdClickGroupByPayload<T extends AdClickGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AdClickGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AdClickGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AdClickGroupByOutputType[P]>
+            : GetScalarType<T[P], AdClickGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AdClickSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    adCampaignId?: boolean
+    userId?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    createdAt?: boolean
+    adCampaign?: boolean | AdCampaignDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adClick"]>
+
+  export type AdClickSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    adCampaignId?: boolean
+    userId?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    createdAt?: boolean
+    adCampaign?: boolean | AdCampaignDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adClick"]>
+
+  export type AdClickSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    adCampaignId?: boolean
+    userId?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    createdAt?: boolean
+    adCampaign?: boolean | AdCampaignDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adClick"]>
+
+  export type AdClickSelectScalar = {
+    id?: boolean
+    adCampaignId?: boolean
+    userId?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    createdAt?: boolean
+  }
+
+  export type AdClickOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "adCampaignId" | "userId" | "ipAddress" | "userAgent" | "createdAt", ExtArgs["result"]["adClick"]>
+  export type AdClickInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    adCampaign?: boolean | AdCampaignDefaultArgs<ExtArgs>
+  }
+  export type AdClickIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    adCampaign?: boolean | AdCampaignDefaultArgs<ExtArgs>
+  }
+  export type AdClickIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    adCampaign?: boolean | AdCampaignDefaultArgs<ExtArgs>
+  }
+
+  export type $AdClickPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AdClick"
+    objects: {
+      adCampaign: Prisma.$AdCampaignPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      adCampaignId: string
+      userId: string | null
+      ipAddress: string | null
+      userAgent: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["adClick"]>
+    composites: {}
+  }
+
+  type AdClickGetPayload<S extends boolean | null | undefined | AdClickDefaultArgs> = $Result.GetResult<Prisma.$AdClickPayload, S>
+
+  type AdClickCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AdClickFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AdClickCountAggregateInputType | true
+    }
+
+  export interface AdClickDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdClick'], meta: { name: 'AdClick' } }
+    /**
+     * Find zero or one AdClick that matches the filter.
+     * @param {AdClickFindUniqueArgs} args - Arguments to find a AdClick
+     * @example
+     * // Get one AdClick
+     * const adClick = await prisma.adClick.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AdClickFindUniqueArgs>(args: SelectSubset<T, AdClickFindUniqueArgs<ExtArgs>>): Prisma__AdClickClient<$Result.GetResult<Prisma.$AdClickPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AdClick that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AdClickFindUniqueOrThrowArgs} args - Arguments to find a AdClick
+     * @example
+     * // Get one AdClick
+     * const adClick = await prisma.adClick.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AdClickFindUniqueOrThrowArgs>(args: SelectSubset<T, AdClickFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdClickClient<$Result.GetResult<Prisma.$AdClickPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdClick that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdClickFindFirstArgs} args - Arguments to find a AdClick
+     * @example
+     * // Get one AdClick
+     * const adClick = await prisma.adClick.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AdClickFindFirstArgs>(args?: SelectSubset<T, AdClickFindFirstArgs<ExtArgs>>): Prisma__AdClickClient<$Result.GetResult<Prisma.$AdClickPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdClick that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdClickFindFirstOrThrowArgs} args - Arguments to find a AdClick
+     * @example
+     * // Get one AdClick
+     * const adClick = await prisma.adClick.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AdClickFindFirstOrThrowArgs>(args?: SelectSubset<T, AdClickFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdClickClient<$Result.GetResult<Prisma.$AdClickPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AdClicks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdClickFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AdClicks
+     * const adClicks = await prisma.adClick.findMany()
+     * 
+     * // Get first 10 AdClicks
+     * const adClicks = await prisma.adClick.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const adClickWithIdOnly = await prisma.adClick.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AdClickFindManyArgs>(args?: SelectSubset<T, AdClickFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdClickPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AdClick.
+     * @param {AdClickCreateArgs} args - Arguments to create a AdClick.
+     * @example
+     * // Create one AdClick
+     * const AdClick = await prisma.adClick.create({
+     *   data: {
+     *     // ... data to create a AdClick
+     *   }
+     * })
+     * 
+     */
+    create<T extends AdClickCreateArgs>(args: SelectSubset<T, AdClickCreateArgs<ExtArgs>>): Prisma__AdClickClient<$Result.GetResult<Prisma.$AdClickPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AdClicks.
+     * @param {AdClickCreateManyArgs} args - Arguments to create many AdClicks.
+     * @example
+     * // Create many AdClicks
+     * const adClick = await prisma.adClick.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AdClickCreateManyArgs>(args?: SelectSubset<T, AdClickCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AdClicks and returns the data saved in the database.
+     * @param {AdClickCreateManyAndReturnArgs} args - Arguments to create many AdClicks.
+     * @example
+     * // Create many AdClicks
+     * const adClick = await prisma.adClick.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AdClicks and only return the `id`
+     * const adClickWithIdOnly = await prisma.adClick.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AdClickCreateManyAndReturnArgs>(args?: SelectSubset<T, AdClickCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdClickPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AdClick.
+     * @param {AdClickDeleteArgs} args - Arguments to delete one AdClick.
+     * @example
+     * // Delete one AdClick
+     * const AdClick = await prisma.adClick.delete({
+     *   where: {
+     *     // ... filter to delete one AdClick
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AdClickDeleteArgs>(args: SelectSubset<T, AdClickDeleteArgs<ExtArgs>>): Prisma__AdClickClient<$Result.GetResult<Prisma.$AdClickPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AdClick.
+     * @param {AdClickUpdateArgs} args - Arguments to update one AdClick.
+     * @example
+     * // Update one AdClick
+     * const adClick = await prisma.adClick.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AdClickUpdateArgs>(args: SelectSubset<T, AdClickUpdateArgs<ExtArgs>>): Prisma__AdClickClient<$Result.GetResult<Prisma.$AdClickPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AdClicks.
+     * @param {AdClickDeleteManyArgs} args - Arguments to filter AdClicks to delete.
+     * @example
+     * // Delete a few AdClicks
+     * const { count } = await prisma.adClick.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AdClickDeleteManyArgs>(args?: SelectSubset<T, AdClickDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdClicks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdClickUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AdClicks
+     * const adClick = await prisma.adClick.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AdClickUpdateManyArgs>(args: SelectSubset<T, AdClickUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdClicks and returns the data updated in the database.
+     * @param {AdClickUpdateManyAndReturnArgs} args - Arguments to update many AdClicks.
+     * @example
+     * // Update many AdClicks
+     * const adClick = await prisma.adClick.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AdClicks and only return the `id`
+     * const adClickWithIdOnly = await prisma.adClick.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AdClickUpdateManyAndReturnArgs>(args: SelectSubset<T, AdClickUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdClickPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AdClick.
+     * @param {AdClickUpsertArgs} args - Arguments to update or create a AdClick.
+     * @example
+     * // Update or create a AdClick
+     * const adClick = await prisma.adClick.upsert({
+     *   create: {
+     *     // ... data to create a AdClick
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AdClick we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AdClickUpsertArgs>(args: SelectSubset<T, AdClickUpsertArgs<ExtArgs>>): Prisma__AdClickClient<$Result.GetResult<Prisma.$AdClickPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AdClicks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdClickCountArgs} args - Arguments to filter AdClicks to count.
+     * @example
+     * // Count the number of AdClicks
+     * const count = await prisma.adClick.count({
+     *   where: {
+     *     // ... the filter for the AdClicks we want to count
+     *   }
+     * })
+    **/
+    count<T extends AdClickCountArgs>(
+      args?: Subset<T, AdClickCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AdClickCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AdClick.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdClickAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AdClickAggregateArgs>(args: Subset<T, AdClickAggregateArgs>): Prisma.PrismaPromise<GetAdClickAggregateType<T>>
+
+    /**
+     * Group by AdClick.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdClickGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AdClickGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AdClickGroupByArgs['orderBy'] }
+        : { orderBy?: AdClickGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AdClickGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdClickGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AdClick model
+   */
+  readonly fields: AdClickFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AdClick.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AdClickClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    adCampaign<T extends AdCampaignDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdCampaignDefaultArgs<ExtArgs>>): Prisma__AdCampaignClient<$Result.GetResult<Prisma.$AdCampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AdClick model
+   */
+  interface AdClickFieldRefs {
+    readonly id: FieldRef<"AdClick", 'String'>
+    readonly adCampaignId: FieldRef<"AdClick", 'String'>
+    readonly userId: FieldRef<"AdClick", 'String'>
+    readonly ipAddress: FieldRef<"AdClick", 'String'>
+    readonly userAgent: FieldRef<"AdClick", 'String'>
+    readonly createdAt: FieldRef<"AdClick", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AdClick findUnique
+   */
+  export type AdClickFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdClick
+     */
+    select?: AdClickSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdClick
+     */
+    omit?: AdClickOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdClickInclude<ExtArgs> | null
+    /**
+     * Filter, which AdClick to fetch.
+     */
+    where: AdClickWhereUniqueInput
+  }
+
+  /**
+   * AdClick findUniqueOrThrow
+   */
+  export type AdClickFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdClick
+     */
+    select?: AdClickSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdClick
+     */
+    omit?: AdClickOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdClickInclude<ExtArgs> | null
+    /**
+     * Filter, which AdClick to fetch.
+     */
+    where: AdClickWhereUniqueInput
+  }
+
+  /**
+   * AdClick findFirst
+   */
+  export type AdClickFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdClick
+     */
+    select?: AdClickSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdClick
+     */
+    omit?: AdClickOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdClickInclude<ExtArgs> | null
+    /**
+     * Filter, which AdClick to fetch.
+     */
+    where?: AdClickWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdClicks to fetch.
+     */
+    orderBy?: AdClickOrderByWithRelationInput | AdClickOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdClicks.
+     */
+    cursor?: AdClickWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdClicks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdClicks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdClicks.
+     */
+    distinct?: AdClickScalarFieldEnum | AdClickScalarFieldEnum[]
+  }
+
+  /**
+   * AdClick findFirstOrThrow
+   */
+  export type AdClickFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdClick
+     */
+    select?: AdClickSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdClick
+     */
+    omit?: AdClickOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdClickInclude<ExtArgs> | null
+    /**
+     * Filter, which AdClick to fetch.
+     */
+    where?: AdClickWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdClicks to fetch.
+     */
+    orderBy?: AdClickOrderByWithRelationInput | AdClickOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdClicks.
+     */
+    cursor?: AdClickWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdClicks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdClicks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdClicks.
+     */
+    distinct?: AdClickScalarFieldEnum | AdClickScalarFieldEnum[]
+  }
+
+  /**
+   * AdClick findMany
+   */
+  export type AdClickFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdClick
+     */
+    select?: AdClickSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdClick
+     */
+    omit?: AdClickOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdClickInclude<ExtArgs> | null
+    /**
+     * Filter, which AdClicks to fetch.
+     */
+    where?: AdClickWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdClicks to fetch.
+     */
+    orderBy?: AdClickOrderByWithRelationInput | AdClickOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AdClicks.
+     */
+    cursor?: AdClickWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdClicks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdClicks.
+     */
+    skip?: number
+    distinct?: AdClickScalarFieldEnum | AdClickScalarFieldEnum[]
+  }
+
+  /**
+   * AdClick create
+   */
+  export type AdClickCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdClick
+     */
+    select?: AdClickSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdClick
+     */
+    omit?: AdClickOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdClickInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AdClick.
+     */
+    data: XOR<AdClickCreateInput, AdClickUncheckedCreateInput>
+  }
+
+  /**
+   * AdClick createMany
+   */
+  export type AdClickCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AdClicks.
+     */
+    data: AdClickCreateManyInput | AdClickCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdClick createManyAndReturn
+   */
+  export type AdClickCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdClick
+     */
+    select?: AdClickSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdClick
+     */
+    omit?: AdClickOmit<ExtArgs> | null
+    /**
+     * The data used to create many AdClicks.
+     */
+    data: AdClickCreateManyInput | AdClickCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdClickIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdClick update
+   */
+  export type AdClickUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdClick
+     */
+    select?: AdClickSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdClick
+     */
+    omit?: AdClickOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdClickInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AdClick.
+     */
+    data: XOR<AdClickUpdateInput, AdClickUncheckedUpdateInput>
+    /**
+     * Choose, which AdClick to update.
+     */
+    where: AdClickWhereUniqueInput
+  }
+
+  /**
+   * AdClick updateMany
+   */
+  export type AdClickUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AdClicks.
+     */
+    data: XOR<AdClickUpdateManyMutationInput, AdClickUncheckedUpdateManyInput>
+    /**
+     * Filter which AdClicks to update
+     */
+    where?: AdClickWhereInput
+    /**
+     * Limit how many AdClicks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdClick updateManyAndReturn
+   */
+  export type AdClickUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdClick
+     */
+    select?: AdClickSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdClick
+     */
+    omit?: AdClickOmit<ExtArgs> | null
+    /**
+     * The data used to update AdClicks.
+     */
+    data: XOR<AdClickUpdateManyMutationInput, AdClickUncheckedUpdateManyInput>
+    /**
+     * Filter which AdClicks to update
+     */
+    where?: AdClickWhereInput
+    /**
+     * Limit how many AdClicks to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdClickIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdClick upsert
+   */
+  export type AdClickUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdClick
+     */
+    select?: AdClickSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdClick
+     */
+    omit?: AdClickOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdClickInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AdClick to update in case it exists.
+     */
+    where: AdClickWhereUniqueInput
+    /**
+     * In case the AdClick found by the `where` argument doesn't exist, create a new AdClick with this data.
+     */
+    create: XOR<AdClickCreateInput, AdClickUncheckedCreateInput>
+    /**
+     * In case the AdClick was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AdClickUpdateInput, AdClickUncheckedUpdateInput>
+  }
+
+  /**
+   * AdClick delete
+   */
+  export type AdClickDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdClick
+     */
+    select?: AdClickSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdClick
+     */
+    omit?: AdClickOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdClickInclude<ExtArgs> | null
+    /**
+     * Filter which AdClick to delete.
+     */
+    where: AdClickWhereUniqueInput
+  }
+
+  /**
+   * AdClick deleteMany
+   */
+  export type AdClickDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdClicks to delete
+     */
+    where?: AdClickWhereInput
+    /**
+     * Limit how many AdClicks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdClick without action
+   */
+  export type AdClickDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdClick
+     */
+    select?: AdClickSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdClick
+     */
+    omit?: AdClickOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdClickInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BranchDiscountCode
+   */
+
+  export type AggregateBranchDiscountCode = {
+    _count: BranchDiscountCodeCountAggregateOutputType | null
+    _avg: BranchDiscountCodeAvgAggregateOutputType | null
+    _sum: BranchDiscountCodeSumAggregateOutputType | null
+    _min: BranchDiscountCodeMinAggregateOutputType | null
+    _max: BranchDiscountCodeMaxAggregateOutputType | null
+  }
+
+  export type BranchDiscountCodeAvgAggregateOutputType = {
+    discountPercentage: number | null
+    discountAmount: number | null
+    minOrderAmount: number | null
+    usageLimit: number | null
+    usedCount: number | null
+  }
+
+  export type BranchDiscountCodeSumAggregateOutputType = {
+    discountPercentage: number | null
+    discountAmount: number | null
+    minOrderAmount: number | null
+    usageLimit: number | null
+    usedCount: number | null
+  }
+
+  export type BranchDiscountCodeMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    discountPercentage: number | null
+    discountAmount: number | null
+    minOrderAmount: number | null
+    usageLimit: number | null
+    usedCount: number | null
+    isActive: boolean | null
+    validFrom: Date | null
+    validUntil: Date | null
+    createdAt: Date | null
+    branchId: string | null
+  }
+
+  export type BranchDiscountCodeMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    discountPercentage: number | null
+    discountAmount: number | null
+    minOrderAmount: number | null
+    usageLimit: number | null
+    usedCount: number | null
+    isActive: boolean | null
+    validFrom: Date | null
+    validUntil: Date | null
+    createdAt: Date | null
+    branchId: string | null
+  }
+
+  export type BranchDiscountCodeCountAggregateOutputType = {
+    id: number
+    code: number
+    discountPercentage: number
+    discountAmount: number
+    minOrderAmount: number
+    usageLimit: number
+    usedCount: number
+    isActive: number
+    validFrom: number
+    validUntil: number
+    createdAt: number
+    branchId: number
+    _all: number
+  }
+
+
+  export type BranchDiscountCodeAvgAggregateInputType = {
+    discountPercentage?: true
+    discountAmount?: true
+    minOrderAmount?: true
+    usageLimit?: true
+    usedCount?: true
+  }
+
+  export type BranchDiscountCodeSumAggregateInputType = {
+    discountPercentage?: true
+    discountAmount?: true
+    minOrderAmount?: true
+    usageLimit?: true
+    usedCount?: true
+  }
+
+  export type BranchDiscountCodeMinAggregateInputType = {
+    id?: true
+    code?: true
+    discountPercentage?: true
+    discountAmount?: true
+    minOrderAmount?: true
+    usageLimit?: true
+    usedCount?: true
+    isActive?: true
+    validFrom?: true
+    validUntil?: true
+    createdAt?: true
+    branchId?: true
+  }
+
+  export type BranchDiscountCodeMaxAggregateInputType = {
+    id?: true
+    code?: true
+    discountPercentage?: true
+    discountAmount?: true
+    minOrderAmount?: true
+    usageLimit?: true
+    usedCount?: true
+    isActive?: true
+    validFrom?: true
+    validUntil?: true
+    createdAt?: true
+    branchId?: true
+  }
+
+  export type BranchDiscountCodeCountAggregateInputType = {
+    id?: true
+    code?: true
+    discountPercentage?: true
+    discountAmount?: true
+    minOrderAmount?: true
+    usageLimit?: true
+    usedCount?: true
+    isActive?: true
+    validFrom?: true
+    validUntil?: true
+    createdAt?: true
+    branchId?: true
+    _all?: true
+  }
+
+  export type BranchDiscountCodeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BranchDiscountCode to aggregate.
+     */
+    where?: BranchDiscountCodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BranchDiscountCodes to fetch.
+     */
+    orderBy?: BranchDiscountCodeOrderByWithRelationInput | BranchDiscountCodeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BranchDiscountCodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BranchDiscountCodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BranchDiscountCodes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BranchDiscountCodes
+    **/
+    _count?: true | BranchDiscountCodeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BranchDiscountCodeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BranchDiscountCodeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BranchDiscountCodeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BranchDiscountCodeMaxAggregateInputType
+  }
+
+  export type GetBranchDiscountCodeAggregateType<T extends BranchDiscountCodeAggregateArgs> = {
+        [P in keyof T & keyof AggregateBranchDiscountCode]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBranchDiscountCode[P]>
+      : GetScalarType<T[P], AggregateBranchDiscountCode[P]>
+  }
+
+
+
+
+  export type BranchDiscountCodeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BranchDiscountCodeWhereInput
+    orderBy?: BranchDiscountCodeOrderByWithAggregationInput | BranchDiscountCodeOrderByWithAggregationInput[]
+    by: BranchDiscountCodeScalarFieldEnum[] | BranchDiscountCodeScalarFieldEnum
+    having?: BranchDiscountCodeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BranchDiscountCodeCountAggregateInputType | true
+    _avg?: BranchDiscountCodeAvgAggregateInputType
+    _sum?: BranchDiscountCodeSumAggregateInputType
+    _min?: BranchDiscountCodeMinAggregateInputType
+    _max?: BranchDiscountCodeMaxAggregateInputType
+  }
+
+  export type BranchDiscountCodeGroupByOutputType = {
+    id: string
+    code: string
+    discountPercentage: number | null
+    discountAmount: number | null
+    minOrderAmount: number | null
+    usageLimit: number | null
+    usedCount: number
+    isActive: boolean
+    validFrom: Date | null
+    validUntil: Date | null
+    createdAt: Date
+    branchId: string
+    _count: BranchDiscountCodeCountAggregateOutputType | null
+    _avg: BranchDiscountCodeAvgAggregateOutputType | null
+    _sum: BranchDiscountCodeSumAggregateOutputType | null
+    _min: BranchDiscountCodeMinAggregateOutputType | null
+    _max: BranchDiscountCodeMaxAggregateOutputType | null
+  }
+
+  type GetBranchDiscountCodeGroupByPayload<T extends BranchDiscountCodeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BranchDiscountCodeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BranchDiscountCodeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BranchDiscountCodeGroupByOutputType[P]>
+            : GetScalarType<T[P], BranchDiscountCodeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BranchDiscountCodeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    discountPercentage?: boolean
+    discountAmount?: boolean
+    minOrderAmount?: boolean
+    usageLimit?: boolean
+    usedCount?: boolean
+    isActive?: boolean
+    validFrom?: boolean
+    validUntil?: boolean
+    createdAt?: boolean
+    branchId?: boolean
+    branch?: boolean | branchDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["branchDiscountCode"]>
+
+  export type BranchDiscountCodeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    discountPercentage?: boolean
+    discountAmount?: boolean
+    minOrderAmount?: boolean
+    usageLimit?: boolean
+    usedCount?: boolean
+    isActive?: boolean
+    validFrom?: boolean
+    validUntil?: boolean
+    createdAt?: boolean
+    branchId?: boolean
+    branch?: boolean | branchDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["branchDiscountCode"]>
+
+  export type BranchDiscountCodeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    discountPercentage?: boolean
+    discountAmount?: boolean
+    minOrderAmount?: boolean
+    usageLimit?: boolean
+    usedCount?: boolean
+    isActive?: boolean
+    validFrom?: boolean
+    validUntil?: boolean
+    createdAt?: boolean
+    branchId?: boolean
+    branch?: boolean | branchDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["branchDiscountCode"]>
+
+  export type BranchDiscountCodeSelectScalar = {
+    id?: boolean
+    code?: boolean
+    discountPercentage?: boolean
+    discountAmount?: boolean
+    minOrderAmount?: boolean
+    usageLimit?: boolean
+    usedCount?: boolean
+    isActive?: boolean
+    validFrom?: boolean
+    validUntil?: boolean
+    createdAt?: boolean
+    branchId?: boolean
+  }
+
+  export type BranchDiscountCodeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "discountPercentage" | "discountAmount" | "minOrderAmount" | "usageLimit" | "usedCount" | "isActive" | "validFrom" | "validUntil" | "createdAt" | "branchId", ExtArgs["result"]["branchDiscountCode"]>
+  export type BranchDiscountCodeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    branch?: boolean | branchDefaultArgs<ExtArgs>
+  }
+  export type BranchDiscountCodeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    branch?: boolean | branchDefaultArgs<ExtArgs>
+  }
+  export type BranchDiscountCodeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    branch?: boolean | branchDefaultArgs<ExtArgs>
+  }
+
+  export type $BranchDiscountCodePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BranchDiscountCode"
+    objects: {
+      branch: Prisma.$branchPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string
+      discountPercentage: number | null
+      discountAmount: number | null
+      minOrderAmount: number | null
+      usageLimit: number | null
+      usedCount: number
+      isActive: boolean
+      validFrom: Date | null
+      validUntil: Date | null
+      createdAt: Date
+      branchId: string
+    }, ExtArgs["result"]["branchDiscountCode"]>
+    composites: {}
+  }
+
+  type BranchDiscountCodeGetPayload<S extends boolean | null | undefined | BranchDiscountCodeDefaultArgs> = $Result.GetResult<Prisma.$BranchDiscountCodePayload, S>
+
+  type BranchDiscountCodeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BranchDiscountCodeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BranchDiscountCodeCountAggregateInputType | true
+    }
+
+  export interface BranchDiscountCodeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BranchDiscountCode'], meta: { name: 'BranchDiscountCode' } }
+    /**
+     * Find zero or one BranchDiscountCode that matches the filter.
+     * @param {BranchDiscountCodeFindUniqueArgs} args - Arguments to find a BranchDiscountCode
+     * @example
+     * // Get one BranchDiscountCode
+     * const branchDiscountCode = await prisma.branchDiscountCode.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BranchDiscountCodeFindUniqueArgs>(args: SelectSubset<T, BranchDiscountCodeFindUniqueArgs<ExtArgs>>): Prisma__BranchDiscountCodeClient<$Result.GetResult<Prisma.$BranchDiscountCodePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BranchDiscountCode that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BranchDiscountCodeFindUniqueOrThrowArgs} args - Arguments to find a BranchDiscountCode
+     * @example
+     * // Get one BranchDiscountCode
+     * const branchDiscountCode = await prisma.branchDiscountCode.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BranchDiscountCodeFindUniqueOrThrowArgs>(args: SelectSubset<T, BranchDiscountCodeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BranchDiscountCodeClient<$Result.GetResult<Prisma.$BranchDiscountCodePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BranchDiscountCode that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BranchDiscountCodeFindFirstArgs} args - Arguments to find a BranchDiscountCode
+     * @example
+     * // Get one BranchDiscountCode
+     * const branchDiscountCode = await prisma.branchDiscountCode.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BranchDiscountCodeFindFirstArgs>(args?: SelectSubset<T, BranchDiscountCodeFindFirstArgs<ExtArgs>>): Prisma__BranchDiscountCodeClient<$Result.GetResult<Prisma.$BranchDiscountCodePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BranchDiscountCode that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BranchDiscountCodeFindFirstOrThrowArgs} args - Arguments to find a BranchDiscountCode
+     * @example
+     * // Get one BranchDiscountCode
+     * const branchDiscountCode = await prisma.branchDiscountCode.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BranchDiscountCodeFindFirstOrThrowArgs>(args?: SelectSubset<T, BranchDiscountCodeFindFirstOrThrowArgs<ExtArgs>>): Prisma__BranchDiscountCodeClient<$Result.GetResult<Prisma.$BranchDiscountCodePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BranchDiscountCodes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BranchDiscountCodeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BranchDiscountCodes
+     * const branchDiscountCodes = await prisma.branchDiscountCode.findMany()
+     * 
+     * // Get first 10 BranchDiscountCodes
+     * const branchDiscountCodes = await prisma.branchDiscountCode.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const branchDiscountCodeWithIdOnly = await prisma.branchDiscountCode.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BranchDiscountCodeFindManyArgs>(args?: SelectSubset<T, BranchDiscountCodeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BranchDiscountCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BranchDiscountCode.
+     * @param {BranchDiscountCodeCreateArgs} args - Arguments to create a BranchDiscountCode.
+     * @example
+     * // Create one BranchDiscountCode
+     * const BranchDiscountCode = await prisma.branchDiscountCode.create({
+     *   data: {
+     *     // ... data to create a BranchDiscountCode
+     *   }
+     * })
+     * 
+     */
+    create<T extends BranchDiscountCodeCreateArgs>(args: SelectSubset<T, BranchDiscountCodeCreateArgs<ExtArgs>>): Prisma__BranchDiscountCodeClient<$Result.GetResult<Prisma.$BranchDiscountCodePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BranchDiscountCodes.
+     * @param {BranchDiscountCodeCreateManyArgs} args - Arguments to create many BranchDiscountCodes.
+     * @example
+     * // Create many BranchDiscountCodes
+     * const branchDiscountCode = await prisma.branchDiscountCode.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BranchDiscountCodeCreateManyArgs>(args?: SelectSubset<T, BranchDiscountCodeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BranchDiscountCodes and returns the data saved in the database.
+     * @param {BranchDiscountCodeCreateManyAndReturnArgs} args - Arguments to create many BranchDiscountCodes.
+     * @example
+     * // Create many BranchDiscountCodes
+     * const branchDiscountCode = await prisma.branchDiscountCode.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BranchDiscountCodes and only return the `id`
+     * const branchDiscountCodeWithIdOnly = await prisma.branchDiscountCode.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BranchDiscountCodeCreateManyAndReturnArgs>(args?: SelectSubset<T, BranchDiscountCodeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BranchDiscountCodePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BranchDiscountCode.
+     * @param {BranchDiscountCodeDeleteArgs} args - Arguments to delete one BranchDiscountCode.
+     * @example
+     * // Delete one BranchDiscountCode
+     * const BranchDiscountCode = await prisma.branchDiscountCode.delete({
+     *   where: {
+     *     // ... filter to delete one BranchDiscountCode
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BranchDiscountCodeDeleteArgs>(args: SelectSubset<T, BranchDiscountCodeDeleteArgs<ExtArgs>>): Prisma__BranchDiscountCodeClient<$Result.GetResult<Prisma.$BranchDiscountCodePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BranchDiscountCode.
+     * @param {BranchDiscountCodeUpdateArgs} args - Arguments to update one BranchDiscountCode.
+     * @example
+     * // Update one BranchDiscountCode
+     * const branchDiscountCode = await prisma.branchDiscountCode.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BranchDiscountCodeUpdateArgs>(args: SelectSubset<T, BranchDiscountCodeUpdateArgs<ExtArgs>>): Prisma__BranchDiscountCodeClient<$Result.GetResult<Prisma.$BranchDiscountCodePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BranchDiscountCodes.
+     * @param {BranchDiscountCodeDeleteManyArgs} args - Arguments to filter BranchDiscountCodes to delete.
+     * @example
+     * // Delete a few BranchDiscountCodes
+     * const { count } = await prisma.branchDiscountCode.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BranchDiscountCodeDeleteManyArgs>(args?: SelectSubset<T, BranchDiscountCodeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BranchDiscountCodes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BranchDiscountCodeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BranchDiscountCodes
+     * const branchDiscountCode = await prisma.branchDiscountCode.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BranchDiscountCodeUpdateManyArgs>(args: SelectSubset<T, BranchDiscountCodeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BranchDiscountCodes and returns the data updated in the database.
+     * @param {BranchDiscountCodeUpdateManyAndReturnArgs} args - Arguments to update many BranchDiscountCodes.
+     * @example
+     * // Update many BranchDiscountCodes
+     * const branchDiscountCode = await prisma.branchDiscountCode.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BranchDiscountCodes and only return the `id`
+     * const branchDiscountCodeWithIdOnly = await prisma.branchDiscountCode.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BranchDiscountCodeUpdateManyAndReturnArgs>(args: SelectSubset<T, BranchDiscountCodeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BranchDiscountCodePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BranchDiscountCode.
+     * @param {BranchDiscountCodeUpsertArgs} args - Arguments to update or create a BranchDiscountCode.
+     * @example
+     * // Update or create a BranchDiscountCode
+     * const branchDiscountCode = await prisma.branchDiscountCode.upsert({
+     *   create: {
+     *     // ... data to create a BranchDiscountCode
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BranchDiscountCode we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BranchDiscountCodeUpsertArgs>(args: SelectSubset<T, BranchDiscountCodeUpsertArgs<ExtArgs>>): Prisma__BranchDiscountCodeClient<$Result.GetResult<Prisma.$BranchDiscountCodePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BranchDiscountCodes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BranchDiscountCodeCountArgs} args - Arguments to filter BranchDiscountCodes to count.
+     * @example
+     * // Count the number of BranchDiscountCodes
+     * const count = await prisma.branchDiscountCode.count({
+     *   where: {
+     *     // ... the filter for the BranchDiscountCodes we want to count
+     *   }
+     * })
+    **/
+    count<T extends BranchDiscountCodeCountArgs>(
+      args?: Subset<T, BranchDiscountCodeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BranchDiscountCodeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BranchDiscountCode.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BranchDiscountCodeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BranchDiscountCodeAggregateArgs>(args: Subset<T, BranchDiscountCodeAggregateArgs>): Prisma.PrismaPromise<GetBranchDiscountCodeAggregateType<T>>
+
+    /**
+     * Group by BranchDiscountCode.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BranchDiscountCodeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BranchDiscountCodeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BranchDiscountCodeGroupByArgs['orderBy'] }
+        : { orderBy?: BranchDiscountCodeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BranchDiscountCodeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBranchDiscountCodeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BranchDiscountCode model
+   */
+  readonly fields: BranchDiscountCodeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BranchDiscountCode.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BranchDiscountCodeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    branch<T extends branchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, branchDefaultArgs<ExtArgs>>): Prisma__branchClient<$Result.GetResult<Prisma.$branchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BranchDiscountCode model
+   */
+  interface BranchDiscountCodeFieldRefs {
+    readonly id: FieldRef<"BranchDiscountCode", 'String'>
+    readonly code: FieldRef<"BranchDiscountCode", 'String'>
+    readonly discountPercentage: FieldRef<"BranchDiscountCode", 'Int'>
+    readonly discountAmount: FieldRef<"BranchDiscountCode", 'Float'>
+    readonly minOrderAmount: FieldRef<"BranchDiscountCode", 'Float'>
+    readonly usageLimit: FieldRef<"BranchDiscountCode", 'Int'>
+    readonly usedCount: FieldRef<"BranchDiscountCode", 'Int'>
+    readonly isActive: FieldRef<"BranchDiscountCode", 'Boolean'>
+    readonly validFrom: FieldRef<"BranchDiscountCode", 'DateTime'>
+    readonly validUntil: FieldRef<"BranchDiscountCode", 'DateTime'>
+    readonly createdAt: FieldRef<"BranchDiscountCode", 'DateTime'>
+    readonly branchId: FieldRef<"BranchDiscountCode", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BranchDiscountCode findUnique
+   */
+  export type BranchDiscountCodeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BranchDiscountCode
+     */
+    select?: BranchDiscountCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BranchDiscountCode
+     */
+    omit?: BranchDiscountCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchDiscountCodeInclude<ExtArgs> | null
+    /**
+     * Filter, which BranchDiscountCode to fetch.
+     */
+    where: BranchDiscountCodeWhereUniqueInput
+  }
+
+  /**
+   * BranchDiscountCode findUniqueOrThrow
+   */
+  export type BranchDiscountCodeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BranchDiscountCode
+     */
+    select?: BranchDiscountCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BranchDiscountCode
+     */
+    omit?: BranchDiscountCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchDiscountCodeInclude<ExtArgs> | null
+    /**
+     * Filter, which BranchDiscountCode to fetch.
+     */
+    where: BranchDiscountCodeWhereUniqueInput
+  }
+
+  /**
+   * BranchDiscountCode findFirst
+   */
+  export type BranchDiscountCodeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BranchDiscountCode
+     */
+    select?: BranchDiscountCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BranchDiscountCode
+     */
+    omit?: BranchDiscountCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchDiscountCodeInclude<ExtArgs> | null
+    /**
+     * Filter, which BranchDiscountCode to fetch.
+     */
+    where?: BranchDiscountCodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BranchDiscountCodes to fetch.
+     */
+    orderBy?: BranchDiscountCodeOrderByWithRelationInput | BranchDiscountCodeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BranchDiscountCodes.
+     */
+    cursor?: BranchDiscountCodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BranchDiscountCodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BranchDiscountCodes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BranchDiscountCodes.
+     */
+    distinct?: BranchDiscountCodeScalarFieldEnum | BranchDiscountCodeScalarFieldEnum[]
+  }
+
+  /**
+   * BranchDiscountCode findFirstOrThrow
+   */
+  export type BranchDiscountCodeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BranchDiscountCode
+     */
+    select?: BranchDiscountCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BranchDiscountCode
+     */
+    omit?: BranchDiscountCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchDiscountCodeInclude<ExtArgs> | null
+    /**
+     * Filter, which BranchDiscountCode to fetch.
+     */
+    where?: BranchDiscountCodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BranchDiscountCodes to fetch.
+     */
+    orderBy?: BranchDiscountCodeOrderByWithRelationInput | BranchDiscountCodeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BranchDiscountCodes.
+     */
+    cursor?: BranchDiscountCodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BranchDiscountCodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BranchDiscountCodes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BranchDiscountCodes.
+     */
+    distinct?: BranchDiscountCodeScalarFieldEnum | BranchDiscountCodeScalarFieldEnum[]
+  }
+
+  /**
+   * BranchDiscountCode findMany
+   */
+  export type BranchDiscountCodeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BranchDiscountCode
+     */
+    select?: BranchDiscountCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BranchDiscountCode
+     */
+    omit?: BranchDiscountCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchDiscountCodeInclude<ExtArgs> | null
+    /**
+     * Filter, which BranchDiscountCodes to fetch.
+     */
+    where?: BranchDiscountCodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BranchDiscountCodes to fetch.
+     */
+    orderBy?: BranchDiscountCodeOrderByWithRelationInput | BranchDiscountCodeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BranchDiscountCodes.
+     */
+    cursor?: BranchDiscountCodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BranchDiscountCodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BranchDiscountCodes.
+     */
+    skip?: number
+    distinct?: BranchDiscountCodeScalarFieldEnum | BranchDiscountCodeScalarFieldEnum[]
+  }
+
+  /**
+   * BranchDiscountCode create
+   */
+  export type BranchDiscountCodeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BranchDiscountCode
+     */
+    select?: BranchDiscountCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BranchDiscountCode
+     */
+    omit?: BranchDiscountCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchDiscountCodeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BranchDiscountCode.
+     */
+    data: XOR<BranchDiscountCodeCreateInput, BranchDiscountCodeUncheckedCreateInput>
+  }
+
+  /**
+   * BranchDiscountCode createMany
+   */
+  export type BranchDiscountCodeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BranchDiscountCodes.
+     */
+    data: BranchDiscountCodeCreateManyInput | BranchDiscountCodeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BranchDiscountCode createManyAndReturn
+   */
+  export type BranchDiscountCodeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BranchDiscountCode
+     */
+    select?: BranchDiscountCodeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BranchDiscountCode
+     */
+    omit?: BranchDiscountCodeOmit<ExtArgs> | null
+    /**
+     * The data used to create many BranchDiscountCodes.
+     */
+    data: BranchDiscountCodeCreateManyInput | BranchDiscountCodeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchDiscountCodeIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BranchDiscountCode update
+   */
+  export type BranchDiscountCodeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BranchDiscountCode
+     */
+    select?: BranchDiscountCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BranchDiscountCode
+     */
+    omit?: BranchDiscountCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchDiscountCodeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BranchDiscountCode.
+     */
+    data: XOR<BranchDiscountCodeUpdateInput, BranchDiscountCodeUncheckedUpdateInput>
+    /**
+     * Choose, which BranchDiscountCode to update.
+     */
+    where: BranchDiscountCodeWhereUniqueInput
+  }
+
+  /**
+   * BranchDiscountCode updateMany
+   */
+  export type BranchDiscountCodeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BranchDiscountCodes.
+     */
+    data: XOR<BranchDiscountCodeUpdateManyMutationInput, BranchDiscountCodeUncheckedUpdateManyInput>
+    /**
+     * Filter which BranchDiscountCodes to update
+     */
+    where?: BranchDiscountCodeWhereInput
+    /**
+     * Limit how many BranchDiscountCodes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BranchDiscountCode updateManyAndReturn
+   */
+  export type BranchDiscountCodeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BranchDiscountCode
+     */
+    select?: BranchDiscountCodeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BranchDiscountCode
+     */
+    omit?: BranchDiscountCodeOmit<ExtArgs> | null
+    /**
+     * The data used to update BranchDiscountCodes.
+     */
+    data: XOR<BranchDiscountCodeUpdateManyMutationInput, BranchDiscountCodeUncheckedUpdateManyInput>
+    /**
+     * Filter which BranchDiscountCodes to update
+     */
+    where?: BranchDiscountCodeWhereInput
+    /**
+     * Limit how many BranchDiscountCodes to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchDiscountCodeIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BranchDiscountCode upsert
+   */
+  export type BranchDiscountCodeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BranchDiscountCode
+     */
+    select?: BranchDiscountCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BranchDiscountCode
+     */
+    omit?: BranchDiscountCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchDiscountCodeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BranchDiscountCode to update in case it exists.
+     */
+    where: BranchDiscountCodeWhereUniqueInput
+    /**
+     * In case the BranchDiscountCode found by the `where` argument doesn't exist, create a new BranchDiscountCode with this data.
+     */
+    create: XOR<BranchDiscountCodeCreateInput, BranchDiscountCodeUncheckedCreateInput>
+    /**
+     * In case the BranchDiscountCode was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BranchDiscountCodeUpdateInput, BranchDiscountCodeUncheckedUpdateInput>
+  }
+
+  /**
+   * BranchDiscountCode delete
+   */
+  export type BranchDiscountCodeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BranchDiscountCode
+     */
+    select?: BranchDiscountCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BranchDiscountCode
+     */
+    omit?: BranchDiscountCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchDiscountCodeInclude<ExtArgs> | null
+    /**
+     * Filter which BranchDiscountCode to delete.
+     */
+    where: BranchDiscountCodeWhereUniqueInput
+  }
+
+  /**
+   * BranchDiscountCode deleteMany
+   */
+  export type BranchDiscountCodeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BranchDiscountCodes to delete
+     */
+    where?: BranchDiscountCodeWhereInput
+    /**
+     * Limit how many BranchDiscountCodes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BranchDiscountCode without action
+   */
+  export type BranchDiscountCodeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BranchDiscountCode
+     */
+    select?: BranchDiscountCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BranchDiscountCode
+     */
+    omit?: BranchDiscountCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchDiscountCodeInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model branch
    */
 
@@ -5712,6 +11114,7 @@ export namespace Prisma {
     location?: boolean | branch$locationArgs<ExtArgs>
     workHours?: boolean | branch$workHoursArgs<ExtArgs>
     productStock?: boolean | branch$productStockArgs<ExtArgs>
+    discountCodes?: boolean | branch$discountCodesArgs<ExtArgs>
     _count?: boolean | BranchCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["branch"]>
 
@@ -5755,6 +11158,7 @@ export namespace Prisma {
     location?: boolean | branch$locationArgs<ExtArgs>
     workHours?: boolean | branch$workHoursArgs<ExtArgs>
     productStock?: boolean | branch$productStockArgs<ExtArgs>
+    discountCodes?: boolean | branch$discountCodesArgs<ExtArgs>
     _count?: boolean | BranchCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type branchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5773,6 +11177,7 @@ export namespace Prisma {
       location: Prisma.$locationPayload<ExtArgs> | null
       workHours: Prisma.$workHourPayload<ExtArgs>[]
       productStock: Prisma.$productStockPayload<ExtArgs>[]
+      discountCodes: Prisma.$BranchDiscountCodePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6180,6 +11585,7 @@ export namespace Prisma {
     location<T extends branch$locationArgs<ExtArgs> = {}>(args?: Subset<T, branch$locationArgs<ExtArgs>>): Prisma__locationClient<$Result.GetResult<Prisma.$locationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     workHours<T extends branch$workHoursArgs<ExtArgs> = {}>(args?: Subset<T, branch$workHoursArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$workHourPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     productStock<T extends branch$productStockArgs<ExtArgs> = {}>(args?: Subset<T, branch$productStockArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$productStockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    discountCodes<T extends branch$discountCodesArgs<ExtArgs> = {}>(args?: Subset<T, branch$discountCodesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BranchDiscountCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6676,6 +12082,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProductStockScalarFieldEnum | ProductStockScalarFieldEnum[]
+  }
+
+  /**
+   * branch.discountCodes
+   */
+  export type branch$discountCodesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BranchDiscountCode
+     */
+    select?: BranchDiscountCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BranchDiscountCode
+     */
+    omit?: BranchDiscountCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchDiscountCodeInclude<ExtArgs> | null
+    where?: BranchDiscountCodeWhereInput
+    orderBy?: BranchDiscountCodeOrderByWithRelationInput | BranchDiscountCodeOrderByWithRelationInput[]
+    cursor?: BranchDiscountCodeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BranchDiscountCodeScalarFieldEnum | BranchDiscountCodeScalarFieldEnum[]
   }
 
   /**
@@ -21597,6 +27027,1229 @@ export namespace Prisma {
 
 
   /**
+   * Model PlanLimit
+   */
+
+  export type AggregatePlanLimit = {
+    _count: PlanLimitCountAggregateOutputType | null
+    _avg: PlanLimitAvgAggregateOutputType | null
+    _sum: PlanLimitSumAggregateOutputType | null
+    _min: PlanLimitMinAggregateOutputType | null
+    _max: PlanLimitMaxAggregateOutputType | null
+  }
+
+  export type PlanLimitAvgAggregateOutputType = {
+    maxProducts: number | null
+    maxBranches: number | null
+    maxDiscountCodes: number | null
+    notificationsPerWeek: number | null
+    adsPerWeek: number | null
+    commissionRate: number | null
+    monthlyPrice: number | null
+    annualPrice: number | null
+  }
+
+  export type PlanLimitSumAggregateOutputType = {
+    maxProducts: number | null
+    maxBranches: number | null
+    maxDiscountCodes: number | null
+    notificationsPerWeek: number | null
+    adsPerWeek: number | null
+    commissionRate: number | null
+    monthlyPrice: number | null
+    annualPrice: number | null
+  }
+
+  export type PlanLimitMinAggregateOutputType = {
+    id: string | null
+    planName: $Enums.PlanName | null
+    maxProducts: number | null
+    maxBranches: number | null
+    maxDiscountCodes: number | null
+    notificationsPerWeek: number | null
+    adsPerWeek: number | null
+    allowsBoxes: boolean | null
+    allowsCollaborations: boolean | null
+    commissionRate: number | null
+    monthlyPrice: number | null
+    annualPrice: number | null
+  }
+
+  export type PlanLimitMaxAggregateOutputType = {
+    id: string | null
+    planName: $Enums.PlanName | null
+    maxProducts: number | null
+    maxBranches: number | null
+    maxDiscountCodes: number | null
+    notificationsPerWeek: number | null
+    adsPerWeek: number | null
+    allowsBoxes: boolean | null
+    allowsCollaborations: boolean | null
+    commissionRate: number | null
+    monthlyPrice: number | null
+    annualPrice: number | null
+  }
+
+  export type PlanLimitCountAggregateOutputType = {
+    id: number
+    planName: number
+    maxProducts: number
+    maxBranches: number
+    maxDiscountCodes: number
+    notificationsPerWeek: number
+    adsPerWeek: number
+    allowsBoxes: number
+    allowsCollaborations: number
+    commissionRate: number
+    monthlyPrice: number
+    annualPrice: number
+    _all: number
+  }
+
+
+  export type PlanLimitAvgAggregateInputType = {
+    maxProducts?: true
+    maxBranches?: true
+    maxDiscountCodes?: true
+    notificationsPerWeek?: true
+    adsPerWeek?: true
+    commissionRate?: true
+    monthlyPrice?: true
+    annualPrice?: true
+  }
+
+  export type PlanLimitSumAggregateInputType = {
+    maxProducts?: true
+    maxBranches?: true
+    maxDiscountCodes?: true
+    notificationsPerWeek?: true
+    adsPerWeek?: true
+    commissionRate?: true
+    monthlyPrice?: true
+    annualPrice?: true
+  }
+
+  export type PlanLimitMinAggregateInputType = {
+    id?: true
+    planName?: true
+    maxProducts?: true
+    maxBranches?: true
+    maxDiscountCodes?: true
+    notificationsPerWeek?: true
+    adsPerWeek?: true
+    allowsBoxes?: true
+    allowsCollaborations?: true
+    commissionRate?: true
+    monthlyPrice?: true
+    annualPrice?: true
+  }
+
+  export type PlanLimitMaxAggregateInputType = {
+    id?: true
+    planName?: true
+    maxProducts?: true
+    maxBranches?: true
+    maxDiscountCodes?: true
+    notificationsPerWeek?: true
+    adsPerWeek?: true
+    allowsBoxes?: true
+    allowsCollaborations?: true
+    commissionRate?: true
+    monthlyPrice?: true
+    annualPrice?: true
+  }
+
+  export type PlanLimitCountAggregateInputType = {
+    id?: true
+    planName?: true
+    maxProducts?: true
+    maxBranches?: true
+    maxDiscountCodes?: true
+    notificationsPerWeek?: true
+    adsPerWeek?: true
+    allowsBoxes?: true
+    allowsCollaborations?: true
+    commissionRate?: true
+    monthlyPrice?: true
+    annualPrice?: true
+    _all?: true
+  }
+
+  export type PlanLimitAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PlanLimit to aggregate.
+     */
+    where?: PlanLimitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlanLimits to fetch.
+     */
+    orderBy?: PlanLimitOrderByWithRelationInput | PlanLimitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PlanLimitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlanLimits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlanLimits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PlanLimits
+    **/
+    _count?: true | PlanLimitCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PlanLimitAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PlanLimitSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PlanLimitMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PlanLimitMaxAggregateInputType
+  }
+
+  export type GetPlanLimitAggregateType<T extends PlanLimitAggregateArgs> = {
+        [P in keyof T & keyof AggregatePlanLimit]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePlanLimit[P]>
+      : GetScalarType<T[P], AggregatePlanLimit[P]>
+  }
+
+
+
+
+  export type PlanLimitGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlanLimitWhereInput
+    orderBy?: PlanLimitOrderByWithAggregationInput | PlanLimitOrderByWithAggregationInput[]
+    by: PlanLimitScalarFieldEnum[] | PlanLimitScalarFieldEnum
+    having?: PlanLimitScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PlanLimitCountAggregateInputType | true
+    _avg?: PlanLimitAvgAggregateInputType
+    _sum?: PlanLimitSumAggregateInputType
+    _min?: PlanLimitMinAggregateInputType
+    _max?: PlanLimitMaxAggregateInputType
+  }
+
+  export type PlanLimitGroupByOutputType = {
+    id: string
+    planName: $Enums.PlanName
+    maxProducts: number
+    maxBranches: number
+    maxDiscountCodes: number
+    notificationsPerWeek: number
+    adsPerWeek: number
+    allowsBoxes: boolean
+    allowsCollaborations: boolean
+    commissionRate: number
+    monthlyPrice: number | null
+    annualPrice: number | null
+    _count: PlanLimitCountAggregateOutputType | null
+    _avg: PlanLimitAvgAggregateOutputType | null
+    _sum: PlanLimitSumAggregateOutputType | null
+    _min: PlanLimitMinAggregateOutputType | null
+    _max: PlanLimitMaxAggregateOutputType | null
+  }
+
+  type GetPlanLimitGroupByPayload<T extends PlanLimitGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PlanLimitGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PlanLimitGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PlanLimitGroupByOutputType[P]>
+            : GetScalarType<T[P], PlanLimitGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PlanLimitSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    planName?: boolean
+    maxProducts?: boolean
+    maxBranches?: boolean
+    maxDiscountCodes?: boolean
+    notificationsPerWeek?: boolean
+    adsPerWeek?: boolean
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: boolean
+    monthlyPrice?: boolean
+    annualPrice?: boolean
+    storeSubscription?: boolean | PlanLimit$storeSubscriptionArgs<ExtArgs>
+    _count?: boolean | PlanLimitCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["planLimit"]>
+
+  export type PlanLimitSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    planName?: boolean
+    maxProducts?: boolean
+    maxBranches?: boolean
+    maxDiscountCodes?: boolean
+    notificationsPerWeek?: boolean
+    adsPerWeek?: boolean
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: boolean
+    monthlyPrice?: boolean
+    annualPrice?: boolean
+  }, ExtArgs["result"]["planLimit"]>
+
+  export type PlanLimitSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    planName?: boolean
+    maxProducts?: boolean
+    maxBranches?: boolean
+    maxDiscountCodes?: boolean
+    notificationsPerWeek?: boolean
+    adsPerWeek?: boolean
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: boolean
+    monthlyPrice?: boolean
+    annualPrice?: boolean
+  }, ExtArgs["result"]["planLimit"]>
+
+  export type PlanLimitSelectScalar = {
+    id?: boolean
+    planName?: boolean
+    maxProducts?: boolean
+    maxBranches?: boolean
+    maxDiscountCodes?: boolean
+    notificationsPerWeek?: boolean
+    adsPerWeek?: boolean
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: boolean
+    monthlyPrice?: boolean
+    annualPrice?: boolean
+  }
+
+  export type PlanLimitOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "planName" | "maxProducts" | "maxBranches" | "maxDiscountCodes" | "notificationsPerWeek" | "adsPerWeek" | "allowsBoxes" | "allowsCollaborations" | "commissionRate" | "monthlyPrice" | "annualPrice", ExtArgs["result"]["planLimit"]>
+  export type PlanLimitInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    storeSubscription?: boolean | PlanLimit$storeSubscriptionArgs<ExtArgs>
+    _count?: boolean | PlanLimitCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type PlanLimitIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type PlanLimitIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $PlanLimitPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PlanLimit"
+    objects: {
+      storeSubscription: Prisma.$StoreSubscriptionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      planName: $Enums.PlanName
+      maxProducts: number
+      maxBranches: number
+      maxDiscountCodes: number
+      notificationsPerWeek: number
+      adsPerWeek: number
+      allowsBoxes: boolean
+      allowsCollaborations: boolean
+      commissionRate: number
+      monthlyPrice: number | null
+      annualPrice: number | null
+    }, ExtArgs["result"]["planLimit"]>
+    composites: {}
+  }
+
+  type PlanLimitGetPayload<S extends boolean | null | undefined | PlanLimitDefaultArgs> = $Result.GetResult<Prisma.$PlanLimitPayload, S>
+
+  type PlanLimitCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PlanLimitFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PlanLimitCountAggregateInputType | true
+    }
+
+  export interface PlanLimitDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PlanLimit'], meta: { name: 'PlanLimit' } }
+    /**
+     * Find zero or one PlanLimit that matches the filter.
+     * @param {PlanLimitFindUniqueArgs} args - Arguments to find a PlanLimit
+     * @example
+     * // Get one PlanLimit
+     * const planLimit = await prisma.planLimit.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PlanLimitFindUniqueArgs>(args: SelectSubset<T, PlanLimitFindUniqueArgs<ExtArgs>>): Prisma__PlanLimitClient<$Result.GetResult<Prisma.$PlanLimitPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PlanLimit that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PlanLimitFindUniqueOrThrowArgs} args - Arguments to find a PlanLimit
+     * @example
+     * // Get one PlanLimit
+     * const planLimit = await prisma.planLimit.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PlanLimitFindUniqueOrThrowArgs>(args: SelectSubset<T, PlanLimitFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PlanLimitClient<$Result.GetResult<Prisma.$PlanLimitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PlanLimit that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanLimitFindFirstArgs} args - Arguments to find a PlanLimit
+     * @example
+     * // Get one PlanLimit
+     * const planLimit = await prisma.planLimit.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PlanLimitFindFirstArgs>(args?: SelectSubset<T, PlanLimitFindFirstArgs<ExtArgs>>): Prisma__PlanLimitClient<$Result.GetResult<Prisma.$PlanLimitPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PlanLimit that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanLimitFindFirstOrThrowArgs} args - Arguments to find a PlanLimit
+     * @example
+     * // Get one PlanLimit
+     * const planLimit = await prisma.planLimit.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PlanLimitFindFirstOrThrowArgs>(args?: SelectSubset<T, PlanLimitFindFirstOrThrowArgs<ExtArgs>>): Prisma__PlanLimitClient<$Result.GetResult<Prisma.$PlanLimitPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PlanLimits that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanLimitFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PlanLimits
+     * const planLimits = await prisma.planLimit.findMany()
+     * 
+     * // Get first 10 PlanLimits
+     * const planLimits = await prisma.planLimit.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const planLimitWithIdOnly = await prisma.planLimit.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PlanLimitFindManyArgs>(args?: SelectSubset<T, PlanLimitFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanLimitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PlanLimit.
+     * @param {PlanLimitCreateArgs} args - Arguments to create a PlanLimit.
+     * @example
+     * // Create one PlanLimit
+     * const PlanLimit = await prisma.planLimit.create({
+     *   data: {
+     *     // ... data to create a PlanLimit
+     *   }
+     * })
+     * 
+     */
+    create<T extends PlanLimitCreateArgs>(args: SelectSubset<T, PlanLimitCreateArgs<ExtArgs>>): Prisma__PlanLimitClient<$Result.GetResult<Prisma.$PlanLimitPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PlanLimits.
+     * @param {PlanLimitCreateManyArgs} args - Arguments to create many PlanLimits.
+     * @example
+     * // Create many PlanLimits
+     * const planLimit = await prisma.planLimit.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PlanLimitCreateManyArgs>(args?: SelectSubset<T, PlanLimitCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PlanLimits and returns the data saved in the database.
+     * @param {PlanLimitCreateManyAndReturnArgs} args - Arguments to create many PlanLimits.
+     * @example
+     * // Create many PlanLimits
+     * const planLimit = await prisma.planLimit.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PlanLimits and only return the `id`
+     * const planLimitWithIdOnly = await prisma.planLimit.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PlanLimitCreateManyAndReturnArgs>(args?: SelectSubset<T, PlanLimitCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanLimitPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PlanLimit.
+     * @param {PlanLimitDeleteArgs} args - Arguments to delete one PlanLimit.
+     * @example
+     * // Delete one PlanLimit
+     * const PlanLimit = await prisma.planLimit.delete({
+     *   where: {
+     *     // ... filter to delete one PlanLimit
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PlanLimitDeleteArgs>(args: SelectSubset<T, PlanLimitDeleteArgs<ExtArgs>>): Prisma__PlanLimitClient<$Result.GetResult<Prisma.$PlanLimitPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PlanLimit.
+     * @param {PlanLimitUpdateArgs} args - Arguments to update one PlanLimit.
+     * @example
+     * // Update one PlanLimit
+     * const planLimit = await prisma.planLimit.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PlanLimitUpdateArgs>(args: SelectSubset<T, PlanLimitUpdateArgs<ExtArgs>>): Prisma__PlanLimitClient<$Result.GetResult<Prisma.$PlanLimitPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PlanLimits.
+     * @param {PlanLimitDeleteManyArgs} args - Arguments to filter PlanLimits to delete.
+     * @example
+     * // Delete a few PlanLimits
+     * const { count } = await prisma.planLimit.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PlanLimitDeleteManyArgs>(args?: SelectSubset<T, PlanLimitDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PlanLimits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanLimitUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PlanLimits
+     * const planLimit = await prisma.planLimit.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PlanLimitUpdateManyArgs>(args: SelectSubset<T, PlanLimitUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PlanLimits and returns the data updated in the database.
+     * @param {PlanLimitUpdateManyAndReturnArgs} args - Arguments to update many PlanLimits.
+     * @example
+     * // Update many PlanLimits
+     * const planLimit = await prisma.planLimit.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PlanLimits and only return the `id`
+     * const planLimitWithIdOnly = await prisma.planLimit.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PlanLimitUpdateManyAndReturnArgs>(args: SelectSubset<T, PlanLimitUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanLimitPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PlanLimit.
+     * @param {PlanLimitUpsertArgs} args - Arguments to update or create a PlanLimit.
+     * @example
+     * // Update or create a PlanLimit
+     * const planLimit = await prisma.planLimit.upsert({
+     *   create: {
+     *     // ... data to create a PlanLimit
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PlanLimit we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PlanLimitUpsertArgs>(args: SelectSubset<T, PlanLimitUpsertArgs<ExtArgs>>): Prisma__PlanLimitClient<$Result.GetResult<Prisma.$PlanLimitPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PlanLimits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanLimitCountArgs} args - Arguments to filter PlanLimits to count.
+     * @example
+     * // Count the number of PlanLimits
+     * const count = await prisma.planLimit.count({
+     *   where: {
+     *     // ... the filter for the PlanLimits we want to count
+     *   }
+     * })
+    **/
+    count<T extends PlanLimitCountArgs>(
+      args?: Subset<T, PlanLimitCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PlanLimitCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PlanLimit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanLimitAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PlanLimitAggregateArgs>(args: Subset<T, PlanLimitAggregateArgs>): Prisma.PrismaPromise<GetPlanLimitAggregateType<T>>
+
+    /**
+     * Group by PlanLimit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlanLimitGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PlanLimitGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PlanLimitGroupByArgs['orderBy'] }
+        : { orderBy?: PlanLimitGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PlanLimitGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPlanLimitGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PlanLimit model
+   */
+  readonly fields: PlanLimitFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PlanLimit.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PlanLimitClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    storeSubscription<T extends PlanLimit$storeSubscriptionArgs<ExtArgs> = {}>(args?: Subset<T, PlanLimit$storeSubscriptionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StoreSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PlanLimit model
+   */
+  interface PlanLimitFieldRefs {
+    readonly id: FieldRef<"PlanLimit", 'String'>
+    readonly planName: FieldRef<"PlanLimit", 'PlanName'>
+    readonly maxProducts: FieldRef<"PlanLimit", 'Int'>
+    readonly maxBranches: FieldRef<"PlanLimit", 'Int'>
+    readonly maxDiscountCodes: FieldRef<"PlanLimit", 'Int'>
+    readonly notificationsPerWeek: FieldRef<"PlanLimit", 'Int'>
+    readonly adsPerWeek: FieldRef<"PlanLimit", 'Int'>
+    readonly allowsBoxes: FieldRef<"PlanLimit", 'Boolean'>
+    readonly allowsCollaborations: FieldRef<"PlanLimit", 'Boolean'>
+    readonly commissionRate: FieldRef<"PlanLimit", 'Float'>
+    readonly monthlyPrice: FieldRef<"PlanLimit", 'Float'>
+    readonly annualPrice: FieldRef<"PlanLimit", 'Float'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PlanLimit findUnique
+   */
+  export type PlanLimitFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanLimit
+     */
+    select?: PlanLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlanLimit
+     */
+    omit?: PlanLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanLimitInclude<ExtArgs> | null
+    /**
+     * Filter, which PlanLimit to fetch.
+     */
+    where: PlanLimitWhereUniqueInput
+  }
+
+  /**
+   * PlanLimit findUniqueOrThrow
+   */
+  export type PlanLimitFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanLimit
+     */
+    select?: PlanLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlanLimit
+     */
+    omit?: PlanLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanLimitInclude<ExtArgs> | null
+    /**
+     * Filter, which PlanLimit to fetch.
+     */
+    where: PlanLimitWhereUniqueInput
+  }
+
+  /**
+   * PlanLimit findFirst
+   */
+  export type PlanLimitFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanLimit
+     */
+    select?: PlanLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlanLimit
+     */
+    omit?: PlanLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanLimitInclude<ExtArgs> | null
+    /**
+     * Filter, which PlanLimit to fetch.
+     */
+    where?: PlanLimitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlanLimits to fetch.
+     */
+    orderBy?: PlanLimitOrderByWithRelationInput | PlanLimitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PlanLimits.
+     */
+    cursor?: PlanLimitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlanLimits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlanLimits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PlanLimits.
+     */
+    distinct?: PlanLimitScalarFieldEnum | PlanLimitScalarFieldEnum[]
+  }
+
+  /**
+   * PlanLimit findFirstOrThrow
+   */
+  export type PlanLimitFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanLimit
+     */
+    select?: PlanLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlanLimit
+     */
+    omit?: PlanLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanLimitInclude<ExtArgs> | null
+    /**
+     * Filter, which PlanLimit to fetch.
+     */
+    where?: PlanLimitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlanLimits to fetch.
+     */
+    orderBy?: PlanLimitOrderByWithRelationInput | PlanLimitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PlanLimits.
+     */
+    cursor?: PlanLimitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlanLimits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlanLimits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PlanLimits.
+     */
+    distinct?: PlanLimitScalarFieldEnum | PlanLimitScalarFieldEnum[]
+  }
+
+  /**
+   * PlanLimit findMany
+   */
+  export type PlanLimitFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanLimit
+     */
+    select?: PlanLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlanLimit
+     */
+    omit?: PlanLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanLimitInclude<ExtArgs> | null
+    /**
+     * Filter, which PlanLimits to fetch.
+     */
+    where?: PlanLimitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlanLimits to fetch.
+     */
+    orderBy?: PlanLimitOrderByWithRelationInput | PlanLimitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PlanLimits.
+     */
+    cursor?: PlanLimitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlanLimits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlanLimits.
+     */
+    skip?: number
+    distinct?: PlanLimitScalarFieldEnum | PlanLimitScalarFieldEnum[]
+  }
+
+  /**
+   * PlanLimit create
+   */
+  export type PlanLimitCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanLimit
+     */
+    select?: PlanLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlanLimit
+     */
+    omit?: PlanLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanLimitInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PlanLimit.
+     */
+    data?: XOR<PlanLimitCreateInput, PlanLimitUncheckedCreateInput>
+  }
+
+  /**
+   * PlanLimit createMany
+   */
+  export type PlanLimitCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PlanLimits.
+     */
+    data: PlanLimitCreateManyInput | PlanLimitCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PlanLimit createManyAndReturn
+   */
+  export type PlanLimitCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanLimit
+     */
+    select?: PlanLimitSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlanLimit
+     */
+    omit?: PlanLimitOmit<ExtArgs> | null
+    /**
+     * The data used to create many PlanLimits.
+     */
+    data: PlanLimitCreateManyInput | PlanLimitCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PlanLimit update
+   */
+  export type PlanLimitUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanLimit
+     */
+    select?: PlanLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlanLimit
+     */
+    omit?: PlanLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanLimitInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PlanLimit.
+     */
+    data: XOR<PlanLimitUpdateInput, PlanLimitUncheckedUpdateInput>
+    /**
+     * Choose, which PlanLimit to update.
+     */
+    where: PlanLimitWhereUniqueInput
+  }
+
+  /**
+   * PlanLimit updateMany
+   */
+  export type PlanLimitUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PlanLimits.
+     */
+    data: XOR<PlanLimitUpdateManyMutationInput, PlanLimitUncheckedUpdateManyInput>
+    /**
+     * Filter which PlanLimits to update
+     */
+    where?: PlanLimitWhereInput
+    /**
+     * Limit how many PlanLimits to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PlanLimit updateManyAndReturn
+   */
+  export type PlanLimitUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanLimit
+     */
+    select?: PlanLimitSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlanLimit
+     */
+    omit?: PlanLimitOmit<ExtArgs> | null
+    /**
+     * The data used to update PlanLimits.
+     */
+    data: XOR<PlanLimitUpdateManyMutationInput, PlanLimitUncheckedUpdateManyInput>
+    /**
+     * Filter which PlanLimits to update
+     */
+    where?: PlanLimitWhereInput
+    /**
+     * Limit how many PlanLimits to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PlanLimit upsert
+   */
+  export type PlanLimitUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanLimit
+     */
+    select?: PlanLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlanLimit
+     */
+    omit?: PlanLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanLimitInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PlanLimit to update in case it exists.
+     */
+    where: PlanLimitWhereUniqueInput
+    /**
+     * In case the PlanLimit found by the `where` argument doesn't exist, create a new PlanLimit with this data.
+     */
+    create: XOR<PlanLimitCreateInput, PlanLimitUncheckedCreateInput>
+    /**
+     * In case the PlanLimit was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PlanLimitUpdateInput, PlanLimitUncheckedUpdateInput>
+  }
+
+  /**
+   * PlanLimit delete
+   */
+  export type PlanLimitDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanLimit
+     */
+    select?: PlanLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlanLimit
+     */
+    omit?: PlanLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanLimitInclude<ExtArgs> | null
+    /**
+     * Filter which PlanLimit to delete.
+     */
+    where: PlanLimitWhereUniqueInput
+  }
+
+  /**
+   * PlanLimit deleteMany
+   */
+  export type PlanLimitDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PlanLimits to delete
+     */
+    where?: PlanLimitWhereInput
+    /**
+     * Limit how many PlanLimits to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PlanLimit.storeSubscription
+   */
+  export type PlanLimit$storeSubscriptionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StoreSubscription
+     */
+    select?: StoreSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StoreSubscription
+     */
+    omit?: StoreSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StoreSubscriptionInclude<ExtArgs> | null
+    where?: StoreSubscriptionWhereInput
+    orderBy?: StoreSubscriptionOrderByWithRelationInput | StoreSubscriptionOrderByWithRelationInput[]
+    cursor?: StoreSubscriptionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StoreSubscriptionScalarFieldEnum | StoreSubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * PlanLimit without action
+   */
+  export type PlanLimitDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanLimit
+     */
+    select?: PlanLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlanLimit
+     */
+    omit?: PlanLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanLimitInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model productCart
    */
 
@@ -32335,6 +38988,1387 @@ export namespace Prisma {
 
 
   /**
+   * Model StoreSubscription
+   */
+
+  export type AggregateStoreSubscription = {
+    _count: StoreSubscriptionCountAggregateOutputType | null
+    _avg: StoreSubscriptionAvgAggregateOutputType | null
+    _sum: StoreSubscriptionSumAggregateOutputType | null
+    _min: StoreSubscriptionMinAggregateOutputType | null
+    _max: StoreSubscriptionMaxAggregateOutputType | null
+  }
+
+  export type StoreSubscriptionAvgAggregateOutputType = {
+    maxTotalProducts: number | null
+    maxBranches: number | null
+    maxDiscountCodes: number | null
+    notificationsPerWeek: number | null
+    adsPerWeek: number | null
+    commissionRate: number | null
+    monthlyPrice: number | null
+    annualPrice: number | null
+    adsUsedThisPeriod: number | null
+  }
+
+  export type StoreSubscriptionSumAggregateOutputType = {
+    maxTotalProducts: number | null
+    maxBranches: number | null
+    maxDiscountCodes: number | null
+    notificationsPerWeek: number | null
+    adsPerWeek: number | null
+    commissionRate: number | null
+    monthlyPrice: number | null
+    annualPrice: number | null
+    adsUsedThisPeriod: number | null
+  }
+
+  export type StoreSubscriptionMinAggregateOutputType = {
+    id: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    planLimitId: string | null
+    status: $Enums.SubscriptionStatus | null
+    currentPeriodStart: Date | null
+    currentPeriodEnd: Date | null
+    maxTotalProducts: number | null
+    maxBranches: number | null
+    maxDiscountCodes: number | null
+    notificationsPerWeek: number | null
+    adsPerWeek: number | null
+    allowsBoxes: boolean | null
+    allowsCollaborations: boolean | null
+    commissionRate: number | null
+    monthlyPrice: number | null
+    annualPrice: number | null
+    adsUsedThisPeriod: number | null
+    adsResetAt: Date | null
+    downgradeToPlan: $Enums.PlanName | null
+    downgradeScheduledAt: Date | null
+  }
+
+  export type StoreSubscriptionMaxAggregateOutputType = {
+    id: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    planLimitId: string | null
+    status: $Enums.SubscriptionStatus | null
+    currentPeriodStart: Date | null
+    currentPeriodEnd: Date | null
+    maxTotalProducts: number | null
+    maxBranches: number | null
+    maxDiscountCodes: number | null
+    notificationsPerWeek: number | null
+    adsPerWeek: number | null
+    allowsBoxes: boolean | null
+    allowsCollaborations: boolean | null
+    commissionRate: number | null
+    monthlyPrice: number | null
+    annualPrice: number | null
+    adsUsedThisPeriod: number | null
+    adsResetAt: Date | null
+    downgradeToPlan: $Enums.PlanName | null
+    downgradeScheduledAt: Date | null
+  }
+
+  export type StoreSubscriptionCountAggregateOutputType = {
+    id: number
+    createdAt: number
+    updatedAt: number
+    planLimitId: number
+    status: number
+    currentPeriodStart: number
+    currentPeriodEnd: number
+    maxTotalProducts: number
+    maxBranches: number
+    maxDiscountCodes: number
+    notificationsPerWeek: number
+    adsPerWeek: number
+    allowsBoxes: number
+    allowsCollaborations: number
+    commissionRate: number
+    monthlyPrice: number
+    annualPrice: number
+    adsUsedThisPeriod: number
+    adsResetAt: number
+    downgradeToPlan: number
+    downgradeScheduledAt: number
+    _all: number
+  }
+
+
+  export type StoreSubscriptionAvgAggregateInputType = {
+    maxTotalProducts?: true
+    maxBranches?: true
+    maxDiscountCodes?: true
+    notificationsPerWeek?: true
+    adsPerWeek?: true
+    commissionRate?: true
+    monthlyPrice?: true
+    annualPrice?: true
+    adsUsedThisPeriod?: true
+  }
+
+  export type StoreSubscriptionSumAggregateInputType = {
+    maxTotalProducts?: true
+    maxBranches?: true
+    maxDiscountCodes?: true
+    notificationsPerWeek?: true
+    adsPerWeek?: true
+    commissionRate?: true
+    monthlyPrice?: true
+    annualPrice?: true
+    adsUsedThisPeriod?: true
+  }
+
+  export type StoreSubscriptionMinAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    planLimitId?: true
+    status?: true
+    currentPeriodStart?: true
+    currentPeriodEnd?: true
+    maxTotalProducts?: true
+    maxBranches?: true
+    maxDiscountCodes?: true
+    notificationsPerWeek?: true
+    adsPerWeek?: true
+    allowsBoxes?: true
+    allowsCollaborations?: true
+    commissionRate?: true
+    monthlyPrice?: true
+    annualPrice?: true
+    adsUsedThisPeriod?: true
+    adsResetAt?: true
+    downgradeToPlan?: true
+    downgradeScheduledAt?: true
+  }
+
+  export type StoreSubscriptionMaxAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    planLimitId?: true
+    status?: true
+    currentPeriodStart?: true
+    currentPeriodEnd?: true
+    maxTotalProducts?: true
+    maxBranches?: true
+    maxDiscountCodes?: true
+    notificationsPerWeek?: true
+    adsPerWeek?: true
+    allowsBoxes?: true
+    allowsCollaborations?: true
+    commissionRate?: true
+    monthlyPrice?: true
+    annualPrice?: true
+    adsUsedThisPeriod?: true
+    adsResetAt?: true
+    downgradeToPlan?: true
+    downgradeScheduledAt?: true
+  }
+
+  export type StoreSubscriptionCountAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    planLimitId?: true
+    status?: true
+    currentPeriodStart?: true
+    currentPeriodEnd?: true
+    maxTotalProducts?: true
+    maxBranches?: true
+    maxDiscountCodes?: true
+    notificationsPerWeek?: true
+    adsPerWeek?: true
+    allowsBoxes?: true
+    allowsCollaborations?: true
+    commissionRate?: true
+    monthlyPrice?: true
+    annualPrice?: true
+    adsUsedThisPeriod?: true
+    adsResetAt?: true
+    downgradeToPlan?: true
+    downgradeScheduledAt?: true
+    _all?: true
+  }
+
+  export type StoreSubscriptionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StoreSubscription to aggregate.
+     */
+    where?: StoreSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StoreSubscriptions to fetch.
+     */
+    orderBy?: StoreSubscriptionOrderByWithRelationInput | StoreSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: StoreSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StoreSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StoreSubscriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned StoreSubscriptions
+    **/
+    _count?: true | StoreSubscriptionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: StoreSubscriptionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: StoreSubscriptionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: StoreSubscriptionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: StoreSubscriptionMaxAggregateInputType
+  }
+
+  export type GetStoreSubscriptionAggregateType<T extends StoreSubscriptionAggregateArgs> = {
+        [P in keyof T & keyof AggregateStoreSubscription]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStoreSubscription[P]>
+      : GetScalarType<T[P], AggregateStoreSubscription[P]>
+  }
+
+
+
+
+  export type StoreSubscriptionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StoreSubscriptionWhereInput
+    orderBy?: StoreSubscriptionOrderByWithAggregationInput | StoreSubscriptionOrderByWithAggregationInput[]
+    by: StoreSubscriptionScalarFieldEnum[] | StoreSubscriptionScalarFieldEnum
+    having?: StoreSubscriptionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: StoreSubscriptionCountAggregateInputType | true
+    _avg?: StoreSubscriptionAvgAggregateInputType
+    _sum?: StoreSubscriptionSumAggregateInputType
+    _min?: StoreSubscriptionMinAggregateInputType
+    _max?: StoreSubscriptionMaxAggregateInputType
+  }
+
+  export type StoreSubscriptionGroupByOutputType = {
+    id: string
+    createdAt: Date
+    updatedAt: Date
+    planLimitId: string | null
+    status: $Enums.SubscriptionStatus
+    currentPeriodStart: Date
+    currentPeriodEnd: Date
+    maxTotalProducts: number
+    maxBranches: number
+    maxDiscountCodes: number
+    notificationsPerWeek: number
+    adsPerWeek: number
+    allowsBoxes: boolean
+    allowsCollaborations: boolean
+    commissionRate: number
+    monthlyPrice: number | null
+    annualPrice: number | null
+    adsUsedThisPeriod: number
+    adsResetAt: Date | null
+    downgradeToPlan: $Enums.PlanName | null
+    downgradeScheduledAt: Date | null
+    _count: StoreSubscriptionCountAggregateOutputType | null
+    _avg: StoreSubscriptionAvgAggregateOutputType | null
+    _sum: StoreSubscriptionSumAggregateOutputType | null
+    _min: StoreSubscriptionMinAggregateOutputType | null
+    _max: StoreSubscriptionMaxAggregateOutputType | null
+  }
+
+  type GetStoreSubscriptionGroupByPayload<T extends StoreSubscriptionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<StoreSubscriptionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof StoreSubscriptionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], StoreSubscriptionGroupByOutputType[P]>
+            : GetScalarType<T[P], StoreSubscriptionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type StoreSubscriptionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    planLimitId?: boolean
+    status?: boolean
+    currentPeriodStart?: boolean
+    currentPeriodEnd?: boolean
+    maxTotalProducts?: boolean
+    maxBranches?: boolean
+    maxDiscountCodes?: boolean
+    notificationsPerWeek?: boolean
+    adsPerWeek?: boolean
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: boolean
+    monthlyPrice?: boolean
+    annualPrice?: boolean
+    adsUsedThisPeriod?: boolean
+    adsResetAt?: boolean
+    downgradeToPlan?: boolean
+    downgradeScheduledAt?: boolean
+    planLimit?: boolean | StoreSubscription$planLimitArgs<ExtArgs>
+    planChanges?: boolean | StoreSubscription$planChangesArgs<ExtArgs>
+    _count?: boolean | StoreSubscriptionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["storeSubscription"]>
+
+  export type StoreSubscriptionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    planLimitId?: boolean
+    status?: boolean
+    currentPeriodStart?: boolean
+    currentPeriodEnd?: boolean
+    maxTotalProducts?: boolean
+    maxBranches?: boolean
+    maxDiscountCodes?: boolean
+    notificationsPerWeek?: boolean
+    adsPerWeek?: boolean
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: boolean
+    monthlyPrice?: boolean
+    annualPrice?: boolean
+    adsUsedThisPeriod?: boolean
+    adsResetAt?: boolean
+    downgradeToPlan?: boolean
+    downgradeScheduledAt?: boolean
+    planLimit?: boolean | StoreSubscription$planLimitArgs<ExtArgs>
+  }, ExtArgs["result"]["storeSubscription"]>
+
+  export type StoreSubscriptionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    planLimitId?: boolean
+    status?: boolean
+    currentPeriodStart?: boolean
+    currentPeriodEnd?: boolean
+    maxTotalProducts?: boolean
+    maxBranches?: boolean
+    maxDiscountCodes?: boolean
+    notificationsPerWeek?: boolean
+    adsPerWeek?: boolean
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: boolean
+    monthlyPrice?: boolean
+    annualPrice?: boolean
+    adsUsedThisPeriod?: boolean
+    adsResetAt?: boolean
+    downgradeToPlan?: boolean
+    downgradeScheduledAt?: boolean
+    planLimit?: boolean | StoreSubscription$planLimitArgs<ExtArgs>
+  }, ExtArgs["result"]["storeSubscription"]>
+
+  export type StoreSubscriptionSelectScalar = {
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    planLimitId?: boolean
+    status?: boolean
+    currentPeriodStart?: boolean
+    currentPeriodEnd?: boolean
+    maxTotalProducts?: boolean
+    maxBranches?: boolean
+    maxDiscountCodes?: boolean
+    notificationsPerWeek?: boolean
+    adsPerWeek?: boolean
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: boolean
+    monthlyPrice?: boolean
+    annualPrice?: boolean
+    adsUsedThisPeriod?: boolean
+    adsResetAt?: boolean
+    downgradeToPlan?: boolean
+    downgradeScheduledAt?: boolean
+  }
+
+  export type StoreSubscriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "planLimitId" | "status" | "currentPeriodStart" | "currentPeriodEnd" | "maxTotalProducts" | "maxBranches" | "maxDiscountCodes" | "notificationsPerWeek" | "adsPerWeek" | "allowsBoxes" | "allowsCollaborations" | "commissionRate" | "monthlyPrice" | "annualPrice" | "adsUsedThisPeriod" | "adsResetAt" | "downgradeToPlan" | "downgradeScheduledAt", ExtArgs["result"]["storeSubscription"]>
+  export type StoreSubscriptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    planLimit?: boolean | StoreSubscription$planLimitArgs<ExtArgs>
+    planChanges?: boolean | StoreSubscription$planChangesArgs<ExtArgs>
+    _count?: boolean | StoreSubscriptionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type StoreSubscriptionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    planLimit?: boolean | StoreSubscription$planLimitArgs<ExtArgs>
+  }
+  export type StoreSubscriptionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    planLimit?: boolean | StoreSubscription$planLimitArgs<ExtArgs>
+  }
+
+  export type $StoreSubscriptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "StoreSubscription"
+    objects: {
+      planLimit: Prisma.$PlanLimitPayload<ExtArgs> | null
+      planChanges: Prisma.$SubscriptionPlanChangePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      createdAt: Date
+      updatedAt: Date
+      planLimitId: string | null
+      status: $Enums.SubscriptionStatus
+      currentPeriodStart: Date
+      currentPeriodEnd: Date
+      maxTotalProducts: number
+      maxBranches: number
+      maxDiscountCodes: number
+      notificationsPerWeek: number
+      adsPerWeek: number
+      allowsBoxes: boolean
+      allowsCollaborations: boolean
+      commissionRate: number
+      monthlyPrice: number | null
+      annualPrice: number | null
+      adsUsedThisPeriod: number
+      adsResetAt: Date | null
+      downgradeToPlan: $Enums.PlanName | null
+      downgradeScheduledAt: Date | null
+    }, ExtArgs["result"]["storeSubscription"]>
+    composites: {}
+  }
+
+  type StoreSubscriptionGetPayload<S extends boolean | null | undefined | StoreSubscriptionDefaultArgs> = $Result.GetResult<Prisma.$StoreSubscriptionPayload, S>
+
+  type StoreSubscriptionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<StoreSubscriptionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: StoreSubscriptionCountAggregateInputType | true
+    }
+
+  export interface StoreSubscriptionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StoreSubscription'], meta: { name: 'StoreSubscription' } }
+    /**
+     * Find zero or one StoreSubscription that matches the filter.
+     * @param {StoreSubscriptionFindUniqueArgs} args - Arguments to find a StoreSubscription
+     * @example
+     * // Get one StoreSubscription
+     * const storeSubscription = await prisma.storeSubscription.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends StoreSubscriptionFindUniqueArgs>(args: SelectSubset<T, StoreSubscriptionFindUniqueArgs<ExtArgs>>): Prisma__StoreSubscriptionClient<$Result.GetResult<Prisma.$StoreSubscriptionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one StoreSubscription that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {StoreSubscriptionFindUniqueOrThrowArgs} args - Arguments to find a StoreSubscription
+     * @example
+     * // Get one StoreSubscription
+     * const storeSubscription = await prisma.storeSubscription.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends StoreSubscriptionFindUniqueOrThrowArgs>(args: SelectSubset<T, StoreSubscriptionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__StoreSubscriptionClient<$Result.GetResult<Prisma.$StoreSubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StoreSubscription that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StoreSubscriptionFindFirstArgs} args - Arguments to find a StoreSubscription
+     * @example
+     * // Get one StoreSubscription
+     * const storeSubscription = await prisma.storeSubscription.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends StoreSubscriptionFindFirstArgs>(args?: SelectSubset<T, StoreSubscriptionFindFirstArgs<ExtArgs>>): Prisma__StoreSubscriptionClient<$Result.GetResult<Prisma.$StoreSubscriptionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StoreSubscription that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StoreSubscriptionFindFirstOrThrowArgs} args - Arguments to find a StoreSubscription
+     * @example
+     * // Get one StoreSubscription
+     * const storeSubscription = await prisma.storeSubscription.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends StoreSubscriptionFindFirstOrThrowArgs>(args?: SelectSubset<T, StoreSubscriptionFindFirstOrThrowArgs<ExtArgs>>): Prisma__StoreSubscriptionClient<$Result.GetResult<Prisma.$StoreSubscriptionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more StoreSubscriptions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StoreSubscriptionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all StoreSubscriptions
+     * const storeSubscriptions = await prisma.storeSubscription.findMany()
+     * 
+     * // Get first 10 StoreSubscriptions
+     * const storeSubscriptions = await prisma.storeSubscription.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const storeSubscriptionWithIdOnly = await prisma.storeSubscription.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends StoreSubscriptionFindManyArgs>(args?: SelectSubset<T, StoreSubscriptionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StoreSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a StoreSubscription.
+     * @param {StoreSubscriptionCreateArgs} args - Arguments to create a StoreSubscription.
+     * @example
+     * // Create one StoreSubscription
+     * const StoreSubscription = await prisma.storeSubscription.create({
+     *   data: {
+     *     // ... data to create a StoreSubscription
+     *   }
+     * })
+     * 
+     */
+    create<T extends StoreSubscriptionCreateArgs>(args: SelectSubset<T, StoreSubscriptionCreateArgs<ExtArgs>>): Prisma__StoreSubscriptionClient<$Result.GetResult<Prisma.$StoreSubscriptionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many StoreSubscriptions.
+     * @param {StoreSubscriptionCreateManyArgs} args - Arguments to create many StoreSubscriptions.
+     * @example
+     * // Create many StoreSubscriptions
+     * const storeSubscription = await prisma.storeSubscription.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends StoreSubscriptionCreateManyArgs>(args?: SelectSubset<T, StoreSubscriptionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many StoreSubscriptions and returns the data saved in the database.
+     * @param {StoreSubscriptionCreateManyAndReturnArgs} args - Arguments to create many StoreSubscriptions.
+     * @example
+     * // Create many StoreSubscriptions
+     * const storeSubscription = await prisma.storeSubscription.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many StoreSubscriptions and only return the `id`
+     * const storeSubscriptionWithIdOnly = await prisma.storeSubscription.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends StoreSubscriptionCreateManyAndReturnArgs>(args?: SelectSubset<T, StoreSubscriptionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StoreSubscriptionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a StoreSubscription.
+     * @param {StoreSubscriptionDeleteArgs} args - Arguments to delete one StoreSubscription.
+     * @example
+     * // Delete one StoreSubscription
+     * const StoreSubscription = await prisma.storeSubscription.delete({
+     *   where: {
+     *     // ... filter to delete one StoreSubscription
+     *   }
+     * })
+     * 
+     */
+    delete<T extends StoreSubscriptionDeleteArgs>(args: SelectSubset<T, StoreSubscriptionDeleteArgs<ExtArgs>>): Prisma__StoreSubscriptionClient<$Result.GetResult<Prisma.$StoreSubscriptionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one StoreSubscription.
+     * @param {StoreSubscriptionUpdateArgs} args - Arguments to update one StoreSubscription.
+     * @example
+     * // Update one StoreSubscription
+     * const storeSubscription = await prisma.storeSubscription.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends StoreSubscriptionUpdateArgs>(args: SelectSubset<T, StoreSubscriptionUpdateArgs<ExtArgs>>): Prisma__StoreSubscriptionClient<$Result.GetResult<Prisma.$StoreSubscriptionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more StoreSubscriptions.
+     * @param {StoreSubscriptionDeleteManyArgs} args - Arguments to filter StoreSubscriptions to delete.
+     * @example
+     * // Delete a few StoreSubscriptions
+     * const { count } = await prisma.storeSubscription.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends StoreSubscriptionDeleteManyArgs>(args?: SelectSubset<T, StoreSubscriptionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StoreSubscriptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StoreSubscriptionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many StoreSubscriptions
+     * const storeSubscription = await prisma.storeSubscription.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends StoreSubscriptionUpdateManyArgs>(args: SelectSubset<T, StoreSubscriptionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StoreSubscriptions and returns the data updated in the database.
+     * @param {StoreSubscriptionUpdateManyAndReturnArgs} args - Arguments to update many StoreSubscriptions.
+     * @example
+     * // Update many StoreSubscriptions
+     * const storeSubscription = await prisma.storeSubscription.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more StoreSubscriptions and only return the `id`
+     * const storeSubscriptionWithIdOnly = await prisma.storeSubscription.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends StoreSubscriptionUpdateManyAndReturnArgs>(args: SelectSubset<T, StoreSubscriptionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StoreSubscriptionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one StoreSubscription.
+     * @param {StoreSubscriptionUpsertArgs} args - Arguments to update or create a StoreSubscription.
+     * @example
+     * // Update or create a StoreSubscription
+     * const storeSubscription = await prisma.storeSubscription.upsert({
+     *   create: {
+     *     // ... data to create a StoreSubscription
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the StoreSubscription we want to update
+     *   }
+     * })
+     */
+    upsert<T extends StoreSubscriptionUpsertArgs>(args: SelectSubset<T, StoreSubscriptionUpsertArgs<ExtArgs>>): Prisma__StoreSubscriptionClient<$Result.GetResult<Prisma.$StoreSubscriptionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of StoreSubscriptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StoreSubscriptionCountArgs} args - Arguments to filter StoreSubscriptions to count.
+     * @example
+     * // Count the number of StoreSubscriptions
+     * const count = await prisma.storeSubscription.count({
+     *   where: {
+     *     // ... the filter for the StoreSubscriptions we want to count
+     *   }
+     * })
+    **/
+    count<T extends StoreSubscriptionCountArgs>(
+      args?: Subset<T, StoreSubscriptionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], StoreSubscriptionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a StoreSubscription.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StoreSubscriptionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends StoreSubscriptionAggregateArgs>(args: Subset<T, StoreSubscriptionAggregateArgs>): Prisma.PrismaPromise<GetStoreSubscriptionAggregateType<T>>
+
+    /**
+     * Group by StoreSubscription.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StoreSubscriptionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends StoreSubscriptionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StoreSubscriptionGroupByArgs['orderBy'] }
+        : { orderBy?: StoreSubscriptionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, StoreSubscriptionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStoreSubscriptionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the StoreSubscription model
+   */
+  readonly fields: StoreSubscriptionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for StoreSubscription.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__StoreSubscriptionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    planLimit<T extends StoreSubscription$planLimitArgs<ExtArgs> = {}>(args?: Subset<T, StoreSubscription$planLimitArgs<ExtArgs>>): Prisma__PlanLimitClient<$Result.GetResult<Prisma.$PlanLimitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    planChanges<T extends StoreSubscription$planChangesArgs<ExtArgs> = {}>(args?: Subset<T, StoreSubscription$planChangesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubscriptionPlanChangePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the StoreSubscription model
+   */
+  interface StoreSubscriptionFieldRefs {
+    readonly id: FieldRef<"StoreSubscription", 'String'>
+    readonly createdAt: FieldRef<"StoreSubscription", 'DateTime'>
+    readonly updatedAt: FieldRef<"StoreSubscription", 'DateTime'>
+    readonly planLimitId: FieldRef<"StoreSubscription", 'String'>
+    readonly status: FieldRef<"StoreSubscription", 'SubscriptionStatus'>
+    readonly currentPeriodStart: FieldRef<"StoreSubscription", 'DateTime'>
+    readonly currentPeriodEnd: FieldRef<"StoreSubscription", 'DateTime'>
+    readonly maxTotalProducts: FieldRef<"StoreSubscription", 'Int'>
+    readonly maxBranches: FieldRef<"StoreSubscription", 'Int'>
+    readonly maxDiscountCodes: FieldRef<"StoreSubscription", 'Int'>
+    readonly notificationsPerWeek: FieldRef<"StoreSubscription", 'Int'>
+    readonly adsPerWeek: FieldRef<"StoreSubscription", 'Int'>
+    readonly allowsBoxes: FieldRef<"StoreSubscription", 'Boolean'>
+    readonly allowsCollaborations: FieldRef<"StoreSubscription", 'Boolean'>
+    readonly commissionRate: FieldRef<"StoreSubscription", 'Float'>
+    readonly monthlyPrice: FieldRef<"StoreSubscription", 'Float'>
+    readonly annualPrice: FieldRef<"StoreSubscription", 'Float'>
+    readonly adsUsedThisPeriod: FieldRef<"StoreSubscription", 'Int'>
+    readonly adsResetAt: FieldRef<"StoreSubscription", 'DateTime'>
+    readonly downgradeToPlan: FieldRef<"StoreSubscription", 'PlanName'>
+    readonly downgradeScheduledAt: FieldRef<"StoreSubscription", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * StoreSubscription findUnique
+   */
+  export type StoreSubscriptionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StoreSubscription
+     */
+    select?: StoreSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StoreSubscription
+     */
+    omit?: StoreSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StoreSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which StoreSubscription to fetch.
+     */
+    where: StoreSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * StoreSubscription findUniqueOrThrow
+   */
+  export type StoreSubscriptionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StoreSubscription
+     */
+    select?: StoreSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StoreSubscription
+     */
+    omit?: StoreSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StoreSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which StoreSubscription to fetch.
+     */
+    where: StoreSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * StoreSubscription findFirst
+   */
+  export type StoreSubscriptionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StoreSubscription
+     */
+    select?: StoreSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StoreSubscription
+     */
+    omit?: StoreSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StoreSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which StoreSubscription to fetch.
+     */
+    where?: StoreSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StoreSubscriptions to fetch.
+     */
+    orderBy?: StoreSubscriptionOrderByWithRelationInput | StoreSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StoreSubscriptions.
+     */
+    cursor?: StoreSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StoreSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StoreSubscriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StoreSubscriptions.
+     */
+    distinct?: StoreSubscriptionScalarFieldEnum | StoreSubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * StoreSubscription findFirstOrThrow
+   */
+  export type StoreSubscriptionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StoreSubscription
+     */
+    select?: StoreSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StoreSubscription
+     */
+    omit?: StoreSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StoreSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which StoreSubscription to fetch.
+     */
+    where?: StoreSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StoreSubscriptions to fetch.
+     */
+    orderBy?: StoreSubscriptionOrderByWithRelationInput | StoreSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StoreSubscriptions.
+     */
+    cursor?: StoreSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StoreSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StoreSubscriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StoreSubscriptions.
+     */
+    distinct?: StoreSubscriptionScalarFieldEnum | StoreSubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * StoreSubscription findMany
+   */
+  export type StoreSubscriptionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StoreSubscription
+     */
+    select?: StoreSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StoreSubscription
+     */
+    omit?: StoreSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StoreSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which StoreSubscriptions to fetch.
+     */
+    where?: StoreSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StoreSubscriptions to fetch.
+     */
+    orderBy?: StoreSubscriptionOrderByWithRelationInput | StoreSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing StoreSubscriptions.
+     */
+    cursor?: StoreSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StoreSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StoreSubscriptions.
+     */
+    skip?: number
+    distinct?: StoreSubscriptionScalarFieldEnum | StoreSubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * StoreSubscription create
+   */
+  export type StoreSubscriptionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StoreSubscription
+     */
+    select?: StoreSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StoreSubscription
+     */
+    omit?: StoreSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StoreSubscriptionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a StoreSubscription.
+     */
+    data: XOR<StoreSubscriptionCreateInput, StoreSubscriptionUncheckedCreateInput>
+  }
+
+  /**
+   * StoreSubscription createMany
+   */
+  export type StoreSubscriptionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many StoreSubscriptions.
+     */
+    data: StoreSubscriptionCreateManyInput | StoreSubscriptionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * StoreSubscription createManyAndReturn
+   */
+  export type StoreSubscriptionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StoreSubscription
+     */
+    select?: StoreSubscriptionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StoreSubscription
+     */
+    omit?: StoreSubscriptionOmit<ExtArgs> | null
+    /**
+     * The data used to create many StoreSubscriptions.
+     */
+    data: StoreSubscriptionCreateManyInput | StoreSubscriptionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StoreSubscriptionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StoreSubscription update
+   */
+  export type StoreSubscriptionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StoreSubscription
+     */
+    select?: StoreSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StoreSubscription
+     */
+    omit?: StoreSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StoreSubscriptionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a StoreSubscription.
+     */
+    data: XOR<StoreSubscriptionUpdateInput, StoreSubscriptionUncheckedUpdateInput>
+    /**
+     * Choose, which StoreSubscription to update.
+     */
+    where: StoreSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * StoreSubscription updateMany
+   */
+  export type StoreSubscriptionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update StoreSubscriptions.
+     */
+    data: XOR<StoreSubscriptionUpdateManyMutationInput, StoreSubscriptionUncheckedUpdateManyInput>
+    /**
+     * Filter which StoreSubscriptions to update
+     */
+    where?: StoreSubscriptionWhereInput
+    /**
+     * Limit how many StoreSubscriptions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * StoreSubscription updateManyAndReturn
+   */
+  export type StoreSubscriptionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StoreSubscription
+     */
+    select?: StoreSubscriptionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StoreSubscription
+     */
+    omit?: StoreSubscriptionOmit<ExtArgs> | null
+    /**
+     * The data used to update StoreSubscriptions.
+     */
+    data: XOR<StoreSubscriptionUpdateManyMutationInput, StoreSubscriptionUncheckedUpdateManyInput>
+    /**
+     * Filter which StoreSubscriptions to update
+     */
+    where?: StoreSubscriptionWhereInput
+    /**
+     * Limit how many StoreSubscriptions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StoreSubscriptionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StoreSubscription upsert
+   */
+  export type StoreSubscriptionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StoreSubscription
+     */
+    select?: StoreSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StoreSubscription
+     */
+    omit?: StoreSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StoreSubscriptionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the StoreSubscription to update in case it exists.
+     */
+    where: StoreSubscriptionWhereUniqueInput
+    /**
+     * In case the StoreSubscription found by the `where` argument doesn't exist, create a new StoreSubscription with this data.
+     */
+    create: XOR<StoreSubscriptionCreateInput, StoreSubscriptionUncheckedCreateInput>
+    /**
+     * In case the StoreSubscription was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<StoreSubscriptionUpdateInput, StoreSubscriptionUncheckedUpdateInput>
+  }
+
+  /**
+   * StoreSubscription delete
+   */
+  export type StoreSubscriptionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StoreSubscription
+     */
+    select?: StoreSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StoreSubscription
+     */
+    omit?: StoreSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StoreSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter which StoreSubscription to delete.
+     */
+    where: StoreSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * StoreSubscription deleteMany
+   */
+  export type StoreSubscriptionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StoreSubscriptions to delete
+     */
+    where?: StoreSubscriptionWhereInput
+    /**
+     * Limit how many StoreSubscriptions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * StoreSubscription.planLimit
+   */
+  export type StoreSubscription$planLimitArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlanLimit
+     */
+    select?: PlanLimitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlanLimit
+     */
+    omit?: PlanLimitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanLimitInclude<ExtArgs> | null
+    where?: PlanLimitWhereInput
+  }
+
+  /**
+   * StoreSubscription.planChanges
+   */
+  export type StoreSubscription$planChangesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlanChange
+     */
+    select?: SubscriptionPlanChangeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlanChange
+     */
+    omit?: SubscriptionPlanChangeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionPlanChangeInclude<ExtArgs> | null
+    where?: SubscriptionPlanChangeWhereInput
+    orderBy?: SubscriptionPlanChangeOrderByWithRelationInput | SubscriptionPlanChangeOrderByWithRelationInput[]
+    cursor?: SubscriptionPlanChangeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SubscriptionPlanChangeScalarFieldEnum | SubscriptionPlanChangeScalarFieldEnum[]
+  }
+
+  /**
+   * StoreSubscription without action
+   */
+  export type StoreSubscriptionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StoreSubscription
+     */
+    select?: StoreSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StoreSubscription
+     */
+    omit?: StoreSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StoreSubscriptionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model store
    */
 
@@ -32612,6 +40646,7 @@ export namespace Prisma {
     branches?: boolean | store$branchesArgs<ExtArgs>
     transactions?: boolean | store$transactionsArgs<ExtArgs>
     sessions?: boolean | store$sessionsArgs<ExtArgs>
+    adCampaigns?: boolean | store$adCampaignsArgs<ExtArgs>
     _count?: boolean | StoreCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["store"]>
 
@@ -32684,6 +40719,7 @@ export namespace Prisma {
     branches?: boolean | store$branchesArgs<ExtArgs>
     transactions?: boolean | store$transactionsArgs<ExtArgs>
     sessions?: boolean | store$sessionsArgs<ExtArgs>
+    adCampaigns?: boolean | store$adCampaignsArgs<ExtArgs>
     _count?: boolean | StoreCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type storeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -32710,6 +40746,7 @@ export namespace Prisma {
       branches: Prisma.$branchPayload<ExtArgs>[]
       transactions: Prisma.$transactionPayload<ExtArgs>[]
       sessions: Prisma.$sessionPayload<ExtArgs>[]
+      adCampaigns: Prisma.$AdCampaignPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -33128,6 +41165,7 @@ export namespace Prisma {
     branches<T extends store$branchesArgs<ExtArgs> = {}>(args?: Subset<T, store$branchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$branchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     transactions<T extends store$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, store$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$transactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessions<T extends store$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, store$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$sessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    adCampaigns<T extends store$adCampaignsArgs<ExtArgs> = {}>(args?: Subset<T, store$adCampaignsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdCampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -33655,6 +41693,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
+  }
+
+  /**
+   * store.adCampaigns
+   */
+  export type store$adCampaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdCampaign
+     */
+    select?: AdCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdCampaign
+     */
+    omit?: AdCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdCampaignInclude<ExtArgs> | null
+    where?: AdCampaignWhereInput
+    orderBy?: AdCampaignOrderByWithRelationInput | AdCampaignOrderByWithRelationInput[]
+    cursor?: AdCampaignWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AdCampaignScalarFieldEnum | AdCampaignScalarFieldEnum[]
   }
 
   /**
@@ -34757,6 +42819,1090 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: socialLinkInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SubscriptionPlanChange
+   */
+
+  export type AggregateSubscriptionPlanChange = {
+    _count: SubscriptionPlanChangeCountAggregateOutputType | null
+    _min: SubscriptionPlanChangeMinAggregateOutputType | null
+    _max: SubscriptionPlanChangeMaxAggregateOutputType | null
+  }
+
+  export type SubscriptionPlanChangeMinAggregateOutputType = {
+    id: string | null
+    createdAt: Date | null
+    fromPlan: $Enums.PlanName | null
+    toPlan: $Enums.PlanName | null
+    changeType: $Enums.ChangeType | null
+    reason: string | null
+    subscriptionId: string | null
+  }
+
+  export type SubscriptionPlanChangeMaxAggregateOutputType = {
+    id: string | null
+    createdAt: Date | null
+    fromPlan: $Enums.PlanName | null
+    toPlan: $Enums.PlanName | null
+    changeType: $Enums.ChangeType | null
+    reason: string | null
+    subscriptionId: string | null
+  }
+
+  export type SubscriptionPlanChangeCountAggregateOutputType = {
+    id: number
+    createdAt: number
+    fromPlan: number
+    toPlan: number
+    changeType: number
+    reason: number
+    subscriptionId: number
+    _all: number
+  }
+
+
+  export type SubscriptionPlanChangeMinAggregateInputType = {
+    id?: true
+    createdAt?: true
+    fromPlan?: true
+    toPlan?: true
+    changeType?: true
+    reason?: true
+    subscriptionId?: true
+  }
+
+  export type SubscriptionPlanChangeMaxAggregateInputType = {
+    id?: true
+    createdAt?: true
+    fromPlan?: true
+    toPlan?: true
+    changeType?: true
+    reason?: true
+    subscriptionId?: true
+  }
+
+  export type SubscriptionPlanChangeCountAggregateInputType = {
+    id?: true
+    createdAt?: true
+    fromPlan?: true
+    toPlan?: true
+    changeType?: true
+    reason?: true
+    subscriptionId?: true
+    _all?: true
+  }
+
+  export type SubscriptionPlanChangeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SubscriptionPlanChange to aggregate.
+     */
+    where?: SubscriptionPlanChangeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubscriptionPlanChanges to fetch.
+     */
+    orderBy?: SubscriptionPlanChangeOrderByWithRelationInput | SubscriptionPlanChangeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SubscriptionPlanChangeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubscriptionPlanChanges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubscriptionPlanChanges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SubscriptionPlanChanges
+    **/
+    _count?: true | SubscriptionPlanChangeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SubscriptionPlanChangeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SubscriptionPlanChangeMaxAggregateInputType
+  }
+
+  export type GetSubscriptionPlanChangeAggregateType<T extends SubscriptionPlanChangeAggregateArgs> = {
+        [P in keyof T & keyof AggregateSubscriptionPlanChange]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSubscriptionPlanChange[P]>
+      : GetScalarType<T[P], AggregateSubscriptionPlanChange[P]>
+  }
+
+
+
+
+  export type SubscriptionPlanChangeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SubscriptionPlanChangeWhereInput
+    orderBy?: SubscriptionPlanChangeOrderByWithAggregationInput | SubscriptionPlanChangeOrderByWithAggregationInput[]
+    by: SubscriptionPlanChangeScalarFieldEnum[] | SubscriptionPlanChangeScalarFieldEnum
+    having?: SubscriptionPlanChangeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SubscriptionPlanChangeCountAggregateInputType | true
+    _min?: SubscriptionPlanChangeMinAggregateInputType
+    _max?: SubscriptionPlanChangeMaxAggregateInputType
+  }
+
+  export type SubscriptionPlanChangeGroupByOutputType = {
+    id: string
+    createdAt: Date
+    fromPlan: $Enums.PlanName
+    toPlan: $Enums.PlanName
+    changeType: $Enums.ChangeType
+    reason: string | null
+    subscriptionId: string
+    _count: SubscriptionPlanChangeCountAggregateOutputType | null
+    _min: SubscriptionPlanChangeMinAggregateOutputType | null
+    _max: SubscriptionPlanChangeMaxAggregateOutputType | null
+  }
+
+  type GetSubscriptionPlanChangeGroupByPayload<T extends SubscriptionPlanChangeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SubscriptionPlanChangeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SubscriptionPlanChangeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SubscriptionPlanChangeGroupByOutputType[P]>
+            : GetScalarType<T[P], SubscriptionPlanChangeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SubscriptionPlanChangeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    fromPlan?: boolean
+    toPlan?: boolean
+    changeType?: boolean
+    reason?: boolean
+    subscriptionId?: boolean
+    subscription?: boolean | StoreSubscriptionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["subscriptionPlanChange"]>
+
+  export type SubscriptionPlanChangeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    fromPlan?: boolean
+    toPlan?: boolean
+    changeType?: boolean
+    reason?: boolean
+    subscriptionId?: boolean
+    subscription?: boolean | StoreSubscriptionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["subscriptionPlanChange"]>
+
+  export type SubscriptionPlanChangeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    fromPlan?: boolean
+    toPlan?: boolean
+    changeType?: boolean
+    reason?: boolean
+    subscriptionId?: boolean
+    subscription?: boolean | StoreSubscriptionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["subscriptionPlanChange"]>
+
+  export type SubscriptionPlanChangeSelectScalar = {
+    id?: boolean
+    createdAt?: boolean
+    fromPlan?: boolean
+    toPlan?: boolean
+    changeType?: boolean
+    reason?: boolean
+    subscriptionId?: boolean
+  }
+
+  export type SubscriptionPlanChangeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "fromPlan" | "toPlan" | "changeType" | "reason" | "subscriptionId", ExtArgs["result"]["subscriptionPlanChange"]>
+  export type SubscriptionPlanChangeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    subscription?: boolean | StoreSubscriptionDefaultArgs<ExtArgs>
+  }
+  export type SubscriptionPlanChangeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    subscription?: boolean | StoreSubscriptionDefaultArgs<ExtArgs>
+  }
+  export type SubscriptionPlanChangeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    subscription?: boolean | StoreSubscriptionDefaultArgs<ExtArgs>
+  }
+
+  export type $SubscriptionPlanChangePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SubscriptionPlanChange"
+    objects: {
+      subscription: Prisma.$StoreSubscriptionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      createdAt: Date
+      fromPlan: $Enums.PlanName
+      toPlan: $Enums.PlanName
+      changeType: $Enums.ChangeType
+      reason: string | null
+      subscriptionId: string
+    }, ExtArgs["result"]["subscriptionPlanChange"]>
+    composites: {}
+  }
+
+  type SubscriptionPlanChangeGetPayload<S extends boolean | null | undefined | SubscriptionPlanChangeDefaultArgs> = $Result.GetResult<Prisma.$SubscriptionPlanChangePayload, S>
+
+  type SubscriptionPlanChangeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SubscriptionPlanChangeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SubscriptionPlanChangeCountAggregateInputType | true
+    }
+
+  export interface SubscriptionPlanChangeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SubscriptionPlanChange'], meta: { name: 'SubscriptionPlanChange' } }
+    /**
+     * Find zero or one SubscriptionPlanChange that matches the filter.
+     * @param {SubscriptionPlanChangeFindUniqueArgs} args - Arguments to find a SubscriptionPlanChange
+     * @example
+     * // Get one SubscriptionPlanChange
+     * const subscriptionPlanChange = await prisma.subscriptionPlanChange.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SubscriptionPlanChangeFindUniqueArgs>(args: SelectSubset<T, SubscriptionPlanChangeFindUniqueArgs<ExtArgs>>): Prisma__SubscriptionPlanChangeClient<$Result.GetResult<Prisma.$SubscriptionPlanChangePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SubscriptionPlanChange that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SubscriptionPlanChangeFindUniqueOrThrowArgs} args - Arguments to find a SubscriptionPlanChange
+     * @example
+     * // Get one SubscriptionPlanChange
+     * const subscriptionPlanChange = await prisma.subscriptionPlanChange.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SubscriptionPlanChangeFindUniqueOrThrowArgs>(args: SelectSubset<T, SubscriptionPlanChangeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SubscriptionPlanChangeClient<$Result.GetResult<Prisma.$SubscriptionPlanChangePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SubscriptionPlanChange that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionPlanChangeFindFirstArgs} args - Arguments to find a SubscriptionPlanChange
+     * @example
+     * // Get one SubscriptionPlanChange
+     * const subscriptionPlanChange = await prisma.subscriptionPlanChange.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SubscriptionPlanChangeFindFirstArgs>(args?: SelectSubset<T, SubscriptionPlanChangeFindFirstArgs<ExtArgs>>): Prisma__SubscriptionPlanChangeClient<$Result.GetResult<Prisma.$SubscriptionPlanChangePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SubscriptionPlanChange that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionPlanChangeFindFirstOrThrowArgs} args - Arguments to find a SubscriptionPlanChange
+     * @example
+     * // Get one SubscriptionPlanChange
+     * const subscriptionPlanChange = await prisma.subscriptionPlanChange.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SubscriptionPlanChangeFindFirstOrThrowArgs>(args?: SelectSubset<T, SubscriptionPlanChangeFindFirstOrThrowArgs<ExtArgs>>): Prisma__SubscriptionPlanChangeClient<$Result.GetResult<Prisma.$SubscriptionPlanChangePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SubscriptionPlanChanges that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionPlanChangeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SubscriptionPlanChanges
+     * const subscriptionPlanChanges = await prisma.subscriptionPlanChange.findMany()
+     * 
+     * // Get first 10 SubscriptionPlanChanges
+     * const subscriptionPlanChanges = await prisma.subscriptionPlanChange.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const subscriptionPlanChangeWithIdOnly = await prisma.subscriptionPlanChange.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SubscriptionPlanChangeFindManyArgs>(args?: SelectSubset<T, SubscriptionPlanChangeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubscriptionPlanChangePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SubscriptionPlanChange.
+     * @param {SubscriptionPlanChangeCreateArgs} args - Arguments to create a SubscriptionPlanChange.
+     * @example
+     * // Create one SubscriptionPlanChange
+     * const SubscriptionPlanChange = await prisma.subscriptionPlanChange.create({
+     *   data: {
+     *     // ... data to create a SubscriptionPlanChange
+     *   }
+     * })
+     * 
+     */
+    create<T extends SubscriptionPlanChangeCreateArgs>(args: SelectSubset<T, SubscriptionPlanChangeCreateArgs<ExtArgs>>): Prisma__SubscriptionPlanChangeClient<$Result.GetResult<Prisma.$SubscriptionPlanChangePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SubscriptionPlanChanges.
+     * @param {SubscriptionPlanChangeCreateManyArgs} args - Arguments to create many SubscriptionPlanChanges.
+     * @example
+     * // Create many SubscriptionPlanChanges
+     * const subscriptionPlanChange = await prisma.subscriptionPlanChange.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SubscriptionPlanChangeCreateManyArgs>(args?: SelectSubset<T, SubscriptionPlanChangeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SubscriptionPlanChanges and returns the data saved in the database.
+     * @param {SubscriptionPlanChangeCreateManyAndReturnArgs} args - Arguments to create many SubscriptionPlanChanges.
+     * @example
+     * // Create many SubscriptionPlanChanges
+     * const subscriptionPlanChange = await prisma.subscriptionPlanChange.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SubscriptionPlanChanges and only return the `id`
+     * const subscriptionPlanChangeWithIdOnly = await prisma.subscriptionPlanChange.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SubscriptionPlanChangeCreateManyAndReturnArgs>(args?: SelectSubset<T, SubscriptionPlanChangeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubscriptionPlanChangePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SubscriptionPlanChange.
+     * @param {SubscriptionPlanChangeDeleteArgs} args - Arguments to delete one SubscriptionPlanChange.
+     * @example
+     * // Delete one SubscriptionPlanChange
+     * const SubscriptionPlanChange = await prisma.subscriptionPlanChange.delete({
+     *   where: {
+     *     // ... filter to delete one SubscriptionPlanChange
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SubscriptionPlanChangeDeleteArgs>(args: SelectSubset<T, SubscriptionPlanChangeDeleteArgs<ExtArgs>>): Prisma__SubscriptionPlanChangeClient<$Result.GetResult<Prisma.$SubscriptionPlanChangePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SubscriptionPlanChange.
+     * @param {SubscriptionPlanChangeUpdateArgs} args - Arguments to update one SubscriptionPlanChange.
+     * @example
+     * // Update one SubscriptionPlanChange
+     * const subscriptionPlanChange = await prisma.subscriptionPlanChange.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SubscriptionPlanChangeUpdateArgs>(args: SelectSubset<T, SubscriptionPlanChangeUpdateArgs<ExtArgs>>): Prisma__SubscriptionPlanChangeClient<$Result.GetResult<Prisma.$SubscriptionPlanChangePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SubscriptionPlanChanges.
+     * @param {SubscriptionPlanChangeDeleteManyArgs} args - Arguments to filter SubscriptionPlanChanges to delete.
+     * @example
+     * // Delete a few SubscriptionPlanChanges
+     * const { count } = await prisma.subscriptionPlanChange.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SubscriptionPlanChangeDeleteManyArgs>(args?: SelectSubset<T, SubscriptionPlanChangeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SubscriptionPlanChanges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionPlanChangeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SubscriptionPlanChanges
+     * const subscriptionPlanChange = await prisma.subscriptionPlanChange.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SubscriptionPlanChangeUpdateManyArgs>(args: SelectSubset<T, SubscriptionPlanChangeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SubscriptionPlanChanges and returns the data updated in the database.
+     * @param {SubscriptionPlanChangeUpdateManyAndReturnArgs} args - Arguments to update many SubscriptionPlanChanges.
+     * @example
+     * // Update many SubscriptionPlanChanges
+     * const subscriptionPlanChange = await prisma.subscriptionPlanChange.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SubscriptionPlanChanges and only return the `id`
+     * const subscriptionPlanChangeWithIdOnly = await prisma.subscriptionPlanChange.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SubscriptionPlanChangeUpdateManyAndReturnArgs>(args: SelectSubset<T, SubscriptionPlanChangeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubscriptionPlanChangePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SubscriptionPlanChange.
+     * @param {SubscriptionPlanChangeUpsertArgs} args - Arguments to update or create a SubscriptionPlanChange.
+     * @example
+     * // Update or create a SubscriptionPlanChange
+     * const subscriptionPlanChange = await prisma.subscriptionPlanChange.upsert({
+     *   create: {
+     *     // ... data to create a SubscriptionPlanChange
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SubscriptionPlanChange we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SubscriptionPlanChangeUpsertArgs>(args: SelectSubset<T, SubscriptionPlanChangeUpsertArgs<ExtArgs>>): Prisma__SubscriptionPlanChangeClient<$Result.GetResult<Prisma.$SubscriptionPlanChangePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SubscriptionPlanChanges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionPlanChangeCountArgs} args - Arguments to filter SubscriptionPlanChanges to count.
+     * @example
+     * // Count the number of SubscriptionPlanChanges
+     * const count = await prisma.subscriptionPlanChange.count({
+     *   where: {
+     *     // ... the filter for the SubscriptionPlanChanges we want to count
+     *   }
+     * })
+    **/
+    count<T extends SubscriptionPlanChangeCountArgs>(
+      args?: Subset<T, SubscriptionPlanChangeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SubscriptionPlanChangeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SubscriptionPlanChange.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionPlanChangeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SubscriptionPlanChangeAggregateArgs>(args: Subset<T, SubscriptionPlanChangeAggregateArgs>): Prisma.PrismaPromise<GetSubscriptionPlanChangeAggregateType<T>>
+
+    /**
+     * Group by SubscriptionPlanChange.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubscriptionPlanChangeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SubscriptionPlanChangeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SubscriptionPlanChangeGroupByArgs['orderBy'] }
+        : { orderBy?: SubscriptionPlanChangeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SubscriptionPlanChangeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSubscriptionPlanChangeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SubscriptionPlanChange model
+   */
+  readonly fields: SubscriptionPlanChangeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SubscriptionPlanChange.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SubscriptionPlanChangeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    subscription<T extends StoreSubscriptionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StoreSubscriptionDefaultArgs<ExtArgs>>): Prisma__StoreSubscriptionClient<$Result.GetResult<Prisma.$StoreSubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SubscriptionPlanChange model
+   */
+  interface SubscriptionPlanChangeFieldRefs {
+    readonly id: FieldRef<"SubscriptionPlanChange", 'String'>
+    readonly createdAt: FieldRef<"SubscriptionPlanChange", 'DateTime'>
+    readonly fromPlan: FieldRef<"SubscriptionPlanChange", 'PlanName'>
+    readonly toPlan: FieldRef<"SubscriptionPlanChange", 'PlanName'>
+    readonly changeType: FieldRef<"SubscriptionPlanChange", 'ChangeType'>
+    readonly reason: FieldRef<"SubscriptionPlanChange", 'String'>
+    readonly subscriptionId: FieldRef<"SubscriptionPlanChange", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SubscriptionPlanChange findUnique
+   */
+  export type SubscriptionPlanChangeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlanChange
+     */
+    select?: SubscriptionPlanChangeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlanChange
+     */
+    omit?: SubscriptionPlanChangeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionPlanChangeInclude<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionPlanChange to fetch.
+     */
+    where: SubscriptionPlanChangeWhereUniqueInput
+  }
+
+  /**
+   * SubscriptionPlanChange findUniqueOrThrow
+   */
+  export type SubscriptionPlanChangeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlanChange
+     */
+    select?: SubscriptionPlanChangeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlanChange
+     */
+    omit?: SubscriptionPlanChangeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionPlanChangeInclude<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionPlanChange to fetch.
+     */
+    where: SubscriptionPlanChangeWhereUniqueInput
+  }
+
+  /**
+   * SubscriptionPlanChange findFirst
+   */
+  export type SubscriptionPlanChangeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlanChange
+     */
+    select?: SubscriptionPlanChangeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlanChange
+     */
+    omit?: SubscriptionPlanChangeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionPlanChangeInclude<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionPlanChange to fetch.
+     */
+    where?: SubscriptionPlanChangeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubscriptionPlanChanges to fetch.
+     */
+    orderBy?: SubscriptionPlanChangeOrderByWithRelationInput | SubscriptionPlanChangeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SubscriptionPlanChanges.
+     */
+    cursor?: SubscriptionPlanChangeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubscriptionPlanChanges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubscriptionPlanChanges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SubscriptionPlanChanges.
+     */
+    distinct?: SubscriptionPlanChangeScalarFieldEnum | SubscriptionPlanChangeScalarFieldEnum[]
+  }
+
+  /**
+   * SubscriptionPlanChange findFirstOrThrow
+   */
+  export type SubscriptionPlanChangeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlanChange
+     */
+    select?: SubscriptionPlanChangeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlanChange
+     */
+    omit?: SubscriptionPlanChangeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionPlanChangeInclude<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionPlanChange to fetch.
+     */
+    where?: SubscriptionPlanChangeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubscriptionPlanChanges to fetch.
+     */
+    orderBy?: SubscriptionPlanChangeOrderByWithRelationInput | SubscriptionPlanChangeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SubscriptionPlanChanges.
+     */
+    cursor?: SubscriptionPlanChangeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubscriptionPlanChanges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubscriptionPlanChanges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SubscriptionPlanChanges.
+     */
+    distinct?: SubscriptionPlanChangeScalarFieldEnum | SubscriptionPlanChangeScalarFieldEnum[]
+  }
+
+  /**
+   * SubscriptionPlanChange findMany
+   */
+  export type SubscriptionPlanChangeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlanChange
+     */
+    select?: SubscriptionPlanChangeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlanChange
+     */
+    omit?: SubscriptionPlanChangeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionPlanChangeInclude<ExtArgs> | null
+    /**
+     * Filter, which SubscriptionPlanChanges to fetch.
+     */
+    where?: SubscriptionPlanChangeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubscriptionPlanChanges to fetch.
+     */
+    orderBy?: SubscriptionPlanChangeOrderByWithRelationInput | SubscriptionPlanChangeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SubscriptionPlanChanges.
+     */
+    cursor?: SubscriptionPlanChangeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubscriptionPlanChanges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubscriptionPlanChanges.
+     */
+    skip?: number
+    distinct?: SubscriptionPlanChangeScalarFieldEnum | SubscriptionPlanChangeScalarFieldEnum[]
+  }
+
+  /**
+   * SubscriptionPlanChange create
+   */
+  export type SubscriptionPlanChangeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlanChange
+     */
+    select?: SubscriptionPlanChangeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlanChange
+     */
+    omit?: SubscriptionPlanChangeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionPlanChangeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SubscriptionPlanChange.
+     */
+    data: XOR<SubscriptionPlanChangeCreateInput, SubscriptionPlanChangeUncheckedCreateInput>
+  }
+
+  /**
+   * SubscriptionPlanChange createMany
+   */
+  export type SubscriptionPlanChangeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SubscriptionPlanChanges.
+     */
+    data: SubscriptionPlanChangeCreateManyInput | SubscriptionPlanChangeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SubscriptionPlanChange createManyAndReturn
+   */
+  export type SubscriptionPlanChangeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlanChange
+     */
+    select?: SubscriptionPlanChangeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlanChange
+     */
+    omit?: SubscriptionPlanChangeOmit<ExtArgs> | null
+    /**
+     * The data used to create many SubscriptionPlanChanges.
+     */
+    data: SubscriptionPlanChangeCreateManyInput | SubscriptionPlanChangeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionPlanChangeIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SubscriptionPlanChange update
+   */
+  export type SubscriptionPlanChangeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlanChange
+     */
+    select?: SubscriptionPlanChangeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlanChange
+     */
+    omit?: SubscriptionPlanChangeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionPlanChangeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SubscriptionPlanChange.
+     */
+    data: XOR<SubscriptionPlanChangeUpdateInput, SubscriptionPlanChangeUncheckedUpdateInput>
+    /**
+     * Choose, which SubscriptionPlanChange to update.
+     */
+    where: SubscriptionPlanChangeWhereUniqueInput
+  }
+
+  /**
+   * SubscriptionPlanChange updateMany
+   */
+  export type SubscriptionPlanChangeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SubscriptionPlanChanges.
+     */
+    data: XOR<SubscriptionPlanChangeUpdateManyMutationInput, SubscriptionPlanChangeUncheckedUpdateManyInput>
+    /**
+     * Filter which SubscriptionPlanChanges to update
+     */
+    where?: SubscriptionPlanChangeWhereInput
+    /**
+     * Limit how many SubscriptionPlanChanges to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SubscriptionPlanChange updateManyAndReturn
+   */
+  export type SubscriptionPlanChangeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlanChange
+     */
+    select?: SubscriptionPlanChangeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlanChange
+     */
+    omit?: SubscriptionPlanChangeOmit<ExtArgs> | null
+    /**
+     * The data used to update SubscriptionPlanChanges.
+     */
+    data: XOR<SubscriptionPlanChangeUpdateManyMutationInput, SubscriptionPlanChangeUncheckedUpdateManyInput>
+    /**
+     * Filter which SubscriptionPlanChanges to update
+     */
+    where?: SubscriptionPlanChangeWhereInput
+    /**
+     * Limit how many SubscriptionPlanChanges to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionPlanChangeIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SubscriptionPlanChange upsert
+   */
+  export type SubscriptionPlanChangeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlanChange
+     */
+    select?: SubscriptionPlanChangeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlanChange
+     */
+    omit?: SubscriptionPlanChangeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionPlanChangeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SubscriptionPlanChange to update in case it exists.
+     */
+    where: SubscriptionPlanChangeWhereUniqueInput
+    /**
+     * In case the SubscriptionPlanChange found by the `where` argument doesn't exist, create a new SubscriptionPlanChange with this data.
+     */
+    create: XOR<SubscriptionPlanChangeCreateInput, SubscriptionPlanChangeUncheckedCreateInput>
+    /**
+     * In case the SubscriptionPlanChange was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SubscriptionPlanChangeUpdateInput, SubscriptionPlanChangeUncheckedUpdateInput>
+  }
+
+  /**
+   * SubscriptionPlanChange delete
+   */
+  export type SubscriptionPlanChangeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlanChange
+     */
+    select?: SubscriptionPlanChangeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlanChange
+     */
+    omit?: SubscriptionPlanChangeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionPlanChangeInclude<ExtArgs> | null
+    /**
+     * Filter which SubscriptionPlanChange to delete.
+     */
+    where: SubscriptionPlanChangeWhereUniqueInput
+  }
+
+  /**
+   * SubscriptionPlanChange deleteMany
+   */
+  export type SubscriptionPlanChangeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SubscriptionPlanChanges to delete
+     */
+    where?: SubscriptionPlanChangeWhereInput
+    /**
+     * Limit how many SubscriptionPlanChanges to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SubscriptionPlanChange without action
+   */
+  export type SubscriptionPlanChangeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubscriptionPlanChange
+     */
+    select?: SubscriptionPlanChangeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubscriptionPlanChange
+     */
+    omit?: SubscriptionPlanChangeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubscriptionPlanChangeInclude<ExtArgs> | null
   }
 
 
@@ -39645,6 +48791,66 @@ export namespace Prisma {
   export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof AdminScalarFieldEnum]
 
 
+  export const AdCampaignScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    description: 'description',
+    imageUrl: 'imageUrl',
+    targetUrl: 'targetUrl',
+    startDate: 'startDate',
+    endDate: 'endDate',
+    clicks: 'clicks',
+    impressions: 'impressions',
+    storeId: 'storeId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AdCampaignScalarFieldEnum = (typeof AdCampaignScalarFieldEnum)[keyof typeof AdCampaignScalarFieldEnum]
+
+
+  export const AdImpressionScalarFieldEnum: {
+    id: 'id',
+    adCampaignId: 'adCampaignId',
+    userId: 'userId',
+    ipAddress: 'ipAddress',
+    userAgent: 'userAgent',
+    createdAt: 'createdAt'
+  };
+
+  export type AdImpressionScalarFieldEnum = (typeof AdImpressionScalarFieldEnum)[keyof typeof AdImpressionScalarFieldEnum]
+
+
+  export const AdClickScalarFieldEnum: {
+    id: 'id',
+    adCampaignId: 'adCampaignId',
+    userId: 'userId',
+    ipAddress: 'ipAddress',
+    userAgent: 'userAgent',
+    createdAt: 'createdAt'
+  };
+
+  export type AdClickScalarFieldEnum = (typeof AdClickScalarFieldEnum)[keyof typeof AdClickScalarFieldEnum]
+
+
+  export const BranchDiscountCodeScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    discountPercentage: 'discountPercentage',
+    discountAmount: 'discountAmount',
+    minOrderAmount: 'minOrderAmount',
+    usageLimit: 'usageLimit',
+    usedCount: 'usedCount',
+    isActive: 'isActive',
+    validFrom: 'validFrom',
+    validUntil: 'validUntil',
+    createdAt: 'createdAt',
+    branchId: 'branchId'
+  };
+
+  export type BranchDiscountCodeScalarFieldEnum = (typeof BranchDiscountCodeScalarFieldEnum)[keyof typeof BranchDiscountCodeScalarFieldEnum]
+
+
   export const BranchScalarFieldEnum: {
     id: 'id',
     storeId: 'storeId',
@@ -39819,6 +49025,24 @@ export namespace Prisma {
   export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
 
 
+  export const PlanLimitScalarFieldEnum: {
+    id: 'id',
+    planName: 'planName',
+    maxProducts: 'maxProducts',
+    maxBranches: 'maxBranches',
+    maxDiscountCodes: 'maxDiscountCodes',
+    notificationsPerWeek: 'notificationsPerWeek',
+    adsPerWeek: 'adsPerWeek',
+    allowsBoxes: 'allowsBoxes',
+    allowsCollaborations: 'allowsCollaborations',
+    commissionRate: 'commissionRate',
+    monthlyPrice: 'monthlyPrice',
+    annualPrice: 'annualPrice'
+  };
+
+  export type PlanLimitScalarFieldEnum = (typeof PlanLimitScalarFieldEnum)[keyof typeof PlanLimitScalarFieldEnum]
+
+
   export const ProductCartScalarFieldEnum: {
     userCartUserId: 'userCartUserId',
     productStockId: 'productStockId',
@@ -39945,6 +49169,33 @@ export namespace Prisma {
   export type StateScalarFieldEnum = (typeof StateScalarFieldEnum)[keyof typeof StateScalarFieldEnum]
 
 
+  export const StoreSubscriptionScalarFieldEnum: {
+    id: 'id',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    planLimitId: 'planLimitId',
+    status: 'status',
+    currentPeriodStart: 'currentPeriodStart',
+    currentPeriodEnd: 'currentPeriodEnd',
+    maxTotalProducts: 'maxTotalProducts',
+    maxBranches: 'maxBranches',
+    maxDiscountCodes: 'maxDiscountCodes',
+    notificationsPerWeek: 'notificationsPerWeek',
+    adsPerWeek: 'adsPerWeek',
+    allowsBoxes: 'allowsBoxes',
+    allowsCollaborations: 'allowsCollaborations',
+    commissionRate: 'commissionRate',
+    monthlyPrice: 'monthlyPrice',
+    annualPrice: 'annualPrice',
+    adsUsedThisPeriod: 'adsUsedThisPeriod',
+    adsResetAt: 'adsResetAt',
+    downgradeToPlan: 'downgradeToPlan',
+    downgradeScheduledAt: 'downgradeScheduledAt'
+  };
+
+  export type StoreSubscriptionScalarFieldEnum = (typeof StoreSubscriptionScalarFieldEnum)[keyof typeof StoreSubscriptionScalarFieldEnum]
+
+
   export const StoreScalarFieldEnum: {
     id: 'id',
     nameId: 'nameId',
@@ -39976,6 +49227,19 @@ export namespace Prisma {
   };
 
   export type SocialLinkScalarFieldEnum = (typeof SocialLinkScalarFieldEnum)[keyof typeof SocialLinkScalarFieldEnum]
+
+
+  export const SubscriptionPlanChangeScalarFieldEnum: {
+    id: 'id',
+    createdAt: 'createdAt',
+    fromPlan: 'fromPlan',
+    toPlan: 'toPlan',
+    changeType: 'changeType',
+    reason: 'reason',
+    subscriptionId: 'subscriptionId'
+  };
+
+  export type SubscriptionPlanChangeScalarFieldEnum = (typeof SubscriptionPlanChangeScalarFieldEnum)[keyof typeof SubscriptionPlanChangeScalarFieldEnum]
 
 
   export const TransactionScalarFieldEnum: {
@@ -40107,13 +49371,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -40128,6 +49385,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'UserOrderStatus'
    */
   export type EnumUserOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserOrderStatus'>
@@ -40138,6 +49402,20 @@ export namespace Prisma {
    * Reference to a field of type 'UserOrderStatus[]'
    */
   export type ListEnumUserOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserOrderStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'PlanName'
+   */
+  export type EnumPlanNameFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PlanName'>
+    
+
+
+  /**
+   * Reference to a field of type 'PlanName[]'
+   */
+  export type ListEnumPlanNameFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PlanName[]'>
     
 
 
@@ -40212,6 +49490,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'SubscriptionStatus'
+   */
+  export type EnumSubscriptionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubscriptionStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'SubscriptionStatus[]'
+   */
+  export type ListEnumSubscriptionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubscriptionStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Decimal'
    */
   export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
@@ -40236,6 +49528,20 @@ export namespace Prisma {
    * Reference to a field of type 'StoreStatus[]'
    */
   export type ListEnumStoreStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StoreStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ChangeType'
+   */
+  export type EnumChangeTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChangeType'>
+    
+
+
+  /**
+   * Reference to a field of type 'ChangeType[]'
+   */
+  export type ListEnumChangeTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChangeType[]'>
     
 
 
@@ -40339,6 +49645,317 @@ export namespace Prisma {
     countryId?: StringNullableWithAggregatesFilter<"admin"> | string | null
   }
 
+  export type AdCampaignWhereInput = {
+    AND?: AdCampaignWhereInput | AdCampaignWhereInput[]
+    OR?: AdCampaignWhereInput[]
+    NOT?: AdCampaignWhereInput | AdCampaignWhereInput[]
+    id?: StringFilter<"AdCampaign"> | string
+    title?: StringFilter<"AdCampaign"> | string
+    description?: StringNullableFilter<"AdCampaign"> | string | null
+    imageUrl?: StringFilter<"AdCampaign"> | string
+    targetUrl?: StringFilter<"AdCampaign"> | string
+    startDate?: DateTimeNullableFilter<"AdCampaign"> | Date | string | null
+    endDate?: DateTimeNullableFilter<"AdCampaign"> | Date | string | null
+    clicks?: IntFilter<"AdCampaign"> | number
+    impressions?: IntFilter<"AdCampaign"> | number
+    storeId?: StringFilter<"AdCampaign"> | string
+    createdAt?: DateTimeFilter<"AdCampaign"> | Date | string
+    updatedAt?: DateTimeFilter<"AdCampaign"> | Date | string
+    adImpressions?: AdImpressionListRelationFilter
+    adClick?: AdClickListRelationFilter
+    store?: XOR<StoreScalarRelationFilter, storeWhereInput>
+  }
+
+  export type AdCampaignOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    imageUrl?: SortOrder
+    targetUrl?: SortOrder
+    startDate?: SortOrderInput | SortOrder
+    endDate?: SortOrderInput | SortOrder
+    clicks?: SortOrder
+    impressions?: SortOrder
+    storeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    adImpressions?: AdImpressionOrderByRelationAggregateInput
+    adClick?: AdClickOrderByRelationAggregateInput
+    store?: storeOrderByWithRelationInput
+  }
+
+  export type AdCampaignWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AdCampaignWhereInput | AdCampaignWhereInput[]
+    OR?: AdCampaignWhereInput[]
+    NOT?: AdCampaignWhereInput | AdCampaignWhereInput[]
+    title?: StringFilter<"AdCampaign"> | string
+    description?: StringNullableFilter<"AdCampaign"> | string | null
+    imageUrl?: StringFilter<"AdCampaign"> | string
+    targetUrl?: StringFilter<"AdCampaign"> | string
+    startDate?: DateTimeNullableFilter<"AdCampaign"> | Date | string | null
+    endDate?: DateTimeNullableFilter<"AdCampaign"> | Date | string | null
+    clicks?: IntFilter<"AdCampaign"> | number
+    impressions?: IntFilter<"AdCampaign"> | number
+    storeId?: StringFilter<"AdCampaign"> | string
+    createdAt?: DateTimeFilter<"AdCampaign"> | Date | string
+    updatedAt?: DateTimeFilter<"AdCampaign"> | Date | string
+    adImpressions?: AdImpressionListRelationFilter
+    adClick?: AdClickListRelationFilter
+    store?: XOR<StoreScalarRelationFilter, storeWhereInput>
+  }, "id">
+
+  export type AdCampaignOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    imageUrl?: SortOrder
+    targetUrl?: SortOrder
+    startDate?: SortOrderInput | SortOrder
+    endDate?: SortOrderInput | SortOrder
+    clicks?: SortOrder
+    impressions?: SortOrder
+    storeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AdCampaignCountOrderByAggregateInput
+    _avg?: AdCampaignAvgOrderByAggregateInput
+    _max?: AdCampaignMaxOrderByAggregateInput
+    _min?: AdCampaignMinOrderByAggregateInput
+    _sum?: AdCampaignSumOrderByAggregateInput
+  }
+
+  export type AdCampaignScalarWhereWithAggregatesInput = {
+    AND?: AdCampaignScalarWhereWithAggregatesInput | AdCampaignScalarWhereWithAggregatesInput[]
+    OR?: AdCampaignScalarWhereWithAggregatesInput[]
+    NOT?: AdCampaignScalarWhereWithAggregatesInput | AdCampaignScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AdCampaign"> | string
+    title?: StringWithAggregatesFilter<"AdCampaign"> | string
+    description?: StringNullableWithAggregatesFilter<"AdCampaign"> | string | null
+    imageUrl?: StringWithAggregatesFilter<"AdCampaign"> | string
+    targetUrl?: StringWithAggregatesFilter<"AdCampaign"> | string
+    startDate?: DateTimeNullableWithAggregatesFilter<"AdCampaign"> | Date | string | null
+    endDate?: DateTimeNullableWithAggregatesFilter<"AdCampaign"> | Date | string | null
+    clicks?: IntWithAggregatesFilter<"AdCampaign"> | number
+    impressions?: IntWithAggregatesFilter<"AdCampaign"> | number
+    storeId?: StringWithAggregatesFilter<"AdCampaign"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"AdCampaign"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AdCampaign"> | Date | string
+  }
+
+  export type AdImpressionWhereInput = {
+    AND?: AdImpressionWhereInput | AdImpressionWhereInput[]
+    OR?: AdImpressionWhereInput[]
+    NOT?: AdImpressionWhereInput | AdImpressionWhereInput[]
+    id?: StringFilter<"AdImpression"> | string
+    adCampaignId?: StringFilter<"AdImpression"> | string
+    userId?: StringNullableFilter<"AdImpression"> | string | null
+    ipAddress?: StringNullableFilter<"AdImpression"> | string | null
+    userAgent?: StringNullableFilter<"AdImpression"> | string | null
+    createdAt?: DateTimeFilter<"AdImpression"> | Date | string
+    adCampaign?: XOR<AdCampaignScalarRelationFilter, AdCampaignWhereInput>
+  }
+
+  export type AdImpressionOrderByWithRelationInput = {
+    id?: SortOrder
+    adCampaignId?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    ipAddress?: SortOrderInput | SortOrder
+    userAgent?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    adCampaign?: AdCampaignOrderByWithRelationInput
+  }
+
+  export type AdImpressionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AdImpressionWhereInput | AdImpressionWhereInput[]
+    OR?: AdImpressionWhereInput[]
+    NOT?: AdImpressionWhereInput | AdImpressionWhereInput[]
+    adCampaignId?: StringFilter<"AdImpression"> | string
+    userId?: StringNullableFilter<"AdImpression"> | string | null
+    ipAddress?: StringNullableFilter<"AdImpression"> | string | null
+    userAgent?: StringNullableFilter<"AdImpression"> | string | null
+    createdAt?: DateTimeFilter<"AdImpression"> | Date | string
+    adCampaign?: XOR<AdCampaignScalarRelationFilter, AdCampaignWhereInput>
+  }, "id">
+
+  export type AdImpressionOrderByWithAggregationInput = {
+    id?: SortOrder
+    adCampaignId?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    ipAddress?: SortOrderInput | SortOrder
+    userAgent?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: AdImpressionCountOrderByAggregateInput
+    _max?: AdImpressionMaxOrderByAggregateInput
+    _min?: AdImpressionMinOrderByAggregateInput
+  }
+
+  export type AdImpressionScalarWhereWithAggregatesInput = {
+    AND?: AdImpressionScalarWhereWithAggregatesInput | AdImpressionScalarWhereWithAggregatesInput[]
+    OR?: AdImpressionScalarWhereWithAggregatesInput[]
+    NOT?: AdImpressionScalarWhereWithAggregatesInput | AdImpressionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AdImpression"> | string
+    adCampaignId?: StringWithAggregatesFilter<"AdImpression"> | string
+    userId?: StringNullableWithAggregatesFilter<"AdImpression"> | string | null
+    ipAddress?: StringNullableWithAggregatesFilter<"AdImpression"> | string | null
+    userAgent?: StringNullableWithAggregatesFilter<"AdImpression"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"AdImpression"> | Date | string
+  }
+
+  export type AdClickWhereInput = {
+    AND?: AdClickWhereInput | AdClickWhereInput[]
+    OR?: AdClickWhereInput[]
+    NOT?: AdClickWhereInput | AdClickWhereInput[]
+    id?: StringFilter<"AdClick"> | string
+    adCampaignId?: StringFilter<"AdClick"> | string
+    userId?: StringNullableFilter<"AdClick"> | string | null
+    ipAddress?: StringNullableFilter<"AdClick"> | string | null
+    userAgent?: StringNullableFilter<"AdClick"> | string | null
+    createdAt?: DateTimeFilter<"AdClick"> | Date | string
+    adCampaign?: XOR<AdCampaignScalarRelationFilter, AdCampaignWhereInput>
+  }
+
+  export type AdClickOrderByWithRelationInput = {
+    id?: SortOrder
+    adCampaignId?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    ipAddress?: SortOrderInput | SortOrder
+    userAgent?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    adCampaign?: AdCampaignOrderByWithRelationInput
+  }
+
+  export type AdClickWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AdClickWhereInput | AdClickWhereInput[]
+    OR?: AdClickWhereInput[]
+    NOT?: AdClickWhereInput | AdClickWhereInput[]
+    adCampaignId?: StringFilter<"AdClick"> | string
+    userId?: StringNullableFilter<"AdClick"> | string | null
+    ipAddress?: StringNullableFilter<"AdClick"> | string | null
+    userAgent?: StringNullableFilter<"AdClick"> | string | null
+    createdAt?: DateTimeFilter<"AdClick"> | Date | string
+    adCampaign?: XOR<AdCampaignScalarRelationFilter, AdCampaignWhereInput>
+  }, "id">
+
+  export type AdClickOrderByWithAggregationInput = {
+    id?: SortOrder
+    adCampaignId?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    ipAddress?: SortOrderInput | SortOrder
+    userAgent?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: AdClickCountOrderByAggregateInput
+    _max?: AdClickMaxOrderByAggregateInput
+    _min?: AdClickMinOrderByAggregateInput
+  }
+
+  export type AdClickScalarWhereWithAggregatesInput = {
+    AND?: AdClickScalarWhereWithAggregatesInput | AdClickScalarWhereWithAggregatesInput[]
+    OR?: AdClickScalarWhereWithAggregatesInput[]
+    NOT?: AdClickScalarWhereWithAggregatesInput | AdClickScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AdClick"> | string
+    adCampaignId?: StringWithAggregatesFilter<"AdClick"> | string
+    userId?: StringNullableWithAggregatesFilter<"AdClick"> | string | null
+    ipAddress?: StringNullableWithAggregatesFilter<"AdClick"> | string | null
+    userAgent?: StringNullableWithAggregatesFilter<"AdClick"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"AdClick"> | Date | string
+  }
+
+  export type BranchDiscountCodeWhereInput = {
+    AND?: BranchDiscountCodeWhereInput | BranchDiscountCodeWhereInput[]
+    OR?: BranchDiscountCodeWhereInput[]
+    NOT?: BranchDiscountCodeWhereInput | BranchDiscountCodeWhereInput[]
+    id?: StringFilter<"BranchDiscountCode"> | string
+    code?: StringFilter<"BranchDiscountCode"> | string
+    discountPercentage?: IntNullableFilter<"BranchDiscountCode"> | number | null
+    discountAmount?: FloatNullableFilter<"BranchDiscountCode"> | number | null
+    minOrderAmount?: FloatNullableFilter<"BranchDiscountCode"> | number | null
+    usageLimit?: IntNullableFilter<"BranchDiscountCode"> | number | null
+    usedCount?: IntFilter<"BranchDiscountCode"> | number
+    isActive?: BoolFilter<"BranchDiscountCode"> | boolean
+    validFrom?: DateTimeNullableFilter<"BranchDiscountCode"> | Date | string | null
+    validUntil?: DateTimeNullableFilter<"BranchDiscountCode"> | Date | string | null
+    createdAt?: DateTimeFilter<"BranchDiscountCode"> | Date | string
+    branchId?: StringFilter<"BranchDiscountCode"> | string
+    branch?: XOR<BranchScalarRelationFilter, branchWhereInput>
+  }
+
+  export type BranchDiscountCodeOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    discountPercentage?: SortOrderInput | SortOrder
+    discountAmount?: SortOrderInput | SortOrder
+    minOrderAmount?: SortOrderInput | SortOrder
+    usageLimit?: SortOrderInput | SortOrder
+    usedCount?: SortOrder
+    isActive?: SortOrder
+    validFrom?: SortOrderInput | SortOrder
+    validUntil?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    branchId?: SortOrder
+    branch?: branchOrderByWithRelationInput
+  }
+
+  export type BranchDiscountCodeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    branchId_code?: BranchDiscountCodeBranchIdCodeCompoundUniqueInput
+    AND?: BranchDiscountCodeWhereInput | BranchDiscountCodeWhereInput[]
+    OR?: BranchDiscountCodeWhereInput[]
+    NOT?: BranchDiscountCodeWhereInput | BranchDiscountCodeWhereInput[]
+    code?: StringFilter<"BranchDiscountCode"> | string
+    discountPercentage?: IntNullableFilter<"BranchDiscountCode"> | number | null
+    discountAmount?: FloatNullableFilter<"BranchDiscountCode"> | number | null
+    minOrderAmount?: FloatNullableFilter<"BranchDiscountCode"> | number | null
+    usageLimit?: IntNullableFilter<"BranchDiscountCode"> | number | null
+    usedCount?: IntFilter<"BranchDiscountCode"> | number
+    isActive?: BoolFilter<"BranchDiscountCode"> | boolean
+    validFrom?: DateTimeNullableFilter<"BranchDiscountCode"> | Date | string | null
+    validUntil?: DateTimeNullableFilter<"BranchDiscountCode"> | Date | string | null
+    createdAt?: DateTimeFilter<"BranchDiscountCode"> | Date | string
+    branchId?: StringFilter<"BranchDiscountCode"> | string
+    branch?: XOR<BranchScalarRelationFilter, branchWhereInput>
+  }, "id" | "branchId_code">
+
+  export type BranchDiscountCodeOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    discountPercentage?: SortOrderInput | SortOrder
+    discountAmount?: SortOrderInput | SortOrder
+    minOrderAmount?: SortOrderInput | SortOrder
+    usageLimit?: SortOrderInput | SortOrder
+    usedCount?: SortOrder
+    isActive?: SortOrder
+    validFrom?: SortOrderInput | SortOrder
+    validUntil?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    branchId?: SortOrder
+    _count?: BranchDiscountCodeCountOrderByAggregateInput
+    _avg?: BranchDiscountCodeAvgOrderByAggregateInput
+    _max?: BranchDiscountCodeMaxOrderByAggregateInput
+    _min?: BranchDiscountCodeMinOrderByAggregateInput
+    _sum?: BranchDiscountCodeSumOrderByAggregateInput
+  }
+
+  export type BranchDiscountCodeScalarWhereWithAggregatesInput = {
+    AND?: BranchDiscountCodeScalarWhereWithAggregatesInput | BranchDiscountCodeScalarWhereWithAggregatesInput[]
+    OR?: BranchDiscountCodeScalarWhereWithAggregatesInput[]
+    NOT?: BranchDiscountCodeScalarWhereWithAggregatesInput | BranchDiscountCodeScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BranchDiscountCode"> | string
+    code?: StringWithAggregatesFilter<"BranchDiscountCode"> | string
+    discountPercentage?: IntNullableWithAggregatesFilter<"BranchDiscountCode"> | number | null
+    discountAmount?: FloatNullableWithAggregatesFilter<"BranchDiscountCode"> | number | null
+    minOrderAmount?: FloatNullableWithAggregatesFilter<"BranchDiscountCode"> | number | null
+    usageLimit?: IntNullableWithAggregatesFilter<"BranchDiscountCode"> | number | null
+    usedCount?: IntWithAggregatesFilter<"BranchDiscountCode"> | number
+    isActive?: BoolWithAggregatesFilter<"BranchDiscountCode"> | boolean
+    validFrom?: DateTimeNullableWithAggregatesFilter<"BranchDiscountCode"> | Date | string | null
+    validUntil?: DateTimeNullableWithAggregatesFilter<"BranchDiscountCode"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"BranchDiscountCode"> | Date | string
+    branchId?: StringWithAggregatesFilter<"BranchDiscountCode"> | string
+  }
+
   export type branchWhereInput = {
     AND?: branchWhereInput | branchWhereInput[]
     OR?: branchWhereInput[]
@@ -40354,6 +49971,7 @@ export namespace Prisma {
     location?: XOR<LocationNullableScalarRelationFilter, locationWhereInput> | null
     workHours?: WorkHourListRelationFilter
     productStock?: ProductStockListRelationFilter
+    discountCodes?: BranchDiscountCodeListRelationFilter
   }
 
   export type branchOrderByWithRelationInput = {
@@ -40368,6 +49986,7 @@ export namespace Prisma {
     location?: locationOrderByWithRelationInput
     workHours?: workHourOrderByRelationAggregateInput
     productStock?: productStockOrderByRelationAggregateInput
+    discountCodes?: BranchDiscountCodeOrderByRelationAggregateInput
   }
 
   export type branchWhereUniqueInput = Prisma.AtLeast<{
@@ -40385,6 +50004,7 @@ export namespace Prisma {
     location?: XOR<LocationNullableScalarRelationFilter, locationWhereInput> | null
     workHours?: WorkHourListRelationFilter
     productStock?: ProductStockListRelationFilter
+    discountCodes?: BranchDiscountCodeListRelationFilter
   }, "id" | "id" | "locationId">
 
   export type branchOrderByWithAggregationInput = {
@@ -41329,6 +50949,98 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"order"> | Date | string
   }
 
+  export type PlanLimitWhereInput = {
+    AND?: PlanLimitWhereInput | PlanLimitWhereInput[]
+    OR?: PlanLimitWhereInput[]
+    NOT?: PlanLimitWhereInput | PlanLimitWhereInput[]
+    id?: StringFilter<"PlanLimit"> | string
+    planName?: EnumPlanNameFilter<"PlanLimit"> | $Enums.PlanName
+    maxProducts?: IntFilter<"PlanLimit"> | number
+    maxBranches?: IntFilter<"PlanLimit"> | number
+    maxDiscountCodes?: IntFilter<"PlanLimit"> | number
+    notificationsPerWeek?: IntFilter<"PlanLimit"> | number
+    adsPerWeek?: IntFilter<"PlanLimit"> | number
+    allowsBoxes?: BoolFilter<"PlanLimit"> | boolean
+    allowsCollaborations?: BoolFilter<"PlanLimit"> | boolean
+    commissionRate?: FloatFilter<"PlanLimit"> | number
+    monthlyPrice?: FloatNullableFilter<"PlanLimit"> | number | null
+    annualPrice?: FloatNullableFilter<"PlanLimit"> | number | null
+    storeSubscription?: StoreSubscriptionListRelationFilter
+  }
+
+  export type PlanLimitOrderByWithRelationInput = {
+    id?: SortOrder
+    planName?: SortOrder
+    maxProducts?: SortOrder
+    maxBranches?: SortOrder
+    maxDiscountCodes?: SortOrder
+    notificationsPerWeek?: SortOrder
+    adsPerWeek?: SortOrder
+    allowsBoxes?: SortOrder
+    allowsCollaborations?: SortOrder
+    commissionRate?: SortOrder
+    monthlyPrice?: SortOrderInput | SortOrder
+    annualPrice?: SortOrderInput | SortOrder
+    storeSubscription?: StoreSubscriptionOrderByRelationAggregateInput
+  }
+
+  export type PlanLimitWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    planName?: $Enums.PlanName
+    AND?: PlanLimitWhereInput | PlanLimitWhereInput[]
+    OR?: PlanLimitWhereInput[]
+    NOT?: PlanLimitWhereInput | PlanLimitWhereInput[]
+    maxProducts?: IntFilter<"PlanLimit"> | number
+    maxBranches?: IntFilter<"PlanLimit"> | number
+    maxDiscountCodes?: IntFilter<"PlanLimit"> | number
+    notificationsPerWeek?: IntFilter<"PlanLimit"> | number
+    adsPerWeek?: IntFilter<"PlanLimit"> | number
+    allowsBoxes?: BoolFilter<"PlanLimit"> | boolean
+    allowsCollaborations?: BoolFilter<"PlanLimit"> | boolean
+    commissionRate?: FloatFilter<"PlanLimit"> | number
+    monthlyPrice?: FloatNullableFilter<"PlanLimit"> | number | null
+    annualPrice?: FloatNullableFilter<"PlanLimit"> | number | null
+    storeSubscription?: StoreSubscriptionListRelationFilter
+  }, "id" | "planName">
+
+  export type PlanLimitOrderByWithAggregationInput = {
+    id?: SortOrder
+    planName?: SortOrder
+    maxProducts?: SortOrder
+    maxBranches?: SortOrder
+    maxDiscountCodes?: SortOrder
+    notificationsPerWeek?: SortOrder
+    adsPerWeek?: SortOrder
+    allowsBoxes?: SortOrder
+    allowsCollaborations?: SortOrder
+    commissionRate?: SortOrder
+    monthlyPrice?: SortOrderInput | SortOrder
+    annualPrice?: SortOrderInput | SortOrder
+    _count?: PlanLimitCountOrderByAggregateInput
+    _avg?: PlanLimitAvgOrderByAggregateInput
+    _max?: PlanLimitMaxOrderByAggregateInput
+    _min?: PlanLimitMinOrderByAggregateInput
+    _sum?: PlanLimitSumOrderByAggregateInput
+  }
+
+  export type PlanLimitScalarWhereWithAggregatesInput = {
+    AND?: PlanLimitScalarWhereWithAggregatesInput | PlanLimitScalarWhereWithAggregatesInput[]
+    OR?: PlanLimitScalarWhereWithAggregatesInput[]
+    NOT?: PlanLimitScalarWhereWithAggregatesInput | PlanLimitScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PlanLimit"> | string
+    planName?: EnumPlanNameWithAggregatesFilter<"PlanLimit"> | $Enums.PlanName
+    maxProducts?: IntWithAggregatesFilter<"PlanLimit"> | number
+    maxBranches?: IntWithAggregatesFilter<"PlanLimit"> | number
+    maxDiscountCodes?: IntWithAggregatesFilter<"PlanLimit"> | number
+    notificationsPerWeek?: IntWithAggregatesFilter<"PlanLimit"> | number
+    adsPerWeek?: IntWithAggregatesFilter<"PlanLimit"> | number
+    allowsBoxes?: BoolWithAggregatesFilter<"PlanLimit"> | boolean
+    allowsCollaborations?: BoolWithAggregatesFilter<"PlanLimit"> | boolean
+    commissionRate?: FloatWithAggregatesFilter<"PlanLimit"> | number
+    monthlyPrice?: FloatNullableWithAggregatesFilter<"PlanLimit"> | number | null
+    annualPrice?: FloatNullableWithAggregatesFilter<"PlanLimit"> | number | null
+  }
+
   export type productCartWhereInput = {
     AND?: productCartWhereInput | productCartWhereInput[]
     OR?: productCartWhereInput[]
@@ -42052,6 +51764,146 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"state"> | Date | string
   }
 
+  export type StoreSubscriptionWhereInput = {
+    AND?: StoreSubscriptionWhereInput | StoreSubscriptionWhereInput[]
+    OR?: StoreSubscriptionWhereInput[]
+    NOT?: StoreSubscriptionWhereInput | StoreSubscriptionWhereInput[]
+    id?: StringFilter<"StoreSubscription"> | string
+    createdAt?: DateTimeFilter<"StoreSubscription"> | Date | string
+    updatedAt?: DateTimeFilter<"StoreSubscription"> | Date | string
+    planLimitId?: StringNullableFilter<"StoreSubscription"> | string | null
+    status?: EnumSubscriptionStatusFilter<"StoreSubscription"> | $Enums.SubscriptionStatus
+    currentPeriodStart?: DateTimeFilter<"StoreSubscription"> | Date | string
+    currentPeriodEnd?: DateTimeFilter<"StoreSubscription"> | Date | string
+    maxTotalProducts?: IntFilter<"StoreSubscription"> | number
+    maxBranches?: IntFilter<"StoreSubscription"> | number
+    maxDiscountCodes?: IntFilter<"StoreSubscription"> | number
+    notificationsPerWeek?: IntFilter<"StoreSubscription"> | number
+    adsPerWeek?: IntFilter<"StoreSubscription"> | number
+    allowsBoxes?: BoolFilter<"StoreSubscription"> | boolean
+    allowsCollaborations?: BoolFilter<"StoreSubscription"> | boolean
+    commissionRate?: FloatFilter<"StoreSubscription"> | number
+    monthlyPrice?: FloatNullableFilter<"StoreSubscription"> | number | null
+    annualPrice?: FloatNullableFilter<"StoreSubscription"> | number | null
+    adsUsedThisPeriod?: IntFilter<"StoreSubscription"> | number
+    adsResetAt?: DateTimeNullableFilter<"StoreSubscription"> | Date | string | null
+    downgradeToPlan?: EnumPlanNameNullableFilter<"StoreSubscription"> | $Enums.PlanName | null
+    downgradeScheduledAt?: DateTimeNullableFilter<"StoreSubscription"> | Date | string | null
+    planLimit?: XOR<PlanLimitNullableScalarRelationFilter, PlanLimitWhereInput> | null
+    planChanges?: SubscriptionPlanChangeListRelationFilter
+  }
+
+  export type StoreSubscriptionOrderByWithRelationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    planLimitId?: SortOrderInput | SortOrder
+    status?: SortOrder
+    currentPeriodStart?: SortOrder
+    currentPeriodEnd?: SortOrder
+    maxTotalProducts?: SortOrder
+    maxBranches?: SortOrder
+    maxDiscountCodes?: SortOrder
+    notificationsPerWeek?: SortOrder
+    adsPerWeek?: SortOrder
+    allowsBoxes?: SortOrder
+    allowsCollaborations?: SortOrder
+    commissionRate?: SortOrder
+    monthlyPrice?: SortOrderInput | SortOrder
+    annualPrice?: SortOrderInput | SortOrder
+    adsUsedThisPeriod?: SortOrder
+    adsResetAt?: SortOrderInput | SortOrder
+    downgradeToPlan?: SortOrderInput | SortOrder
+    downgradeScheduledAt?: SortOrderInput | SortOrder
+    planLimit?: PlanLimitOrderByWithRelationInput
+    planChanges?: SubscriptionPlanChangeOrderByRelationAggregateInput
+  }
+
+  export type StoreSubscriptionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: StoreSubscriptionWhereInput | StoreSubscriptionWhereInput[]
+    OR?: StoreSubscriptionWhereInput[]
+    NOT?: StoreSubscriptionWhereInput | StoreSubscriptionWhereInput[]
+    createdAt?: DateTimeFilter<"StoreSubscription"> | Date | string
+    updatedAt?: DateTimeFilter<"StoreSubscription"> | Date | string
+    planLimitId?: StringNullableFilter<"StoreSubscription"> | string | null
+    status?: EnumSubscriptionStatusFilter<"StoreSubscription"> | $Enums.SubscriptionStatus
+    currentPeriodStart?: DateTimeFilter<"StoreSubscription"> | Date | string
+    currentPeriodEnd?: DateTimeFilter<"StoreSubscription"> | Date | string
+    maxTotalProducts?: IntFilter<"StoreSubscription"> | number
+    maxBranches?: IntFilter<"StoreSubscription"> | number
+    maxDiscountCodes?: IntFilter<"StoreSubscription"> | number
+    notificationsPerWeek?: IntFilter<"StoreSubscription"> | number
+    adsPerWeek?: IntFilter<"StoreSubscription"> | number
+    allowsBoxes?: BoolFilter<"StoreSubscription"> | boolean
+    allowsCollaborations?: BoolFilter<"StoreSubscription"> | boolean
+    commissionRate?: FloatFilter<"StoreSubscription"> | number
+    monthlyPrice?: FloatNullableFilter<"StoreSubscription"> | number | null
+    annualPrice?: FloatNullableFilter<"StoreSubscription"> | number | null
+    adsUsedThisPeriod?: IntFilter<"StoreSubscription"> | number
+    adsResetAt?: DateTimeNullableFilter<"StoreSubscription"> | Date | string | null
+    downgradeToPlan?: EnumPlanNameNullableFilter<"StoreSubscription"> | $Enums.PlanName | null
+    downgradeScheduledAt?: DateTimeNullableFilter<"StoreSubscription"> | Date | string | null
+    planLimit?: XOR<PlanLimitNullableScalarRelationFilter, PlanLimitWhereInput> | null
+    planChanges?: SubscriptionPlanChangeListRelationFilter
+  }, "id">
+
+  export type StoreSubscriptionOrderByWithAggregationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    planLimitId?: SortOrderInput | SortOrder
+    status?: SortOrder
+    currentPeriodStart?: SortOrder
+    currentPeriodEnd?: SortOrder
+    maxTotalProducts?: SortOrder
+    maxBranches?: SortOrder
+    maxDiscountCodes?: SortOrder
+    notificationsPerWeek?: SortOrder
+    adsPerWeek?: SortOrder
+    allowsBoxes?: SortOrder
+    allowsCollaborations?: SortOrder
+    commissionRate?: SortOrder
+    monthlyPrice?: SortOrderInput | SortOrder
+    annualPrice?: SortOrderInput | SortOrder
+    adsUsedThisPeriod?: SortOrder
+    adsResetAt?: SortOrderInput | SortOrder
+    downgradeToPlan?: SortOrderInput | SortOrder
+    downgradeScheduledAt?: SortOrderInput | SortOrder
+    _count?: StoreSubscriptionCountOrderByAggregateInput
+    _avg?: StoreSubscriptionAvgOrderByAggregateInput
+    _max?: StoreSubscriptionMaxOrderByAggregateInput
+    _min?: StoreSubscriptionMinOrderByAggregateInput
+    _sum?: StoreSubscriptionSumOrderByAggregateInput
+  }
+
+  export type StoreSubscriptionScalarWhereWithAggregatesInput = {
+    AND?: StoreSubscriptionScalarWhereWithAggregatesInput | StoreSubscriptionScalarWhereWithAggregatesInput[]
+    OR?: StoreSubscriptionScalarWhereWithAggregatesInput[]
+    NOT?: StoreSubscriptionScalarWhereWithAggregatesInput | StoreSubscriptionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"StoreSubscription"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"StoreSubscription"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"StoreSubscription"> | Date | string
+    planLimitId?: StringNullableWithAggregatesFilter<"StoreSubscription"> | string | null
+    status?: EnumSubscriptionStatusWithAggregatesFilter<"StoreSubscription"> | $Enums.SubscriptionStatus
+    currentPeriodStart?: DateTimeWithAggregatesFilter<"StoreSubscription"> | Date | string
+    currentPeriodEnd?: DateTimeWithAggregatesFilter<"StoreSubscription"> | Date | string
+    maxTotalProducts?: IntWithAggregatesFilter<"StoreSubscription"> | number
+    maxBranches?: IntWithAggregatesFilter<"StoreSubscription"> | number
+    maxDiscountCodes?: IntWithAggregatesFilter<"StoreSubscription"> | number
+    notificationsPerWeek?: IntWithAggregatesFilter<"StoreSubscription"> | number
+    adsPerWeek?: IntWithAggregatesFilter<"StoreSubscription"> | number
+    allowsBoxes?: BoolWithAggregatesFilter<"StoreSubscription"> | boolean
+    allowsCollaborations?: BoolWithAggregatesFilter<"StoreSubscription"> | boolean
+    commissionRate?: FloatWithAggregatesFilter<"StoreSubscription"> | number
+    monthlyPrice?: FloatNullableWithAggregatesFilter<"StoreSubscription"> | number | null
+    annualPrice?: FloatNullableWithAggregatesFilter<"StoreSubscription"> | number | null
+    adsUsedThisPeriod?: IntWithAggregatesFilter<"StoreSubscription"> | number
+    adsResetAt?: DateTimeNullableWithAggregatesFilter<"StoreSubscription"> | Date | string | null
+    downgradeToPlan?: EnumPlanNameNullableWithAggregatesFilter<"StoreSubscription"> | $Enums.PlanName | null
+    downgradeScheduledAt?: DateTimeNullableWithAggregatesFilter<"StoreSubscription"> | Date | string | null
+  }
+
   export type storeWhereInput = {
     AND?: storeWhereInput | storeWhereInput[]
     OR?: storeWhereInput[]
@@ -42078,6 +51930,7 @@ export namespace Prisma {
     branches?: BranchListRelationFilter
     transactions?: TransactionListRelationFilter
     sessions?: SessionListRelationFilter
+    adCampaigns?: AdCampaignListRelationFilter
   }
 
   export type storeOrderByWithRelationInput = {
@@ -42103,6 +51956,7 @@ export namespace Prisma {
     branches?: branchOrderByRelationAggregateInput
     transactions?: transactionOrderByRelationAggregateInput
     sessions?: sessionOrderByRelationAggregateInput
+    adCampaigns?: AdCampaignOrderByRelationAggregateInput
   }
 
   export type storeWhereUniqueInput = Prisma.AtLeast<{
@@ -42131,6 +51985,7 @@ export namespace Prisma {
     branches?: BranchListRelationFilter
     transactions?: TransactionListRelationFilter
     sessions?: SessionListRelationFilter
+    adCampaigns?: AdCampaignListRelationFilter
   }, "id" | "id" | "nameId" | "bioId" | "logoId" | "bannerId" | "phone" | "email">
 
   export type storeOrderByWithAggregationInput = {
@@ -42238,6 +52093,71 @@ export namespace Prisma {
     x?: StringNullableWithAggregatesFilter<"socialLink"> | string | null
     instagram?: StringNullableWithAggregatesFilter<"socialLink"> | string | null
     storeId?: StringWithAggregatesFilter<"socialLink"> | string
+  }
+
+  export type SubscriptionPlanChangeWhereInput = {
+    AND?: SubscriptionPlanChangeWhereInput | SubscriptionPlanChangeWhereInput[]
+    OR?: SubscriptionPlanChangeWhereInput[]
+    NOT?: SubscriptionPlanChangeWhereInput | SubscriptionPlanChangeWhereInput[]
+    id?: StringFilter<"SubscriptionPlanChange"> | string
+    createdAt?: DateTimeFilter<"SubscriptionPlanChange"> | Date | string
+    fromPlan?: EnumPlanNameFilter<"SubscriptionPlanChange"> | $Enums.PlanName
+    toPlan?: EnumPlanNameFilter<"SubscriptionPlanChange"> | $Enums.PlanName
+    changeType?: EnumChangeTypeFilter<"SubscriptionPlanChange"> | $Enums.ChangeType
+    reason?: StringNullableFilter<"SubscriptionPlanChange"> | string | null
+    subscriptionId?: StringFilter<"SubscriptionPlanChange"> | string
+    subscription?: XOR<StoreSubscriptionScalarRelationFilter, StoreSubscriptionWhereInput>
+  }
+
+  export type SubscriptionPlanChangeOrderByWithRelationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    fromPlan?: SortOrder
+    toPlan?: SortOrder
+    changeType?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    subscriptionId?: SortOrder
+    subscription?: StoreSubscriptionOrderByWithRelationInput
+  }
+
+  export type SubscriptionPlanChangeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SubscriptionPlanChangeWhereInput | SubscriptionPlanChangeWhereInput[]
+    OR?: SubscriptionPlanChangeWhereInput[]
+    NOT?: SubscriptionPlanChangeWhereInput | SubscriptionPlanChangeWhereInput[]
+    createdAt?: DateTimeFilter<"SubscriptionPlanChange"> | Date | string
+    fromPlan?: EnumPlanNameFilter<"SubscriptionPlanChange"> | $Enums.PlanName
+    toPlan?: EnumPlanNameFilter<"SubscriptionPlanChange"> | $Enums.PlanName
+    changeType?: EnumChangeTypeFilter<"SubscriptionPlanChange"> | $Enums.ChangeType
+    reason?: StringNullableFilter<"SubscriptionPlanChange"> | string | null
+    subscriptionId?: StringFilter<"SubscriptionPlanChange"> | string
+    subscription?: XOR<StoreSubscriptionScalarRelationFilter, StoreSubscriptionWhereInput>
+  }, "id">
+
+  export type SubscriptionPlanChangeOrderByWithAggregationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    fromPlan?: SortOrder
+    toPlan?: SortOrder
+    changeType?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    subscriptionId?: SortOrder
+    _count?: SubscriptionPlanChangeCountOrderByAggregateInput
+    _max?: SubscriptionPlanChangeMaxOrderByAggregateInput
+    _min?: SubscriptionPlanChangeMinOrderByAggregateInput
+  }
+
+  export type SubscriptionPlanChangeScalarWhereWithAggregatesInput = {
+    AND?: SubscriptionPlanChangeScalarWhereWithAggregatesInput | SubscriptionPlanChangeScalarWhereWithAggregatesInput[]
+    OR?: SubscriptionPlanChangeScalarWhereWithAggregatesInput[]
+    NOT?: SubscriptionPlanChangeScalarWhereWithAggregatesInput | SubscriptionPlanChangeScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SubscriptionPlanChange"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"SubscriptionPlanChange"> | Date | string
+    fromPlan?: EnumPlanNameWithAggregatesFilter<"SubscriptionPlanChange"> | $Enums.PlanName
+    toPlan?: EnumPlanNameWithAggregatesFilter<"SubscriptionPlanChange"> | $Enums.PlanName
+    changeType?: EnumChangeTypeWithAggregatesFilter<"SubscriptionPlanChange"> | $Enums.ChangeType
+    reason?: StringNullableWithAggregatesFilter<"SubscriptionPlanChange"> | string | null
+    subscriptionId?: StringWithAggregatesFilter<"SubscriptionPlanChange"> | string
   }
 
   export type transactionWhereInput = {
@@ -42655,6 +52575,346 @@ export namespace Prisma {
     countryId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type AdCampaignCreateInput = {
+    id?: string
+    title: string
+    description?: string | null
+    imageUrl: string
+    targetUrl: string
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    clicks?: number
+    impressions?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adImpressions?: AdImpressionCreateNestedManyWithoutAdCampaignInput
+    adClick?: AdClickCreateNestedManyWithoutAdCampaignInput
+    store: storeCreateNestedOneWithoutAdCampaignsInput
+  }
+
+  export type AdCampaignUncheckedCreateInput = {
+    id?: string
+    title: string
+    description?: string | null
+    imageUrl: string
+    targetUrl: string
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    clicks?: number
+    impressions?: number
+    storeId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adImpressions?: AdImpressionUncheckedCreateNestedManyWithoutAdCampaignInput
+    adClick?: AdClickUncheckedCreateNestedManyWithoutAdCampaignInput
+  }
+
+  export type AdCampaignUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicks?: IntFieldUpdateOperationsInput | number
+    impressions?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adImpressions?: AdImpressionUpdateManyWithoutAdCampaignNestedInput
+    adClick?: AdClickUpdateManyWithoutAdCampaignNestedInput
+    store?: storeUpdateOneRequiredWithoutAdCampaignsNestedInput
+  }
+
+  export type AdCampaignUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicks?: IntFieldUpdateOperationsInput | number
+    impressions?: IntFieldUpdateOperationsInput | number
+    storeId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adImpressions?: AdImpressionUncheckedUpdateManyWithoutAdCampaignNestedInput
+    adClick?: AdClickUncheckedUpdateManyWithoutAdCampaignNestedInput
+  }
+
+  export type AdCampaignCreateManyInput = {
+    id?: string
+    title: string
+    description?: string | null
+    imageUrl: string
+    targetUrl: string
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    clicks?: number
+    impressions?: number
+    storeId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdCampaignUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicks?: IntFieldUpdateOperationsInput | number
+    impressions?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdCampaignUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicks?: IntFieldUpdateOperationsInput | number
+    impressions?: IntFieldUpdateOperationsInput | number
+    storeId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdImpressionCreateInput = {
+    id?: string
+    userId?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+    createdAt?: Date | string
+    adCampaign: AdCampaignCreateNestedOneWithoutAdImpressionsInput
+  }
+
+  export type AdImpressionUncheckedCreateInput = {
+    id?: string
+    adCampaignId: string
+    userId?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AdImpressionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adCampaign?: AdCampaignUpdateOneRequiredWithoutAdImpressionsNestedInput
+  }
+
+  export type AdImpressionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    adCampaignId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdImpressionCreateManyInput = {
+    id?: string
+    adCampaignId: string
+    userId?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AdImpressionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdImpressionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    adCampaignId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdClickCreateInput = {
+    id?: string
+    userId?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+    createdAt?: Date | string
+    adCampaign: AdCampaignCreateNestedOneWithoutAdClickInput
+  }
+
+  export type AdClickUncheckedCreateInput = {
+    id?: string
+    adCampaignId: string
+    userId?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AdClickUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adCampaign?: AdCampaignUpdateOneRequiredWithoutAdClickNestedInput
+  }
+
+  export type AdClickUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    adCampaignId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdClickCreateManyInput = {
+    id?: string
+    adCampaignId: string
+    userId?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AdClickUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdClickUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    adCampaignId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BranchDiscountCodeCreateInput = {
+    id?: string
+    code: string
+    discountPercentage?: number | null
+    discountAmount?: number | null
+    minOrderAmount?: number | null
+    usageLimit?: number | null
+    usedCount?: number
+    isActive?: boolean
+    validFrom?: Date | string | null
+    validUntil?: Date | string | null
+    createdAt?: Date | string
+    branch: branchCreateNestedOneWithoutDiscountCodesInput
+  }
+
+  export type BranchDiscountCodeUncheckedCreateInput = {
+    id?: string
+    code: string
+    discountPercentage?: number | null
+    discountAmount?: number | null
+    minOrderAmount?: number | null
+    usageLimit?: number | null
+    usedCount?: number
+    isActive?: boolean
+    validFrom?: Date | string | null
+    validUntil?: Date | string | null
+    createdAt?: Date | string
+    branchId: string
+  }
+
+  export type BranchDiscountCodeUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discountPercentage?: NullableIntFieldUpdateOperationsInput | number | null
+    discountAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    minOrderAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    usageLimit?: NullableIntFieldUpdateOperationsInput | number | null
+    usedCount?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    branch?: branchUpdateOneRequiredWithoutDiscountCodesNestedInput
+  }
+
+  export type BranchDiscountCodeUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discountPercentage?: NullableIntFieldUpdateOperationsInput | number | null
+    discountAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    minOrderAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    usageLimit?: NullableIntFieldUpdateOperationsInput | number | null
+    usedCount?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    branchId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BranchDiscountCodeCreateManyInput = {
+    id?: string
+    code: string
+    discountPercentage?: number | null
+    discountAmount?: number | null
+    minOrderAmount?: number | null
+    usageLimit?: number | null
+    usedCount?: number
+    isActive?: boolean
+    validFrom?: Date | string | null
+    validUntil?: Date | string | null
+    createdAt?: Date | string
+    branchId: string
+  }
+
+  export type BranchDiscountCodeUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discountPercentage?: NullableIntFieldUpdateOperationsInput | number | null
+    discountAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    minOrderAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    usageLimit?: NullableIntFieldUpdateOperationsInput | number | null
+    usedCount?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BranchDiscountCodeUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discountPercentage?: NullableIntFieldUpdateOperationsInput | number | null
+    discountAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    minOrderAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    usageLimit?: NullableIntFieldUpdateOperationsInput | number | null
+    usedCount?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    branchId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type branchCreateInput = {
     id?: string
     phone?: string | null
@@ -42665,6 +52925,7 @@ export namespace Prisma {
     location?: locationCreateNestedOneWithoutBranchInput
     workHours?: workHourCreateNestedManyWithoutBranchInput
     productStock?: productStockCreateNestedManyWithoutBranchInput
+    discountCodes?: BranchDiscountCodeCreateNestedManyWithoutBranchInput
   }
 
   export type branchUncheckedCreateInput = {
@@ -42677,6 +52938,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     workHours?: workHourUncheckedCreateNestedManyWithoutBranchInput
     productStock?: productStockUncheckedCreateNestedManyWithoutBranchInput
+    discountCodes?: BranchDiscountCodeUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type branchUpdateInput = {
@@ -42689,6 +52951,7 @@ export namespace Prisma {
     location?: locationUpdateOneWithoutBranchNestedInput
     workHours?: workHourUpdateManyWithoutBranchNestedInput
     productStock?: productStockUpdateManyWithoutBranchNestedInput
+    discountCodes?: BranchDiscountCodeUpdateManyWithoutBranchNestedInput
   }
 
   export type branchUncheckedUpdateInput = {
@@ -42701,6 +52964,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workHours?: workHourUncheckedUpdateManyWithoutBranchNestedInput
     productStock?: productStockUncheckedUpdateManyWithoutBranchNestedInput
+    discountCodes?: BranchDiscountCodeUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type branchCreateManyInput = {
@@ -43682,6 +53946,115 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PlanLimitCreateInput = {
+    id?: string
+    planName?: $Enums.PlanName
+    maxProducts?: number
+    maxBranches?: number
+    maxDiscountCodes?: number
+    notificationsPerWeek?: number
+    adsPerWeek?: number
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: number
+    monthlyPrice?: number | null
+    annualPrice?: number | null
+    storeSubscription?: StoreSubscriptionCreateNestedManyWithoutPlanLimitInput
+  }
+
+  export type PlanLimitUncheckedCreateInput = {
+    id?: string
+    planName?: $Enums.PlanName
+    maxProducts?: number
+    maxBranches?: number
+    maxDiscountCodes?: number
+    notificationsPerWeek?: number
+    adsPerWeek?: number
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: number
+    monthlyPrice?: number | null
+    annualPrice?: number | null
+    storeSubscription?: StoreSubscriptionUncheckedCreateNestedManyWithoutPlanLimitInput
+  }
+
+  export type PlanLimitUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    planName?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    maxProducts?: IntFieldUpdateOperationsInput | number
+    maxBranches?: IntFieldUpdateOperationsInput | number
+    maxDiscountCodes?: IntFieldUpdateOperationsInput | number
+    notificationsPerWeek?: IntFieldUpdateOperationsInput | number
+    adsPerWeek?: IntFieldUpdateOperationsInput | number
+    allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
+    allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
+    commissionRate?: FloatFieldUpdateOperationsInput | number
+    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    storeSubscription?: StoreSubscriptionUpdateManyWithoutPlanLimitNestedInput
+  }
+
+  export type PlanLimitUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    planName?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    maxProducts?: IntFieldUpdateOperationsInput | number
+    maxBranches?: IntFieldUpdateOperationsInput | number
+    maxDiscountCodes?: IntFieldUpdateOperationsInput | number
+    notificationsPerWeek?: IntFieldUpdateOperationsInput | number
+    adsPerWeek?: IntFieldUpdateOperationsInput | number
+    allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
+    allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
+    commissionRate?: FloatFieldUpdateOperationsInput | number
+    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    storeSubscription?: StoreSubscriptionUncheckedUpdateManyWithoutPlanLimitNestedInput
+  }
+
+  export type PlanLimitCreateManyInput = {
+    id?: string
+    planName?: $Enums.PlanName
+    maxProducts?: number
+    maxBranches?: number
+    maxDiscountCodes?: number
+    notificationsPerWeek?: number
+    adsPerWeek?: number
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: number
+    monthlyPrice?: number | null
+    annualPrice?: number | null
+  }
+
+  export type PlanLimitUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    planName?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    maxProducts?: IntFieldUpdateOperationsInput | number
+    maxBranches?: IntFieldUpdateOperationsInput | number
+    maxDiscountCodes?: IntFieldUpdateOperationsInput | number
+    notificationsPerWeek?: IntFieldUpdateOperationsInput | number
+    adsPerWeek?: IntFieldUpdateOperationsInput | number
+    allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
+    allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
+    commissionRate?: FloatFieldUpdateOperationsInput | number
+    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+  }
+
+  export type PlanLimitUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    planName?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    maxProducts?: IntFieldUpdateOperationsInput | number
+    maxBranches?: IntFieldUpdateOperationsInput | number
+    maxDiscountCodes?: IntFieldUpdateOperationsInput | number
+    notificationsPerWeek?: IntFieldUpdateOperationsInput | number
+    adsPerWeek?: IntFieldUpdateOperationsInput | number
+    allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
+    allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
+    commissionRate?: FloatFieldUpdateOperationsInput | number
+    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+  }
+
   export type productCartCreateInput = {
     quantity?: number
     status?: $Enums.ProductCartStatus
@@ -44410,6 +54783,177 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type StoreSubscriptionCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.SubscriptionStatus
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    maxTotalProducts?: number
+    maxBranches?: number
+    maxDiscountCodes?: number
+    notificationsPerWeek?: number
+    adsPerWeek?: number
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: number
+    monthlyPrice?: number | null
+    annualPrice?: number | null
+    adsUsedThisPeriod?: number
+    adsResetAt?: Date | string | null
+    downgradeToPlan?: $Enums.PlanName | null
+    downgradeScheduledAt?: Date | string | null
+    planLimit?: PlanLimitCreateNestedOneWithoutStoreSubscriptionInput
+    planChanges?: SubscriptionPlanChangeCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type StoreSubscriptionUncheckedCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    planLimitId?: string | null
+    status?: $Enums.SubscriptionStatus
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    maxTotalProducts?: number
+    maxBranches?: number
+    maxDiscountCodes?: number
+    notificationsPerWeek?: number
+    adsPerWeek?: number
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: number
+    monthlyPrice?: number | null
+    annualPrice?: number | null
+    adsUsedThisPeriod?: number
+    adsResetAt?: Date | string | null
+    downgradeToPlan?: $Enums.PlanName | null
+    downgradeScheduledAt?: Date | string | null
+    planChanges?: SubscriptionPlanChangeUncheckedCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type StoreSubscriptionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxTotalProducts?: IntFieldUpdateOperationsInput | number
+    maxBranches?: IntFieldUpdateOperationsInput | number
+    maxDiscountCodes?: IntFieldUpdateOperationsInput | number
+    notificationsPerWeek?: IntFieldUpdateOperationsInput | number
+    adsPerWeek?: IntFieldUpdateOperationsInput | number
+    allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
+    allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
+    commissionRate?: FloatFieldUpdateOperationsInput | number
+    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
+    adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    downgradeToPlan?: NullableEnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName | null
+    downgradeScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    planLimit?: PlanLimitUpdateOneWithoutStoreSubscriptionNestedInput
+    planChanges?: SubscriptionPlanChangeUpdateManyWithoutSubscriptionNestedInput
+  }
+
+  export type StoreSubscriptionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    planLimitId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxTotalProducts?: IntFieldUpdateOperationsInput | number
+    maxBranches?: IntFieldUpdateOperationsInput | number
+    maxDiscountCodes?: IntFieldUpdateOperationsInput | number
+    notificationsPerWeek?: IntFieldUpdateOperationsInput | number
+    adsPerWeek?: IntFieldUpdateOperationsInput | number
+    allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
+    allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
+    commissionRate?: FloatFieldUpdateOperationsInput | number
+    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
+    adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    downgradeToPlan?: NullableEnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName | null
+    downgradeScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    planChanges?: SubscriptionPlanChangeUncheckedUpdateManyWithoutSubscriptionNestedInput
+  }
+
+  export type StoreSubscriptionCreateManyInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    planLimitId?: string | null
+    status?: $Enums.SubscriptionStatus
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    maxTotalProducts?: number
+    maxBranches?: number
+    maxDiscountCodes?: number
+    notificationsPerWeek?: number
+    adsPerWeek?: number
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: number
+    monthlyPrice?: number | null
+    annualPrice?: number | null
+    adsUsedThisPeriod?: number
+    adsResetAt?: Date | string | null
+    downgradeToPlan?: $Enums.PlanName | null
+    downgradeScheduledAt?: Date | string | null
+  }
+
+  export type StoreSubscriptionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxTotalProducts?: IntFieldUpdateOperationsInput | number
+    maxBranches?: IntFieldUpdateOperationsInput | number
+    maxDiscountCodes?: IntFieldUpdateOperationsInput | number
+    notificationsPerWeek?: IntFieldUpdateOperationsInput | number
+    adsPerWeek?: IntFieldUpdateOperationsInput | number
+    allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
+    allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
+    commissionRate?: FloatFieldUpdateOperationsInput | number
+    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
+    adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    downgradeToPlan?: NullableEnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName | null
+    downgradeScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type StoreSubscriptionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    planLimitId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxTotalProducts?: IntFieldUpdateOperationsInput | number
+    maxBranches?: IntFieldUpdateOperationsInput | number
+    maxDiscountCodes?: IntFieldUpdateOperationsInput | number
+    notificationsPerWeek?: IntFieldUpdateOperationsInput | number
+    adsPerWeek?: IntFieldUpdateOperationsInput | number
+    allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
+    allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
+    commissionRate?: FloatFieldUpdateOperationsInput | number
+    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
+    adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    downgradeToPlan?: NullableEnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName | null
+    downgradeScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type storeCreateInput = {
     id?: string
     phone: string
@@ -44429,6 +54973,7 @@ export namespace Prisma {
     branches?: branchCreateNestedManyWithoutStoreInput
     transactions?: transactionCreateNestedManyWithoutStoreInput
     sessions?: sessionCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignCreateNestedManyWithoutStoreInput
   }
 
   export type storeUncheckedCreateInput = {
@@ -44450,6 +54995,7 @@ export namespace Prisma {
     branches?: branchUncheckedCreateNestedManyWithoutStoreInput
     transactions?: transactionUncheckedCreateNestedManyWithoutStoreInput
     sessions?: sessionUncheckedCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignUncheckedCreateNestedManyWithoutStoreInput
   }
 
   export type storeUpdateInput = {
@@ -44471,6 +55017,7 @@ export namespace Prisma {
     branches?: branchUpdateManyWithoutStoreNestedInput
     transactions?: transactionUpdateManyWithoutStoreNestedInput
     sessions?: sessionUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUpdateManyWithoutStoreNestedInput
   }
 
   export type storeUncheckedUpdateInput = {
@@ -44492,6 +55039,7 @@ export namespace Prisma {
     branches?: branchUncheckedUpdateManyWithoutStoreNestedInput
     transactions?: transactionUncheckedUpdateManyWithoutStoreNestedInput
     sessions?: sessionUncheckedUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUncheckedUpdateManyWithoutStoreNestedInput
   }
 
   export type storeCreateManyInput = {
@@ -44608,6 +55156,75 @@ export namespace Prisma {
     x?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     storeId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SubscriptionPlanChangeCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    fromPlan: $Enums.PlanName
+    toPlan: $Enums.PlanName
+    changeType: $Enums.ChangeType
+    reason?: string | null
+    subscription: StoreSubscriptionCreateNestedOneWithoutPlanChangesInput
+  }
+
+  export type SubscriptionPlanChangeUncheckedCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    fromPlan: $Enums.PlanName
+    toPlan: $Enums.PlanName
+    changeType: $Enums.ChangeType
+    reason?: string | null
+    subscriptionId: string
+  }
+
+  export type SubscriptionPlanChangeUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fromPlan?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    toPlan?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    changeType?: EnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    subscription?: StoreSubscriptionUpdateOneRequiredWithoutPlanChangesNestedInput
+  }
+
+  export type SubscriptionPlanChangeUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fromPlan?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    toPlan?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    changeType?: EnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriptionId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SubscriptionPlanChangeCreateManyInput = {
+    id?: string
+    createdAt?: Date | string
+    fromPlan: $Enums.PlanName
+    toPlan: $Enums.PlanName
+    changeType: $Enums.ChangeType
+    reason?: string | null
+    subscriptionId: string
+  }
+
+  export type SubscriptionPlanChangeUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fromPlan?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    toPlan?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    changeType?: EnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SubscriptionPlanChangeUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fromPlan?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    toPlan?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    changeType?: EnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    subscriptionId?: StringFieldUpdateOperationsInput | string
   }
 
   export type transactionCreateInput = {
@@ -45137,14 +55754,333 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type AdImpressionListRelationFilter = {
+    every?: AdImpressionWhereInput
+    some?: AdImpressionWhereInput
+    none?: AdImpressionWhereInput
+  }
+
+  export type AdClickListRelationFilter = {
+    every?: AdClickWhereInput
+    some?: AdClickWhereInput
+    none?: AdClickWhereInput
   }
 
   export type StoreScalarRelationFilter = {
     is?: storeWhereInput
     isNot?: storeWhereInput
+  }
+
+  export type AdImpressionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AdClickOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AdCampaignCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    imageUrl?: SortOrder
+    targetUrl?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    clicks?: SortOrder
+    impressions?: SortOrder
+    storeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdCampaignAvgOrderByAggregateInput = {
+    clicks?: SortOrder
+    impressions?: SortOrder
+  }
+
+  export type AdCampaignMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    imageUrl?: SortOrder
+    targetUrl?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    clicks?: SortOrder
+    impressions?: SortOrder
+    storeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdCampaignMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    imageUrl?: SortOrder
+    targetUrl?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    clicks?: SortOrder
+    impressions?: SortOrder
+    storeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdCampaignSumOrderByAggregateInput = {
+    clicks?: SortOrder
+    impressions?: SortOrder
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type AdCampaignScalarRelationFilter = {
+    is?: AdCampaignWhereInput
+    isNot?: AdCampaignWhereInput
+  }
+
+  export type AdImpressionCountOrderByAggregateInput = {
+    id?: SortOrder
+    adCampaignId?: SortOrder
+    userId?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AdImpressionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    adCampaignId?: SortOrder
+    userId?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AdImpressionMinOrderByAggregateInput = {
+    id?: SortOrder
+    adCampaignId?: SortOrder
+    userId?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AdClickCountOrderByAggregateInput = {
+    id?: SortOrder
+    adCampaignId?: SortOrder
+    userId?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AdClickMaxOrderByAggregateInput = {
+    id?: SortOrder
+    adCampaignId?: SortOrder
+    userId?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AdClickMinOrderByAggregateInput = {
+    id?: SortOrder
+    adCampaignId?: SortOrder
+    userId?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type BranchScalarRelationFilter = {
+    is?: branchWhereInput
+    isNot?: branchWhereInput
+  }
+
+  export type BranchDiscountCodeBranchIdCodeCompoundUniqueInput = {
+    branchId: string
+    code: string
+  }
+
+  export type BranchDiscountCodeCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    discountPercentage?: SortOrder
+    discountAmount?: SortOrder
+    minOrderAmount?: SortOrder
+    usageLimit?: SortOrder
+    usedCount?: SortOrder
+    isActive?: SortOrder
+    validFrom?: SortOrder
+    validUntil?: SortOrder
+    createdAt?: SortOrder
+    branchId?: SortOrder
+  }
+
+  export type BranchDiscountCodeAvgOrderByAggregateInput = {
+    discountPercentage?: SortOrder
+    discountAmount?: SortOrder
+    minOrderAmount?: SortOrder
+    usageLimit?: SortOrder
+    usedCount?: SortOrder
+  }
+
+  export type BranchDiscountCodeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    discountPercentage?: SortOrder
+    discountAmount?: SortOrder
+    minOrderAmount?: SortOrder
+    usageLimit?: SortOrder
+    usedCount?: SortOrder
+    isActive?: SortOrder
+    validFrom?: SortOrder
+    validUntil?: SortOrder
+    createdAt?: SortOrder
+    branchId?: SortOrder
+  }
+
+  export type BranchDiscountCodeMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    discountPercentage?: SortOrder
+    discountAmount?: SortOrder
+    minOrderAmount?: SortOrder
+    usageLimit?: SortOrder
+    usedCount?: SortOrder
+    isActive?: SortOrder
+    validFrom?: SortOrder
+    validUntil?: SortOrder
+    createdAt?: SortOrder
+    branchId?: SortOrder
+  }
+
+  export type BranchDiscountCodeSumOrderByAggregateInput = {
+    discountPercentage?: SortOrder
+    discountAmount?: SortOrder
+    minOrderAmount?: SortOrder
+    usageLimit?: SortOrder
+    usedCount?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type LocationNullableScalarRelationFilter = {
@@ -45164,11 +56100,21 @@ export namespace Prisma {
     none?: productStockWhereInput
   }
 
+  export type BranchDiscountCodeListRelationFilter = {
+    every?: BranchDiscountCodeWhereInput
+    some?: BranchDiscountCodeWhereInput
+    none?: BranchDiscountCodeWhereInput
+  }
+
   export type workHourOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type productStockOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BranchDiscountCodeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -45202,30 +56148,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
-  export type BranchScalarRelationFilter = {
-    is?: branchWhereInput
-    isNot?: branchWhereInput
-  }
-
   export type workHourCountOrderByAggregateInput = {
     id?: SortOrder
     branchId?: SortOrder
@@ -45256,22 +56178,6 @@ export namespace Prisma {
 
   export type workHourSumOrderByAggregateInput = {
     day?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type LocaleScalarRelationFilter = {
@@ -45446,28 +56352,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type ProductCartListRelationFilter = {
     every?: productCartWhereInput
     some?: productCartWhereInput
@@ -45532,36 +56416,6 @@ export namespace Prisma {
     additionalFeesAfterKg?: SortOrder
     feePerKg?: SortOrder
     estimatedDays?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type CategoryListRelationFilter = {
@@ -45787,17 +56641,6 @@ export namespace Prisma {
     not?: NestedEnumUserOrderStatusFilter<$PrismaModel> | $Enums.UserOrderStatus
   }
 
-  export type FloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
   export type UserScalarRelationFilter = {
     is?: userWhereInput
     isNot?: userWhereInput
@@ -45901,20 +56744,98 @@ export namespace Prisma {
     _max?: NestedEnumUserOrderStatusFilter<$PrismaModel>
   }
 
-  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
+  export type EnumPlanNameFilter<$PrismaModel = never> = {
+    equals?: $Enums.PlanName | EnumPlanNameFieldRefInput<$PrismaModel>
+    in?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel>
+    not?: NestedEnumPlanNameFilter<$PrismaModel> | $Enums.PlanName
+  }
+
+  export type StoreSubscriptionListRelationFilter = {
+    every?: StoreSubscriptionWhereInput
+    some?: StoreSubscriptionWhereInput
+    none?: StoreSubscriptionWhereInput
+  }
+
+  export type StoreSubscriptionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PlanLimitCountOrderByAggregateInput = {
+    id?: SortOrder
+    planName?: SortOrder
+    maxProducts?: SortOrder
+    maxBranches?: SortOrder
+    maxDiscountCodes?: SortOrder
+    notificationsPerWeek?: SortOrder
+    adsPerWeek?: SortOrder
+    allowsBoxes?: SortOrder
+    allowsCollaborations?: SortOrder
+    commissionRate?: SortOrder
+    monthlyPrice?: SortOrder
+    annualPrice?: SortOrder
+  }
+
+  export type PlanLimitAvgOrderByAggregateInput = {
+    maxProducts?: SortOrder
+    maxBranches?: SortOrder
+    maxDiscountCodes?: SortOrder
+    notificationsPerWeek?: SortOrder
+    adsPerWeek?: SortOrder
+    commissionRate?: SortOrder
+    monthlyPrice?: SortOrder
+    annualPrice?: SortOrder
+  }
+
+  export type PlanLimitMaxOrderByAggregateInput = {
+    id?: SortOrder
+    planName?: SortOrder
+    maxProducts?: SortOrder
+    maxBranches?: SortOrder
+    maxDiscountCodes?: SortOrder
+    notificationsPerWeek?: SortOrder
+    adsPerWeek?: SortOrder
+    allowsBoxes?: SortOrder
+    allowsCollaborations?: SortOrder
+    commissionRate?: SortOrder
+    monthlyPrice?: SortOrder
+    annualPrice?: SortOrder
+  }
+
+  export type PlanLimitMinOrderByAggregateInput = {
+    id?: SortOrder
+    planName?: SortOrder
+    maxProducts?: SortOrder
+    maxBranches?: SortOrder
+    maxDiscountCodes?: SortOrder
+    notificationsPerWeek?: SortOrder
+    adsPerWeek?: SortOrder
+    allowsBoxes?: SortOrder
+    allowsCollaborations?: SortOrder
+    commissionRate?: SortOrder
+    monthlyPrice?: SortOrder
+    annualPrice?: SortOrder
+  }
+
+  export type PlanLimitSumOrderByAggregateInput = {
+    maxProducts?: SortOrder
+    maxBranches?: SortOrder
+    maxDiscountCodes?: SortOrder
+    notificationsPerWeek?: SortOrder
+    adsPerWeek?: SortOrder
+    commissionRate?: SortOrder
+    monthlyPrice?: SortOrder
+    annualPrice?: SortOrder
+  }
+
+  export type EnumPlanNameWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PlanName | EnumPlanNameFieldRefInput<$PrismaModel>
+    in?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel>
+    not?: NestedEnumPlanNameWithAggregatesFilter<$PrismaModel> | $Enums.PlanName
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPlanNameFilter<$PrismaModel>
+    _max?: NestedEnumPlanNameFilter<$PrismaModel>
   }
 
   export type EnumProductCartStatusFilter<$PrismaModel = never> = {
@@ -46520,6 +57441,151 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type EnumSubscriptionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SubscriptionStatus | EnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SubscriptionStatus[] | ListEnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SubscriptionStatus[] | ListEnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSubscriptionStatusFilter<$PrismaModel> | $Enums.SubscriptionStatus
+  }
+
+  export type EnumPlanNameNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.PlanName | EnumPlanNameFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPlanNameNullableFilter<$PrismaModel> | $Enums.PlanName | null
+  }
+
+  export type PlanLimitNullableScalarRelationFilter = {
+    is?: PlanLimitWhereInput | null
+    isNot?: PlanLimitWhereInput | null
+  }
+
+  export type SubscriptionPlanChangeListRelationFilter = {
+    every?: SubscriptionPlanChangeWhereInput
+    some?: SubscriptionPlanChangeWhereInput
+    none?: SubscriptionPlanChangeWhereInput
+  }
+
+  export type SubscriptionPlanChangeOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type StoreSubscriptionCountOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    planLimitId?: SortOrder
+    status?: SortOrder
+    currentPeriodStart?: SortOrder
+    currentPeriodEnd?: SortOrder
+    maxTotalProducts?: SortOrder
+    maxBranches?: SortOrder
+    maxDiscountCodes?: SortOrder
+    notificationsPerWeek?: SortOrder
+    adsPerWeek?: SortOrder
+    allowsBoxes?: SortOrder
+    allowsCollaborations?: SortOrder
+    commissionRate?: SortOrder
+    monthlyPrice?: SortOrder
+    annualPrice?: SortOrder
+    adsUsedThisPeriod?: SortOrder
+    adsResetAt?: SortOrder
+    downgradeToPlan?: SortOrder
+    downgradeScheduledAt?: SortOrder
+  }
+
+  export type StoreSubscriptionAvgOrderByAggregateInput = {
+    maxTotalProducts?: SortOrder
+    maxBranches?: SortOrder
+    maxDiscountCodes?: SortOrder
+    notificationsPerWeek?: SortOrder
+    adsPerWeek?: SortOrder
+    commissionRate?: SortOrder
+    monthlyPrice?: SortOrder
+    annualPrice?: SortOrder
+    adsUsedThisPeriod?: SortOrder
+  }
+
+  export type StoreSubscriptionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    planLimitId?: SortOrder
+    status?: SortOrder
+    currentPeriodStart?: SortOrder
+    currentPeriodEnd?: SortOrder
+    maxTotalProducts?: SortOrder
+    maxBranches?: SortOrder
+    maxDiscountCodes?: SortOrder
+    notificationsPerWeek?: SortOrder
+    adsPerWeek?: SortOrder
+    allowsBoxes?: SortOrder
+    allowsCollaborations?: SortOrder
+    commissionRate?: SortOrder
+    monthlyPrice?: SortOrder
+    annualPrice?: SortOrder
+    adsUsedThisPeriod?: SortOrder
+    adsResetAt?: SortOrder
+    downgradeToPlan?: SortOrder
+    downgradeScheduledAt?: SortOrder
+  }
+
+  export type StoreSubscriptionMinOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    planLimitId?: SortOrder
+    status?: SortOrder
+    currentPeriodStart?: SortOrder
+    currentPeriodEnd?: SortOrder
+    maxTotalProducts?: SortOrder
+    maxBranches?: SortOrder
+    maxDiscountCodes?: SortOrder
+    notificationsPerWeek?: SortOrder
+    adsPerWeek?: SortOrder
+    allowsBoxes?: SortOrder
+    allowsCollaborations?: SortOrder
+    commissionRate?: SortOrder
+    monthlyPrice?: SortOrder
+    annualPrice?: SortOrder
+    adsUsedThisPeriod?: SortOrder
+    adsResetAt?: SortOrder
+    downgradeToPlan?: SortOrder
+    downgradeScheduledAt?: SortOrder
+  }
+
+  export type StoreSubscriptionSumOrderByAggregateInput = {
+    maxTotalProducts?: SortOrder
+    maxBranches?: SortOrder
+    maxDiscountCodes?: SortOrder
+    notificationsPerWeek?: SortOrder
+    adsPerWeek?: SortOrder
+    commissionRate?: SortOrder
+    monthlyPrice?: SortOrder
+    annualPrice?: SortOrder
+    adsUsedThisPeriod?: SortOrder
+  }
+
+  export type EnumSubscriptionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SubscriptionStatus | EnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SubscriptionStatus[] | ListEnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SubscriptionStatus[] | ListEnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSubscriptionStatusWithAggregatesFilter<$PrismaModel> | $Enums.SubscriptionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSubscriptionStatusFilter<$PrismaModel>
+    _max?: NestedEnumSubscriptionStatusFilter<$PrismaModel>
+  }
+
+  export type EnumPlanNameNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PlanName | EnumPlanNameFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPlanNameNullableWithAggregatesFilter<$PrismaModel> | $Enums.PlanName | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumPlanNameNullableFilter<$PrismaModel>
+    _max?: NestedEnumPlanNameNullableFilter<$PrismaModel>
+  }
+
   export type DecimalFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
@@ -46549,7 +57615,17 @@ export namespace Prisma {
     none?: branchWhereInput
   }
 
+  export type AdCampaignListRelationFilter = {
+    every?: AdCampaignWhereInput
+    some?: AdCampaignWhereInput
+    none?: AdCampaignWhereInput
+  }
+
   export type branchOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AdCampaignOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -46666,6 +57742,58 @@ export namespace Prisma {
     x?: SortOrder
     instagram?: SortOrder
     storeId?: SortOrder
+  }
+
+  export type EnumChangeTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChangeType | EnumChangeTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ChangeType[] | ListEnumChangeTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ChangeType[] | ListEnumChangeTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumChangeTypeFilter<$PrismaModel> | $Enums.ChangeType
+  }
+
+  export type StoreSubscriptionScalarRelationFilter = {
+    is?: StoreSubscriptionWhereInput
+    isNot?: StoreSubscriptionWhereInput
+  }
+
+  export type SubscriptionPlanChangeCountOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    fromPlan?: SortOrder
+    toPlan?: SortOrder
+    changeType?: SortOrder
+    reason?: SortOrder
+    subscriptionId?: SortOrder
+  }
+
+  export type SubscriptionPlanChangeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    fromPlan?: SortOrder
+    toPlan?: SortOrder
+    changeType?: SortOrder
+    reason?: SortOrder
+    subscriptionId?: SortOrder
+  }
+
+  export type SubscriptionPlanChangeMinOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    fromPlan?: SortOrder
+    toPlan?: SortOrder
+    changeType?: SortOrder
+    reason?: SortOrder
+    subscriptionId?: SortOrder
+  }
+
+  export type EnumChangeTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChangeType | EnumChangeTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ChangeType[] | ListEnumChangeTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ChangeType[] | ListEnumChangeTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumChangeTypeWithAggregatesFilter<$PrismaModel> | $Enums.ChangeType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumChangeTypeFilter<$PrismaModel>
+    _max?: NestedEnumChangeTypeFilter<$PrismaModel>
   }
 
   export type EnumTransactionTypeFilter<$PrismaModel = never> = {
@@ -46975,6 +58103,178 @@ export namespace Prisma {
     deleteMany?: transactionScalarWhereInput | transactionScalarWhereInput[]
   }
 
+  export type AdImpressionCreateNestedManyWithoutAdCampaignInput = {
+    create?: XOR<AdImpressionCreateWithoutAdCampaignInput, AdImpressionUncheckedCreateWithoutAdCampaignInput> | AdImpressionCreateWithoutAdCampaignInput[] | AdImpressionUncheckedCreateWithoutAdCampaignInput[]
+    connectOrCreate?: AdImpressionCreateOrConnectWithoutAdCampaignInput | AdImpressionCreateOrConnectWithoutAdCampaignInput[]
+    createMany?: AdImpressionCreateManyAdCampaignInputEnvelope
+    connect?: AdImpressionWhereUniqueInput | AdImpressionWhereUniqueInput[]
+  }
+
+  export type AdClickCreateNestedManyWithoutAdCampaignInput = {
+    create?: XOR<AdClickCreateWithoutAdCampaignInput, AdClickUncheckedCreateWithoutAdCampaignInput> | AdClickCreateWithoutAdCampaignInput[] | AdClickUncheckedCreateWithoutAdCampaignInput[]
+    connectOrCreate?: AdClickCreateOrConnectWithoutAdCampaignInput | AdClickCreateOrConnectWithoutAdCampaignInput[]
+    createMany?: AdClickCreateManyAdCampaignInputEnvelope
+    connect?: AdClickWhereUniqueInput | AdClickWhereUniqueInput[]
+  }
+
+  export type storeCreateNestedOneWithoutAdCampaignsInput = {
+    create?: XOR<storeCreateWithoutAdCampaignsInput, storeUncheckedCreateWithoutAdCampaignsInput>
+    connectOrCreate?: storeCreateOrConnectWithoutAdCampaignsInput
+    connect?: storeWhereUniqueInput
+  }
+
+  export type AdImpressionUncheckedCreateNestedManyWithoutAdCampaignInput = {
+    create?: XOR<AdImpressionCreateWithoutAdCampaignInput, AdImpressionUncheckedCreateWithoutAdCampaignInput> | AdImpressionCreateWithoutAdCampaignInput[] | AdImpressionUncheckedCreateWithoutAdCampaignInput[]
+    connectOrCreate?: AdImpressionCreateOrConnectWithoutAdCampaignInput | AdImpressionCreateOrConnectWithoutAdCampaignInput[]
+    createMany?: AdImpressionCreateManyAdCampaignInputEnvelope
+    connect?: AdImpressionWhereUniqueInput | AdImpressionWhereUniqueInput[]
+  }
+
+  export type AdClickUncheckedCreateNestedManyWithoutAdCampaignInput = {
+    create?: XOR<AdClickCreateWithoutAdCampaignInput, AdClickUncheckedCreateWithoutAdCampaignInput> | AdClickCreateWithoutAdCampaignInput[] | AdClickUncheckedCreateWithoutAdCampaignInput[]
+    connectOrCreate?: AdClickCreateOrConnectWithoutAdCampaignInput | AdClickCreateOrConnectWithoutAdCampaignInput[]
+    createMany?: AdClickCreateManyAdCampaignInputEnvelope
+    connect?: AdClickWhereUniqueInput | AdClickWhereUniqueInput[]
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type AdImpressionUpdateManyWithoutAdCampaignNestedInput = {
+    create?: XOR<AdImpressionCreateWithoutAdCampaignInput, AdImpressionUncheckedCreateWithoutAdCampaignInput> | AdImpressionCreateWithoutAdCampaignInput[] | AdImpressionUncheckedCreateWithoutAdCampaignInput[]
+    connectOrCreate?: AdImpressionCreateOrConnectWithoutAdCampaignInput | AdImpressionCreateOrConnectWithoutAdCampaignInput[]
+    upsert?: AdImpressionUpsertWithWhereUniqueWithoutAdCampaignInput | AdImpressionUpsertWithWhereUniqueWithoutAdCampaignInput[]
+    createMany?: AdImpressionCreateManyAdCampaignInputEnvelope
+    set?: AdImpressionWhereUniqueInput | AdImpressionWhereUniqueInput[]
+    disconnect?: AdImpressionWhereUniqueInput | AdImpressionWhereUniqueInput[]
+    delete?: AdImpressionWhereUniqueInput | AdImpressionWhereUniqueInput[]
+    connect?: AdImpressionWhereUniqueInput | AdImpressionWhereUniqueInput[]
+    update?: AdImpressionUpdateWithWhereUniqueWithoutAdCampaignInput | AdImpressionUpdateWithWhereUniqueWithoutAdCampaignInput[]
+    updateMany?: AdImpressionUpdateManyWithWhereWithoutAdCampaignInput | AdImpressionUpdateManyWithWhereWithoutAdCampaignInput[]
+    deleteMany?: AdImpressionScalarWhereInput | AdImpressionScalarWhereInput[]
+  }
+
+  export type AdClickUpdateManyWithoutAdCampaignNestedInput = {
+    create?: XOR<AdClickCreateWithoutAdCampaignInput, AdClickUncheckedCreateWithoutAdCampaignInput> | AdClickCreateWithoutAdCampaignInput[] | AdClickUncheckedCreateWithoutAdCampaignInput[]
+    connectOrCreate?: AdClickCreateOrConnectWithoutAdCampaignInput | AdClickCreateOrConnectWithoutAdCampaignInput[]
+    upsert?: AdClickUpsertWithWhereUniqueWithoutAdCampaignInput | AdClickUpsertWithWhereUniqueWithoutAdCampaignInput[]
+    createMany?: AdClickCreateManyAdCampaignInputEnvelope
+    set?: AdClickWhereUniqueInput | AdClickWhereUniqueInput[]
+    disconnect?: AdClickWhereUniqueInput | AdClickWhereUniqueInput[]
+    delete?: AdClickWhereUniqueInput | AdClickWhereUniqueInput[]
+    connect?: AdClickWhereUniqueInput | AdClickWhereUniqueInput[]
+    update?: AdClickUpdateWithWhereUniqueWithoutAdCampaignInput | AdClickUpdateWithWhereUniqueWithoutAdCampaignInput[]
+    updateMany?: AdClickUpdateManyWithWhereWithoutAdCampaignInput | AdClickUpdateManyWithWhereWithoutAdCampaignInput[]
+    deleteMany?: AdClickScalarWhereInput | AdClickScalarWhereInput[]
+  }
+
+  export type storeUpdateOneRequiredWithoutAdCampaignsNestedInput = {
+    create?: XOR<storeCreateWithoutAdCampaignsInput, storeUncheckedCreateWithoutAdCampaignsInput>
+    connectOrCreate?: storeCreateOrConnectWithoutAdCampaignsInput
+    upsert?: storeUpsertWithoutAdCampaignsInput
+    connect?: storeWhereUniqueInput
+    update?: XOR<XOR<storeUpdateToOneWithWhereWithoutAdCampaignsInput, storeUpdateWithoutAdCampaignsInput>, storeUncheckedUpdateWithoutAdCampaignsInput>
+  }
+
+  export type AdImpressionUncheckedUpdateManyWithoutAdCampaignNestedInput = {
+    create?: XOR<AdImpressionCreateWithoutAdCampaignInput, AdImpressionUncheckedCreateWithoutAdCampaignInput> | AdImpressionCreateWithoutAdCampaignInput[] | AdImpressionUncheckedCreateWithoutAdCampaignInput[]
+    connectOrCreate?: AdImpressionCreateOrConnectWithoutAdCampaignInput | AdImpressionCreateOrConnectWithoutAdCampaignInput[]
+    upsert?: AdImpressionUpsertWithWhereUniqueWithoutAdCampaignInput | AdImpressionUpsertWithWhereUniqueWithoutAdCampaignInput[]
+    createMany?: AdImpressionCreateManyAdCampaignInputEnvelope
+    set?: AdImpressionWhereUniqueInput | AdImpressionWhereUniqueInput[]
+    disconnect?: AdImpressionWhereUniqueInput | AdImpressionWhereUniqueInput[]
+    delete?: AdImpressionWhereUniqueInput | AdImpressionWhereUniqueInput[]
+    connect?: AdImpressionWhereUniqueInput | AdImpressionWhereUniqueInput[]
+    update?: AdImpressionUpdateWithWhereUniqueWithoutAdCampaignInput | AdImpressionUpdateWithWhereUniqueWithoutAdCampaignInput[]
+    updateMany?: AdImpressionUpdateManyWithWhereWithoutAdCampaignInput | AdImpressionUpdateManyWithWhereWithoutAdCampaignInput[]
+    deleteMany?: AdImpressionScalarWhereInput | AdImpressionScalarWhereInput[]
+  }
+
+  export type AdClickUncheckedUpdateManyWithoutAdCampaignNestedInput = {
+    create?: XOR<AdClickCreateWithoutAdCampaignInput, AdClickUncheckedCreateWithoutAdCampaignInput> | AdClickCreateWithoutAdCampaignInput[] | AdClickUncheckedCreateWithoutAdCampaignInput[]
+    connectOrCreate?: AdClickCreateOrConnectWithoutAdCampaignInput | AdClickCreateOrConnectWithoutAdCampaignInput[]
+    upsert?: AdClickUpsertWithWhereUniqueWithoutAdCampaignInput | AdClickUpsertWithWhereUniqueWithoutAdCampaignInput[]
+    createMany?: AdClickCreateManyAdCampaignInputEnvelope
+    set?: AdClickWhereUniqueInput | AdClickWhereUniqueInput[]
+    disconnect?: AdClickWhereUniqueInput | AdClickWhereUniqueInput[]
+    delete?: AdClickWhereUniqueInput | AdClickWhereUniqueInput[]
+    connect?: AdClickWhereUniqueInput | AdClickWhereUniqueInput[]
+    update?: AdClickUpdateWithWhereUniqueWithoutAdCampaignInput | AdClickUpdateWithWhereUniqueWithoutAdCampaignInput[]
+    updateMany?: AdClickUpdateManyWithWhereWithoutAdCampaignInput | AdClickUpdateManyWithWhereWithoutAdCampaignInput[]
+    deleteMany?: AdClickScalarWhereInput | AdClickScalarWhereInput[]
+  }
+
+  export type AdCampaignCreateNestedOneWithoutAdImpressionsInput = {
+    create?: XOR<AdCampaignCreateWithoutAdImpressionsInput, AdCampaignUncheckedCreateWithoutAdImpressionsInput>
+    connectOrCreate?: AdCampaignCreateOrConnectWithoutAdImpressionsInput
+    connect?: AdCampaignWhereUniqueInput
+  }
+
+  export type AdCampaignUpdateOneRequiredWithoutAdImpressionsNestedInput = {
+    create?: XOR<AdCampaignCreateWithoutAdImpressionsInput, AdCampaignUncheckedCreateWithoutAdImpressionsInput>
+    connectOrCreate?: AdCampaignCreateOrConnectWithoutAdImpressionsInput
+    upsert?: AdCampaignUpsertWithoutAdImpressionsInput
+    connect?: AdCampaignWhereUniqueInput
+    update?: XOR<XOR<AdCampaignUpdateToOneWithWhereWithoutAdImpressionsInput, AdCampaignUpdateWithoutAdImpressionsInput>, AdCampaignUncheckedUpdateWithoutAdImpressionsInput>
+  }
+
+  export type AdCampaignCreateNestedOneWithoutAdClickInput = {
+    create?: XOR<AdCampaignCreateWithoutAdClickInput, AdCampaignUncheckedCreateWithoutAdClickInput>
+    connectOrCreate?: AdCampaignCreateOrConnectWithoutAdClickInput
+    connect?: AdCampaignWhereUniqueInput
+  }
+
+  export type AdCampaignUpdateOneRequiredWithoutAdClickNestedInput = {
+    create?: XOR<AdCampaignCreateWithoutAdClickInput, AdCampaignUncheckedCreateWithoutAdClickInput>
+    connectOrCreate?: AdCampaignCreateOrConnectWithoutAdClickInput
+    upsert?: AdCampaignUpsertWithoutAdClickInput
+    connect?: AdCampaignWhereUniqueInput
+    update?: XOR<XOR<AdCampaignUpdateToOneWithWhereWithoutAdClickInput, AdCampaignUpdateWithoutAdClickInput>, AdCampaignUncheckedUpdateWithoutAdClickInput>
+  }
+
+  export type branchCreateNestedOneWithoutDiscountCodesInput = {
+    create?: XOR<branchCreateWithoutDiscountCodesInput, branchUncheckedCreateWithoutDiscountCodesInput>
+    connectOrCreate?: branchCreateOrConnectWithoutDiscountCodesInput
+    connect?: branchWhereUniqueInput
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type branchUpdateOneRequiredWithoutDiscountCodesNestedInput = {
+    create?: XOR<branchCreateWithoutDiscountCodesInput, branchUncheckedCreateWithoutDiscountCodesInput>
+    connectOrCreate?: branchCreateOrConnectWithoutDiscountCodesInput
+    upsert?: branchUpsertWithoutDiscountCodesInput
+    connect?: branchWhereUniqueInput
+    update?: XOR<XOR<branchUpdateToOneWithWhereWithoutDiscountCodesInput, branchUpdateWithoutDiscountCodesInput>, branchUncheckedUpdateWithoutDiscountCodesInput>
+  }
+
   export type storeCreateNestedOneWithoutBranchesInput = {
     create?: XOR<storeCreateWithoutBranchesInput, storeUncheckedCreateWithoutBranchesInput>
     connectOrCreate?: storeCreateOrConnectWithoutBranchesInput
@@ -47001,6 +58301,13 @@ export namespace Prisma {
     connect?: productStockWhereUniqueInput | productStockWhereUniqueInput[]
   }
 
+  export type BranchDiscountCodeCreateNestedManyWithoutBranchInput = {
+    create?: XOR<BranchDiscountCodeCreateWithoutBranchInput, BranchDiscountCodeUncheckedCreateWithoutBranchInput> | BranchDiscountCodeCreateWithoutBranchInput[] | BranchDiscountCodeUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: BranchDiscountCodeCreateOrConnectWithoutBranchInput | BranchDiscountCodeCreateOrConnectWithoutBranchInput[]
+    createMany?: BranchDiscountCodeCreateManyBranchInputEnvelope
+    connect?: BranchDiscountCodeWhereUniqueInput | BranchDiscountCodeWhereUniqueInput[]
+  }
+
   export type workHourUncheckedCreateNestedManyWithoutBranchInput = {
     create?: XOR<workHourCreateWithoutBranchInput, workHourUncheckedCreateWithoutBranchInput> | workHourCreateWithoutBranchInput[] | workHourUncheckedCreateWithoutBranchInput[]
     connectOrCreate?: workHourCreateOrConnectWithoutBranchInput | workHourCreateOrConnectWithoutBranchInput[]
@@ -47015,8 +58322,11 @@ export namespace Prisma {
     connect?: productStockWhereUniqueInput | productStockWhereUniqueInput[]
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
+  export type BranchDiscountCodeUncheckedCreateNestedManyWithoutBranchInput = {
+    create?: XOR<BranchDiscountCodeCreateWithoutBranchInput, BranchDiscountCodeUncheckedCreateWithoutBranchInput> | BranchDiscountCodeCreateWithoutBranchInput[] | BranchDiscountCodeUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: BranchDiscountCodeCreateOrConnectWithoutBranchInput | BranchDiscountCodeCreateOrConnectWithoutBranchInput[]
+    createMany?: BranchDiscountCodeCreateManyBranchInputEnvelope
+    connect?: BranchDiscountCodeWhereUniqueInput | BranchDiscountCodeWhereUniqueInput[]
   }
 
   export type storeUpdateOneRequiredWithoutBranchesNestedInput = {
@@ -47065,6 +58375,20 @@ export namespace Prisma {
     deleteMany?: productStockScalarWhereInput | productStockScalarWhereInput[]
   }
 
+  export type BranchDiscountCodeUpdateManyWithoutBranchNestedInput = {
+    create?: XOR<BranchDiscountCodeCreateWithoutBranchInput, BranchDiscountCodeUncheckedCreateWithoutBranchInput> | BranchDiscountCodeCreateWithoutBranchInput[] | BranchDiscountCodeUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: BranchDiscountCodeCreateOrConnectWithoutBranchInput | BranchDiscountCodeCreateOrConnectWithoutBranchInput[]
+    upsert?: BranchDiscountCodeUpsertWithWhereUniqueWithoutBranchInput | BranchDiscountCodeUpsertWithWhereUniqueWithoutBranchInput[]
+    createMany?: BranchDiscountCodeCreateManyBranchInputEnvelope
+    set?: BranchDiscountCodeWhereUniqueInput | BranchDiscountCodeWhereUniqueInput[]
+    disconnect?: BranchDiscountCodeWhereUniqueInput | BranchDiscountCodeWhereUniqueInput[]
+    delete?: BranchDiscountCodeWhereUniqueInput | BranchDiscountCodeWhereUniqueInput[]
+    connect?: BranchDiscountCodeWhereUniqueInput | BranchDiscountCodeWhereUniqueInput[]
+    update?: BranchDiscountCodeUpdateWithWhereUniqueWithoutBranchInput | BranchDiscountCodeUpdateWithWhereUniqueWithoutBranchInput[]
+    updateMany?: BranchDiscountCodeUpdateManyWithWhereWithoutBranchInput | BranchDiscountCodeUpdateManyWithWhereWithoutBranchInput[]
+    deleteMany?: BranchDiscountCodeScalarWhereInput | BranchDiscountCodeScalarWhereInput[]
+  }
+
   export type workHourUncheckedUpdateManyWithoutBranchNestedInput = {
     create?: XOR<workHourCreateWithoutBranchInput, workHourUncheckedCreateWithoutBranchInput> | workHourCreateWithoutBranchInput[] | workHourUncheckedCreateWithoutBranchInput[]
     connectOrCreate?: workHourCreateOrConnectWithoutBranchInput | workHourCreateOrConnectWithoutBranchInput[]
@@ -47093,18 +58417,24 @@ export namespace Prisma {
     deleteMany?: productStockScalarWhereInput | productStockScalarWhereInput[]
   }
 
+  export type BranchDiscountCodeUncheckedUpdateManyWithoutBranchNestedInput = {
+    create?: XOR<BranchDiscountCodeCreateWithoutBranchInput, BranchDiscountCodeUncheckedCreateWithoutBranchInput> | BranchDiscountCodeCreateWithoutBranchInput[] | BranchDiscountCodeUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: BranchDiscountCodeCreateOrConnectWithoutBranchInput | BranchDiscountCodeCreateOrConnectWithoutBranchInput[]
+    upsert?: BranchDiscountCodeUpsertWithWhereUniqueWithoutBranchInput | BranchDiscountCodeUpsertWithWhereUniqueWithoutBranchInput[]
+    createMany?: BranchDiscountCodeCreateManyBranchInputEnvelope
+    set?: BranchDiscountCodeWhereUniqueInput | BranchDiscountCodeWhereUniqueInput[]
+    disconnect?: BranchDiscountCodeWhereUniqueInput | BranchDiscountCodeWhereUniqueInput[]
+    delete?: BranchDiscountCodeWhereUniqueInput | BranchDiscountCodeWhereUniqueInput[]
+    connect?: BranchDiscountCodeWhereUniqueInput | BranchDiscountCodeWhereUniqueInput[]
+    update?: BranchDiscountCodeUpdateWithWhereUniqueWithoutBranchInput | BranchDiscountCodeUpdateWithWhereUniqueWithoutBranchInput[]
+    updateMany?: BranchDiscountCodeUpdateManyWithWhereWithoutBranchInput | BranchDiscountCodeUpdateManyWithWhereWithoutBranchInput[]
+    deleteMany?: BranchDiscountCodeScalarWhereInput | BranchDiscountCodeScalarWhereInput[]
+  }
+
   export type branchCreateNestedOneWithoutWorkHoursInput = {
     create?: XOR<branchCreateWithoutWorkHoursInput, branchUncheckedCreateWithoutWorkHoursInput>
     connectOrCreate?: branchCreateOrConnectWithoutWorkHoursInput
     connect?: branchWhereUniqueInput
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type branchUpdateOneRequiredWithoutWorkHoursNestedInput = {
@@ -47495,18 +58825,6 @@ export namespace Prisma {
     connectOrCreate?: productCartCreateOrConnectWithoutDeliveryTaxesInput | productCartCreateOrConnectWithoutDeliveryTaxesInput[]
     createMany?: productCartCreateManyDeliveryTaxesInputEnvelope
     connect?: productCartWhereUniqueInput | productCartWhereUniqueInput[]
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
   }
 
   export type stateUpdateOneRequiredWithoutOriginDeliveryTaxesNestedInput = {
@@ -48379,14 +59697,6 @@ export namespace Prisma {
     set?: $Enums.UserOrderStatus
   }
 
-  export type NullableFloatFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type userUpdateOneRequiredWithoutOrderNestedInput = {
     create?: XOR<userCreateWithoutOrderInput, userUncheckedCreateWithoutOrderInput>
     connectOrCreate?: userCreateOrConnectWithoutOrderInput
@@ -48439,6 +59749,52 @@ export namespace Prisma {
     update?: productOrderUpdateWithWhereUniqueWithoutOrderInput | productOrderUpdateWithWhereUniqueWithoutOrderInput[]
     updateMany?: productOrderUpdateManyWithWhereWithoutOrderInput | productOrderUpdateManyWithWhereWithoutOrderInput[]
     deleteMany?: productOrderScalarWhereInput | productOrderScalarWhereInput[]
+  }
+
+  export type StoreSubscriptionCreateNestedManyWithoutPlanLimitInput = {
+    create?: XOR<StoreSubscriptionCreateWithoutPlanLimitInput, StoreSubscriptionUncheckedCreateWithoutPlanLimitInput> | StoreSubscriptionCreateWithoutPlanLimitInput[] | StoreSubscriptionUncheckedCreateWithoutPlanLimitInput[]
+    connectOrCreate?: StoreSubscriptionCreateOrConnectWithoutPlanLimitInput | StoreSubscriptionCreateOrConnectWithoutPlanLimitInput[]
+    createMany?: StoreSubscriptionCreateManyPlanLimitInputEnvelope
+    connect?: StoreSubscriptionWhereUniqueInput | StoreSubscriptionWhereUniqueInput[]
+  }
+
+  export type StoreSubscriptionUncheckedCreateNestedManyWithoutPlanLimitInput = {
+    create?: XOR<StoreSubscriptionCreateWithoutPlanLimitInput, StoreSubscriptionUncheckedCreateWithoutPlanLimitInput> | StoreSubscriptionCreateWithoutPlanLimitInput[] | StoreSubscriptionUncheckedCreateWithoutPlanLimitInput[]
+    connectOrCreate?: StoreSubscriptionCreateOrConnectWithoutPlanLimitInput | StoreSubscriptionCreateOrConnectWithoutPlanLimitInput[]
+    createMany?: StoreSubscriptionCreateManyPlanLimitInputEnvelope
+    connect?: StoreSubscriptionWhereUniqueInput | StoreSubscriptionWhereUniqueInput[]
+  }
+
+  export type EnumPlanNameFieldUpdateOperationsInput = {
+    set?: $Enums.PlanName
+  }
+
+  export type StoreSubscriptionUpdateManyWithoutPlanLimitNestedInput = {
+    create?: XOR<StoreSubscriptionCreateWithoutPlanLimitInput, StoreSubscriptionUncheckedCreateWithoutPlanLimitInput> | StoreSubscriptionCreateWithoutPlanLimitInput[] | StoreSubscriptionUncheckedCreateWithoutPlanLimitInput[]
+    connectOrCreate?: StoreSubscriptionCreateOrConnectWithoutPlanLimitInput | StoreSubscriptionCreateOrConnectWithoutPlanLimitInput[]
+    upsert?: StoreSubscriptionUpsertWithWhereUniqueWithoutPlanLimitInput | StoreSubscriptionUpsertWithWhereUniqueWithoutPlanLimitInput[]
+    createMany?: StoreSubscriptionCreateManyPlanLimitInputEnvelope
+    set?: StoreSubscriptionWhereUniqueInput | StoreSubscriptionWhereUniqueInput[]
+    disconnect?: StoreSubscriptionWhereUniqueInput | StoreSubscriptionWhereUniqueInput[]
+    delete?: StoreSubscriptionWhereUniqueInput | StoreSubscriptionWhereUniqueInput[]
+    connect?: StoreSubscriptionWhereUniqueInput | StoreSubscriptionWhereUniqueInput[]
+    update?: StoreSubscriptionUpdateWithWhereUniqueWithoutPlanLimitInput | StoreSubscriptionUpdateWithWhereUniqueWithoutPlanLimitInput[]
+    updateMany?: StoreSubscriptionUpdateManyWithWhereWithoutPlanLimitInput | StoreSubscriptionUpdateManyWithWhereWithoutPlanLimitInput[]
+    deleteMany?: StoreSubscriptionScalarWhereInput | StoreSubscriptionScalarWhereInput[]
+  }
+
+  export type StoreSubscriptionUncheckedUpdateManyWithoutPlanLimitNestedInput = {
+    create?: XOR<StoreSubscriptionCreateWithoutPlanLimitInput, StoreSubscriptionUncheckedCreateWithoutPlanLimitInput> | StoreSubscriptionCreateWithoutPlanLimitInput[] | StoreSubscriptionUncheckedCreateWithoutPlanLimitInput[]
+    connectOrCreate?: StoreSubscriptionCreateOrConnectWithoutPlanLimitInput | StoreSubscriptionCreateOrConnectWithoutPlanLimitInput[]
+    upsert?: StoreSubscriptionUpsertWithWhereUniqueWithoutPlanLimitInput | StoreSubscriptionUpsertWithWhereUniqueWithoutPlanLimitInput[]
+    createMany?: StoreSubscriptionCreateManyPlanLimitInputEnvelope
+    set?: StoreSubscriptionWhereUniqueInput | StoreSubscriptionWhereUniqueInput[]
+    disconnect?: StoreSubscriptionWhereUniqueInput | StoreSubscriptionWhereUniqueInput[]
+    delete?: StoreSubscriptionWhereUniqueInput | StoreSubscriptionWhereUniqueInput[]
+    connect?: StoreSubscriptionWhereUniqueInput | StoreSubscriptionWhereUniqueInput[]
+    update?: StoreSubscriptionUpdateWithWhereUniqueWithoutPlanLimitInput | StoreSubscriptionUpdateWithWhereUniqueWithoutPlanLimitInput[]
+    updateMany?: StoreSubscriptionUpdateManyWithWhereWithoutPlanLimitInput | StoreSubscriptionUpdateManyWithWhereWithoutPlanLimitInput[]
+    deleteMany?: StoreSubscriptionScalarWhereInput | StoreSubscriptionScalarWhereInput[]
   }
 
   export type userCartCreateNestedOneWithoutProductCartInput = {
@@ -49341,6 +60697,72 @@ export namespace Prisma {
     deleteMany?: locationScalarWhereInput | locationScalarWhereInput[]
   }
 
+  export type PlanLimitCreateNestedOneWithoutStoreSubscriptionInput = {
+    create?: XOR<PlanLimitCreateWithoutStoreSubscriptionInput, PlanLimitUncheckedCreateWithoutStoreSubscriptionInput>
+    connectOrCreate?: PlanLimitCreateOrConnectWithoutStoreSubscriptionInput
+    connect?: PlanLimitWhereUniqueInput
+  }
+
+  export type SubscriptionPlanChangeCreateNestedManyWithoutSubscriptionInput = {
+    create?: XOR<SubscriptionPlanChangeCreateWithoutSubscriptionInput, SubscriptionPlanChangeUncheckedCreateWithoutSubscriptionInput> | SubscriptionPlanChangeCreateWithoutSubscriptionInput[] | SubscriptionPlanChangeUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: SubscriptionPlanChangeCreateOrConnectWithoutSubscriptionInput | SubscriptionPlanChangeCreateOrConnectWithoutSubscriptionInput[]
+    createMany?: SubscriptionPlanChangeCreateManySubscriptionInputEnvelope
+    connect?: SubscriptionPlanChangeWhereUniqueInput | SubscriptionPlanChangeWhereUniqueInput[]
+  }
+
+  export type SubscriptionPlanChangeUncheckedCreateNestedManyWithoutSubscriptionInput = {
+    create?: XOR<SubscriptionPlanChangeCreateWithoutSubscriptionInput, SubscriptionPlanChangeUncheckedCreateWithoutSubscriptionInput> | SubscriptionPlanChangeCreateWithoutSubscriptionInput[] | SubscriptionPlanChangeUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: SubscriptionPlanChangeCreateOrConnectWithoutSubscriptionInput | SubscriptionPlanChangeCreateOrConnectWithoutSubscriptionInput[]
+    createMany?: SubscriptionPlanChangeCreateManySubscriptionInputEnvelope
+    connect?: SubscriptionPlanChangeWhereUniqueInput | SubscriptionPlanChangeWhereUniqueInput[]
+  }
+
+  export type EnumSubscriptionStatusFieldUpdateOperationsInput = {
+    set?: $Enums.SubscriptionStatus
+  }
+
+  export type NullableEnumPlanNameFieldUpdateOperationsInput = {
+    set?: $Enums.PlanName | null
+  }
+
+  export type PlanLimitUpdateOneWithoutStoreSubscriptionNestedInput = {
+    create?: XOR<PlanLimitCreateWithoutStoreSubscriptionInput, PlanLimitUncheckedCreateWithoutStoreSubscriptionInput>
+    connectOrCreate?: PlanLimitCreateOrConnectWithoutStoreSubscriptionInput
+    upsert?: PlanLimitUpsertWithoutStoreSubscriptionInput
+    disconnect?: PlanLimitWhereInput | boolean
+    delete?: PlanLimitWhereInput | boolean
+    connect?: PlanLimitWhereUniqueInput
+    update?: XOR<XOR<PlanLimitUpdateToOneWithWhereWithoutStoreSubscriptionInput, PlanLimitUpdateWithoutStoreSubscriptionInput>, PlanLimitUncheckedUpdateWithoutStoreSubscriptionInput>
+  }
+
+  export type SubscriptionPlanChangeUpdateManyWithoutSubscriptionNestedInput = {
+    create?: XOR<SubscriptionPlanChangeCreateWithoutSubscriptionInput, SubscriptionPlanChangeUncheckedCreateWithoutSubscriptionInput> | SubscriptionPlanChangeCreateWithoutSubscriptionInput[] | SubscriptionPlanChangeUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: SubscriptionPlanChangeCreateOrConnectWithoutSubscriptionInput | SubscriptionPlanChangeCreateOrConnectWithoutSubscriptionInput[]
+    upsert?: SubscriptionPlanChangeUpsertWithWhereUniqueWithoutSubscriptionInput | SubscriptionPlanChangeUpsertWithWhereUniqueWithoutSubscriptionInput[]
+    createMany?: SubscriptionPlanChangeCreateManySubscriptionInputEnvelope
+    set?: SubscriptionPlanChangeWhereUniqueInput | SubscriptionPlanChangeWhereUniqueInput[]
+    disconnect?: SubscriptionPlanChangeWhereUniqueInput | SubscriptionPlanChangeWhereUniqueInput[]
+    delete?: SubscriptionPlanChangeWhereUniqueInput | SubscriptionPlanChangeWhereUniqueInput[]
+    connect?: SubscriptionPlanChangeWhereUniqueInput | SubscriptionPlanChangeWhereUniqueInput[]
+    update?: SubscriptionPlanChangeUpdateWithWhereUniqueWithoutSubscriptionInput | SubscriptionPlanChangeUpdateWithWhereUniqueWithoutSubscriptionInput[]
+    updateMany?: SubscriptionPlanChangeUpdateManyWithWhereWithoutSubscriptionInput | SubscriptionPlanChangeUpdateManyWithWhereWithoutSubscriptionInput[]
+    deleteMany?: SubscriptionPlanChangeScalarWhereInput | SubscriptionPlanChangeScalarWhereInput[]
+  }
+
+  export type SubscriptionPlanChangeUncheckedUpdateManyWithoutSubscriptionNestedInput = {
+    create?: XOR<SubscriptionPlanChangeCreateWithoutSubscriptionInput, SubscriptionPlanChangeUncheckedCreateWithoutSubscriptionInput> | SubscriptionPlanChangeCreateWithoutSubscriptionInput[] | SubscriptionPlanChangeUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: SubscriptionPlanChangeCreateOrConnectWithoutSubscriptionInput | SubscriptionPlanChangeCreateOrConnectWithoutSubscriptionInput[]
+    upsert?: SubscriptionPlanChangeUpsertWithWhereUniqueWithoutSubscriptionInput | SubscriptionPlanChangeUpsertWithWhereUniqueWithoutSubscriptionInput[]
+    createMany?: SubscriptionPlanChangeCreateManySubscriptionInputEnvelope
+    set?: SubscriptionPlanChangeWhereUniqueInput | SubscriptionPlanChangeWhereUniqueInput[]
+    disconnect?: SubscriptionPlanChangeWhereUniqueInput | SubscriptionPlanChangeWhereUniqueInput[]
+    delete?: SubscriptionPlanChangeWhereUniqueInput | SubscriptionPlanChangeWhereUniqueInput[]
+    connect?: SubscriptionPlanChangeWhereUniqueInput | SubscriptionPlanChangeWhereUniqueInput[]
+    update?: SubscriptionPlanChangeUpdateWithWhereUniqueWithoutSubscriptionInput | SubscriptionPlanChangeUpdateWithWhereUniqueWithoutSubscriptionInput[]
+    updateMany?: SubscriptionPlanChangeUpdateManyWithWhereWithoutSubscriptionInput | SubscriptionPlanChangeUpdateManyWithWhereWithoutSubscriptionInput[]
+    deleteMany?: SubscriptionPlanChangeScalarWhereInput | SubscriptionPlanChangeScalarWhereInput[]
+  }
+
   export type localeCreateNestedOneWithoutStoreNameInput = {
     create?: XOR<localeCreateWithoutStoreNameInput, localeUncheckedCreateWithoutStoreNameInput>
     connectOrCreate?: localeCreateOrConnectWithoutStoreNameInput
@@ -49392,6 +60814,13 @@ export namespace Prisma {
     connect?: sessionWhereUniqueInput | sessionWhereUniqueInput[]
   }
 
+  export type AdCampaignCreateNestedManyWithoutStoreInput = {
+    create?: XOR<AdCampaignCreateWithoutStoreInput, AdCampaignUncheckedCreateWithoutStoreInput> | AdCampaignCreateWithoutStoreInput[] | AdCampaignUncheckedCreateWithoutStoreInput[]
+    connectOrCreate?: AdCampaignCreateOrConnectWithoutStoreInput | AdCampaignCreateOrConnectWithoutStoreInput[]
+    createMany?: AdCampaignCreateManyStoreInputEnvelope
+    connect?: AdCampaignWhereUniqueInput | AdCampaignWhereUniqueInput[]
+  }
+
   export type socialLinkUncheckedCreateNestedOneWithoutStoreInput = {
     create?: XOR<socialLinkCreateWithoutStoreInput, socialLinkUncheckedCreateWithoutStoreInput>
     connectOrCreate?: socialLinkCreateOrConnectWithoutStoreInput
@@ -49417,6 +60846,13 @@ export namespace Prisma {
     connectOrCreate?: sessionCreateOrConnectWithoutStoreInput | sessionCreateOrConnectWithoutStoreInput[]
     createMany?: sessionCreateManyStoreInputEnvelope
     connect?: sessionWhereUniqueInput | sessionWhereUniqueInput[]
+  }
+
+  export type AdCampaignUncheckedCreateNestedManyWithoutStoreInput = {
+    create?: XOR<AdCampaignCreateWithoutStoreInput, AdCampaignUncheckedCreateWithoutStoreInput> | AdCampaignCreateWithoutStoreInput[] | AdCampaignUncheckedCreateWithoutStoreInput[]
+    connectOrCreate?: AdCampaignCreateOrConnectWithoutStoreInput | AdCampaignCreateOrConnectWithoutStoreInput[]
+    createMany?: AdCampaignCreateManyStoreInputEnvelope
+    connect?: AdCampaignWhereUniqueInput | AdCampaignWhereUniqueInput[]
   }
 
   export type DecimalFieldUpdateOperationsInput = {
@@ -49515,6 +60951,20 @@ export namespace Prisma {
     deleteMany?: sessionScalarWhereInput | sessionScalarWhereInput[]
   }
 
+  export type AdCampaignUpdateManyWithoutStoreNestedInput = {
+    create?: XOR<AdCampaignCreateWithoutStoreInput, AdCampaignUncheckedCreateWithoutStoreInput> | AdCampaignCreateWithoutStoreInput[] | AdCampaignUncheckedCreateWithoutStoreInput[]
+    connectOrCreate?: AdCampaignCreateOrConnectWithoutStoreInput | AdCampaignCreateOrConnectWithoutStoreInput[]
+    upsert?: AdCampaignUpsertWithWhereUniqueWithoutStoreInput | AdCampaignUpsertWithWhereUniqueWithoutStoreInput[]
+    createMany?: AdCampaignCreateManyStoreInputEnvelope
+    set?: AdCampaignWhereUniqueInput | AdCampaignWhereUniqueInput[]
+    disconnect?: AdCampaignWhereUniqueInput | AdCampaignWhereUniqueInput[]
+    delete?: AdCampaignWhereUniqueInput | AdCampaignWhereUniqueInput[]
+    connect?: AdCampaignWhereUniqueInput | AdCampaignWhereUniqueInput[]
+    update?: AdCampaignUpdateWithWhereUniqueWithoutStoreInput | AdCampaignUpdateWithWhereUniqueWithoutStoreInput[]
+    updateMany?: AdCampaignUpdateManyWithWhereWithoutStoreInput | AdCampaignUpdateManyWithWhereWithoutStoreInput[]
+    deleteMany?: AdCampaignScalarWhereInput | AdCampaignScalarWhereInput[]
+  }
+
   export type socialLinkUncheckedUpdateOneWithoutStoreNestedInput = {
     create?: XOR<socialLinkCreateWithoutStoreInput, socialLinkUncheckedCreateWithoutStoreInput>
     connectOrCreate?: socialLinkCreateOrConnectWithoutStoreInput
@@ -49567,6 +61017,20 @@ export namespace Prisma {
     deleteMany?: sessionScalarWhereInput | sessionScalarWhereInput[]
   }
 
+  export type AdCampaignUncheckedUpdateManyWithoutStoreNestedInput = {
+    create?: XOR<AdCampaignCreateWithoutStoreInput, AdCampaignUncheckedCreateWithoutStoreInput> | AdCampaignCreateWithoutStoreInput[] | AdCampaignUncheckedCreateWithoutStoreInput[]
+    connectOrCreate?: AdCampaignCreateOrConnectWithoutStoreInput | AdCampaignCreateOrConnectWithoutStoreInput[]
+    upsert?: AdCampaignUpsertWithWhereUniqueWithoutStoreInput | AdCampaignUpsertWithWhereUniqueWithoutStoreInput[]
+    createMany?: AdCampaignCreateManyStoreInputEnvelope
+    set?: AdCampaignWhereUniqueInput | AdCampaignWhereUniqueInput[]
+    disconnect?: AdCampaignWhereUniqueInput | AdCampaignWhereUniqueInput[]
+    delete?: AdCampaignWhereUniqueInput | AdCampaignWhereUniqueInput[]
+    connect?: AdCampaignWhereUniqueInput | AdCampaignWhereUniqueInput[]
+    update?: AdCampaignUpdateWithWhereUniqueWithoutStoreInput | AdCampaignUpdateWithWhereUniqueWithoutStoreInput[]
+    updateMany?: AdCampaignUpdateManyWithWhereWithoutStoreInput | AdCampaignUpdateManyWithWhereWithoutStoreInput[]
+    deleteMany?: AdCampaignScalarWhereInput | AdCampaignScalarWhereInput[]
+  }
+
   export type storeCreateNestedOneWithoutSocialLinksInput = {
     create?: XOR<storeCreateWithoutSocialLinksInput, storeUncheckedCreateWithoutSocialLinksInput>
     connectOrCreate?: storeCreateOrConnectWithoutSocialLinksInput
@@ -49579,6 +61043,24 @@ export namespace Prisma {
     upsert?: storeUpsertWithoutSocialLinksInput
     connect?: storeWhereUniqueInput
     update?: XOR<XOR<storeUpdateToOneWithWhereWithoutSocialLinksInput, storeUpdateWithoutSocialLinksInput>, storeUncheckedUpdateWithoutSocialLinksInput>
+  }
+
+  export type StoreSubscriptionCreateNestedOneWithoutPlanChangesInput = {
+    create?: XOR<StoreSubscriptionCreateWithoutPlanChangesInput, StoreSubscriptionUncheckedCreateWithoutPlanChangesInput>
+    connectOrCreate?: StoreSubscriptionCreateOrConnectWithoutPlanChangesInput
+    connect?: StoreSubscriptionWhereUniqueInput
+  }
+
+  export type EnumChangeTypeFieldUpdateOperationsInput = {
+    set?: $Enums.ChangeType
+  }
+
+  export type StoreSubscriptionUpdateOneRequiredWithoutPlanChangesNestedInput = {
+    create?: XOR<StoreSubscriptionCreateWithoutPlanChangesInput, StoreSubscriptionUncheckedCreateWithoutPlanChangesInput>
+    connectOrCreate?: StoreSubscriptionCreateOrConnectWithoutPlanChangesInput
+    upsert?: StoreSubscriptionUpsertWithoutPlanChangesInput
+    connect?: StoreSubscriptionWhereUniqueInput
+    update?: XOR<XOR<StoreSubscriptionUpdateToOneWithWhereWithoutPlanChangesInput, StoreSubscriptionUpdateWithoutPlanChangesInput>, StoreSubscriptionUncheckedUpdateWithoutPlanChangesInput>
   }
 
   export type userCreateNestedOneWithoutTransactionInput = {
@@ -50129,17 +61611,29 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -50158,15 +61652,20 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -50185,7 +61684,7 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
     notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -50193,21 +61692,20 @@ export namespace Prisma {
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedEnumUserOrderStatusFilter<$PrismaModel = never> = {
@@ -50227,20 +61725,21 @@ export namespace Prisma {
     _max?: NestedEnumUserOrderStatusFilter<$PrismaModel>
   }
 
-  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
+  export type NestedEnumPlanNameFilter<$PrismaModel = never> = {
+    equals?: $Enums.PlanName | EnumPlanNameFieldRefInput<$PrismaModel>
+    in?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel>
+    not?: NestedEnumPlanNameFilter<$PrismaModel> | $Enums.PlanName
+  }
+
+  export type NestedEnumPlanNameWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PlanName | EnumPlanNameFieldRefInput<$PrismaModel>
+    in?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel>
+    not?: NestedEnumPlanNameWithAggregatesFilter<$PrismaModel> | $Enums.PlanName
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPlanNameFilter<$PrismaModel>
+    _max?: NestedEnumPlanNameFilter<$PrismaModel>
   }
 
   export type NestedEnumProductCartStatusFilter<$PrismaModel = never> = {
@@ -50328,6 +61827,40 @@ export namespace Prisma {
     _max?: NestedEnumProductTagsNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumSubscriptionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SubscriptionStatus | EnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SubscriptionStatus[] | ListEnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SubscriptionStatus[] | ListEnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSubscriptionStatusFilter<$PrismaModel> | $Enums.SubscriptionStatus
+  }
+
+  export type NestedEnumPlanNameNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.PlanName | EnumPlanNameFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPlanNameNullableFilter<$PrismaModel> | $Enums.PlanName | null
+  }
+
+  export type NestedEnumSubscriptionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SubscriptionStatus | EnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SubscriptionStatus[] | ListEnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SubscriptionStatus[] | ListEnumSubscriptionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSubscriptionStatusWithAggregatesFilter<$PrismaModel> | $Enums.SubscriptionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSubscriptionStatusFilter<$PrismaModel>
+    _max?: NestedEnumSubscriptionStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumPlanNameNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PlanName | EnumPlanNameFieldRefInput<$PrismaModel> | null
+    in?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumPlanNameNullableWithAggregatesFilter<$PrismaModel> | $Enums.PlanName | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumPlanNameNullableFilter<$PrismaModel>
+    _max?: NestedEnumPlanNameNullableFilter<$PrismaModel>
+  }
+
   export type NestedDecimalFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
@@ -50370,6 +61903,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumStoreStatusFilter<$PrismaModel>
     _max?: NestedEnumStoreStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumChangeTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChangeType | EnumChangeTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ChangeType[] | ListEnumChangeTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ChangeType[] | ListEnumChangeTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumChangeTypeFilter<$PrismaModel> | $Enums.ChangeType
+  }
+
+  export type NestedEnumChangeTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChangeType | EnumChangeTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ChangeType[] | ListEnumChangeTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ChangeType[] | ListEnumChangeTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumChangeTypeWithAggregatesFilter<$PrismaModel> | $Enums.ChangeType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumChangeTypeFilter<$PrismaModel>
+    _max?: NestedEnumChangeTypeFilter<$PrismaModel>
   }
 
   export type NestedEnumTransactionTypeFilter<$PrismaModel = never> = {
@@ -50565,6 +62115,438 @@ export namespace Prisma {
     state?: stateUncheckedUpdateManyWithoutCountryNestedInput
   }
 
+  export type AdImpressionCreateWithoutAdCampaignInput = {
+    id?: string
+    userId?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AdImpressionUncheckedCreateWithoutAdCampaignInput = {
+    id?: string
+    userId?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AdImpressionCreateOrConnectWithoutAdCampaignInput = {
+    where: AdImpressionWhereUniqueInput
+    create: XOR<AdImpressionCreateWithoutAdCampaignInput, AdImpressionUncheckedCreateWithoutAdCampaignInput>
+  }
+
+  export type AdImpressionCreateManyAdCampaignInputEnvelope = {
+    data: AdImpressionCreateManyAdCampaignInput | AdImpressionCreateManyAdCampaignInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AdClickCreateWithoutAdCampaignInput = {
+    id?: string
+    userId?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AdClickUncheckedCreateWithoutAdCampaignInput = {
+    id?: string
+    userId?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AdClickCreateOrConnectWithoutAdCampaignInput = {
+    where: AdClickWhereUniqueInput
+    create: XOR<AdClickCreateWithoutAdCampaignInput, AdClickUncheckedCreateWithoutAdCampaignInput>
+  }
+
+  export type AdClickCreateManyAdCampaignInputEnvelope = {
+    data: AdClickCreateManyAdCampaignInput | AdClickCreateManyAdCampaignInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type storeCreateWithoutAdCampaignsInput = {
+    id?: string
+    phone: string
+    email: string
+    password: string
+    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
+    role?: string
+    status?: $Enums.StoreStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: localeCreateNestedOneWithoutStoreNameInput
+    bio: localeCreateNestedOneWithoutStoreBioInput
+    logo: imageCreateNestedOneWithoutStoreLogoInput
+    banner: imageCreateNestedOneWithoutStoreBannerInput
+    socialLinks?: socialLinkCreateNestedOneWithoutStoreInput
+    branches?: branchCreateNestedManyWithoutStoreInput
+    transactions?: transactionCreateNestedManyWithoutStoreInput
+    sessions?: sessionCreateNestedManyWithoutStoreInput
+  }
+
+  export type storeUncheckedCreateWithoutAdCampaignsInput = {
+    id?: string
+    nameId: string
+    bioId: string
+    logoId: string
+    bannerId: string
+    phone: string
+    email: string
+    password: string
+    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: Date | string | null
+    role?: string
+    status?: $Enums.StoreStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    socialLinks?: socialLinkUncheckedCreateNestedOneWithoutStoreInput
+    branches?: branchUncheckedCreateNestedManyWithoutStoreInput
+    transactions?: transactionUncheckedCreateNestedManyWithoutStoreInput
+    sessions?: sessionUncheckedCreateNestedManyWithoutStoreInput
+  }
+
+  export type storeCreateOrConnectWithoutAdCampaignsInput = {
+    where: storeWhereUniqueInput
+    create: XOR<storeCreateWithoutAdCampaignsInput, storeUncheckedCreateWithoutAdCampaignsInput>
+  }
+
+  export type AdImpressionUpsertWithWhereUniqueWithoutAdCampaignInput = {
+    where: AdImpressionWhereUniqueInput
+    update: XOR<AdImpressionUpdateWithoutAdCampaignInput, AdImpressionUncheckedUpdateWithoutAdCampaignInput>
+    create: XOR<AdImpressionCreateWithoutAdCampaignInput, AdImpressionUncheckedCreateWithoutAdCampaignInput>
+  }
+
+  export type AdImpressionUpdateWithWhereUniqueWithoutAdCampaignInput = {
+    where: AdImpressionWhereUniqueInput
+    data: XOR<AdImpressionUpdateWithoutAdCampaignInput, AdImpressionUncheckedUpdateWithoutAdCampaignInput>
+  }
+
+  export type AdImpressionUpdateManyWithWhereWithoutAdCampaignInput = {
+    where: AdImpressionScalarWhereInput
+    data: XOR<AdImpressionUpdateManyMutationInput, AdImpressionUncheckedUpdateManyWithoutAdCampaignInput>
+  }
+
+  export type AdImpressionScalarWhereInput = {
+    AND?: AdImpressionScalarWhereInput | AdImpressionScalarWhereInput[]
+    OR?: AdImpressionScalarWhereInput[]
+    NOT?: AdImpressionScalarWhereInput | AdImpressionScalarWhereInput[]
+    id?: StringFilter<"AdImpression"> | string
+    adCampaignId?: StringFilter<"AdImpression"> | string
+    userId?: StringNullableFilter<"AdImpression"> | string | null
+    ipAddress?: StringNullableFilter<"AdImpression"> | string | null
+    userAgent?: StringNullableFilter<"AdImpression"> | string | null
+    createdAt?: DateTimeFilter<"AdImpression"> | Date | string
+  }
+
+  export type AdClickUpsertWithWhereUniqueWithoutAdCampaignInput = {
+    where: AdClickWhereUniqueInput
+    update: XOR<AdClickUpdateWithoutAdCampaignInput, AdClickUncheckedUpdateWithoutAdCampaignInput>
+    create: XOR<AdClickCreateWithoutAdCampaignInput, AdClickUncheckedCreateWithoutAdCampaignInput>
+  }
+
+  export type AdClickUpdateWithWhereUniqueWithoutAdCampaignInput = {
+    where: AdClickWhereUniqueInput
+    data: XOR<AdClickUpdateWithoutAdCampaignInput, AdClickUncheckedUpdateWithoutAdCampaignInput>
+  }
+
+  export type AdClickUpdateManyWithWhereWithoutAdCampaignInput = {
+    where: AdClickScalarWhereInput
+    data: XOR<AdClickUpdateManyMutationInput, AdClickUncheckedUpdateManyWithoutAdCampaignInput>
+  }
+
+  export type AdClickScalarWhereInput = {
+    AND?: AdClickScalarWhereInput | AdClickScalarWhereInput[]
+    OR?: AdClickScalarWhereInput[]
+    NOT?: AdClickScalarWhereInput | AdClickScalarWhereInput[]
+    id?: StringFilter<"AdClick"> | string
+    adCampaignId?: StringFilter<"AdClick"> | string
+    userId?: StringNullableFilter<"AdClick"> | string | null
+    ipAddress?: StringNullableFilter<"AdClick"> | string | null
+    userAgent?: StringNullableFilter<"AdClick"> | string | null
+    createdAt?: DateTimeFilter<"AdClick"> | Date | string
+  }
+
+  export type storeUpsertWithoutAdCampaignsInput = {
+    update: XOR<storeUpdateWithoutAdCampaignsInput, storeUncheckedUpdateWithoutAdCampaignsInput>
+    create: XOR<storeCreateWithoutAdCampaignsInput, storeUncheckedCreateWithoutAdCampaignsInput>
+    where?: storeWhereInput
+  }
+
+  export type storeUpdateToOneWithWhereWithoutAdCampaignsInput = {
+    where?: storeWhereInput
+    data: XOR<storeUpdateWithoutAdCampaignsInput, storeUncheckedUpdateWithoutAdCampaignsInput>
+  }
+
+  export type storeUpdateWithoutAdCampaignsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: StringFieldUpdateOperationsInput | string
+    status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: localeUpdateOneRequiredWithoutStoreNameNestedInput
+    bio?: localeUpdateOneRequiredWithoutStoreBioNestedInput
+    logo?: imageUpdateOneRequiredWithoutStoreLogoNestedInput
+    banner?: imageUpdateOneRequiredWithoutStoreBannerNestedInput
+    socialLinks?: socialLinkUpdateOneWithoutStoreNestedInput
+    branches?: branchUpdateManyWithoutStoreNestedInput
+    transactions?: transactionUpdateManyWithoutStoreNestedInput
+    sessions?: sessionUpdateManyWithoutStoreNestedInput
+  }
+
+  export type storeUncheckedUpdateWithoutAdCampaignsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nameId?: StringFieldUpdateOperationsInput | string
+    bioId?: StringFieldUpdateOperationsInput | string
+    logoId?: StringFieldUpdateOperationsInput | string
+    bannerId?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: StringFieldUpdateOperationsInput | string
+    status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    socialLinks?: socialLinkUncheckedUpdateOneWithoutStoreNestedInput
+    branches?: branchUncheckedUpdateManyWithoutStoreNestedInput
+    transactions?: transactionUncheckedUpdateManyWithoutStoreNestedInput
+    sessions?: sessionUncheckedUpdateManyWithoutStoreNestedInput
+  }
+
+  export type AdCampaignCreateWithoutAdImpressionsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    imageUrl: string
+    targetUrl: string
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    clicks?: number
+    impressions?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adClick?: AdClickCreateNestedManyWithoutAdCampaignInput
+    store: storeCreateNestedOneWithoutAdCampaignsInput
+  }
+
+  export type AdCampaignUncheckedCreateWithoutAdImpressionsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    imageUrl: string
+    targetUrl: string
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    clicks?: number
+    impressions?: number
+    storeId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adClick?: AdClickUncheckedCreateNestedManyWithoutAdCampaignInput
+  }
+
+  export type AdCampaignCreateOrConnectWithoutAdImpressionsInput = {
+    where: AdCampaignWhereUniqueInput
+    create: XOR<AdCampaignCreateWithoutAdImpressionsInput, AdCampaignUncheckedCreateWithoutAdImpressionsInput>
+  }
+
+  export type AdCampaignUpsertWithoutAdImpressionsInput = {
+    update: XOR<AdCampaignUpdateWithoutAdImpressionsInput, AdCampaignUncheckedUpdateWithoutAdImpressionsInput>
+    create: XOR<AdCampaignCreateWithoutAdImpressionsInput, AdCampaignUncheckedCreateWithoutAdImpressionsInput>
+    where?: AdCampaignWhereInput
+  }
+
+  export type AdCampaignUpdateToOneWithWhereWithoutAdImpressionsInput = {
+    where?: AdCampaignWhereInput
+    data: XOR<AdCampaignUpdateWithoutAdImpressionsInput, AdCampaignUncheckedUpdateWithoutAdImpressionsInput>
+  }
+
+  export type AdCampaignUpdateWithoutAdImpressionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicks?: IntFieldUpdateOperationsInput | number
+    impressions?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adClick?: AdClickUpdateManyWithoutAdCampaignNestedInput
+    store?: storeUpdateOneRequiredWithoutAdCampaignsNestedInput
+  }
+
+  export type AdCampaignUncheckedUpdateWithoutAdImpressionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicks?: IntFieldUpdateOperationsInput | number
+    impressions?: IntFieldUpdateOperationsInput | number
+    storeId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adClick?: AdClickUncheckedUpdateManyWithoutAdCampaignNestedInput
+  }
+
+  export type AdCampaignCreateWithoutAdClickInput = {
+    id?: string
+    title: string
+    description?: string | null
+    imageUrl: string
+    targetUrl: string
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    clicks?: number
+    impressions?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adImpressions?: AdImpressionCreateNestedManyWithoutAdCampaignInput
+    store: storeCreateNestedOneWithoutAdCampaignsInput
+  }
+
+  export type AdCampaignUncheckedCreateWithoutAdClickInput = {
+    id?: string
+    title: string
+    description?: string | null
+    imageUrl: string
+    targetUrl: string
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    clicks?: number
+    impressions?: number
+    storeId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adImpressions?: AdImpressionUncheckedCreateNestedManyWithoutAdCampaignInput
+  }
+
+  export type AdCampaignCreateOrConnectWithoutAdClickInput = {
+    where: AdCampaignWhereUniqueInput
+    create: XOR<AdCampaignCreateWithoutAdClickInput, AdCampaignUncheckedCreateWithoutAdClickInput>
+  }
+
+  export type AdCampaignUpsertWithoutAdClickInput = {
+    update: XOR<AdCampaignUpdateWithoutAdClickInput, AdCampaignUncheckedUpdateWithoutAdClickInput>
+    create: XOR<AdCampaignCreateWithoutAdClickInput, AdCampaignUncheckedCreateWithoutAdClickInput>
+    where?: AdCampaignWhereInput
+  }
+
+  export type AdCampaignUpdateToOneWithWhereWithoutAdClickInput = {
+    where?: AdCampaignWhereInput
+    data: XOR<AdCampaignUpdateWithoutAdClickInput, AdCampaignUncheckedUpdateWithoutAdClickInput>
+  }
+
+  export type AdCampaignUpdateWithoutAdClickInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicks?: IntFieldUpdateOperationsInput | number
+    impressions?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adImpressions?: AdImpressionUpdateManyWithoutAdCampaignNestedInput
+    store?: storeUpdateOneRequiredWithoutAdCampaignsNestedInput
+  }
+
+  export type AdCampaignUncheckedUpdateWithoutAdClickInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicks?: IntFieldUpdateOperationsInput | number
+    impressions?: IntFieldUpdateOperationsInput | number
+    storeId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adImpressions?: AdImpressionUncheckedUpdateManyWithoutAdCampaignNestedInput
+  }
+
+  export type branchCreateWithoutDiscountCodesInput = {
+    id?: string
+    phone?: string | null
+    isFreezed?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    store: storeCreateNestedOneWithoutBranchesInput
+    location?: locationCreateNestedOneWithoutBranchInput
+    workHours?: workHourCreateNestedManyWithoutBranchInput
+    productStock?: productStockCreateNestedManyWithoutBranchInput
+  }
+
+  export type branchUncheckedCreateWithoutDiscountCodesInput = {
+    id?: string
+    storeId: string
+    locationId?: string | null
+    phone?: string | null
+    isFreezed?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    workHours?: workHourUncheckedCreateNestedManyWithoutBranchInput
+    productStock?: productStockUncheckedCreateNestedManyWithoutBranchInput
+  }
+
+  export type branchCreateOrConnectWithoutDiscountCodesInput = {
+    where: branchWhereUniqueInput
+    create: XOR<branchCreateWithoutDiscountCodesInput, branchUncheckedCreateWithoutDiscountCodesInput>
+  }
+
+  export type branchUpsertWithoutDiscountCodesInput = {
+    update: XOR<branchUpdateWithoutDiscountCodesInput, branchUncheckedUpdateWithoutDiscountCodesInput>
+    create: XOR<branchCreateWithoutDiscountCodesInput, branchUncheckedCreateWithoutDiscountCodesInput>
+    where?: branchWhereInput
+  }
+
+  export type branchUpdateToOneWithWhereWithoutDiscountCodesInput = {
+    where?: branchWhereInput
+    data: XOR<branchUpdateWithoutDiscountCodesInput, branchUncheckedUpdateWithoutDiscountCodesInput>
+  }
+
+  export type branchUpdateWithoutDiscountCodesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isFreezed?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    store?: storeUpdateOneRequiredWithoutBranchesNestedInput
+    location?: locationUpdateOneWithoutBranchNestedInput
+    workHours?: workHourUpdateManyWithoutBranchNestedInput
+    productStock?: productStockUpdateManyWithoutBranchNestedInput
+  }
+
+  export type branchUncheckedUpdateWithoutDiscountCodesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    storeId?: StringFieldUpdateOperationsInput | string
+    locationId?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    isFreezed?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    workHours?: workHourUncheckedUpdateManyWithoutBranchNestedInput
+    productStock?: productStockUncheckedUpdateManyWithoutBranchNestedInput
+  }
+
   export type storeCreateWithoutBranchesInput = {
     id?: string
     phone: string
@@ -50583,6 +62565,7 @@ export namespace Prisma {
     socialLinks?: socialLinkCreateNestedOneWithoutStoreInput
     transactions?: transactionCreateNestedManyWithoutStoreInput
     sessions?: sessionCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignCreateNestedManyWithoutStoreInput
   }
 
   export type storeUncheckedCreateWithoutBranchesInput = {
@@ -50603,6 +62586,7 @@ export namespace Prisma {
     socialLinks?: socialLinkUncheckedCreateNestedOneWithoutStoreInput
     transactions?: transactionUncheckedCreateNestedManyWithoutStoreInput
     sessions?: sessionUncheckedCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignUncheckedCreateNestedManyWithoutStoreInput
   }
 
   export type storeCreateOrConnectWithoutBranchesInput = {
@@ -50685,6 +62669,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type BranchDiscountCodeCreateWithoutBranchInput = {
+    id?: string
+    code: string
+    discountPercentage?: number | null
+    discountAmount?: number | null
+    minOrderAmount?: number | null
+    usageLimit?: number | null
+    usedCount?: number
+    isActive?: boolean
+    validFrom?: Date | string | null
+    validUntil?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type BranchDiscountCodeUncheckedCreateWithoutBranchInput = {
+    id?: string
+    code: string
+    discountPercentage?: number | null
+    discountAmount?: number | null
+    minOrderAmount?: number | null
+    usageLimit?: number | null
+    usedCount?: number
+    isActive?: boolean
+    validFrom?: Date | string | null
+    validUntil?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type BranchDiscountCodeCreateOrConnectWithoutBranchInput = {
+    where: BranchDiscountCodeWhereUniqueInput
+    create: XOR<BranchDiscountCodeCreateWithoutBranchInput, BranchDiscountCodeUncheckedCreateWithoutBranchInput>
+  }
+
+  export type BranchDiscountCodeCreateManyBranchInputEnvelope = {
+    data: BranchDiscountCodeCreateManyBranchInput | BranchDiscountCodeCreateManyBranchInput[]
+    skipDuplicates?: boolean
+  }
+
   export type storeUpsertWithoutBranchesInput = {
     update: XOR<storeUpdateWithoutBranchesInput, storeUncheckedUpdateWithoutBranchesInput>
     create: XOR<storeCreateWithoutBranchesInput, storeUncheckedCreateWithoutBranchesInput>
@@ -50714,6 +62736,7 @@ export namespace Prisma {
     socialLinks?: socialLinkUpdateOneWithoutStoreNestedInput
     transactions?: transactionUpdateManyWithoutStoreNestedInput
     sessions?: sessionUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUpdateManyWithoutStoreNestedInput
   }
 
   export type storeUncheckedUpdateWithoutBranchesInput = {
@@ -50734,6 +62757,7 @@ export namespace Prisma {
     socialLinks?: socialLinkUncheckedUpdateOneWithoutStoreNestedInput
     transactions?: transactionUncheckedUpdateManyWithoutStoreNestedInput
     sessions?: sessionUncheckedUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUncheckedUpdateManyWithoutStoreNestedInput
   }
 
   export type locationUpsertWithoutBranchInput = {
@@ -50818,6 +62842,40 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"productStock"> | Date | string
   }
 
+  export type BranchDiscountCodeUpsertWithWhereUniqueWithoutBranchInput = {
+    where: BranchDiscountCodeWhereUniqueInput
+    update: XOR<BranchDiscountCodeUpdateWithoutBranchInput, BranchDiscountCodeUncheckedUpdateWithoutBranchInput>
+    create: XOR<BranchDiscountCodeCreateWithoutBranchInput, BranchDiscountCodeUncheckedCreateWithoutBranchInput>
+  }
+
+  export type BranchDiscountCodeUpdateWithWhereUniqueWithoutBranchInput = {
+    where: BranchDiscountCodeWhereUniqueInput
+    data: XOR<BranchDiscountCodeUpdateWithoutBranchInput, BranchDiscountCodeUncheckedUpdateWithoutBranchInput>
+  }
+
+  export type BranchDiscountCodeUpdateManyWithWhereWithoutBranchInput = {
+    where: BranchDiscountCodeScalarWhereInput
+    data: XOR<BranchDiscountCodeUpdateManyMutationInput, BranchDiscountCodeUncheckedUpdateManyWithoutBranchInput>
+  }
+
+  export type BranchDiscountCodeScalarWhereInput = {
+    AND?: BranchDiscountCodeScalarWhereInput | BranchDiscountCodeScalarWhereInput[]
+    OR?: BranchDiscountCodeScalarWhereInput[]
+    NOT?: BranchDiscountCodeScalarWhereInput | BranchDiscountCodeScalarWhereInput[]
+    id?: StringFilter<"BranchDiscountCode"> | string
+    code?: StringFilter<"BranchDiscountCode"> | string
+    discountPercentage?: IntNullableFilter<"BranchDiscountCode"> | number | null
+    discountAmount?: FloatNullableFilter<"BranchDiscountCode"> | number | null
+    minOrderAmount?: FloatNullableFilter<"BranchDiscountCode"> | number | null
+    usageLimit?: IntNullableFilter<"BranchDiscountCode"> | number | null
+    usedCount?: IntFilter<"BranchDiscountCode"> | number
+    isActive?: BoolFilter<"BranchDiscountCode"> | boolean
+    validFrom?: DateTimeNullableFilter<"BranchDiscountCode"> | Date | string | null
+    validUntil?: DateTimeNullableFilter<"BranchDiscountCode"> | Date | string | null
+    createdAt?: DateTimeFilter<"BranchDiscountCode"> | Date | string
+    branchId?: StringFilter<"BranchDiscountCode"> | string
+  }
+
   export type branchCreateWithoutWorkHoursInput = {
     id?: string
     phone?: string | null
@@ -50827,6 +62885,7 @@ export namespace Prisma {
     store: storeCreateNestedOneWithoutBranchesInput
     location?: locationCreateNestedOneWithoutBranchInput
     productStock?: productStockCreateNestedManyWithoutBranchInput
+    discountCodes?: BranchDiscountCodeCreateNestedManyWithoutBranchInput
   }
 
   export type branchUncheckedCreateWithoutWorkHoursInput = {
@@ -50838,6 +62897,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     productStock?: productStockUncheckedCreateNestedManyWithoutBranchInput
+    discountCodes?: BranchDiscountCodeUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type branchCreateOrConnectWithoutWorkHoursInput = {
@@ -50865,6 +62925,7 @@ export namespace Prisma {
     store?: storeUpdateOneRequiredWithoutBranchesNestedInput
     location?: locationUpdateOneWithoutBranchNestedInput
     productStock?: productStockUpdateManyWithoutBranchNestedInput
+    discountCodes?: BranchDiscountCodeUpdateManyWithoutBranchNestedInput
   }
 
   export type branchUncheckedUpdateWithoutWorkHoursInput = {
@@ -50876,6 +62937,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productStock?: productStockUncheckedUpdateManyWithoutBranchNestedInput
+    discountCodes?: BranchDiscountCodeUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type localeCreateWithoutCategoryInput = {
@@ -52336,6 +64398,7 @@ export namespace Prisma {
     branches?: branchCreateNestedManyWithoutStoreInput
     transactions?: transactionCreateNestedManyWithoutStoreInput
     sessions?: sessionCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignCreateNestedManyWithoutStoreInput
   }
 
   export type storeUncheckedCreateWithoutLogoInput = {
@@ -52356,6 +64419,7 @@ export namespace Prisma {
     branches?: branchUncheckedCreateNestedManyWithoutStoreInput
     transactions?: transactionUncheckedCreateNestedManyWithoutStoreInput
     sessions?: sessionUncheckedCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignUncheckedCreateNestedManyWithoutStoreInput
   }
 
   export type storeCreateOrConnectWithoutLogoInput = {
@@ -52386,6 +64450,7 @@ export namespace Prisma {
     branches?: branchCreateNestedManyWithoutStoreInput
     transactions?: transactionCreateNestedManyWithoutStoreInput
     sessions?: sessionCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignCreateNestedManyWithoutStoreInput
   }
 
   export type storeUncheckedCreateWithoutBannerInput = {
@@ -52406,6 +64471,7 @@ export namespace Prisma {
     branches?: branchUncheckedCreateNestedManyWithoutStoreInput
     transactions?: transactionUncheckedCreateNestedManyWithoutStoreInput
     sessions?: sessionUncheckedCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignUncheckedCreateNestedManyWithoutStoreInput
   }
 
   export type storeCreateOrConnectWithoutBannerInput = {
@@ -52880,6 +64946,7 @@ export namespace Prisma {
     branches?: branchCreateNestedManyWithoutStoreInput
     transactions?: transactionCreateNestedManyWithoutStoreInput
     sessions?: sessionCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignCreateNestedManyWithoutStoreInput
   }
 
   export type storeUncheckedCreateWithoutNameInput = {
@@ -52900,6 +64967,7 @@ export namespace Prisma {
     branches?: branchUncheckedCreateNestedManyWithoutStoreInput
     transactions?: transactionUncheckedCreateNestedManyWithoutStoreInput
     sessions?: sessionUncheckedCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignUncheckedCreateNestedManyWithoutStoreInput
   }
 
   export type storeCreateOrConnectWithoutNameInput = {
@@ -52925,6 +64993,7 @@ export namespace Prisma {
     branches?: branchCreateNestedManyWithoutStoreInput
     transactions?: transactionCreateNestedManyWithoutStoreInput
     sessions?: sessionCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignCreateNestedManyWithoutStoreInput
   }
 
   export type storeUncheckedCreateWithoutBioInput = {
@@ -52945,6 +65014,7 @@ export namespace Prisma {
     branches?: branchUncheckedCreateNestedManyWithoutStoreInput
     transactions?: transactionUncheckedCreateNestedManyWithoutStoreInput
     sessions?: sessionUncheckedCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignUncheckedCreateNestedManyWithoutStoreInput
   }
 
   export type storeCreateOrConnectWithoutBioInput = {
@@ -53364,6 +65434,7 @@ export namespace Prisma {
     branches?: branchUpdateManyWithoutStoreNestedInput
     transactions?: transactionUpdateManyWithoutStoreNestedInput
     sessions?: sessionUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUpdateManyWithoutStoreNestedInput
   }
 
   export type storeUncheckedUpdateWithoutNameInput = {
@@ -53384,6 +65455,7 @@ export namespace Prisma {
     branches?: branchUncheckedUpdateManyWithoutStoreNestedInput
     transactions?: transactionUncheckedUpdateManyWithoutStoreNestedInput
     sessions?: sessionUncheckedUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUncheckedUpdateManyWithoutStoreNestedInput
   }
 
   export type storeUpsertWithoutBioInput = {
@@ -53415,6 +65487,7 @@ export namespace Prisma {
     branches?: branchUpdateManyWithoutStoreNestedInput
     transactions?: transactionUpdateManyWithoutStoreNestedInput
     sessions?: sessionUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUpdateManyWithoutStoreNestedInput
   }
 
   export type storeUncheckedUpdateWithoutBioInput = {
@@ -53435,6 +65508,7 @@ export namespace Prisma {
     branches?: branchUncheckedUpdateManyWithoutStoreNestedInput
     transactions?: transactionUncheckedUpdateManyWithoutStoreNestedInput
     sessions?: sessionUncheckedUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUncheckedUpdateManyWithoutStoreNestedInput
   }
 
   export type currencyUpsertWithoutCurrencyAbbInput = {
@@ -53775,6 +65849,7 @@ export namespace Prisma {
     store: storeCreateNestedOneWithoutBranchesInput
     workHours?: workHourCreateNestedManyWithoutBranchInput
     productStock?: productStockCreateNestedManyWithoutBranchInput
+    discountCodes?: BranchDiscountCodeCreateNestedManyWithoutBranchInput
   }
 
   export type branchUncheckedCreateWithoutLocationInput = {
@@ -53786,6 +65861,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     workHours?: workHourUncheckedCreateNestedManyWithoutBranchInput
     productStock?: productStockUncheckedCreateNestedManyWithoutBranchInput
+    discountCodes?: BranchDiscountCodeUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type branchCreateOrConnectWithoutLocationInput = {
@@ -53893,6 +65969,7 @@ export namespace Prisma {
     store?: storeUpdateOneRequiredWithoutBranchesNestedInput
     workHours?: workHourUpdateManyWithoutBranchNestedInput
     productStock?: productStockUpdateManyWithoutBranchNestedInput
+    discountCodes?: BranchDiscountCodeUpdateManyWithoutBranchNestedInput
   }
 
   export type branchUncheckedUpdateWithoutLocationInput = {
@@ -53904,6 +65981,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workHours?: workHourUncheckedUpdateManyWithoutBranchNestedInput
     productStock?: productStockUncheckedUpdateManyWithoutBranchNestedInput
+    discountCodes?: BranchDiscountCodeUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type orderUpsertWithoutLocationInput = {
@@ -54454,6 +66532,107 @@ export namespace Prisma {
     transaction?: transactionUncheckedUpdateManyWithoutCurrencyNestedInput
   }
 
+  export type StoreSubscriptionCreateWithoutPlanLimitInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.SubscriptionStatus
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    maxTotalProducts?: number
+    maxBranches?: number
+    maxDiscountCodes?: number
+    notificationsPerWeek?: number
+    adsPerWeek?: number
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: number
+    monthlyPrice?: number | null
+    annualPrice?: number | null
+    adsUsedThisPeriod?: number
+    adsResetAt?: Date | string | null
+    downgradeToPlan?: $Enums.PlanName | null
+    downgradeScheduledAt?: Date | string | null
+    planChanges?: SubscriptionPlanChangeCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type StoreSubscriptionUncheckedCreateWithoutPlanLimitInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.SubscriptionStatus
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    maxTotalProducts?: number
+    maxBranches?: number
+    maxDiscountCodes?: number
+    notificationsPerWeek?: number
+    adsPerWeek?: number
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: number
+    monthlyPrice?: number | null
+    annualPrice?: number | null
+    adsUsedThisPeriod?: number
+    adsResetAt?: Date | string | null
+    downgradeToPlan?: $Enums.PlanName | null
+    downgradeScheduledAt?: Date | string | null
+    planChanges?: SubscriptionPlanChangeUncheckedCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type StoreSubscriptionCreateOrConnectWithoutPlanLimitInput = {
+    where: StoreSubscriptionWhereUniqueInput
+    create: XOR<StoreSubscriptionCreateWithoutPlanLimitInput, StoreSubscriptionUncheckedCreateWithoutPlanLimitInput>
+  }
+
+  export type StoreSubscriptionCreateManyPlanLimitInputEnvelope = {
+    data: StoreSubscriptionCreateManyPlanLimitInput | StoreSubscriptionCreateManyPlanLimitInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type StoreSubscriptionUpsertWithWhereUniqueWithoutPlanLimitInput = {
+    where: StoreSubscriptionWhereUniqueInput
+    update: XOR<StoreSubscriptionUpdateWithoutPlanLimitInput, StoreSubscriptionUncheckedUpdateWithoutPlanLimitInput>
+    create: XOR<StoreSubscriptionCreateWithoutPlanLimitInput, StoreSubscriptionUncheckedCreateWithoutPlanLimitInput>
+  }
+
+  export type StoreSubscriptionUpdateWithWhereUniqueWithoutPlanLimitInput = {
+    where: StoreSubscriptionWhereUniqueInput
+    data: XOR<StoreSubscriptionUpdateWithoutPlanLimitInput, StoreSubscriptionUncheckedUpdateWithoutPlanLimitInput>
+  }
+
+  export type StoreSubscriptionUpdateManyWithWhereWithoutPlanLimitInput = {
+    where: StoreSubscriptionScalarWhereInput
+    data: XOR<StoreSubscriptionUpdateManyMutationInput, StoreSubscriptionUncheckedUpdateManyWithoutPlanLimitInput>
+  }
+
+  export type StoreSubscriptionScalarWhereInput = {
+    AND?: StoreSubscriptionScalarWhereInput | StoreSubscriptionScalarWhereInput[]
+    OR?: StoreSubscriptionScalarWhereInput[]
+    NOT?: StoreSubscriptionScalarWhereInput | StoreSubscriptionScalarWhereInput[]
+    id?: StringFilter<"StoreSubscription"> | string
+    createdAt?: DateTimeFilter<"StoreSubscription"> | Date | string
+    updatedAt?: DateTimeFilter<"StoreSubscription"> | Date | string
+    planLimitId?: StringNullableFilter<"StoreSubscription"> | string | null
+    status?: EnumSubscriptionStatusFilter<"StoreSubscription"> | $Enums.SubscriptionStatus
+    currentPeriodStart?: DateTimeFilter<"StoreSubscription"> | Date | string
+    currentPeriodEnd?: DateTimeFilter<"StoreSubscription"> | Date | string
+    maxTotalProducts?: IntFilter<"StoreSubscription"> | number
+    maxBranches?: IntFilter<"StoreSubscription"> | number
+    maxDiscountCodes?: IntFilter<"StoreSubscription"> | number
+    notificationsPerWeek?: IntFilter<"StoreSubscription"> | number
+    adsPerWeek?: IntFilter<"StoreSubscription"> | number
+    allowsBoxes?: BoolFilter<"StoreSubscription"> | boolean
+    allowsCollaborations?: BoolFilter<"StoreSubscription"> | boolean
+    commissionRate?: FloatFilter<"StoreSubscription"> | number
+    monthlyPrice?: FloatNullableFilter<"StoreSubscription"> | number | null
+    annualPrice?: FloatNullableFilter<"StoreSubscription"> | number | null
+    adsUsedThisPeriod?: IntFilter<"StoreSubscription"> | number
+    adsResetAt?: DateTimeNullableFilter<"StoreSubscription"> | Date | string | null
+    downgradeToPlan?: EnumPlanNameNullableFilter<"StoreSubscription"> | $Enums.PlanName | null
+    downgradeScheduledAt?: DateTimeNullableFilter<"StoreSubscription"> | Date | string | null
+  }
+
   export type userCartCreateWithoutProductCartInput = {
     subtotal?: number
     taxAmount?: number
@@ -54919,6 +67098,7 @@ export namespace Prisma {
     store: storeCreateNestedOneWithoutBranchesInput
     location?: locationCreateNestedOneWithoutBranchInput
     workHours?: workHourCreateNestedManyWithoutBranchInput
+    discountCodes?: BranchDiscountCodeCreateNestedManyWithoutBranchInput
   }
 
   export type branchUncheckedCreateWithoutProductStockInput = {
@@ -54930,6 +67110,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     workHours?: workHourUncheckedCreateNestedManyWithoutBranchInput
+    discountCodes?: BranchDiscountCodeUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type branchCreateOrConnectWithoutProductStockInput = {
@@ -55042,6 +67223,7 @@ export namespace Prisma {
     store?: storeUpdateOneRequiredWithoutBranchesNestedInput
     location?: locationUpdateOneWithoutBranchNestedInput
     workHours?: workHourUpdateManyWithoutBranchNestedInput
+    discountCodes?: BranchDiscountCodeUpdateManyWithoutBranchNestedInput
   }
 
   export type branchUncheckedUpdateWithoutProductStockInput = {
@@ -55053,6 +67235,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workHours?: workHourUncheckedUpdateManyWithoutBranchNestedInput
+    discountCodes?: BranchDiscountCodeUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type productOrderUpsertWithWhereUniqueWithoutProductStockInput = {
@@ -56194,6 +68377,7 @@ export namespace Prisma {
     socialLinks?: socialLinkCreateNestedOneWithoutStoreInput
     branches?: branchCreateNestedManyWithoutStoreInput
     transactions?: transactionCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignCreateNestedManyWithoutStoreInput
   }
 
   export type storeUncheckedCreateWithoutSessionsInput = {
@@ -56214,6 +68398,7 @@ export namespace Prisma {
     socialLinks?: socialLinkUncheckedCreateNestedOneWithoutStoreInput
     branches?: branchUncheckedCreateNestedManyWithoutStoreInput
     transactions?: transactionUncheckedCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignUncheckedCreateNestedManyWithoutStoreInput
   }
 
   export type storeCreateOrConnectWithoutSessionsInput = {
@@ -56332,6 +68517,7 @@ export namespace Prisma {
     socialLinks?: socialLinkUpdateOneWithoutStoreNestedInput
     branches?: branchUpdateManyWithoutStoreNestedInput
     transactions?: transactionUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUpdateManyWithoutStoreNestedInput
   }
 
   export type storeUncheckedUpdateWithoutSessionsInput = {
@@ -56352,6 +68538,7 @@ export namespace Prisma {
     socialLinks?: socialLinkUncheckedUpdateOneWithoutStoreNestedInput
     branches?: branchUncheckedUpdateManyWithoutStoreNestedInput
     transactions?: transactionUncheckedUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUncheckedUpdateManyWithoutStoreNestedInput
   }
 
   export type adminUpsertWithoutSessionsInput = {
@@ -56899,6 +69086,139 @@ export namespace Prisma {
     branchId?: StringNullableFilter<"location"> | string | null
   }
 
+  export type PlanLimitCreateWithoutStoreSubscriptionInput = {
+    id?: string
+    planName?: $Enums.PlanName
+    maxProducts?: number
+    maxBranches?: number
+    maxDiscountCodes?: number
+    notificationsPerWeek?: number
+    adsPerWeek?: number
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: number
+    monthlyPrice?: number | null
+    annualPrice?: number | null
+  }
+
+  export type PlanLimitUncheckedCreateWithoutStoreSubscriptionInput = {
+    id?: string
+    planName?: $Enums.PlanName
+    maxProducts?: number
+    maxBranches?: number
+    maxDiscountCodes?: number
+    notificationsPerWeek?: number
+    adsPerWeek?: number
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: number
+    monthlyPrice?: number | null
+    annualPrice?: number | null
+  }
+
+  export type PlanLimitCreateOrConnectWithoutStoreSubscriptionInput = {
+    where: PlanLimitWhereUniqueInput
+    create: XOR<PlanLimitCreateWithoutStoreSubscriptionInput, PlanLimitUncheckedCreateWithoutStoreSubscriptionInput>
+  }
+
+  export type SubscriptionPlanChangeCreateWithoutSubscriptionInput = {
+    id?: string
+    createdAt?: Date | string
+    fromPlan: $Enums.PlanName
+    toPlan: $Enums.PlanName
+    changeType: $Enums.ChangeType
+    reason?: string | null
+  }
+
+  export type SubscriptionPlanChangeUncheckedCreateWithoutSubscriptionInput = {
+    id?: string
+    createdAt?: Date | string
+    fromPlan: $Enums.PlanName
+    toPlan: $Enums.PlanName
+    changeType: $Enums.ChangeType
+    reason?: string | null
+  }
+
+  export type SubscriptionPlanChangeCreateOrConnectWithoutSubscriptionInput = {
+    where: SubscriptionPlanChangeWhereUniqueInput
+    create: XOR<SubscriptionPlanChangeCreateWithoutSubscriptionInput, SubscriptionPlanChangeUncheckedCreateWithoutSubscriptionInput>
+  }
+
+  export type SubscriptionPlanChangeCreateManySubscriptionInputEnvelope = {
+    data: SubscriptionPlanChangeCreateManySubscriptionInput | SubscriptionPlanChangeCreateManySubscriptionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PlanLimitUpsertWithoutStoreSubscriptionInput = {
+    update: XOR<PlanLimitUpdateWithoutStoreSubscriptionInput, PlanLimitUncheckedUpdateWithoutStoreSubscriptionInput>
+    create: XOR<PlanLimitCreateWithoutStoreSubscriptionInput, PlanLimitUncheckedCreateWithoutStoreSubscriptionInput>
+    where?: PlanLimitWhereInput
+  }
+
+  export type PlanLimitUpdateToOneWithWhereWithoutStoreSubscriptionInput = {
+    where?: PlanLimitWhereInput
+    data: XOR<PlanLimitUpdateWithoutStoreSubscriptionInput, PlanLimitUncheckedUpdateWithoutStoreSubscriptionInput>
+  }
+
+  export type PlanLimitUpdateWithoutStoreSubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    planName?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    maxProducts?: IntFieldUpdateOperationsInput | number
+    maxBranches?: IntFieldUpdateOperationsInput | number
+    maxDiscountCodes?: IntFieldUpdateOperationsInput | number
+    notificationsPerWeek?: IntFieldUpdateOperationsInput | number
+    adsPerWeek?: IntFieldUpdateOperationsInput | number
+    allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
+    allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
+    commissionRate?: FloatFieldUpdateOperationsInput | number
+    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+  }
+
+  export type PlanLimitUncheckedUpdateWithoutStoreSubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    planName?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    maxProducts?: IntFieldUpdateOperationsInput | number
+    maxBranches?: IntFieldUpdateOperationsInput | number
+    maxDiscountCodes?: IntFieldUpdateOperationsInput | number
+    notificationsPerWeek?: IntFieldUpdateOperationsInput | number
+    adsPerWeek?: IntFieldUpdateOperationsInput | number
+    allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
+    allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
+    commissionRate?: FloatFieldUpdateOperationsInput | number
+    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+  }
+
+  export type SubscriptionPlanChangeUpsertWithWhereUniqueWithoutSubscriptionInput = {
+    where: SubscriptionPlanChangeWhereUniqueInput
+    update: XOR<SubscriptionPlanChangeUpdateWithoutSubscriptionInput, SubscriptionPlanChangeUncheckedUpdateWithoutSubscriptionInput>
+    create: XOR<SubscriptionPlanChangeCreateWithoutSubscriptionInput, SubscriptionPlanChangeUncheckedCreateWithoutSubscriptionInput>
+  }
+
+  export type SubscriptionPlanChangeUpdateWithWhereUniqueWithoutSubscriptionInput = {
+    where: SubscriptionPlanChangeWhereUniqueInput
+    data: XOR<SubscriptionPlanChangeUpdateWithoutSubscriptionInput, SubscriptionPlanChangeUncheckedUpdateWithoutSubscriptionInput>
+  }
+
+  export type SubscriptionPlanChangeUpdateManyWithWhereWithoutSubscriptionInput = {
+    where: SubscriptionPlanChangeScalarWhereInput
+    data: XOR<SubscriptionPlanChangeUpdateManyMutationInput, SubscriptionPlanChangeUncheckedUpdateManyWithoutSubscriptionInput>
+  }
+
+  export type SubscriptionPlanChangeScalarWhereInput = {
+    AND?: SubscriptionPlanChangeScalarWhereInput | SubscriptionPlanChangeScalarWhereInput[]
+    OR?: SubscriptionPlanChangeScalarWhereInput[]
+    NOT?: SubscriptionPlanChangeScalarWhereInput | SubscriptionPlanChangeScalarWhereInput[]
+    id?: StringFilter<"SubscriptionPlanChange"> | string
+    createdAt?: DateTimeFilter<"SubscriptionPlanChange"> | Date | string
+    fromPlan?: EnumPlanNameFilter<"SubscriptionPlanChange"> | $Enums.PlanName
+    toPlan?: EnumPlanNameFilter<"SubscriptionPlanChange"> | $Enums.PlanName
+    changeType?: EnumChangeTypeFilter<"SubscriptionPlanChange"> | $Enums.ChangeType
+    reason?: StringNullableFilter<"SubscriptionPlanChange"> | string | null
+    subscriptionId?: StringFilter<"SubscriptionPlanChange"> | string
+  }
+
   export type localeCreateWithoutStoreNameInput = {
     id?: string
     default?: string | null
@@ -57071,6 +69391,7 @@ export namespace Prisma {
     location?: locationCreateNestedOneWithoutBranchInput
     workHours?: workHourCreateNestedManyWithoutBranchInput
     productStock?: productStockCreateNestedManyWithoutBranchInput
+    discountCodes?: BranchDiscountCodeCreateNestedManyWithoutBranchInput
   }
 
   export type branchUncheckedCreateWithoutStoreInput = {
@@ -57082,6 +69403,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     workHours?: workHourUncheckedCreateNestedManyWithoutBranchInput
     productStock?: productStockUncheckedCreateNestedManyWithoutBranchInput
+    discountCodes?: BranchDiscountCodeUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type branchCreateOrConnectWithoutStoreInput = {
@@ -57151,6 +69473,48 @@ export namespace Prisma {
 
   export type sessionCreateManyStoreInputEnvelope = {
     data: sessionCreateManyStoreInput | sessionCreateManyStoreInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AdCampaignCreateWithoutStoreInput = {
+    id?: string
+    title: string
+    description?: string | null
+    imageUrl: string
+    targetUrl: string
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    clicks?: number
+    impressions?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adImpressions?: AdImpressionCreateNestedManyWithoutAdCampaignInput
+    adClick?: AdClickCreateNestedManyWithoutAdCampaignInput
+  }
+
+  export type AdCampaignUncheckedCreateWithoutStoreInput = {
+    id?: string
+    title: string
+    description?: string | null
+    imageUrl: string
+    targetUrl: string
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    clicks?: number
+    impressions?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adImpressions?: AdImpressionUncheckedCreateNestedManyWithoutAdCampaignInput
+    adClick?: AdClickUncheckedCreateNestedManyWithoutAdCampaignInput
+  }
+
+  export type AdCampaignCreateOrConnectWithoutStoreInput = {
+    where: AdCampaignWhereUniqueInput
+    create: XOR<AdCampaignCreateWithoutStoreInput, AdCampaignUncheckedCreateWithoutStoreInput>
+  }
+
+  export type AdCampaignCreateManyStoreInputEnvelope = {
+    data: AdCampaignCreateManyStoreInput | AdCampaignCreateManyStoreInput[]
     skipDuplicates?: boolean
   }
 
@@ -57408,6 +69772,40 @@ export namespace Prisma {
     data: XOR<sessionUpdateManyMutationInput, sessionUncheckedUpdateManyWithoutStoreInput>
   }
 
+  export type AdCampaignUpsertWithWhereUniqueWithoutStoreInput = {
+    where: AdCampaignWhereUniqueInput
+    update: XOR<AdCampaignUpdateWithoutStoreInput, AdCampaignUncheckedUpdateWithoutStoreInput>
+    create: XOR<AdCampaignCreateWithoutStoreInput, AdCampaignUncheckedCreateWithoutStoreInput>
+  }
+
+  export type AdCampaignUpdateWithWhereUniqueWithoutStoreInput = {
+    where: AdCampaignWhereUniqueInput
+    data: XOR<AdCampaignUpdateWithoutStoreInput, AdCampaignUncheckedUpdateWithoutStoreInput>
+  }
+
+  export type AdCampaignUpdateManyWithWhereWithoutStoreInput = {
+    where: AdCampaignScalarWhereInput
+    data: XOR<AdCampaignUpdateManyMutationInput, AdCampaignUncheckedUpdateManyWithoutStoreInput>
+  }
+
+  export type AdCampaignScalarWhereInput = {
+    AND?: AdCampaignScalarWhereInput | AdCampaignScalarWhereInput[]
+    OR?: AdCampaignScalarWhereInput[]
+    NOT?: AdCampaignScalarWhereInput | AdCampaignScalarWhereInput[]
+    id?: StringFilter<"AdCampaign"> | string
+    title?: StringFilter<"AdCampaign"> | string
+    description?: StringNullableFilter<"AdCampaign"> | string | null
+    imageUrl?: StringFilter<"AdCampaign"> | string
+    targetUrl?: StringFilter<"AdCampaign"> | string
+    startDate?: DateTimeNullableFilter<"AdCampaign"> | Date | string | null
+    endDate?: DateTimeNullableFilter<"AdCampaign"> | Date | string | null
+    clicks?: IntFilter<"AdCampaign"> | number
+    impressions?: IntFilter<"AdCampaign"> | number
+    storeId?: StringFilter<"AdCampaign"> | string
+    createdAt?: DateTimeFilter<"AdCampaign"> | Date | string
+    updatedAt?: DateTimeFilter<"AdCampaign"> | Date | string
+  }
+
   export type storeCreateWithoutSocialLinksInput = {
     id?: string
     phone: string
@@ -57426,6 +69824,7 @@ export namespace Prisma {
     branches?: branchCreateNestedManyWithoutStoreInput
     transactions?: transactionCreateNestedManyWithoutStoreInput
     sessions?: sessionCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignCreateNestedManyWithoutStoreInput
   }
 
   export type storeUncheckedCreateWithoutSocialLinksInput = {
@@ -57446,6 +69845,7 @@ export namespace Prisma {
     branches?: branchUncheckedCreateNestedManyWithoutStoreInput
     transactions?: transactionUncheckedCreateNestedManyWithoutStoreInput
     sessions?: sessionUncheckedCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignUncheckedCreateNestedManyWithoutStoreInput
   }
 
   export type storeCreateOrConnectWithoutSocialLinksInput = {
@@ -57482,6 +69882,7 @@ export namespace Prisma {
     branches?: branchUpdateManyWithoutStoreNestedInput
     transactions?: transactionUpdateManyWithoutStoreNestedInput
     sessions?: sessionUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUpdateManyWithoutStoreNestedInput
   }
 
   export type storeUncheckedUpdateWithoutSocialLinksInput = {
@@ -57502,6 +69903,119 @@ export namespace Prisma {
     branches?: branchUncheckedUpdateManyWithoutStoreNestedInput
     transactions?: transactionUncheckedUpdateManyWithoutStoreNestedInput
     sessions?: sessionUncheckedUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUncheckedUpdateManyWithoutStoreNestedInput
+  }
+
+  export type StoreSubscriptionCreateWithoutPlanChangesInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.SubscriptionStatus
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    maxTotalProducts?: number
+    maxBranches?: number
+    maxDiscountCodes?: number
+    notificationsPerWeek?: number
+    adsPerWeek?: number
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: number
+    monthlyPrice?: number | null
+    annualPrice?: number | null
+    adsUsedThisPeriod?: number
+    adsResetAt?: Date | string | null
+    downgradeToPlan?: $Enums.PlanName | null
+    downgradeScheduledAt?: Date | string | null
+    planLimit?: PlanLimitCreateNestedOneWithoutStoreSubscriptionInput
+  }
+
+  export type StoreSubscriptionUncheckedCreateWithoutPlanChangesInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    planLimitId?: string | null
+    status?: $Enums.SubscriptionStatus
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    maxTotalProducts?: number
+    maxBranches?: number
+    maxDiscountCodes?: number
+    notificationsPerWeek?: number
+    adsPerWeek?: number
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: number
+    monthlyPrice?: number | null
+    annualPrice?: number | null
+    adsUsedThisPeriod?: number
+    adsResetAt?: Date | string | null
+    downgradeToPlan?: $Enums.PlanName | null
+    downgradeScheduledAt?: Date | string | null
+  }
+
+  export type StoreSubscriptionCreateOrConnectWithoutPlanChangesInput = {
+    where: StoreSubscriptionWhereUniqueInput
+    create: XOR<StoreSubscriptionCreateWithoutPlanChangesInput, StoreSubscriptionUncheckedCreateWithoutPlanChangesInput>
+  }
+
+  export type StoreSubscriptionUpsertWithoutPlanChangesInput = {
+    update: XOR<StoreSubscriptionUpdateWithoutPlanChangesInput, StoreSubscriptionUncheckedUpdateWithoutPlanChangesInput>
+    create: XOR<StoreSubscriptionCreateWithoutPlanChangesInput, StoreSubscriptionUncheckedCreateWithoutPlanChangesInput>
+    where?: StoreSubscriptionWhereInput
+  }
+
+  export type StoreSubscriptionUpdateToOneWithWhereWithoutPlanChangesInput = {
+    where?: StoreSubscriptionWhereInput
+    data: XOR<StoreSubscriptionUpdateWithoutPlanChangesInput, StoreSubscriptionUncheckedUpdateWithoutPlanChangesInput>
+  }
+
+  export type StoreSubscriptionUpdateWithoutPlanChangesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxTotalProducts?: IntFieldUpdateOperationsInput | number
+    maxBranches?: IntFieldUpdateOperationsInput | number
+    maxDiscountCodes?: IntFieldUpdateOperationsInput | number
+    notificationsPerWeek?: IntFieldUpdateOperationsInput | number
+    adsPerWeek?: IntFieldUpdateOperationsInput | number
+    allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
+    allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
+    commissionRate?: FloatFieldUpdateOperationsInput | number
+    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
+    adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    downgradeToPlan?: NullableEnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName | null
+    downgradeScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    planLimit?: PlanLimitUpdateOneWithoutStoreSubscriptionNestedInput
+  }
+
+  export type StoreSubscriptionUncheckedUpdateWithoutPlanChangesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    planLimitId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxTotalProducts?: IntFieldUpdateOperationsInput | number
+    maxBranches?: IntFieldUpdateOperationsInput | number
+    maxDiscountCodes?: IntFieldUpdateOperationsInput | number
+    notificationsPerWeek?: IntFieldUpdateOperationsInput | number
+    adsPerWeek?: IntFieldUpdateOperationsInput | number
+    allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
+    allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
+    commissionRate?: FloatFieldUpdateOperationsInput | number
+    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
+    adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    downgradeToPlan?: NullableEnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName | null
+    downgradeScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type userCreateWithoutTransactionInput = {
@@ -57567,6 +70081,7 @@ export namespace Prisma {
     socialLinks?: socialLinkCreateNestedOneWithoutStoreInput
     branches?: branchCreateNestedManyWithoutStoreInput
     sessions?: sessionCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignCreateNestedManyWithoutStoreInput
   }
 
   export type storeUncheckedCreateWithoutTransactionsInput = {
@@ -57587,6 +70102,7 @@ export namespace Prisma {
     socialLinks?: socialLinkUncheckedCreateNestedOneWithoutStoreInput
     branches?: branchUncheckedCreateNestedManyWithoutStoreInput
     sessions?: sessionUncheckedCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignUncheckedCreateNestedManyWithoutStoreInput
   }
 
   export type storeCreateOrConnectWithoutTransactionsInput = {
@@ -57730,6 +70246,7 @@ export namespace Prisma {
     socialLinks?: socialLinkUpdateOneWithoutStoreNestedInput
     branches?: branchUpdateManyWithoutStoreNestedInput
     sessions?: sessionUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUpdateManyWithoutStoreNestedInput
   }
 
   export type storeUncheckedUpdateWithoutTransactionsInput = {
@@ -57750,6 +70267,7 @@ export namespace Prisma {
     socialLinks?: socialLinkUncheckedUpdateOneWithoutStoreNestedInput
     branches?: branchUncheckedUpdateManyWithoutStoreNestedInput
     sessions?: sessionUncheckedUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUncheckedUpdateManyWithoutStoreNestedInput
   }
 
   export type adminUpsertWithoutTransactionInput = {
@@ -58568,6 +71086,70 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type AdImpressionCreateManyAdCampaignInput = {
+    id?: string
+    userId?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AdClickCreateManyAdCampaignInput = {
+    id?: string
+    userId?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AdImpressionUpdateWithoutAdCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdImpressionUncheckedUpdateWithoutAdCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdImpressionUncheckedUpdateManyWithoutAdCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdClickUpdateWithoutAdCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdClickUncheckedUpdateWithoutAdCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdClickUncheckedUpdateManyWithoutAdCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type workHourCreateManyBranchInput = {
     id?: string
     startTime: Date | string
@@ -58581,6 +71163,20 @@ export namespace Prisma {
     variantId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type BranchDiscountCodeCreateManyBranchInput = {
+    id?: string
+    code: string
+    discountPercentage?: number | null
+    discountAmount?: number | null
+    minOrderAmount?: number | null
+    usageLimit?: number | null
+    usedCount?: number
+    isActive?: boolean
+    validFrom?: Date | string | null
+    validUntil?: Date | string | null
+    createdAt?: Date | string
   }
 
   export type workHourUpdateWithoutBranchInput = {
@@ -58630,6 +71226,48 @@ export namespace Prisma {
     variantId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BranchDiscountCodeUpdateWithoutBranchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discountPercentage?: NullableIntFieldUpdateOperationsInput | number | null
+    discountAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    minOrderAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    usageLimit?: NullableIntFieldUpdateOperationsInput | number | null
+    usedCount?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BranchDiscountCodeUncheckedUpdateWithoutBranchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discountPercentage?: NullableIntFieldUpdateOperationsInput | number | null
+    discountAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    minOrderAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    usageLimit?: NullableIntFieldUpdateOperationsInput | number | null
+    usedCount?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BranchDiscountCodeUncheckedUpdateManyWithoutBranchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discountPercentage?: NullableIntFieldUpdateOperationsInput | number | null
+    discountAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    minOrderAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    usageLimit?: NullableIntFieldUpdateOperationsInput | number | null
+    usedCount?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type productCreateManyCategoryInput = {
@@ -59094,6 +71732,7 @@ export namespace Prisma {
     branches?: branchUpdateManyWithoutStoreNestedInput
     transactions?: transactionUpdateManyWithoutStoreNestedInput
     sessions?: sessionUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUpdateManyWithoutStoreNestedInput
   }
 
   export type storeUncheckedUpdateWithoutLogoInput = {
@@ -59114,6 +71753,7 @@ export namespace Prisma {
     branches?: branchUncheckedUpdateManyWithoutStoreNestedInput
     transactions?: transactionUncheckedUpdateManyWithoutStoreNestedInput
     sessions?: sessionUncheckedUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUncheckedUpdateManyWithoutStoreNestedInput
   }
 
   export type storeUncheckedUpdateManyWithoutLogoInput = {
@@ -59150,6 +71790,7 @@ export namespace Prisma {
     branches?: branchUpdateManyWithoutStoreNestedInput
     transactions?: transactionUpdateManyWithoutStoreNestedInput
     sessions?: sessionUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUpdateManyWithoutStoreNestedInput
   }
 
   export type storeUncheckedUpdateWithoutBannerInput = {
@@ -59170,6 +71811,7 @@ export namespace Prisma {
     branches?: branchUncheckedUpdateManyWithoutStoreNestedInput
     transactions?: transactionUncheckedUpdateManyWithoutStoreNestedInput
     sessions?: sessionUncheckedUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUncheckedUpdateManyWithoutStoreNestedInput
   }
 
   export type storeUncheckedUpdateManyWithoutBannerInput = {
@@ -59319,6 +71961,100 @@ export namespace Prisma {
     userRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     storerRefundAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     cancelledBy?: NullableEnumOrderCancelByFieldUpdateOperationsInput | $Enums.OrderCancelBy | null
+  }
+
+  export type StoreSubscriptionCreateManyPlanLimitInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.SubscriptionStatus
+    currentPeriodStart: Date | string
+    currentPeriodEnd: Date | string
+    maxTotalProducts?: number
+    maxBranches?: number
+    maxDiscountCodes?: number
+    notificationsPerWeek?: number
+    adsPerWeek?: number
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: number
+    monthlyPrice?: number | null
+    annualPrice?: number | null
+    adsUsedThisPeriod?: number
+    adsResetAt?: Date | string | null
+    downgradeToPlan?: $Enums.PlanName | null
+    downgradeScheduledAt?: Date | string | null
+  }
+
+  export type StoreSubscriptionUpdateWithoutPlanLimitInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxTotalProducts?: IntFieldUpdateOperationsInput | number
+    maxBranches?: IntFieldUpdateOperationsInput | number
+    maxDiscountCodes?: IntFieldUpdateOperationsInput | number
+    notificationsPerWeek?: IntFieldUpdateOperationsInput | number
+    adsPerWeek?: IntFieldUpdateOperationsInput | number
+    allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
+    allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
+    commissionRate?: FloatFieldUpdateOperationsInput | number
+    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
+    adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    downgradeToPlan?: NullableEnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName | null
+    downgradeScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    planChanges?: SubscriptionPlanChangeUpdateManyWithoutSubscriptionNestedInput
+  }
+
+  export type StoreSubscriptionUncheckedUpdateWithoutPlanLimitInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxTotalProducts?: IntFieldUpdateOperationsInput | number
+    maxBranches?: IntFieldUpdateOperationsInput | number
+    maxDiscountCodes?: IntFieldUpdateOperationsInput | number
+    notificationsPerWeek?: IntFieldUpdateOperationsInput | number
+    adsPerWeek?: IntFieldUpdateOperationsInput | number
+    allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
+    allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
+    commissionRate?: FloatFieldUpdateOperationsInput | number
+    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
+    adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    downgradeToPlan?: NullableEnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName | null
+    downgradeScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    planChanges?: SubscriptionPlanChangeUncheckedUpdateManyWithoutSubscriptionNestedInput
+  }
+
+  export type StoreSubscriptionUncheckedUpdateManyWithoutPlanLimitInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxTotalProducts?: IntFieldUpdateOperationsInput | number
+    maxBranches?: IntFieldUpdateOperationsInput | number
+    maxDiscountCodes?: IntFieldUpdateOperationsInput | number
+    notificationsPerWeek?: IntFieldUpdateOperationsInput | number
+    adsPerWeek?: IntFieldUpdateOperationsInput | number
+    allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
+    allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
+    commissionRate?: FloatFieldUpdateOperationsInput | number
+    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
+    adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    downgradeToPlan?: NullableEnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName | null
+    downgradeScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type productOrderCreateManyProductStockInput = {
@@ -59825,6 +72561,42 @@ export namespace Prisma {
     branchId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type SubscriptionPlanChangeCreateManySubscriptionInput = {
+    id?: string
+    createdAt?: Date | string
+    fromPlan: $Enums.PlanName
+    toPlan: $Enums.PlanName
+    changeType: $Enums.ChangeType
+    reason?: string | null
+  }
+
+  export type SubscriptionPlanChangeUpdateWithoutSubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fromPlan?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    toPlan?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    changeType?: EnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SubscriptionPlanChangeUncheckedUpdateWithoutSubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fromPlan?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    toPlan?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    changeType?: EnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SubscriptionPlanChangeUncheckedUpdateManyWithoutSubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fromPlan?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    toPlan?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    changeType?: EnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type branchCreateManyStoreInput = {
     id?: string
     locationId?: string | null
@@ -59854,6 +72626,20 @@ export namespace Prisma {
     adminId?: string | null
   }
 
+  export type AdCampaignCreateManyStoreInput = {
+    id?: string
+    title: string
+    description?: string | null
+    imageUrl: string
+    targetUrl: string
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    clicks?: number
+    impressions?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type branchUpdateWithoutStoreInput = {
     id?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59863,6 +72649,7 @@ export namespace Prisma {
     location?: locationUpdateOneWithoutBranchNestedInput
     workHours?: workHourUpdateManyWithoutBranchNestedInput
     productStock?: productStockUpdateManyWithoutBranchNestedInput
+    discountCodes?: BranchDiscountCodeUpdateManyWithoutBranchNestedInput
   }
 
   export type branchUncheckedUpdateWithoutStoreInput = {
@@ -59874,6 +72661,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     workHours?: workHourUncheckedUpdateManyWithoutBranchNestedInput
     productStock?: productStockUncheckedUpdateManyWithoutBranchNestedInput
+    discountCodes?: BranchDiscountCodeUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type branchUncheckedUpdateManyWithoutStoreInput = {
@@ -59943,6 +72731,52 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     adminId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AdCampaignUpdateWithoutStoreInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicks?: IntFieldUpdateOperationsInput | number
+    impressions?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adImpressions?: AdImpressionUpdateManyWithoutAdCampaignNestedInput
+    adClick?: AdClickUpdateManyWithoutAdCampaignNestedInput
+  }
+
+  export type AdCampaignUncheckedUpdateWithoutStoreInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicks?: IntFieldUpdateOperationsInput | number
+    impressions?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adImpressions?: AdImpressionUncheckedUpdateManyWithoutAdCampaignNestedInput
+    adClick?: AdClickUncheckedUpdateManyWithoutAdCampaignNestedInput
+  }
+
+  export type AdCampaignUncheckedUpdateManyWithoutStoreInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    clicks?: IntFieldUpdateOperationsInput | number
+    impressions?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type productCartCreateManyUserCartInput = {

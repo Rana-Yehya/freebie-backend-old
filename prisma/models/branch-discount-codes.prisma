@@ -1,0 +1,21 @@
+model BranchDiscountCode {
+  id                 String    @id @default(uuid())
+  code               String // Unique per branch? or per store? Let's make it unique per store
+  discountPercentage Int?
+  discountAmount     Float?
+  minOrderAmount     Float? // Minimum order amount to apply discount
+  usageLimit         Int? // Maximum number of times this code can be used
+  usedCount          Int       @default(0) // How many times it's been used
+  isActive           Boolean   @default(true)
+  validFrom          DateTime?
+  validUntil         DateTime?
+  createdAt          DateTime  @default(now())
+
+  // Relations - code belongs to a specific branch
+  branch   branch @relation(fields: [branchId], references: [id])
+  branchId String
+
+  // Ensure code is unique per store (not globally)
+  @@unique([branchId, code])
+  @@map("branch_discount_codes")
+}
