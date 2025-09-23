@@ -40769,7 +40769,6 @@ export namespace Prisma {
 
   export type deliveryTaxesWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    originStateId_destinationStateId?: deliveryTaxesOriginStateIdDestinationStateIdCompoundUniqueInput
     AND?: deliveryTaxesWhereInput | deliveryTaxesWhereInput[]
     OR?: deliveryTaxesWhereInput[]
     NOT?: deliveryTaxesWhereInput | deliveryTaxesWhereInput[]
@@ -40786,7 +40785,7 @@ export namespace Prisma {
     originState?: XOR<StateScalarRelationFilter, stateWhereInput>
     destinationState?: XOR<StateScalarRelationFilter, stateWhereInput>
     productCart?: ProductCartListRelationFilter
-  }, "id" | "id" | "originStateId_destinationStateId">
+  }, "id" | "id">
 
   export type deliveryTaxesOrderByWithAggregationInput = {
     id?: SortOrder
@@ -45477,11 +45476,6 @@ export namespace Prisma {
 
   export type productCartOrderByRelationAggregateInput = {
     _count?: SortOrder
-  }
-
-  export type deliveryTaxesOriginStateIdDestinationStateIdCompoundUniqueInput = {
-    originStateId: string
-    destinationStateId: string
   }
 
   export type deliveryTaxesCountOrderByAggregateInput = {
