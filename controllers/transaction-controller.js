@@ -1,5 +1,7 @@
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
+const i18n = require("i18n");
+
 const {
   NotFoundError,
   BadRequestError,
@@ -167,7 +169,7 @@ const createWithdrawTransaction = async (req, res, next) => {
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
     // userCart: userCart,
-    message: "Transaction created successfully",
+    message: i18n.__("Transaction created successfully"),
     data: transaction,
   });
 };

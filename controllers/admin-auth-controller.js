@@ -1,5 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const { prisma } = require("../config/prisma");
+const i18n = require("i18n");
 
 const { createAccessJWT, createRefreshJWT } = require("../utils/jwt-utils");
 const { passwordEncrypt, passwordCompare } = require("../utils/password-utils");
@@ -162,7 +163,7 @@ const logout = async (req, res) => {
   });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Logged out successfully",
+    message: i18n.__("Logged out successfully"),
   });
 };
 const showMe = async (req, res) => {

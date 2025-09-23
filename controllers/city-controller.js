@@ -1,6 +1,8 @@
 const { CityZodModel } = require("../models/city-zod-model");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
+const i18n = require("i18n");
+
 const {
   NotFoundError,
   BadRequestError,
@@ -66,7 +68,7 @@ const createCity = async (req, res, next) => {
 
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
-    message: "City created successfully",
+    message: i18n.__("City created successfully"),
     data: createdCity,
   });
 };
@@ -104,7 +106,7 @@ const updateCity = async (req, res, next) => {
 
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
-    message: "City updated successfully",
+    message: i18n.__("City updated successfully"),
     data: updatedCity,
   });
 };

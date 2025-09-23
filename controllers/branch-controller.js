@@ -1,4 +1,5 @@
 const { prisma } = require("../config/prisma");
+const i18n = require("i18n");
 
 const { CreateBranchZodModel } = require("../models/create-branch-zod-model");
 const { StatusCodes } = require("http-status-codes");
@@ -85,7 +86,7 @@ const createBranch = async (req, res, next) => {
 
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
-    message: "Branch created successfully",
+    message: i18n.__("Branch created successfully"),
     data: createdBranch,
   });
 };
@@ -123,7 +124,7 @@ const updateBranch = async (req, res, next) => {
   }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Branch updated successfully",
+    message: i18n.__("Branch updated successfully"),
     data: updatedBranch,
   });
 };

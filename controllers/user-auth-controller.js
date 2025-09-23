@@ -1,6 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const { phone } = require("phone");
 const { prisma } = require("../config/prisma");
+const i18n = require("i18n");
 
 const {
   NotFoundError,
@@ -75,7 +76,7 @@ const sendCode = async (req, res, next) => {
   console.log(isAlreadyExist);
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "OTP sent. Please check your phone",
+    message: i18n.__("OTP sent. Please check your phone"),
     isAlreadyExist: userInDB ? true : false,
   });
 };
@@ -174,7 +175,7 @@ const register = async (req, res, next) => {
   // await sendOtpHelper({ name, phone: phoneNumber, email });
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
-    message: "Account Created Successfully",
+    message: i18n.__("Account Created Successfully"),
     accessToken: accessTokenJWT,
     refreshToken: refreshTokenJWT,
     user: user,
@@ -237,7 +238,7 @@ const verifyCode = async (req, res) => {
 
     return res.status(StatusCodes.OK).json({
       isSuccess: true,
-      message: "Account verified successfully",
+      message: i18n.__("Account verified successfully"),
       accessToken: accessTokenJWT,
       refreshToken: refreshTokenJWT,
       user: session,
@@ -245,7 +246,7 @@ const verifyCode = async (req, res) => {
   } else {
     return res.status(StatusCodes.OK).json({
       isSuccess: true,
-      message: "Account verified successfully",
+      message: i18n.__("Account verified successfully"),
     });
   }
 };
@@ -270,7 +271,7 @@ const logout = async (req, res) => {
   // });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Logged out successfully",
+    message: i18n.__("Logged out successfully"),
   });
 };
 
@@ -324,7 +325,7 @@ const updateProfile = async (req, res, next) => {
 
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Profile updated successfully",
+    message: i18n.__("Profile updated successfully"),
     user: user,
   });
 };
@@ -356,7 +357,7 @@ const updateUserLocation = async (req, res) => {
 
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Location updated successfully",
+    message: i18n.__("Location updated successfully"),
     userLocations: userLocations,
   });
 };
@@ -393,7 +394,7 @@ const changeUserMainLocation = async (req, res) => {
   }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Location updated successfully",
+    message: i18n.__("Location updated successfully"),
     userLocations: userLocations,
   });
 };
@@ -415,7 +416,7 @@ const deleteUserLocation = async (req, res) => {
   }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Location deleted successfully",
+    message: i18n.__("Location deleted successfully"),
   });
 };
 
@@ -439,7 +440,7 @@ const createUserLocation = async (req, res) => {
 
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
-    message: "Location created successfully",
+    message: i18n.__("Location created successfully"),
     userLocations: userLocations,
   });
 };
@@ -491,7 +492,7 @@ const deleteAccount = async (req, res) => {
   });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "User deleted successfully",
+    message: i18n.__("User deleted successfully"),
   });
 };
 module.exports = {

@@ -1,6 +1,8 @@
 const { CreateCountryZodModel } = require("../models/create-country-zod-model");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
+const i18n = require("i18n");
+
 const {
   NotFoundError,
   BadRequestError,
@@ -70,7 +72,7 @@ const createCountry = async (req, res, next) => {
 
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
-    message: "Country created successfully",
+    message: i18n.__("Country created successfully"),
     data: createdCountry,
   });
 };
@@ -119,7 +121,7 @@ const updateCountry = async (req, res, next) => {
   }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Country updated successfully",
+    message: i18n.__("Country updated successfully"),
     data: updatedCountry,
   });
 };

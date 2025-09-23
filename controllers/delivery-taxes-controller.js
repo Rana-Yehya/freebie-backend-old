@@ -3,6 +3,8 @@ const {
 } = require("../models/create-delivery-taxes-zod-model");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
+const i18n = require("i18n");
+
 const {
   NotFoundError,
   BadRequestError,
@@ -68,7 +70,7 @@ const createDeliveryTaxes = async (req, res, next) => {
 
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
-    message: "Delivery Taxes created successfully",
+    message: i18n.__("Delivery Taxes created successfully"),
     data: createdDeliveryTaxes,
   });
 };
@@ -116,7 +118,7 @@ const updateDeliveryTaxes = async (req, res, next) => {
 
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Delivery Taxes updated successfully",
+    message: i18n.__("Delivery Taxes updated successfully"),
     data: deliveryTaxes,
   });
 };

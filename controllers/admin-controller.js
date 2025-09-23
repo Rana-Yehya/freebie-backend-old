@@ -1,5 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const { prisma } = require("../config/prisma");
+const i18n = require("i18n");
 
 const {
   NotFoundError,
@@ -30,7 +31,7 @@ const approveStore = async (req, res) => {
   }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Store approved successfully",
+    message: i18n.__("Store approved successfully"),
   });
 };
 
@@ -57,7 +58,7 @@ const freezeStore = async (req, res) => {
   }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Store freezed successfully",
+    message: i18n.__("Store freezed successfully"),
   });
 };
 
@@ -106,7 +107,7 @@ const setStoreStatus = async (req, res) => {
   }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Store freezed successfully",
+    message: i18n.__("Store freezed successfully"),
   });
 };
 const approveProduct = async (req, res) => {
@@ -123,7 +124,7 @@ const approveProduct = async (req, res) => {
   }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Product approved successfully",
+    message: i18n.__("Product approved successfully"),
   });
 };
 const setProductTag = async (req, res) => {
@@ -143,7 +144,7 @@ const setProductTag = async (req, res) => {
   }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Product approved successfully",
+    message: i18n.__("Product approved successfully"),
   });
 };
 
@@ -227,7 +228,10 @@ const sendNotificationToAllUsers = async (req, res, next) => {
   // return res.status(StatusCodes.OK).json({ isSuccess: true });
   return res
     .status(StatusCodes.OK)
-    .json({ isSuccess: true, message: "Notification sent successfully" });
+    .json({
+      isSuccess: true,
+      message: i18n.__("Notification sent successfully"),
+    });
 };
 const sendNotificationToAllStores = async (req, res, next) => {
   const { title, body } = req.body;
@@ -253,7 +257,10 @@ const sendNotificationToAllStores = async (req, res, next) => {
   // return res.status(StatusCodes.OK).json({ isSuccess: true });
   return res
     .status(StatusCodes.OK)
-    .json({ isSuccess: true, message: "Notification sent successfully" });
+    .json({
+      isSuccess: true,
+      message: i18n.__("Notification sent successfully"),
+    });
 };
 module.exports = {
   // approveStore,

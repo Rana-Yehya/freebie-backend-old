@@ -1,5 +1,7 @@
 const { CurrencyZodModel } = require("../models/currency-zod-model");
 const { prisma } = require("../config/prisma");
+const i18n = require("i18n");
+
 const { StatusCodes } = require("http-status-codes");
 const {
   NotFoundError,
@@ -63,7 +65,7 @@ const createCountry = async (req, res, next) => {
 
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
-    message: "Country created successfully",
+    message: i18n.__("Country created successfully"),
     data: createdCountry,
   });
 };
@@ -99,7 +101,7 @@ const updateCountry = async (req, res, next) => {
 
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
-    message: "Country updated successfully",
+    message: i18n.__("Country updated successfully"),
     data: updatedCountry,
   });
 };

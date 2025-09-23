@@ -1,5 +1,7 @@
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
+const i18n = require("i18n");
+
 const {
   NotFoundError,
   BadRequestError,
@@ -105,7 +107,7 @@ const createReview = async (req, res, next) => {
   });
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
-    message: "Review created successfully",
+    message: i18n.__("Review created successfully"),
     data: createdReview,
   });
 };

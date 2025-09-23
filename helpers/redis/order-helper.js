@@ -1,11 +1,6 @@
 const nodemailer = require("nodemailer");
 const path = require("path");
 const ejs = require("ejs");
-const {
-  RateLimitError,
-  ServerError,
-  BadRequestError,
-} = require("../../errors");
 const nodemailerConfig = require("../../config/mail/nodemailer-config");
 const { redis } = require("../../config/redis");
 

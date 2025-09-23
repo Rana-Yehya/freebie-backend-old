@@ -1,5 +1,7 @@
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
+const i18n = require("i18n");
+
 const {
   NotFoundError,
   BadRequestError,
@@ -526,7 +528,7 @@ const changeOrderStatusByStore = async (req, res, next) => {
   // });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Order Status Updated Successfully",
+    message: i18n.__("Order Status Updated Successfully"),
     data: updatedOrder,
   });
 };
@@ -626,7 +628,7 @@ const changeOrderStatusAsDeliveredByAdmin = async (req, res, next) => {
   });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Order Status Updated Successfully",
+    message: i18n.__("Order Status Updated Successfully"),
     data: updatedOrder,
   });
 };
@@ -728,7 +730,7 @@ const changeOrderStatusAsRefundedByAdmin = async (req, res, next) => {
   });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Order Status Updated Successfully",
+    message: i18n.__("Order Status Updated Successfully"),
     data: updatedOrder,
   });
 };
@@ -896,7 +898,7 @@ const cancelProductOrderByUser = async (req, res, next) => {
   // }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Order Cancelled Successfully",
+    message: i18n.__("Order Cancelled Successfully"),
   });
 };
 

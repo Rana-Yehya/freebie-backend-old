@@ -1,5 +1,7 @@
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
+const i18n = require("i18n");
+
 const {
   NotFoundError,
   BadRequestError,
@@ -475,7 +477,7 @@ const createUpdateCartItem = async (req, res, next) => {
 
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Added to cart successfully",
+    message: i18n.__("Added to cart successfully"),
     data: createdOrUpdatedUserCart,
   });
 };

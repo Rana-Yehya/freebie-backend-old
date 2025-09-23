@@ -1,9 +1,6 @@
 const { CustomAPIError } = require("../errors/custom-api-error");
 const { StatusCodes } = require("http-status-codes");
-const {
-  destroyImage,
-  destroyMultipleImages,
-} = require("../helpers/image-kit/delete-image");
+const { destroyMultipleImages } = require("../helpers/image-kit/delete-image");
 const i18n = require("i18n");
 
 const errorHandler = async (err, req, res, next) => {
@@ -63,7 +60,7 @@ const errorHandler = async (err, req, res, next) => {
   }
   let customError = {
     statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-    message: err.message || "Internal Server Error",
+    message: err.message || i18n.__("Internal Server Error"),
   };
   if (err instanceof CustomAPIError) {
     return res.status(err.statusCode).json({

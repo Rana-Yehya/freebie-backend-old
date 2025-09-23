@@ -3,6 +3,8 @@ const {
 } = require("../models/create-category-zod-model");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
+const i18n = require("i18n");
+
 const {
   NotFoundError,
   BadRequestError,
@@ -88,7 +90,7 @@ const createCategory = async (req, res, next) => {
 
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
-    message: "Category created successfully",
+    message: i18n.__("Category created successfully"),
     data: createdCategory,
   });
 };
@@ -164,7 +166,7 @@ const updateCategory = async (req, res, next) => {
   }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Category updated successfully",
+    message: i18n.__("Category updated successfully"),
     data: updatedCategory,
   });
 };

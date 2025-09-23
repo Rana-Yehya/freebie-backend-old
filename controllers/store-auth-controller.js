@@ -1,4 +1,4 @@
-const crypto = require("crypto");
+const i18n = require("i18n");
 
 const { StatusCodes } = require("http-status-codes");
 const { phone } = require("phone");
@@ -75,7 +75,7 @@ const login = async (req, res) => {
 
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Login Successfully",
+    message: i18n.__("Login Successfully"),
     accessToken: accessTokenJWT,
     refreshToken: refreshTokenJWT,
     user: user,
@@ -219,7 +219,7 @@ const register = async (req, res, next) => {
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
     store,
-    message: "Store created. Please wait for admin's approval",
+    message: i18n.__("Store created. Please wait for admin's approval"),
   });
 };
 
@@ -229,7 +229,7 @@ const logout = async (req, res) => {
   });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Logged out successfully",
+    message: i18n.__("Logged out successfully"),
   });
 };
 
@@ -269,7 +269,7 @@ const deleteStore = async (req, res) => {
   });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Store deleted successfully",
+    message: i18n.__("Store deleted successfully"),
   });
 };
 const updateProfile = async (req, res) => {
@@ -401,7 +401,7 @@ const updateProfile = async (req, res) => {
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     store,
-    message: "Store updated successfully",
+    message: i18n.__("Store updated successfully"),
   });
 };
 const changePassword = async (req, res) => {
@@ -430,7 +430,7 @@ const changePassword = async (req, res) => {
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     store,
-    message: "Store password updated successfully",
+    message: i18n.__("Store password updated successfully"),
   });
 };
 
@@ -466,7 +466,7 @@ const sendCode = async (req, res, next) => {
   });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "OTP sent. Please check your phone",
+    message: i18n.__("OTP sent. Please check your phone"),
   });
 };
 
@@ -491,7 +491,7 @@ const verifyCode = async (req, res) => {
   });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Account verified successfully",
+    message: i18n.__("Account verified successfully"),
     store: store,
   });
 };
@@ -536,7 +536,7 @@ const forgotPassword = async (req, res) => {
   });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Password changed successfully",
+    message: i18n.__("Password changed successfully"),
     store: store,
   });
 };

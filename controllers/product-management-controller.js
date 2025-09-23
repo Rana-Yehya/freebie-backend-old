@@ -3,6 +3,8 @@ const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, NotFoundError } = require("../errors");
 const { UpdateProductZodModel } = require("../models/update-product-zod-model");
+const i18n = require("i18n");
+
 const {
   uploadMultipleImages,
   uploadImage,
@@ -309,7 +311,7 @@ const createProduct = async (req, res, next) => {
   */
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
-    message: "Product created successfully",
+    message: i18n.__("Product created successfully"),
     data: createdProduct,
   });
 };
@@ -702,7 +704,7 @@ const updateProduct = async (req, res, next) => {
   // }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Product updated successfully",
+    message: i18n.__("Product updated successfully"),
     data: updatedProduct,
   });
 };

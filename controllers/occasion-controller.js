@@ -1,6 +1,8 @@
 const {
   CreateOccasionZodModel,
 } = require("../models/create-occasion-zod-model");
+const i18n = require("i18n");
+
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
 const {
@@ -76,7 +78,7 @@ const createOccasion = async (req, res, next) => {
   });
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
-    message: "Occasion Created Successfully",
+    message: i18n.__("Occasion Created Successfully"),
     data: createdOccasion,
   });
 };
@@ -143,7 +145,7 @@ const updateOccasion = async (req, res, next) => {
   }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
-    message: "Occasion updated successfully",
+    message: i18n.__("Occasion updated successfully"),
     data: updatedOccasion,
   });
 };
