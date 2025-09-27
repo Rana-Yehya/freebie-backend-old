@@ -12,7 +12,7 @@ const {
   OrderStatus,
   TransactionType,
   UserOrderStatus,
-} = require("../generated/prisma");
+} = require("../generated");
 const {
   createOrderHelper,
   verifyUserOrderHelper,

@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated"
@@ -8,6 +7,7 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 // ===== admin.prisma =====
 // model adminPrivilege {
 
@@ -43,85 +43,83 @@ model admin {
   countryId String?
 }
 
-
 // ===== ads.prisma =====
 // Add these to your existing schema
 
 model AdCampaign {
-    id          String  @id @default(uuid())
-    title       String
-    description String?
-    imageUrl    String
-    targetUrl   String // Where the ad clicks go (e.g., store page, product page)
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+  imageUrl    String
+  targetUrl   String // Where the ad clicks go (e.g., store page, product page)
 
-    // // Ad status and timing
-    // status       AdStatus  @default(PENDING)
-    // startDate    DateTime?
-    // endDate      DateTime?
+  // // Ad status and timing
+  // status       AdStatus  @default(PENDING)
+  // startDate    DateTime?
+  // endDate      DateTime?
 
-    // scheduledFor DateTime? // When the ad is scheduled to run
-    // Ad scheduling (independent of billing period)
-    startDate     DateTime? // 2024-11-05 (when ad should start showing)
-    endDate       DateTime? // 2024-11-12 (when ad should stop showing)
-    // Tracking
-    clicks        Int            @default(0)
-    impressions   Int            @default(0)
-    adImpressions AdImpression[]
-    adClick       AdClick[]
+  // scheduledFor DateTime? // When the ad is scheduled to run
+  // Ad scheduling (independent of billing period)
+  startDate     DateTime? // 2024-11-05 (when ad should start showing)
+  endDate       DateTime? // 2024-11-12 (when ad should stop showing)
+  // Tracking
+  clicks        Int            @default(0)
+  impressions   Int            @default(0)
+  adImpressions AdImpression[]
+  adClick       AdClick[]
 
-    // budget      Float? // Maximum budget for the ad
-    // spent       Float  @default(0)
+  // budget      Float? // Maximum budget for the ad
+  // spent       Float  @default(0)
 
-    // Relations - Ad belongs to a specific store (not branch)
-    store   store  @relation(fields: [storeId], references: [id])
-    storeId String
+  // Relations - Ad belongs to a specific store (not branch)
+  store   store  @relation(fields: [storeId], references: [id])
+  storeId String
 
-    // // Which branch this ad promotes (optional)
-    // branch   branch? @relation(fields: [branchId], references: [id])
-    // branchId String?
+  // // Which branch this ad promotes (optional)
+  // branch   branch? @relation(fields: [branchId], references: [id])
+  // branchId String?
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@map("ad_campaigns")
+  @@map("ad_campaigns")
 }
 
 model AdImpression {
-    id           String     @id @default(uuid())
-    adCampaign   AdCampaign @relation(fields: [adCampaignId], references: [id])
-    adCampaignId String
-    userId       String? // If user is logged in
-    ipAddress    String?
-    userAgent    String?
-    createdAt    DateTime   @default(now())
+  id           String     @id @default(uuid())
+  adCampaign   AdCampaign @relation(fields: [adCampaignId], references: [id])
+  adCampaignId String
+  userId       String? // If user is logged in
+  ipAddress    String?
+  userAgent    String?
+  createdAt    DateTime   @default(now())
 
-    @@map("ad_impressions")
+  @@map("ad_impressions")
 }
 
 model AdClick {
-    id           String     @id @default(uuid())
-    adCampaign   AdCampaign @relation(fields: [adCampaignId], references: [id])
-    adCampaignId String
-    userId       String?
-    ipAddress    String?
-    userAgent    String?
-    createdAt    DateTime   @default(now())
+  id           String     @id @default(uuid())
+  adCampaign   AdCampaign @relation(fields: [adCampaignId], references: [id])
+  adCampaignId String
+  userId       String?
+  ipAddress    String?
+  userAgent    String?
+  createdAt    DateTime   @default(now())
 
-    @@map("ad_clicks")
+  @@map("ad_clicks")
 }
 
 // Add to your existing enums
 enum AdStatus {
-    DRAFT
-    PENDING
-    APPROVED
-    REJECTED
-    ACTIVE
-    PAUSED
-    COMPLETED
-    CANCELLED
+  DRAFT
+  PENDING
+  APPROVED
+  REJECTED
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
 }
-
 
 // ===== branch-discount-codes.prisma =====
 model BranchDiscountCode {
@@ -145,7 +143,6 @@ model BranchDiscountCode {
   @@unique([branchId, code])
   @@map("branch_discount_codes")
 }
-
 
 // ===== branch.prisma =====
 model branch {
@@ -193,12 +190,11 @@ model workHour {
   day       Int
 }
 
-
 // ===== category.prisma =====
 model category {
   id                         String    @id @unique @default(uuid())
-  nameId                     String   @unique
-  name                       locale   @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  nameId                     String    @unique
+  name                       locale    @relation(fields: [nameId], references: [id])
   imageId                    String
   image                      image     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   product                    product[]
@@ -206,6 +202,7 @@ model category {
   createdAt                  DateTime  @default(now())
   updatedAt                  DateTime  @updatedAt
 }
+
 // enum DeliveryPolicy {
 //   ANYWHERE
 //   WITHIN_STATE
@@ -224,7 +221,6 @@ model city {
   // order     order[]
 }
 
-
 // ===== country.prisma =====
 model country {
   id             String    @id @unique @default(uuid())
@@ -237,7 +233,6 @@ model country {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 }
-
 
 // ===== currency.prisma =====
 model currency {
@@ -253,7 +248,6 @@ model currency {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 }
-
 
 // ===== delivery-taxes.prisma =====
 model deliveryTaxes {
@@ -272,6 +266,7 @@ model deliveryTaxes {
   expiryDate            DateTime?
   createdAt             DateTime      @default(now())
   updatedAt             DateTime      @updatedAt
+
   // government            government?   @relation(fields: [governmentId], references: [id])
   // governmentId          String?
   //currency String @default("USD") // Required for multi-currency
@@ -282,7 +277,6 @@ model deliveryTaxes {
 // minimumFee Decimal @default(0) // New field
 // maximumFee Decimal? // New field
 // currency String @default("USD") // Required for multi-currency
-
 
 // ===== image.prisma =====
 model image {
@@ -300,7 +294,6 @@ model image {
   storeBanner      store[]    @relation("storeBanner")
 }
 
-
 // ===== inbox.prisma =====
 model inbox {
   id        String   @id @unique @default(uuid())
@@ -313,7 +306,6 @@ model inbox {
   updatedAt DateTime @updatedAt
 }
 
-
 // ===== info.prisma =====
 model info {
   id        String   @id @unique @default(uuid())
@@ -321,11 +313,10 @@ model info {
   slug      String   @unique
   // data      String
   nameId    String   @unique
-  name      locale   @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  name      locale   @relation(fields: [nameId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
 
 // ===== locale.prisma =====
 model locale {
@@ -361,7 +352,6 @@ model locale {
   detailedDescriptionProduct product?  @relation("detailedDescriptionProduct") //, references: [id], fields: [detailedDescriptionProductId])
 }
 
-
 // ===== location.prisma =====
 model location {
   id       String  @id @unique @default(uuid())
@@ -373,12 +363,11 @@ model location {
   order    order?
 }
 
-
 // ===== occasion.prisma =====
 model occasion {
   id        String    @id @unique @default(uuid())
-  nameId    String   @unique
-  name      locale   @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  nameId    String    @unique
+  name      locale    @relation(fields: [nameId], references: [id])
   imageId   String
   image     image     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // productOccasion productOccasion[]
@@ -388,7 +377,6 @@ model occasion {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
-
 
 // ===== order.prisma =====
 model order {
@@ -429,33 +417,31 @@ enum UserOrderStatus {
 // amountPaid Decimal @default(0)
 // amountDue Decimal @default(0) // Calculated as totalAmount - amountPaid
 
-
 // ===== plan-limits.prisma =====
 model PlanLimit {
-    id                   String             @id @default(uuid())
-    planName             PlanName           @unique @default(BASIC)
-    maxProducts          Int                @default(50)
-    maxBranches          Int                @default(2)
-    maxDiscountCodes     Int                @default(0)
-    notificationsPerWeek Int                @default(0)
-    adsPerWeek           Int                @default(0)
-    allowsBoxes          Boolean            @default(false)
-    allowsCollaborations Boolean            @default(false)
-    commissionRate       Float              @default(0.14) // 14%
-    monthlyPrice         Float? // null for commission-based plans
-    annualPrice          Float?
-    storeSubscription    StoreSubscription[]
+  id                   String              @id @default(uuid())
+  planName             PlanName            @unique @default(BASIC)
+  maxProducts          Int                 @default(50)
+  maxBranches          Int                 @default(2)
+  maxDiscountCodes     Int                 @default(0)
+  notificationsPerWeek Int                 @default(0)
+  adsPerWeek           Int                 @default(0)
+  allowsBoxes          Boolean             @default(false)
+  allowsCollaborations Boolean             @default(false)
+  commissionRate       Float               @default(0.14) // 14%
+  monthlyPrice         Float? // null for commission-based plans
+  annualPrice          Float?
+  storeSubscription    StoreSubscription[]
 
-    @@map("plan_limits")
+  @@map("plan_limits")
 }
 
 enum PlanName {
-    BASIC
-    SILVER
-    GOLD
-    DIAMOND
+  BASIC
+  SILVER
+  GOLD
+  DIAMOND
 }
-
 
 // ===== product-cart.prisma =====
 model productCart {
@@ -491,7 +477,6 @@ enum ProductCartStatus {
   NODELIVERYSTATES
   OUTOFSTOCK
 }
-
 
 // ===== product-order.prisma =====
 model productOrder {
@@ -536,20 +521,21 @@ enum OrderStatus {
   REFUNDED
 }
 
-
 // ===== product-price.prisma =====
 model productPrice {
-  productId                    String   @unique
-  product                      product     @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productId String  @unique
+  product   product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   actualPrice Float? // @default(1)
 
-  discountPercent          Float?    @default(0)
-  discountStartTime        DateTime?
-  discountEndTime          DateTime?
+  discountPercent   Float?    @default(0)
+  discountStartTime DateTime?
+  discountEndTime   DateTime?
+
   //bulkPricing BulkPricing[]
   @@map("product_price")
 }
+
 // minimumOrder: 5
 // discountPercent: 10 // 10% off when buying 5+ units
 
@@ -581,25 +567,23 @@ model productStock {
   @@map("product_stock")
 }
 
-
 // ===== product-variant.prisma =====
 model productVariant {
-    id           String         @id @unique @default(uuid())
-    product      product        @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    productId    String
-    // Variant attributes (size, color, etc.)
-    color        String // e.g., "Color"
-    //   option2   String?  // e.g., "Size"
-    //   option3   String?  // e.g., "Material"
-    // Inventory relationship
-    productStock productStock[]
-    // productCart  productCart[]
-    // productOrder productOrder[]
+  id           String         @id @unique @default(uuid())
+  product      product        @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productId    String
+  // Variant attributes (size, color, etc.)
+  color        String // e.g., "Color"
+  //   option2   String?  // e.g., "Size"
+  //   option3   String?  // e.g., "Material"
+  // Inventory relationship
+  productStock productStock[]
+  // productCart  productCart[]
+  // productOrder productOrder[]
 
-    @@unique([productId, color])
-    @@map("product_variant")
+  @@unique([productId, color])
+  @@map("product_variant")
 }
-
 
 // ===== product.prisma =====
 // Big sales
@@ -685,7 +669,6 @@ enum ProductStatus {
 //   bulkPricing BulkPricing[] // For quantity breaks
 // }
 
-
 // ===== review.prisma =====
 model review {
   id        String   @id @unique @default(uuid())
@@ -701,7 +684,6 @@ model review {
   @@unique([userId, productId])
 }
 
-
 // ===== session.prisma =====
 model session {
   id       String  @id @unique @default(uuid())
@@ -714,7 +696,6 @@ model session {
   isActive Boolean @default(true)
   adminId  String?
 }
-
 
 // ===== state.prisma =====
 model state {
@@ -735,7 +716,6 @@ model state {
   updatedAt                DateTime        @updatedAt
   location                 location[]
 }
-
 
 // ===== store-subscriptions.prisma =====
 model StoreSubscription {
@@ -790,7 +770,6 @@ enum SubscriptionStatus {
   EXPIRED
 }
 
-
 // ===== store.prisma =====
 model store {
   id     String @id @unique @default(uuid())
@@ -801,24 +780,24 @@ model store {
 
   // name               String
   // bio                String
-  logoId               String            @unique
-  logo                 image             @relation("storeLogo", fields: [logoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  bannerId             String            @unique
-  banner               image             @relation("storeBanner", fields: [bannerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  phone                String            @unique
-  email                String            @unique
+  logoId               String        @unique
+  logo                 image         @relation("storeLogo", fields: [logoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bannerId             String        @unique
+  banner               image         @relation("storeBanner", fields: [bannerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  phone                String        @unique
+  email                String        @unique
   password             String
   // socialLinksId      String    
   socialLinks          socialLink? //  @relation(fields: [socialLinksId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   branches             branch[]
   transactions         transaction[]
-  moneyInPocket        Decimal           @default(0)
-  sessions             session[]         @relation("storeSession")
+  moneyInPocket        Decimal       @default(0)
+  sessions             session[]     @relation("storeSession")
   passwordChangeBefore DateTime?
   // product            product[]
   // store - restaurant - place for weddings
-  role                 String            @default("store")
-  status               StoreStatus       @default(PENDING)
+  role                 String        @default("store")
+  status               StoreStatus   @default(PENDING)
   // subscription         StoreSubscription @relation(fields: [subscriptionId], references: [id])
   // subscriptionId       String            @unique
   // Store can have multiple ad campaigns
@@ -854,34 +833,31 @@ model socialLink {
   // store     store[]
 }
 
-
 // ===== subscription-plan-changes.prisma =====
 model SubscriptionPlanChange {
-    id        String   @id @default(uuid())
-    createdAt DateTime @default(now())
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
 
-    // What changed
-    fromPlan   PlanName
-    toPlan     PlanName
-    changeType ChangeType // UPGRADE, DOWNGRADE, RENEWAL
+  // What changed
+  fromPlan   PlanName
+  toPlan     PlanName
+  changeType ChangeType // UPGRADE, DOWNGRADE, RENEWAL
 
-    // Context
-    reason String?
+  // Context
+  reason String?
 
-    // Relations
-    subscription   StoreSubscription @relation(fields: [subscriptionId], references: [id])
-    subscriptionId String
+  // Relations
+  subscription   StoreSubscription @relation(fields: [subscriptionId], references: [id])
+  subscriptionId String
 
-    @@map("subscription_plan_changes")
+  @@map("subscription_plan_changes")
 }
-
 
 enum ChangeType {
-    UPGRADE
-    DOWNGRADE
-    RENEWAL
+  UPGRADE
+  DOWNGRADE
+  RENEWAL
 }
-
 
 // ===== transaction.prisma =====
 enum TransactionType {
@@ -911,7 +887,6 @@ model transaction {
   updatedAt  DateTime        @updatedAt
 }
 
-
 // ===== user-cart.prisma =====
 model userCart {
   // id          String        @id @default(uuid())
@@ -930,7 +905,6 @@ model userCart {
   // productId String?
   @@map("user_cart")
 }
-
 
 // ===== user.prisma =====
 model user {
@@ -974,4 +948,3 @@ model userLocations {
   stateId String?
   isMain  Boolean @default(false)
 }
-

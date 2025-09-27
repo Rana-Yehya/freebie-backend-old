@@ -16,7 +16,7 @@ const { createAccessJWT, createRefreshJWT } = require("../utils/jwt-utils");
 const { passwordEncrypt, passwordCompare } = require("../utils/password-utils");
 const { storeConstant } = require("../config/constants");
 const { uploadImage } = require("../helpers/image-kit/upload-image");
-const { StoreStatus, OrderStatus } = require("../generated/prisma");
+const { StoreStatus, OrderStatus } = require("../generated");
 const {
   checkOtpRestirictionsHelper,
   spamOtpRequestHelper,

@@ -8,7 +8,7 @@ const {
   UnauthenticatedError,
 } = require("../errors");
 const { userConstant, adminConstant } = require("../config/constants");
-const { TransactionType } = require("../generated/prisma");
+const { TransactionType } = require("../generated");
 const createDepositPayment = async ({
   type,
   isUser = true,

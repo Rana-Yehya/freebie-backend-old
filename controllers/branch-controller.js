@@ -10,7 +10,7 @@ const {
 } = require("../errors");
 const { storeConstant } = require("../config/constants");
 const { UpdateBranchZodModel } = require("../models/update-branch-zod-model");
-const { OrderStatus } = require("../generated/prisma");
+const { OrderStatus } = require("../generated");
 const getAllStoreBranches = async (req, res, next) => {
   let id = req.query.id;
   if (req.user != undefined && req.user.role === storeConstant) {

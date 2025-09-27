@@ -2,23 +2,73 @@ services:
   app:
     build:
       context: .
+      dockerfile: ./api-gateway/Dockerfile
     container_name: freebie
+    env_file: ./api-gateway/.env
     environment:
       - PORT=5000
       - NODE_ENV=development
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/freebie?schema=public
-    ports: 
+    ports:
       - "5000:5000"
+    volumes:
+      - ./api-gateway:/docker
+      
+      - ./core-gateway:/docker/core-gateway
     depends_on:
       - db
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./*
-          target: /docker
+    command: >
+      sh -c "
+        # Install core as local package
+        npm install ./core-gateway &&
+        # Start the application
+        npm run dev
+      "
+    # develop:
+    #   watch:
+    #     - action: sync+restart
+    #       path: ./*
+    #       target: /docker
+  # core:
+  #   build:
+  #     context: ./core-gateway/
+  #     dockerfile: Dockerfile
+  #   container_name: freebie-core
+  #   env_file: ./core-gateway/.env
+  #   environment:
+  #     - PORT=5000
+  #     - NODE_ENV=development
+  #     - DATABASE_URL=postgresql://postgres:postgres@db:5432/freebie?schema=public
+  #   ports:
+  #     - "5000:5000"
+  #   volumes:
+  #     - ./core-gateway:/docker
+  #   depends_on:
+  #     - db
+  # admin:
+  #   build:
+  #     context: ./admin-gateway
+  #     dockerfile: Dockerfile
+  #   container_name: freebie-admin
+  #   env_file: ./admin-gateway/.env
+  #   environment:
+  #     - PORT=5001
+  #     - NODE_ENV=development
+  #     - DATABASE_URL=postgresql://postgres:postgres@db:5432/freebie?schema=public
+  #   ports:
+  #     - "5001:5001"
+  #   depends_on:
+  #     - db
+  #   # develop:
+  #   #   watch:
+  #   #     - action: sync+restart
+  #   #       path: ./*
+  #   #       target: /docker
 
-    volumes:
-      - .:/docker
+  #   volumes:
+  #     - ./core:/app/core
+  #     - ./admin-gateway:/docker
+  #     - ./generated:/docker/generated
   db:
     image: postgres:16
     container_name: postgres

@@ -5,7 +5,7 @@ const path = require("path");
 const baseSchema = `
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  output   = "../generated"
 }
 
 datasource db {

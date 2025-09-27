@@ -22,7 +22,7 @@ const { userConstant } = require("../config/constants");
 const {
   UpdateUserProfileZodModel,
 } = require("../models/update-user-profile-zod-model");
-const { OrderStatus } = require("../generated/prisma");
+const { OrderStatus } = require("../generated");
 const {
   UpdateLocationZodModel,
 } = require("../models/update-location-zod-model");

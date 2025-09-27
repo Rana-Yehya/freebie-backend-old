@@ -7,11 +7,7 @@ const {
   UnauthenticatedError,
 } = require("../errors");
 const { userConstant, adminConstant } = require("../config/constants");
-const {
-  ProductTags,
-  ProductStatus,
-  OrderStatus,
-} = require("../generated/prisma");
+const { ProductTags, ProductStatus, OrderStatus } = require("../generated");
 
 const selectedQuery = {
   id: true,

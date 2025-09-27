@@ -198,7 +198,7 @@ model workHour {
 model category {
   id                         String    @id @unique @default(uuid())
   nameId                     String   @unique
-  name                       locale   @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  name                       locale   @relation(fields: [nameId], references: [id])
   imageId                    String
   image                      image     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   product                    product[]
@@ -321,7 +321,7 @@ model info {
   slug      String   @unique
   // data      String
   nameId    String   @unique
-  name      locale   @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  name      locale   @relation(fields: [nameId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -378,7 +378,7 @@ model location {
 model occasion {
   id        String    @id @unique @default(uuid())
   nameId    String   @unique
-  name      locale   @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  name      locale   @relation(fields: [nameId], references: [id])
   imageId   String
   image     image     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // productOccasion productOccasion[]

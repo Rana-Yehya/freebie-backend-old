@@ -10,7 +10,7 @@ const {
 const { uploadImage } = require("../helpers/image-kit/upload-image");
 const { destroyImage } = require("../helpers/image-kit/delete-image");
 const { CreateReviewZodModel } = require("../models/create-review-zod-model");
-const { OrderStatus } = require("../generated/prisma");
+const { OrderStatus } = require("../generated");
 const getAllProductReviews = async (req, res, next) => {
   const { id: productId } = req.params;
   if (!productId) {

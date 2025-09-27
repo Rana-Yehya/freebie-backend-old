@@ -13,7 +13,7 @@ const {
   destroyMultipleImages,
   destroyImage,
 } = require("../helpers/image-kit/delete-image");
-const { ProductTags, ProductStatus } = require("../generated/prisma");
+const { ProductTags, ProductStatus } = require("../generated");
 const getAllProducts = async (req, res, next) => {
   const products = await prisma.product.findMany({
     include: { occasions: true },

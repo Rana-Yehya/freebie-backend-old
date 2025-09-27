@@ -11,7 +11,7 @@ const { UserProductZodModel } = require("../models/user-product-zod-model");
 // const {
 //   UpdateUserProductZodModel,
 // } = require("../models/update-user-product-zod-model");
-const { ProductCartStatus } = require("../generated/prisma");
+const { ProductCartStatus } = require("../generated");
 const getAllCartItems = async (req, res, next) => {
   const userCart = await prisma.userCart.findUnique({
     where: {
