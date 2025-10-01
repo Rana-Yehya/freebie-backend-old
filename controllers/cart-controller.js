@@ -719,7 +719,7 @@ const calculateSubTotal = async (req, res, next) => {
             select: {
               variant: {
                 include: {
-                  product: { select: { price: true, productPrice: true } },
+                  product: { select: { price: true, actualPrice: true } },
                 },
               },
             },
@@ -735,9 +735,9 @@ const calculateSubTotal = async (req, res, next) => {
   let sum = 0;
   userCart.productCart.forEach((item) => {
     const price =
-      item.productStock.variant.product.productPrice == undefined
+      item.productStock.variant.product.actualPrice == undefined
         ? item.productStock.variant.product.price
-        : item.productStock.variant.product.productPrice.actualPrice;
+        : item.productStock.variant.product.actualPrice;
     sum += price * item.quantity;
   });
   console.log(sum);
@@ -781,7 +781,7 @@ const calculateDeliveryFees = async (req, res, next) => {
                     select: {
                       weightInKg: true,
                       price: true,
-                      productPrice: true,
+                      actualPrice: true,
                     },
                   },
                 },

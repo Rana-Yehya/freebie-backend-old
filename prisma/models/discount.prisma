@@ -4,11 +4,13 @@ model discount {
   discountPercent   Float    @default(0)
   discountStartTime DateTime
   discountEndTime   DateTime
-
-  store     store    @relation(fields: [storeId], references: [id])
-  storeId   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  product           product  @relation(fields: [productId], references: [id])
+  productId         String   @unique
+  // product           product? // @relation("currencyAbbLocale")
+  store             store?   @relation(fields: [storeId], references: [id])
+  storeId           String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   //bulkPricing BulkPricing[]
   @@map("discount")

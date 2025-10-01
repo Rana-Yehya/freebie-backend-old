@@ -112,8 +112,8 @@ const CreateProductZodModel = z
       .default("false"),
     preparationTimeInMinutes: z.string().default("0"),
     discountPercent: z.string().default("0"),
-    discountStartTime: z.coerce.date().optional(),
-    discountEndTime: z.coerce.date().optional(),
+    discountStartTime: z.string().datetime().optional(),
+    discountEndTime: z.string().datetime().optional(),
     // color: z.array(
     //   z
     //     .string()

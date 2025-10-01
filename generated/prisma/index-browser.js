@@ -127,6 +127,7 @@ exports.Prisma.AdminScalarFieldEnum = {
   email: 'email',
   password: 'password',
   moneyInPocket: 'moneyInPocket',
+  adminPrivilege: 'adminPrivilege',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   countryId: 'countryId'
@@ -246,6 +247,17 @@ exports.Prisma.DeliveryTaxesScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.DiscountScalarFieldEnum = {
+  id: 'id',
+  discountPercent: 'discountPercent',
+  discountStartTime: 'discountStartTime',
+  discountEndTime: 'discountEndTime',
+  productId: 'productId',
+  storeId: 'storeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.ImageScalarFieldEnum = {
   id: 'id',
   publicId: 'publicId',
@@ -341,6 +353,7 @@ exports.Prisma.ProductOrderScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
   productStockId: 'productStockId',
+  commissionRate: 'commissionRate',
   quantity: 'quantity',
   price: 'price',
   deliveryFee: 'deliveryFee',
@@ -350,14 +363,6 @@ exports.Prisma.ProductOrderScalarFieldEnum = {
   userRefundAmount: 'userRefundAmount',
   storerRefundAmount: 'storerRefundAmount',
   cancelledBy: 'cancelledBy'
-};
-
-exports.Prisma.ProductPriceScalarFieldEnum = {
-  productId: 'productId',
-  actualPrice: 'actualPrice',
-  discountPercent: 'discountPercent',
-  discountStartTime: 'discountStartTime',
-  discountEndTime: 'discountEndTime'
 };
 
 exports.Prisma.ProductStockScalarFieldEnum = {
@@ -382,6 +387,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   descriptionId: 'descriptionId',
   detailedDescriptionId: 'detailedDescriptionId',
   price: 'price',
+  actualPrice: 'actualPrice',
   doesNeedPreparation: 'doesNeedPreparation',
   status: 'status',
   tags: 'tags',
@@ -542,6 +548,11 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.adminPrivilege = exports.$Enums.adminPrivilege = {
+  ALL: 'ALL',
+  DELIVERY: 'DELIVERY'
+};
+
 exports.UserOrderStatus = exports.$Enums.UserOrderStatus = {
   UNPAID: 'UNPAID',
   PAID: 'PAID'
@@ -633,6 +644,7 @@ exports.Prisma.ModelName = {
   country: 'country',
   currency: 'currency',
   deliveryTaxes: 'deliveryTaxes',
+  discount: 'discount',
   image: 'image',
   inbox: 'inbox',
   info: 'info',
@@ -643,7 +655,6 @@ exports.Prisma.ModelName = {
   PlanLimit: 'PlanLimit',
   productCart: 'productCart',
   productOrder: 'productOrder',
-  productPrice: 'productPrice',
   productStock: 'productStock',
   productVariant: 'productVariant',
   product: 'product',

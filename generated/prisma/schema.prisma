@@ -18,10 +18,10 @@ model admin {
 
   // categoriesInterest category[]
   // occasionsInterest  occasion[]
-
+  adminPrivilege adminPrivilege
   // products           product[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 
   // imageId     String?  
   // avatar      image?    @relation(fields: [imageId], references: [id])
@@ -29,9 +29,11 @@ model admin {
   countryId String?
 }
 
-// model adminPrivilege {
+enum adminPrivilege {
+  ALL
+  DELIVERY
+}
 
-// }
 // Add these to your existing schema
 
 model AdCampaign {
@@ -259,6 +261,24 @@ model deliveryTaxes {
 // maximumFee Decimal? // New field
 // currency String @default("USD") // Required for multi-currency
 
+model discount {
+  id String @id @unique @default(uuid())
+
+  discountPercent   Float    @default(0)
+  discountStartTime DateTime
+  discountEndTime   DateTime
+  product           product  @relation(fields: [productId], references: [id])
+  productId         String   @unique
+  // product           product? // @relation("currencyAbbLocale")
+  store             store?   @relation(fields: [storeId], references: [id])
+  storeId           String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  //bulkPricing BulkPricing[]
+  @@map("discount")
+}
+
 model image {
   id               String     @id @unique @default(uuid())
   publicId         String
@@ -466,6 +486,7 @@ model productOrder {
   // variantId          String
   productStock       productStock?  @relation(fields: [productStockId], references: [id])
   productStockId     String?
+  commissionRate     Float
   quantity           Int            @default(1)
   price              Float          @default(0)
   deliveryFee        Float          @default(0)
@@ -493,29 +514,6 @@ enum OrderStatus {
   REFUNDED
 }
 
-model productPrice {
-  productId String  @unique
-  product   product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  actualPrice Float? // @default(1)
-
-  discountPercent   Float?    @default(0)
-  discountStartTime DateTime?
-  discountEndTime   DateTime?
-
-  //bulkPricing BulkPricing[]
-  @@map("product_price")
-}
-
-// minimumOrder: 5
-// discountPercent: 10 // 10% off when buying 5+ units
-
-// model BulkPricing {
-//   id String @id @default(uuid())
-//   minQuantity Int
-//   price Decimal
-//   productPrice ProductPrice @relation(...)
-// }
 model productStock {
   id           String         @id @unique @default(uuid())
   // product      product        @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -584,7 +582,8 @@ model product {
   // user                     user?             @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   // userId                   String?
   price                      Float            @default(1)
-  productPrice               productPrice?
+  discount                   discount?
+  actualPrice                Float?
   doesNeedPreparation        Boolean          @default(false)
   status                     ProductStatus    @default(PENDING)
   // isFeatured               Boolean   @default(false)
@@ -760,13 +759,13 @@ model store {
   subscriptionId       String? //@unique
   // Store can have multiple ad campaigns
   adCampaigns          AdCampaign[]
-
+  discounts            discount[]
   // isApprovedByAdmin Boolean  @default(false)
   // isFreezed         Boolean  @default(false)
   // isBanned          Boolean  @default(false)
   // isDeleted         Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
   // storeAddress storeAddress[]
 }
 

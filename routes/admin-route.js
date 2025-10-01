@@ -18,7 +18,13 @@ const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
 
-const { adminConstant } = require("../config/constants");
+const {
+  adminConstant,
+  adminPrivilegeAllConstant,
+} = require("../config/constants");
+const {
+  authorizeAdminMiddleware,
+} = require("../middleware/authorization-admin-middleware");
 
 const router = express.Router();
 
@@ -37,65 +43,72 @@ const router = express.Router();
 //     freezeStore
 //   );
 
-router
-  .route("/set-store-status")
-  .post(
-    authenticateUserMiddleware,
-    authorizeMiddleware(adminConstant),
-    setStoreStatus
-  );
+router.route("/set-store-status").post(
+  authenticateUserMiddleware,
+  authorizeMiddleware(adminConstant),
+  authorizeAdminMiddleware(adminPrivilegeAllConstant),
 
+  setStoreStatus
+);
+
+router.route("/approve-product").post(
+  authenticateUserMiddleware,
+  authorizeMiddleware(adminConstant),
+  authorizeAdminMiddleware(adminPrivilegeAllConstant),
+
+  approveProduct
+);
 router
-  .route("/approve-product")
+  .route("/create-admin")
   .post(
     authenticateUserMiddleware,
     authorizeMiddleware(adminConstant),
+    authorizeAdminMiddleware(adminPrivilegeAllConstant),
     approveProduct
   );
+router.route("/stores").get(
+  authenticateUserMiddleware,
+  authorizeMiddleware(adminConstant),
+  authorizeAdminMiddleware(adminPrivilegeAllConstant),
 
-router
-  .route("/stores")
-  .get(
-    authenticateUserMiddleware,
-    authorizeMiddleware(adminConstant),
-    getAllStores
-  );
+  getAllStores
+);
 
-router
-  .route("/users")
-  .get(
-    authenticateUserMiddleware,
-    authorizeMiddleware(adminConstant),
-    getAllUsers
-  );
+router.route("/users").get(
+  authenticateUserMiddleware,
+  authorizeMiddleware(adminConstant),
+  authorizeAdminMiddleware(adminPrivilegeAllConstant),
 
-router
-  .route("/send-notification-to-all-users")
-  .post(
-    authenticateUserMiddleware,
-    authorizeMiddleware(adminConstant),
-    sendNotificationToAllUsers
-  );
-router
-  .route("/send-notification-to-all-stores")
-  .post(
-    authenticateUserMiddleware,
-    authorizeMiddleware(adminConstant),
-    sendNotificationToAllStores
-  );
+  getAllUsers
+);
 
-router
-  .route("/products")
-  .get(
-    authenticateUserMiddleware,
-    authorizeMiddleware(adminConstant),
-    getAllProducts
-  );
-router
-  .route("/set-product-tag")
-  .post(
-    authenticateUserMiddleware,
-    authorizeMiddleware(adminConstant),
-    setProductTag
-  );
+router.route("/send-notification-to-all-users").post(
+  authenticateUserMiddleware,
+  authorizeMiddleware(adminConstant),
+  authorizeAdminMiddleware(adminPrivilegeAllConstant),
+
+  sendNotificationToAllUsers
+);
+router.route("/send-notification-to-all-stores").post(
+  authenticateUserMiddleware,
+  authorizeMiddleware(adminConstant),
+  authorizeAdminMiddleware(adminPrivilegeAllConstant),
+
+  sendNotificationToAllStores
+);
+
+router.route("/products").get(
+  authenticateUserMiddleware,
+  authorizeMiddleware(adminConstant),
+  authorizeAdminMiddleware(adminPrivilegeAllConstant),
+
+  getAllProducts
+);
+router.route("/set-product-tag").post(
+  authenticateUserMiddleware,
+  authorizeMiddleware(adminConstant),
+  authorizeAdminMiddleware(adminPrivilegeAllConstant),
+
+  setProductTag
+);
 module.exports = router;
