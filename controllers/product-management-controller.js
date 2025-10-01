@@ -96,6 +96,15 @@ const createProduct = async (req, res, next) => {
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
+
+  if (
+    req.user.subscription.maxTotalProducts >=
+    req.user.subscription.planLimit.maxProducts
+  ) {
+    throw new BadRequestError(
+      "You have reached the maximum number of products"
+    );
+  }
   const category = await prisma.category.findUnique({
     where: { id: categoryId },
   });
@@ -150,39 +159,8 @@ const createProduct = async (req, res, next) => {
       publicId: imagePublicIdsToStore[imageIndex],
     });
   }
-  // console.log(category.canBeDeliveredOutsideState);
-  // console.log(canBeDeliveredOutsideState);
-  // console.log(
-  //   category.canBeDeliveredOutsideState == true
-  //     ? canBeDeliveredOutsideState == undefined
-  //       ? undefined
-  //       : canBeDeliveredOutsideState === "false"
-  //       ? false
-  //       : true
-  //     : false
-  // );
-  // if (category.canBeDeliveredOutsideState == true) {
-  //   console.log("here");
 
-  //   console.log(canBeDeliveredOutsideState == undefined);
-  //   console.log("here");
-  //   const x = Boolean(canBeDeliveredOutsideState);
-  //   console.log(x);
-  //   //   ? undefined
-  //   //   : Boolean(canBeDeliveredOutsideState);
-  //   // false;
-  // }
   const productStockListToStore = productStockList.map((product) => {
-    //   return {
-    //     branch: {
-    //       connect: {
-    //         id: product.branchId,
-    //       },
-    //     },
-    //     stock: product.stock,
-    //     color: product.color,
-    //   };
-    // });
     return {
       color: product.color,
       productStock: {
@@ -283,6 +261,18 @@ const createProduct = async (req, res, next) => {
       occasions: true,
     },
   });
+  if (createdProduct) {
+    await prisma.store.update({
+      where: { id: req.user.id },
+      data: {
+        subscription: {
+          update: {
+            maxTotalProducts: { increment: 1 },
+          },
+        },
+      },
+    });
+  }
   /*
   let productStockDb = [];
   for (

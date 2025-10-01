@@ -1,17 +1,3 @@
-generator client {
-  provider = "prisma-client-js"
-  output   = "../generated/prisma"
-}
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-// ===== admin.prisma =====
-// model adminPrivilege {
-
-// }
 model admin {
   id       String    @id @unique @default(uuid())
   name     String
@@ -43,7 +29,9 @@ model admin {
   countryId String?
 }
 
-// ===== ads.prisma =====
+// model adminPrivilege {
+
+// }
 // Add these to your existing schema
 
 model AdCampaign {
@@ -121,7 +109,6 @@ enum AdStatus {
   CANCELLED
 }
 
-// ===== branch-discount-codes.prisma =====
 model BranchDiscountCode {
   id                 String    @id @default(uuid())
   code               String // Unique per branch? or per store? Let's make it unique per store
@@ -144,7 +131,6 @@ model BranchDiscountCode {
   @@map("branch_discount_codes")
 }
 
-// ===== branch.prisma =====
 model branch {
   id         String    @id @unique @default(uuid())
   storeId    String
@@ -190,11 +176,10 @@ model workHour {
   day       Int
 }
 
-// ===== category.prisma =====
 model category {
   id                         String    @id @unique @default(uuid())
   nameId                     String    @unique
-  name                       locale    @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  name                       locale    @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   imageId                    String
   image                      image     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   product                    product[]
@@ -209,7 +194,6 @@ model category {
 //   WITHIN_COUNTRY
 // }
 
-// ===== city.prisma =====
 model city {
   id        String   @id @unique @default(uuid())
   nameId    String?  @unique
@@ -221,7 +205,6 @@ model city {
   // order     order[]
 }
 
-// ===== country.prisma =====
 model country {
   id             String    @id @unique @default(uuid())
   nameId         String    @unique
@@ -234,7 +217,6 @@ model country {
   updatedAt      DateTime  @updatedAt
 }
 
-// ===== currency.prisma =====
 model currency {
   id            String        @id @unique @default(uuid())
   nameId        String        @unique
@@ -249,7 +231,6 @@ model currency {
   updatedAt     DateTime      @updatedAt
 }
 
-// ===== delivery-taxes.prisma =====
 model deliveryTaxes {
   id                    String        @id @unique @default(uuid())
   // name               String
@@ -278,7 +259,6 @@ model deliveryTaxes {
 // maximumFee Decimal? // New field
 // currency String @default("USD") // Required for multi-currency
 
-// ===== image.prisma =====
 model image {
   id               String     @id @unique @default(uuid())
   publicId         String
@@ -294,7 +274,6 @@ model image {
   storeBanner      store[]    @relation("storeBanner")
 }
 
-// ===== inbox.prisma =====
 model inbox {
   id        String   @id @unique @default(uuid())
   // buy something or take money from wallet -> false = buy, true = take
@@ -306,19 +285,17 @@ model inbox {
   updatedAt DateTime @updatedAt
 }
 
-// ===== info.prisma =====
 model info {
   id        String   @id @unique @default(uuid())
   // buy something or take money from wallet -> false = buy, true = take
   slug      String   @unique
   // data      String
   nameId    String   @unique
-  name      locale   @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  name      locale   @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-// ===== locale.prisma =====
 model locale {
   id                         String    @id @unique @default(uuid())
   default                    String?
@@ -352,7 +329,6 @@ model locale {
   detailedDescriptionProduct product?  @relation("detailedDescriptionProduct") //, references: [id], fields: [detailedDescriptionProductId])
 }
 
-// ===== location.prisma =====
 model location {
   id       String  @id @unique @default(uuid())
   address  String?
@@ -363,11 +339,10 @@ model location {
   order    order?
 }
 
-// ===== occasion.prisma =====
 model occasion {
   id        String    @id @unique @default(uuid())
   nameId    String    @unique
-  name      locale    @relation(fields: [nameId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  name      locale    @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   imageId   String
   image     image     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // productOccasion productOccasion[]
@@ -378,7 +353,6 @@ model occasion {
   updatedAt DateTime  @updatedAt
 }
 
-// ===== order.prisma =====
 model order {
   id                 String          @id @unique @default(uuid())
   userId             String
@@ -417,10 +391,9 @@ enum UserOrderStatus {
 // amountPaid Decimal @default(0)
 // amountDue Decimal @default(0) // Calculated as totalAmount - amountPaid
 
-// ===== plan-limits.prisma =====
 model PlanLimit {
-  id                   String              @id @default(uuid())
-  planName             PlanName            @unique @default(BASIC)
+  // id                   String             @id @default(uuid())
+  planName             PlanName            @default(BASIC)
   maxProducts          Int                 @default(50)
   maxBranches          Int                 @default(2)
   maxDiscountCodes     Int                 @default(0)
@@ -433,6 +406,7 @@ model PlanLimit {
   annualPrice          Float?
   storeSubscription    StoreSubscription[]
 
+  @@unique(planName)
   @@map("plan_limits")
 }
 
@@ -443,7 +417,6 @@ enum PlanName {
   DIAMOND
 }
 
-// ===== product-cart.prisma =====
 model productCart {
   userCart        userCart          @relation(fields: [userCartUserId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
   userCartUserId  String
@@ -478,7 +451,6 @@ enum ProductCartStatus {
   OUTOFSTOCK
 }
 
-// ===== product-order.prisma =====
 model productOrder {
   id                 String         @id @unique @default(uuid())
   order              order          @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -521,7 +493,6 @@ enum OrderStatus {
   REFUNDED
 }
 
-// ===== product-price.prisma =====
 model productPrice {
   productId String  @unique
   product   product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -545,8 +516,6 @@ model productPrice {
 //   price Decimal
 //   productPrice ProductPrice @relation(...)
 // }
-
-// ===== product-stock.prisma =====
 model productStock {
   id           String         @id @unique @default(uuid())
   // product      product        @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -567,7 +536,6 @@ model productStock {
   @@map("product_stock")
 }
 
-// ===== product-variant.prisma =====
 model productVariant {
   id           String         @id @unique @default(uuid())
   product      product        @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -585,7 +553,6 @@ model productVariant {
   @@map("product_variant")
 }
 
-// ===== product.prisma =====
 // Big sales
 
 //  1 100 000  20%       price = 80 000
@@ -669,7 +636,6 @@ enum ProductStatus {
 //   bulkPricing BulkPricing[] // For quantity breaks
 // }
 
-// ===== review.prisma =====
 model review {
   id        String   @id @unique @default(uuid())
   user      user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -684,7 +650,6 @@ model review {
   @@unique([userId, productId])
 }
 
-// ===== session.prisma =====
 model session {
   id       String  @id @unique @default(uuid())
   fcmToken String?
@@ -697,7 +662,6 @@ model session {
   adminId  String?
 }
 
-// ===== state.prisma =====
 model state {
   id                       String          @id @unique @default(uuid())
   // name                     String
@@ -717,24 +681,20 @@ model state {
   location                 location[]
 }
 
-// ===== store-subscriptions.prisma =====
 model StoreSubscription {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  id          String             @id @default(uuid())
   // Current active plan
-  planLimit   PlanLimit?         @relation(fields: [planLimitId], references: [id], onDelete: SetNull)
-  planLimitId String?
+  planLimit   PlanLimit          @relation(fields: [planLimitId], references: [planName])
+  planLimitId PlanName
   status      SubscriptionStatus @default(ACTIVE)
 
   // Billing period (Nov 1 - Nov 30)
-  currentPeriodStart DateTime // 2024-11-01
-  currentPeriodEnd   DateTime // 2024-11-30
+  lastUpgradeDate        DateTime  @default(now()) // 2024-11-01
+  minimumPlanPeriodUntil DateTime?
 
   // Plan limits are now PER STORE (aggregate of all branches)
-  maxTotalProducts     Int @default(50) // Total across all branches
-  maxBranches          Int @default(1) // How many branches allowed
+  maxTotalProducts     Int @default(0) // Total across all branches
+  maxBranches          Int @default(0) // How many branches allowed
   maxDiscountCodes     Int @default(0) // Total discount codes across all branches
   notificationsPerWeek Int @default(0)
   adsPerWeek           Int @default(0)
@@ -744,21 +704,20 @@ model StoreSubscription {
   allowsCollaborations Boolean @default(false)
 
   // Pricing
-  commissionRate Float  @default(0.14)
-  monthlyPrice   Float?
-  annualPrice    Float?
+  commissionRate Float @default(0.14)
+  // monthlyPrice   Float?
+  // annualPrice    Float?
 
   // Simple ad counter - reset each period
   adsUsedThisPeriod Int       @default(0) // Tracks 0, 1, 2...
   adsResetAt        DateTime? // Set to currentPeriodEnd
 
-  // For pending downgrades
-  downgradeToPlan      PlanName?
-  downgradeScheduledAt DateTime?
-
   // Relations
   // store       store?
   planChanges SubscriptionPlanChange[]
+  store       store[]
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime                 @updatedAt
 
   @@map("store_subscriptions")
 }
@@ -770,7 +729,6 @@ enum SubscriptionStatus {
   EXPIRED
 }
 
-// ===== store.prisma =====
 model store {
   id     String @id @unique @default(uuid())
   nameId String @unique
@@ -780,26 +738,26 @@ model store {
 
   // name               String
   // bio                String
-  logoId               String        @unique
-  logo                 image         @relation("storeLogo", fields: [logoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  bannerId             String        @unique
-  banner               image         @relation("storeBanner", fields: [bannerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  phone                String        @unique
-  email                String        @unique
+  logoId               String             @unique
+  logo                 image              @relation("storeLogo", fields: [logoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bannerId             String             @unique
+  banner               image              @relation("storeBanner", fields: [bannerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  phone                String             @unique
+  email                String             @unique
   password             String
   // socialLinksId      String    
   socialLinks          socialLink? //  @relation(fields: [socialLinksId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   branches             branch[]
   transactions         transaction[]
-  moneyInPocket        Decimal       @default(0)
-  sessions             session[]     @relation("storeSession")
+  moneyInPocket        Float              @default(0)
+  sessions             session[]          @relation("storeSession")
   passwordChangeBefore DateTime?
   // product            product[]
   // store - restaurant - place for weddings
-  role                 String        @default("store")
-  status               StoreStatus   @default(PENDING)
-  // subscription         StoreSubscription @relation(fields: [subscriptionId], references: [id])
-  // subscriptionId       String            @unique
+  role                 StoreRole          @default(STORE)
+  status               StoreStatus        @default(PENDING)
+  subscription         StoreSubscription? @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  subscriptionId       String? //@unique
   // Store can have multiple ad campaigns
   adCampaigns          AdCampaign[]
 
@@ -810,6 +768,10 @@ model store {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   // storeAddress storeAddress[]
+}
+
+enum StoreRole {
+  STORE
 }
 
 enum StoreStatus {
@@ -833,7 +795,6 @@ model socialLink {
   // store     store[]
 }
 
-// ===== subscription-plan-changes.prisma =====
 model SubscriptionPlanChange {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
@@ -859,7 +820,6 @@ enum ChangeType {
   RENEWAL
 }
 
-// ===== transaction.prisma =====
 enum TransactionType {
   DEPOSIT
   WITHDRAW
@@ -887,7 +847,6 @@ model transaction {
   updatedAt  DateTime        @updatedAt
 }
 
-// ===== user-cart.prisma =====
 model userCart {
   // id          String        @id @default(uuid())
   userId      String        @unique
@@ -906,13 +865,12 @@ model userCart {
   @@map("user_cart")
 }
 
-// ===== user.prisma =====
 model user {
   id            String          @id @unique @default(uuid())
   name          String
   dateOfBirth   DateTime?
   gender        String?
-  moneyInPocket Decimal         @default(0)
+  moneyInPocket Float           @default(0)
   // is the country is deleted, the user country will be set to null
   // what is the action after this?
   // countryId          String?
@@ -947,4 +905,14 @@ model userLocations {
   state   state?  @relation(fields: [stateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   stateId String?
   isMain  Boolean @default(false)
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }

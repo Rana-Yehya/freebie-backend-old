@@ -34,7 +34,13 @@ const authenticateUserMiddleware = async (req, res, next) => {
             },
           },
           store: {
-            include: { name: true, bio: true, logo: true, banner: true },
+            include: {
+              name: true,
+              bio: true,
+              logo: true,
+              banner: true,
+              subscription: { include: { planLimit: true } },
+            },
           },
           admin: {
             include: { country: { include: { name: true } } },

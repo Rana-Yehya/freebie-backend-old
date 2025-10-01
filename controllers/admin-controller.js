@@ -14,6 +14,7 @@ const {
   StoreStatus,
   ProductStatus,
   ProductTags,
+  PlanName,
 } = require("../generated/prisma");
 const { StoreStatusZodModel } = require("../models/store-status-zod-model");
 
@@ -97,14 +98,35 @@ const setStoreStatus = async (req, res) => {
       data: { status: ProductStatus.PENDING },
     });
   }
-  const store = await prisma.store.update({
+  const storeInDb = await prisma.store.findUnique({
     where: { id: storeId },
-    data: { status: storeStatus },
   });
-
-  if (!store) {
+  if (!storeInDb) {
     throw new NotFoundError("Store not found");
   }
+
+  let startBasicSub = false;
+  if (
+    storeInDb.status == StoreStatus.PENDING &&
+    storeStatus == StoreStatus.APPROVED
+  ) {
+    startBasicSub = true;
+  }
+  const store = await prisma.store.update({
+    where: { id: storeId },
+    data: {
+      status: storeStatus,
+      subscription:
+        startBasicSub == true
+          ? {
+              create: {
+                planLimit: { connect: { planName: PlanName.BASIC } },
+              },
+            }
+          : undefined,
+    },
+  });
+
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     message: i18n.__("Store freezed successfully"),
@@ -226,12 +248,10 @@ const sendNotificationToAllUsers = async (req, res, next) => {
   });
 
   // return res.status(StatusCodes.OK).json({ isSuccess: true });
-  return res
-    .status(StatusCodes.OK)
-    .json({
-      isSuccess: true,
-      message: i18n.__("Notification sent successfully"),
-    });
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: i18n.__("Notification sent successfully"),
+  });
 };
 const sendNotificationToAllStores = async (req, res, next) => {
   const { title, body } = req.body;
@@ -255,12 +275,10 @@ const sendNotificationToAllStores = async (req, res, next) => {
   });
 
   // return res.status(StatusCodes.OK).json({ isSuccess: true });
-  return res
-    .status(StatusCodes.OK)
-    .json({
-      isSuccess: true,
-      message: i18n.__("Notification sent successfully"),
-    });
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: i18n.__("Notification sent successfully"),
+  });
 };
 module.exports = {
   // approveStore,

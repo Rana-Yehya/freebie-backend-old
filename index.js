@@ -39,6 +39,8 @@ const deliveryTaxesRouter = require("./routes/delivery-taxes-route");
 const ordersRouter = require("./routes/order-route");
 const transactionsRouter = require("./routes/transaction-route");
 const reviewsRouter = require("./routes/review-route");
+const planLimitsRouter = require("./routes/plan-limit-route");
+const subscriptionRouter = require("./routes/subscription-route");
 
 const notFound = require("./middleware/not-found");
 const errorHandler = require("./middleware/error-handler");
@@ -149,6 +151,8 @@ app.use("/api/v1/delivery-taxes", deliveryTaxesRouter);
 app.use("/api/v1/orders", ordersRouter);
 app.use("/api/v1/transactions", transactionsRouter);
 app.use("/api/v1/reviews", reviewsRouter);
+app.use("/api/v1/plan-limits", planLimitsRouter);
+app.use("/api/v1/subscriptions", subscriptionRouter);
 
 app.use(notFound);
 app.use(errorHandler);

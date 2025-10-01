@@ -9,15 +9,15 @@ const sendOtpHelper = async ({ name, phone, email }) => {
   //send the mail
   console.log("otp", otp);
   const message = i18n.__("Your verification code is ");
-  const clientTwilioResponse = await client.messages.create({
-    body: message + otp,
-    from: "Freebie", // Alphanumeric sender ID or Twilio number
-    to: phone, // Recipient's phone number
-  });
+  // const clientTwilioResponse = await client.messages.create({
+  //   body: message + otp,
+  //   from: "Freebie", // Alphanumeric sender ID or Twilio number
+  //   to: phone, // Recipient's phone number
+  // });
   console.log(message);
-  if (clientTwilioResponse.errorMessage != null) {
-    throw new BadRequestError(clientTwilioResponse.errorMessage);
-  }
+  // if (clientTwilioResponse.errorMessage != null) {
+  //   throw new BadRequestError(clientTwilioResponse.errorMessage);
+  // }
   // const emailTemplatePath = path.join(
   //   __dirname,
   //   "..",

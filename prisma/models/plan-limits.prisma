@@ -1,6 +1,6 @@
 model PlanLimit {
-    id                   String             @id @default(uuid())
-    planName             PlanName           @unique @default(BASIC)
+    // id                   String             @id @default(uuid())
+    planName             PlanName           @default(BASIC)
     maxProducts          Int                @default(50)
     maxBranches          Int                @default(2)
     maxDiscountCodes     Int                @default(0)
@@ -12,7 +12,7 @@ model PlanLimit {
     monthlyPrice         Float? // null for commission-based plans
     annualPrice          Float?
     storeSubscription    StoreSubscription[]
-
+    @@unique(planName)
     @@map("plan_limits")
 }
 

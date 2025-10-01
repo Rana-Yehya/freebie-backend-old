@@ -3,7 +3,12 @@ services:
     build:
       context: .
     container_name: freebie
+    restart: always
     environment:
+      - REDIS_PORT=6379
+      - REDIS_HOST=redis
+      - REDIS_USERNAME=username
+      - REDIS_PASSWORD=authpassword
       - PORT=5000
       - NODE_ENV=development
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/freebie?schema=public
@@ -11,14 +16,24 @@ services:
       - "5000:5000"
     depends_on:
       - db
+      - redis
     develop:
       watch:
         - action: sync+restart
           path: ./*
-          target: /docker
-
+          target: /docker      
     volumes:
       - .:/docker
+
+  redis:
+    image: redis:7.2
+    command: redis-server --requirepass authpassword --user username
+    container_name: redis-server
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
   db:
     image: postgres:16
     container_name: postgres
@@ -32,4 +47,5 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
 volumes:
+  redis_data:
   postgres-data:

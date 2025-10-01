@@ -1,6 +1,3 @@
-// model adminPrivilege {
-
-// }
 model admin {
   id       String    @id @unique @default(uuid())
   name     String
@@ -31,3 +28,7 @@ model admin {
   country   country? @relation(fields: [countryId], references: [id])
   countryId String?
 }
+
+// model adminPrivilege {
+
+// }

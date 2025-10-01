@@ -3,7 +3,7 @@ model user {
   name          String
   dateOfBirth   DateTime?
   gender        String?
-  moneyInPocket Decimal         @default(0)
+  moneyInPocket Float           @default(0)
   // is the country is deleted, the user country will be set to null
   // what is the action after this?
   // countryId          String?

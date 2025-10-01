@@ -293,6 +293,13 @@ export const SubscriptionStatus: {
 export type SubscriptionStatus = (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus]
 
 
+export const StoreRole: {
+  STORE: 'STORE'
+};
+
+export type StoreRole = (typeof StoreRole)[keyof typeof StoreRole]
+
+
 export const StoreStatus: {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
@@ -360,6 +367,10 @@ export const ProductStatus: typeof $Enums.ProductStatus
 export type SubscriptionStatus = $Enums.SubscriptionStatus
 
 export const SubscriptionStatus: typeof $Enums.SubscriptionStatus
+
+export type StoreRole = $Enums.StoreRole
+
+export const StoreRole: typeof $Enums.StoreRole
 
 export type StoreStatus = $Enums.StoreStatus
 
@@ -4938,10 +4949,12 @@ export namespace Prisma {
 
   export type StoreSubscriptionCountOutputType = {
     planChanges: number
+    store: number
   }
 
   export type StoreSubscriptionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     planChanges?: boolean | StoreSubscriptionCountOutputTypeCountPlanChangesArgs
+    store?: boolean | StoreSubscriptionCountOutputTypeCountStoreArgs
   }
 
   // Custom InputTypes
@@ -4960,6 +4973,13 @@ export namespace Prisma {
    */
   export type StoreSubscriptionCountOutputTypeCountPlanChangesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SubscriptionPlanChangeWhereInput
+  }
+
+  /**
+   * StoreSubscriptionCountOutputType without action
+   */
+  export type StoreSubscriptionCountOutputTypeCountStoreArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: storeWhereInput
   }
 
 
@@ -27061,7 +27081,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitMinAggregateOutputType = {
-    id: string | null
     planName: $Enums.PlanName | null
     maxProducts: number | null
     maxBranches: number | null
@@ -27076,7 +27095,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitMaxAggregateOutputType = {
-    id: string | null
     planName: $Enums.PlanName | null
     maxProducts: number | null
     maxBranches: number | null
@@ -27091,7 +27109,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitCountAggregateOutputType = {
-    id: number
     planName: number
     maxProducts: number
     maxBranches: number
@@ -27130,7 +27147,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitMinAggregateInputType = {
-    id?: true
     planName?: true
     maxProducts?: true
     maxBranches?: true
@@ -27145,7 +27161,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitMaxAggregateInputType = {
-    id?: true
     planName?: true
     maxProducts?: true
     maxBranches?: true
@@ -27160,7 +27175,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitCountAggregateInputType = {
-    id?: true
     planName?: true
     maxProducts?: true
     maxBranches?: true
@@ -27262,7 +27276,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitGroupByOutputType = {
-    id: string
     planName: $Enums.PlanName
     maxProducts: number
     maxBranches: number
@@ -27296,7 +27309,6 @@ export namespace Prisma {
 
 
   export type PlanLimitSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
     planName?: boolean
     maxProducts?: boolean
     maxBranches?: boolean
@@ -27313,7 +27325,6 @@ export namespace Prisma {
   }, ExtArgs["result"]["planLimit"]>
 
   export type PlanLimitSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
     planName?: boolean
     maxProducts?: boolean
     maxBranches?: boolean
@@ -27328,7 +27339,6 @@ export namespace Prisma {
   }, ExtArgs["result"]["planLimit"]>
 
   export type PlanLimitSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
     planName?: boolean
     maxProducts?: boolean
     maxBranches?: boolean
@@ -27343,7 +27353,6 @@ export namespace Prisma {
   }, ExtArgs["result"]["planLimit"]>
 
   export type PlanLimitSelectScalar = {
-    id?: boolean
     planName?: boolean
     maxProducts?: boolean
     maxBranches?: boolean
@@ -27357,7 +27366,7 @@ export namespace Prisma {
     annualPrice?: boolean
   }
 
-  export type PlanLimitOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "planName" | "maxProducts" | "maxBranches" | "maxDiscountCodes" | "notificationsPerWeek" | "adsPerWeek" | "allowsBoxes" | "allowsCollaborations" | "commissionRate" | "monthlyPrice" | "annualPrice", ExtArgs["result"]["planLimit"]>
+  export type PlanLimitOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"planName" | "maxProducts" | "maxBranches" | "maxDiscountCodes" | "notificationsPerWeek" | "adsPerWeek" | "allowsBoxes" | "allowsCollaborations" | "commissionRate" | "monthlyPrice" | "annualPrice", ExtArgs["result"]["planLimit"]>
   export type PlanLimitInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     storeSubscription?: boolean | PlanLimit$storeSubscriptionArgs<ExtArgs>
     _count?: boolean | PlanLimitCountOutputTypeDefaultArgs<ExtArgs>
@@ -27371,7 +27380,6 @@ export namespace Prisma {
       storeSubscription: Prisma.$StoreSubscriptionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
       planName: $Enums.PlanName
       maxProducts: number
       maxBranches: number
@@ -27466,8 +27474,8 @@ export namespace Prisma {
      * // Get first 10 PlanLimits
      * const planLimits = await prisma.planLimit.findMany({ take: 10 })
      * 
-     * // Only select the `id`
-     * const planLimitWithIdOnly = await prisma.planLimit.findMany({ select: { id: true } })
+     * // Only select the `maxProducts`
+     * const planLimitWithMaxProductsOnly = await prisma.planLimit.findMany({ select: { maxProducts: true } })
      * 
      */
     findMany<T extends PlanLimitFindManyArgs>(args?: SelectSubset<T, PlanLimitFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanLimitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -27511,9 +27519,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many PlanLimits and only return the `id`
-     * const planLimitWithIdOnly = await prisma.planLimit.createManyAndReturn({
-     *   select: { id: true },
+     * // Create many PlanLimits and only return the `maxProducts`
+     * const planLimitWithMaxProductsOnly = await prisma.planLimit.createManyAndReturn({
+     *   select: { maxProducts: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -27602,9 +27610,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more PlanLimits and only return the `id`
-     * const planLimitWithIdOnly = await prisma.planLimit.updateManyAndReturn({
-     *   select: { id: true },
+     * // Update zero or more PlanLimits and only return the `maxProducts`
+     * const planLimitWithMaxProductsOnly = await prisma.planLimit.updateManyAndReturn({
+     *   select: { maxProducts: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -27807,7 +27815,6 @@ export namespace Prisma {
    * Fields of the PlanLimit model
    */
   interface PlanLimitFieldRefs {
-    readonly id: FieldRef<"PlanLimit", 'String'>
     readonly planName: FieldRef<"PlanLimit", 'PlanName'>
     readonly maxProducts: FieldRef<"PlanLimit", 'Int'>
     readonly maxBranches: FieldRef<"PlanLimit", 'Int'>
@@ -39006,8 +39013,6 @@ export namespace Prisma {
     notificationsPerWeek: number | null
     adsPerWeek: number | null
     commissionRate: number | null
-    monthlyPrice: number | null
-    annualPrice: number | null
     adsUsedThisPeriod: number | null
   }
 
@@ -39018,19 +39023,15 @@ export namespace Prisma {
     notificationsPerWeek: number | null
     adsPerWeek: number | null
     commissionRate: number | null
-    monthlyPrice: number | null
-    annualPrice: number | null
     adsUsedThisPeriod: number | null
   }
 
   export type StoreSubscriptionMinAggregateOutputType = {
     id: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    planLimitId: string | null
+    planLimitId: $Enums.PlanName | null
     status: $Enums.SubscriptionStatus | null
-    currentPeriodStart: Date | null
-    currentPeriodEnd: Date | null
+    lastUpgradeDate: Date | null
+    minimumPlanPeriodUntil: Date | null
     maxTotalProducts: number | null
     maxBranches: number | null
     maxDiscountCodes: number | null
@@ -39039,22 +39040,18 @@ export namespace Prisma {
     allowsBoxes: boolean | null
     allowsCollaborations: boolean | null
     commissionRate: number | null
-    monthlyPrice: number | null
-    annualPrice: number | null
     adsUsedThisPeriod: number | null
     adsResetAt: Date | null
-    downgradeToPlan: $Enums.PlanName | null
-    downgradeScheduledAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type StoreSubscriptionMaxAggregateOutputType = {
     id: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    planLimitId: string | null
+    planLimitId: $Enums.PlanName | null
     status: $Enums.SubscriptionStatus | null
-    currentPeriodStart: Date | null
-    currentPeriodEnd: Date | null
+    lastUpgradeDate: Date | null
+    minimumPlanPeriodUntil: Date | null
     maxTotalProducts: number | null
     maxBranches: number | null
     maxDiscountCodes: number | null
@@ -39063,22 +39060,18 @@ export namespace Prisma {
     allowsBoxes: boolean | null
     allowsCollaborations: boolean | null
     commissionRate: number | null
-    monthlyPrice: number | null
-    annualPrice: number | null
     adsUsedThisPeriod: number | null
     adsResetAt: Date | null
-    downgradeToPlan: $Enums.PlanName | null
-    downgradeScheduledAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type StoreSubscriptionCountAggregateOutputType = {
     id: number
-    createdAt: number
-    updatedAt: number
     planLimitId: number
     status: number
-    currentPeriodStart: number
-    currentPeriodEnd: number
+    lastUpgradeDate: number
+    minimumPlanPeriodUntil: number
     maxTotalProducts: number
     maxBranches: number
     maxDiscountCodes: number
@@ -39087,12 +39080,10 @@ export namespace Prisma {
     allowsBoxes: number
     allowsCollaborations: number
     commissionRate: number
-    monthlyPrice: number
-    annualPrice: number
     adsUsedThisPeriod: number
     adsResetAt: number
-    downgradeToPlan: number
-    downgradeScheduledAt: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -39104,8 +39095,6 @@ export namespace Prisma {
     notificationsPerWeek?: true
     adsPerWeek?: true
     commissionRate?: true
-    monthlyPrice?: true
-    annualPrice?: true
     adsUsedThisPeriod?: true
   }
 
@@ -39116,19 +39105,15 @@ export namespace Prisma {
     notificationsPerWeek?: true
     adsPerWeek?: true
     commissionRate?: true
-    monthlyPrice?: true
-    annualPrice?: true
     adsUsedThisPeriod?: true
   }
 
   export type StoreSubscriptionMinAggregateInputType = {
     id?: true
-    createdAt?: true
-    updatedAt?: true
     planLimitId?: true
     status?: true
-    currentPeriodStart?: true
-    currentPeriodEnd?: true
+    lastUpgradeDate?: true
+    minimumPlanPeriodUntil?: true
     maxTotalProducts?: true
     maxBranches?: true
     maxDiscountCodes?: true
@@ -39137,22 +39122,18 @@ export namespace Prisma {
     allowsBoxes?: true
     allowsCollaborations?: true
     commissionRate?: true
-    monthlyPrice?: true
-    annualPrice?: true
     adsUsedThisPeriod?: true
     adsResetAt?: true
-    downgradeToPlan?: true
-    downgradeScheduledAt?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type StoreSubscriptionMaxAggregateInputType = {
     id?: true
-    createdAt?: true
-    updatedAt?: true
     planLimitId?: true
     status?: true
-    currentPeriodStart?: true
-    currentPeriodEnd?: true
+    lastUpgradeDate?: true
+    minimumPlanPeriodUntil?: true
     maxTotalProducts?: true
     maxBranches?: true
     maxDiscountCodes?: true
@@ -39161,22 +39142,18 @@ export namespace Prisma {
     allowsBoxes?: true
     allowsCollaborations?: true
     commissionRate?: true
-    monthlyPrice?: true
-    annualPrice?: true
     adsUsedThisPeriod?: true
     adsResetAt?: true
-    downgradeToPlan?: true
-    downgradeScheduledAt?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type StoreSubscriptionCountAggregateInputType = {
     id?: true
-    createdAt?: true
-    updatedAt?: true
     planLimitId?: true
     status?: true
-    currentPeriodStart?: true
-    currentPeriodEnd?: true
+    lastUpgradeDate?: true
+    minimumPlanPeriodUntil?: true
     maxTotalProducts?: true
     maxBranches?: true
     maxDiscountCodes?: true
@@ -39185,12 +39162,10 @@ export namespace Prisma {
     allowsBoxes?: true
     allowsCollaborations?: true
     commissionRate?: true
-    monthlyPrice?: true
-    annualPrice?: true
     adsUsedThisPeriod?: true
     adsResetAt?: true
-    downgradeToPlan?: true
-    downgradeScheduledAt?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -39282,12 +39257,10 @@ export namespace Prisma {
 
   export type StoreSubscriptionGroupByOutputType = {
     id: string
-    createdAt: Date
-    updatedAt: Date
-    planLimitId: string | null
+    planLimitId: $Enums.PlanName
     status: $Enums.SubscriptionStatus
-    currentPeriodStart: Date
-    currentPeriodEnd: Date
+    lastUpgradeDate: Date
+    minimumPlanPeriodUntil: Date | null
     maxTotalProducts: number
     maxBranches: number
     maxDiscountCodes: number
@@ -39296,12 +39269,10 @@ export namespace Prisma {
     allowsBoxes: boolean
     allowsCollaborations: boolean
     commissionRate: number
-    monthlyPrice: number | null
-    annualPrice: number | null
     adsUsedThisPeriod: number
     adsResetAt: Date | null
-    downgradeToPlan: $Enums.PlanName | null
-    downgradeScheduledAt: Date | null
+    createdAt: Date
+    updatedAt: Date
     _count: StoreSubscriptionCountAggregateOutputType | null
     _avg: StoreSubscriptionAvgAggregateOutputType | null
     _sum: StoreSubscriptionSumAggregateOutputType | null
@@ -39325,12 +39296,10 @@ export namespace Prisma {
 
   export type StoreSubscriptionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
     planLimitId?: boolean
     status?: boolean
-    currentPeriodStart?: boolean
-    currentPeriodEnd?: boolean
+    lastUpgradeDate?: boolean
+    minimumPlanPeriodUntil?: boolean
     maxTotalProducts?: boolean
     maxBranches?: boolean
     maxDiscountCodes?: boolean
@@ -39339,25 +39308,22 @@ export namespace Prisma {
     allowsBoxes?: boolean
     allowsCollaborations?: boolean
     commissionRate?: boolean
-    monthlyPrice?: boolean
-    annualPrice?: boolean
     adsUsedThisPeriod?: boolean
     adsResetAt?: boolean
-    downgradeToPlan?: boolean
-    downgradeScheduledAt?: boolean
-    planLimit?: boolean | StoreSubscription$planLimitArgs<ExtArgs>
+    createdAt?: boolean
+    updatedAt?: boolean
+    planLimit?: boolean | PlanLimitDefaultArgs<ExtArgs>
     planChanges?: boolean | StoreSubscription$planChangesArgs<ExtArgs>
+    store?: boolean | StoreSubscription$storeArgs<ExtArgs>
     _count?: boolean | StoreSubscriptionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["storeSubscription"]>
 
   export type StoreSubscriptionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
     planLimitId?: boolean
     status?: boolean
-    currentPeriodStart?: boolean
-    currentPeriodEnd?: boolean
+    lastUpgradeDate?: boolean
+    minimumPlanPeriodUntil?: boolean
     maxTotalProducts?: boolean
     maxBranches?: boolean
     maxDiscountCodes?: boolean
@@ -39366,23 +39332,19 @@ export namespace Prisma {
     allowsBoxes?: boolean
     allowsCollaborations?: boolean
     commissionRate?: boolean
-    monthlyPrice?: boolean
-    annualPrice?: boolean
     adsUsedThisPeriod?: boolean
     adsResetAt?: boolean
-    downgradeToPlan?: boolean
-    downgradeScheduledAt?: boolean
-    planLimit?: boolean | StoreSubscription$planLimitArgs<ExtArgs>
+    createdAt?: boolean
+    updatedAt?: boolean
+    planLimit?: boolean | PlanLimitDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["storeSubscription"]>
 
   export type StoreSubscriptionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
     planLimitId?: boolean
     status?: boolean
-    currentPeriodStart?: boolean
-    currentPeriodEnd?: boolean
+    lastUpgradeDate?: boolean
+    minimumPlanPeriodUntil?: boolean
     maxTotalProducts?: boolean
     maxBranches?: boolean
     maxDiscountCodes?: boolean
@@ -39391,23 +39353,19 @@ export namespace Prisma {
     allowsBoxes?: boolean
     allowsCollaborations?: boolean
     commissionRate?: boolean
-    monthlyPrice?: boolean
-    annualPrice?: boolean
     adsUsedThisPeriod?: boolean
     adsResetAt?: boolean
-    downgradeToPlan?: boolean
-    downgradeScheduledAt?: boolean
-    planLimit?: boolean | StoreSubscription$planLimitArgs<ExtArgs>
+    createdAt?: boolean
+    updatedAt?: boolean
+    planLimit?: boolean | PlanLimitDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["storeSubscription"]>
 
   export type StoreSubscriptionSelectScalar = {
     id?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
     planLimitId?: boolean
     status?: boolean
-    currentPeriodStart?: boolean
-    currentPeriodEnd?: boolean
+    lastUpgradeDate?: boolean
+    minimumPlanPeriodUntil?: boolean
     maxTotalProducts?: boolean
     maxBranches?: boolean
     maxDiscountCodes?: boolean
@@ -39416,41 +39374,39 @@ export namespace Prisma {
     allowsBoxes?: boolean
     allowsCollaborations?: boolean
     commissionRate?: boolean
-    monthlyPrice?: boolean
-    annualPrice?: boolean
     adsUsedThisPeriod?: boolean
     adsResetAt?: boolean
-    downgradeToPlan?: boolean
-    downgradeScheduledAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type StoreSubscriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "planLimitId" | "status" | "currentPeriodStart" | "currentPeriodEnd" | "maxTotalProducts" | "maxBranches" | "maxDiscountCodes" | "notificationsPerWeek" | "adsPerWeek" | "allowsBoxes" | "allowsCollaborations" | "commissionRate" | "monthlyPrice" | "annualPrice" | "adsUsedThisPeriod" | "adsResetAt" | "downgradeToPlan" | "downgradeScheduledAt", ExtArgs["result"]["storeSubscription"]>
+  export type StoreSubscriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "planLimitId" | "status" | "lastUpgradeDate" | "minimumPlanPeriodUntil" | "maxTotalProducts" | "maxBranches" | "maxDiscountCodes" | "notificationsPerWeek" | "adsPerWeek" | "allowsBoxes" | "allowsCollaborations" | "commissionRate" | "adsUsedThisPeriod" | "adsResetAt" | "createdAt" | "updatedAt", ExtArgs["result"]["storeSubscription"]>
   export type StoreSubscriptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    planLimit?: boolean | StoreSubscription$planLimitArgs<ExtArgs>
+    planLimit?: boolean | PlanLimitDefaultArgs<ExtArgs>
     planChanges?: boolean | StoreSubscription$planChangesArgs<ExtArgs>
+    store?: boolean | StoreSubscription$storeArgs<ExtArgs>
     _count?: boolean | StoreSubscriptionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type StoreSubscriptionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    planLimit?: boolean | StoreSubscription$planLimitArgs<ExtArgs>
+    planLimit?: boolean | PlanLimitDefaultArgs<ExtArgs>
   }
   export type StoreSubscriptionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    planLimit?: boolean | StoreSubscription$planLimitArgs<ExtArgs>
+    planLimit?: boolean | PlanLimitDefaultArgs<ExtArgs>
   }
 
   export type $StoreSubscriptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "StoreSubscription"
     objects: {
-      planLimit: Prisma.$PlanLimitPayload<ExtArgs> | null
+      planLimit: Prisma.$PlanLimitPayload<ExtArgs>
       planChanges: Prisma.$SubscriptionPlanChangePayload<ExtArgs>[]
+      store: Prisma.$storePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      createdAt: Date
-      updatedAt: Date
-      planLimitId: string | null
+      planLimitId: $Enums.PlanName
       status: $Enums.SubscriptionStatus
-      currentPeriodStart: Date
-      currentPeriodEnd: Date
+      lastUpgradeDate: Date
+      minimumPlanPeriodUntil: Date | null
       maxTotalProducts: number
       maxBranches: number
       maxDiscountCodes: number
@@ -39459,12 +39415,10 @@ export namespace Prisma {
       allowsBoxes: boolean
       allowsCollaborations: boolean
       commissionRate: number
-      monthlyPrice: number | null
-      annualPrice: number | null
       adsUsedThisPeriod: number
       adsResetAt: Date | null
-      downgradeToPlan: $Enums.PlanName | null
-      downgradeScheduledAt: Date | null
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["storeSubscription"]>
     composites: {}
   }
@@ -39859,8 +39813,9 @@ export namespace Prisma {
    */
   export interface Prisma__StoreSubscriptionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    planLimit<T extends StoreSubscription$planLimitArgs<ExtArgs> = {}>(args?: Subset<T, StoreSubscription$planLimitArgs<ExtArgs>>): Prisma__PlanLimitClient<$Result.GetResult<Prisma.$PlanLimitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    planLimit<T extends PlanLimitDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PlanLimitDefaultArgs<ExtArgs>>): Prisma__PlanLimitClient<$Result.GetResult<Prisma.$PlanLimitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     planChanges<T extends StoreSubscription$planChangesArgs<ExtArgs> = {}>(args?: Subset<T, StoreSubscription$planChangesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubscriptionPlanChangePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    store<T extends StoreSubscription$storeArgs<ExtArgs> = {}>(args?: Subset<T, StoreSubscription$storeArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$storePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -39891,12 +39846,10 @@ export namespace Prisma {
    */
   interface StoreSubscriptionFieldRefs {
     readonly id: FieldRef<"StoreSubscription", 'String'>
-    readonly createdAt: FieldRef<"StoreSubscription", 'DateTime'>
-    readonly updatedAt: FieldRef<"StoreSubscription", 'DateTime'>
-    readonly planLimitId: FieldRef<"StoreSubscription", 'String'>
+    readonly planLimitId: FieldRef<"StoreSubscription", 'PlanName'>
     readonly status: FieldRef<"StoreSubscription", 'SubscriptionStatus'>
-    readonly currentPeriodStart: FieldRef<"StoreSubscription", 'DateTime'>
-    readonly currentPeriodEnd: FieldRef<"StoreSubscription", 'DateTime'>
+    readonly lastUpgradeDate: FieldRef<"StoreSubscription", 'DateTime'>
+    readonly minimumPlanPeriodUntil: FieldRef<"StoreSubscription", 'DateTime'>
     readonly maxTotalProducts: FieldRef<"StoreSubscription", 'Int'>
     readonly maxBranches: FieldRef<"StoreSubscription", 'Int'>
     readonly maxDiscountCodes: FieldRef<"StoreSubscription", 'Int'>
@@ -39905,12 +39858,10 @@ export namespace Prisma {
     readonly allowsBoxes: FieldRef<"StoreSubscription", 'Boolean'>
     readonly allowsCollaborations: FieldRef<"StoreSubscription", 'Boolean'>
     readonly commissionRate: FieldRef<"StoreSubscription", 'Float'>
-    readonly monthlyPrice: FieldRef<"StoreSubscription", 'Float'>
-    readonly annualPrice: FieldRef<"StoreSubscription", 'Float'>
     readonly adsUsedThisPeriod: FieldRef<"StoreSubscription", 'Int'>
     readonly adsResetAt: FieldRef<"StoreSubscription", 'DateTime'>
-    readonly downgradeToPlan: FieldRef<"StoreSubscription", 'PlanName'>
-    readonly downgradeScheduledAt: FieldRef<"StoreSubscription", 'DateTime'>
+    readonly createdAt: FieldRef<"StoreSubscription", 'DateTime'>
+    readonly updatedAt: FieldRef<"StoreSubscription", 'DateTime'>
   }
     
 
@@ -40307,25 +40258,6 @@ export namespace Prisma {
   }
 
   /**
-   * StoreSubscription.planLimit
-   */
-  export type StoreSubscription$planLimitArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PlanLimit
-     */
-    select?: PlanLimitSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PlanLimit
-     */
-    omit?: PlanLimitOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PlanLimitInclude<ExtArgs> | null
-    where?: PlanLimitWhereInput
-  }
-
-  /**
    * StoreSubscription.planChanges
    */
   export type StoreSubscription$planChangesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -40347,6 +40279,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SubscriptionPlanChangeScalarFieldEnum | SubscriptionPlanChangeScalarFieldEnum[]
+  }
+
+  /**
+   * StoreSubscription.store
+   */
+  export type StoreSubscription$storeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the store
+     */
+    select?: storeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the store
+     */
+    omit?: storeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: storeInclude<ExtArgs> | null
+    where?: storeWhereInput
+    orderBy?: storeOrderByWithRelationInput | storeOrderByWithRelationInput[]
+    cursor?: storeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StoreScalarFieldEnum | StoreScalarFieldEnum[]
   }
 
   /**
@@ -40381,11 +40337,11 @@ export namespace Prisma {
   }
 
   export type StoreAvgAggregateOutputType = {
-    moneyInPocket: Decimal | null
+    moneyInPocket: number | null
   }
 
   export type StoreSumAggregateOutputType = {
-    moneyInPocket: Decimal | null
+    moneyInPocket: number | null
   }
 
   export type StoreMinAggregateOutputType = {
@@ -40397,10 +40353,11 @@ export namespace Prisma {
     phone: string | null
     email: string | null
     password: string | null
-    moneyInPocket: Decimal | null
+    moneyInPocket: number | null
     passwordChangeBefore: Date | null
-    role: string | null
+    role: $Enums.StoreRole | null
     status: $Enums.StoreStatus | null
+    subscriptionId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -40414,10 +40371,11 @@ export namespace Prisma {
     phone: string | null
     email: string | null
     password: string | null
-    moneyInPocket: Decimal | null
+    moneyInPocket: number | null
     passwordChangeBefore: Date | null
-    role: string | null
+    role: $Enums.StoreRole | null
     status: $Enums.StoreStatus | null
+    subscriptionId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -40435,6 +40393,7 @@ export namespace Prisma {
     passwordChangeBefore: number
     role: number
     status: number
+    subscriptionId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -40462,6 +40421,7 @@ export namespace Prisma {
     passwordChangeBefore?: true
     role?: true
     status?: true
+    subscriptionId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -40479,6 +40439,7 @@ export namespace Prisma {
     passwordChangeBefore?: true
     role?: true
     status?: true
+    subscriptionId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -40496,6 +40457,7 @@ export namespace Prisma {
     passwordChangeBefore?: true
     role?: true
     status?: true
+    subscriptionId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -40596,10 +40558,11 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket: Decimal
+    moneyInPocket: number
     passwordChangeBefore: Date | null
-    role: string
+    role: $Enums.StoreRole
     status: $Enums.StoreStatus
+    subscriptionId: string | null
     createdAt: Date
     updatedAt: Date
     _count: StoreCountAggregateOutputType | null
@@ -40636,6 +40599,7 @@ export namespace Prisma {
     passwordChangeBefore?: boolean
     role?: boolean
     status?: boolean
+    subscriptionId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     name?: boolean | localeDefaultArgs<ExtArgs>
@@ -40646,6 +40610,7 @@ export namespace Prisma {
     branches?: boolean | store$branchesArgs<ExtArgs>
     transactions?: boolean | store$transactionsArgs<ExtArgs>
     sessions?: boolean | store$sessionsArgs<ExtArgs>
+    subscription?: boolean | store$subscriptionArgs<ExtArgs>
     adCampaigns?: boolean | store$adCampaignsArgs<ExtArgs>
     _count?: boolean | StoreCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["store"]>
@@ -40663,12 +40628,14 @@ export namespace Prisma {
     passwordChangeBefore?: boolean
     role?: boolean
     status?: boolean
+    subscriptionId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     name?: boolean | localeDefaultArgs<ExtArgs>
     bio?: boolean | localeDefaultArgs<ExtArgs>
     logo?: boolean | imageDefaultArgs<ExtArgs>
     banner?: boolean | imageDefaultArgs<ExtArgs>
+    subscription?: boolean | store$subscriptionArgs<ExtArgs>
   }, ExtArgs["result"]["store"]>
 
   export type storeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -40684,12 +40651,14 @@ export namespace Prisma {
     passwordChangeBefore?: boolean
     role?: boolean
     status?: boolean
+    subscriptionId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     name?: boolean | localeDefaultArgs<ExtArgs>
     bio?: boolean | localeDefaultArgs<ExtArgs>
     logo?: boolean | imageDefaultArgs<ExtArgs>
     banner?: boolean | imageDefaultArgs<ExtArgs>
+    subscription?: boolean | store$subscriptionArgs<ExtArgs>
   }, ExtArgs["result"]["store"]>
 
   export type storeSelectScalar = {
@@ -40705,11 +40674,12 @@ export namespace Prisma {
     passwordChangeBefore?: boolean
     role?: boolean
     status?: boolean
+    subscriptionId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type storeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nameId" | "bioId" | "logoId" | "bannerId" | "phone" | "email" | "password" | "moneyInPocket" | "passwordChangeBefore" | "role" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["store"]>
+  export type storeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nameId" | "bioId" | "logoId" | "bannerId" | "phone" | "email" | "password" | "moneyInPocket" | "passwordChangeBefore" | "role" | "status" | "subscriptionId" | "createdAt" | "updatedAt", ExtArgs["result"]["store"]>
   export type storeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name?: boolean | localeDefaultArgs<ExtArgs>
     bio?: boolean | localeDefaultArgs<ExtArgs>
@@ -40719,6 +40689,7 @@ export namespace Prisma {
     branches?: boolean | store$branchesArgs<ExtArgs>
     transactions?: boolean | store$transactionsArgs<ExtArgs>
     sessions?: boolean | store$sessionsArgs<ExtArgs>
+    subscription?: boolean | store$subscriptionArgs<ExtArgs>
     adCampaigns?: boolean | store$adCampaignsArgs<ExtArgs>
     _count?: boolean | StoreCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -40727,12 +40698,14 @@ export namespace Prisma {
     bio?: boolean | localeDefaultArgs<ExtArgs>
     logo?: boolean | imageDefaultArgs<ExtArgs>
     banner?: boolean | imageDefaultArgs<ExtArgs>
+    subscription?: boolean | store$subscriptionArgs<ExtArgs>
   }
   export type storeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name?: boolean | localeDefaultArgs<ExtArgs>
     bio?: boolean | localeDefaultArgs<ExtArgs>
     logo?: boolean | imageDefaultArgs<ExtArgs>
     banner?: boolean | imageDefaultArgs<ExtArgs>
+    subscription?: boolean | store$subscriptionArgs<ExtArgs>
   }
 
   export type $storePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -40746,6 +40719,7 @@ export namespace Prisma {
       branches: Prisma.$branchPayload<ExtArgs>[]
       transactions: Prisma.$transactionPayload<ExtArgs>[]
       sessions: Prisma.$sessionPayload<ExtArgs>[]
+      subscription: Prisma.$StoreSubscriptionPayload<ExtArgs> | null
       adCampaigns: Prisma.$AdCampaignPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -40757,10 +40731,11 @@ export namespace Prisma {
       phone: string
       email: string
       password: string
-      moneyInPocket: Prisma.Decimal
+      moneyInPocket: number
       passwordChangeBefore: Date | null
-      role: string
+      role: $Enums.StoreRole
       status: $Enums.StoreStatus
+      subscriptionId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["store"]>
@@ -41165,6 +41140,7 @@ export namespace Prisma {
     branches<T extends store$branchesArgs<ExtArgs> = {}>(args?: Subset<T, store$branchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$branchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     transactions<T extends store$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, store$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$transactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessions<T extends store$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, store$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$sessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    subscription<T extends store$subscriptionArgs<ExtArgs> = {}>(args?: Subset<T, store$subscriptionArgs<ExtArgs>>): Prisma__StoreSubscriptionClient<$Result.GetResult<Prisma.$StoreSubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     adCampaigns<T extends store$adCampaignsArgs<ExtArgs> = {}>(args?: Subset<T, store$adCampaignsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdCampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -41203,10 +41179,11 @@ export namespace Prisma {
     readonly phone: FieldRef<"store", 'String'>
     readonly email: FieldRef<"store", 'String'>
     readonly password: FieldRef<"store", 'String'>
-    readonly moneyInPocket: FieldRef<"store", 'Decimal'>
+    readonly moneyInPocket: FieldRef<"store", 'Float'>
     readonly passwordChangeBefore: FieldRef<"store", 'DateTime'>
-    readonly role: FieldRef<"store", 'String'>
+    readonly role: FieldRef<"store", 'StoreRole'>
     readonly status: FieldRef<"store", 'StoreStatus'>
+    readonly subscriptionId: FieldRef<"store", 'String'>
     readonly createdAt: FieldRef<"store", 'DateTime'>
     readonly updatedAt: FieldRef<"store", 'DateTime'>
   }
@@ -41693,6 +41670,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
+  }
+
+  /**
+   * store.subscription
+   */
+  export type store$subscriptionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StoreSubscription
+     */
+    select?: StoreSubscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StoreSubscription
+     */
+    omit?: StoreSubscriptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StoreSubscriptionInclude<ExtArgs> | null
+    where?: StoreSubscriptionWhereInput
   }
 
   /**
@@ -46336,11 +46332,11 @@ export namespace Prisma {
   }
 
   export type UserAvgAggregateOutputType = {
-    moneyInPocket: Decimal | null
+    moneyInPocket: number | null
   }
 
   export type UserSumAggregateOutputType = {
-    moneyInPocket: Decimal | null
+    moneyInPocket: number | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -46348,7 +46344,7 @@ export namespace Prisma {
     name: string | null
     dateOfBirth: Date | null
     gender: string | null
-    moneyInPocket: Decimal | null
+    moneyInPocket: number | null
     stateId: string | null
     phone: string | null
     email: string | null
@@ -46363,7 +46359,7 @@ export namespace Prisma {
     name: string | null
     dateOfBirth: Date | null
     gender: string | null
-    moneyInPocket: Decimal | null
+    moneyInPocket: number | null
     stateId: string | null
     phone: string | null
     email: string | null
@@ -46535,7 +46531,7 @@ export namespace Prisma {
     name: string
     dateOfBirth: Date | null
     gender: string | null
-    moneyInPocket: Decimal
+    moneyInPocket: number
     stateId: string | null
     phone: string
     email: string
@@ -46668,7 +46664,7 @@ export namespace Prisma {
       name: string
       dateOfBirth: Date | null
       gender: string | null
-      moneyInPocket: Prisma.Decimal
+      moneyInPocket: number
       stateId: string | null
       phone: string
       email: string
@@ -47110,7 +47106,7 @@ export namespace Prisma {
     readonly name: FieldRef<"user", 'String'>
     readonly dateOfBirth: FieldRef<"user", 'DateTime'>
     readonly gender: FieldRef<"user", 'String'>
-    readonly moneyInPocket: FieldRef<"user", 'Decimal'>
+    readonly moneyInPocket: FieldRef<"user", 'Float'>
     readonly stateId: FieldRef<"user", 'String'>
     readonly phone: FieldRef<"user", 'String'>
     readonly email: FieldRef<"user", 'String'>
@@ -49026,7 +49022,6 @@ export namespace Prisma {
 
 
   export const PlanLimitScalarFieldEnum: {
-    id: 'id',
     planName: 'planName',
     maxProducts: 'maxProducts',
     maxBranches: 'maxBranches',
@@ -49171,12 +49166,10 @@ export namespace Prisma {
 
   export const StoreSubscriptionScalarFieldEnum: {
     id: 'id',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
     planLimitId: 'planLimitId',
     status: 'status',
-    currentPeriodStart: 'currentPeriodStart',
-    currentPeriodEnd: 'currentPeriodEnd',
+    lastUpgradeDate: 'lastUpgradeDate',
+    minimumPlanPeriodUntil: 'minimumPlanPeriodUntil',
     maxTotalProducts: 'maxTotalProducts',
     maxBranches: 'maxBranches',
     maxDiscountCodes: 'maxDiscountCodes',
@@ -49185,12 +49178,10 @@ export namespace Prisma {
     allowsBoxes: 'allowsBoxes',
     allowsCollaborations: 'allowsCollaborations',
     commissionRate: 'commissionRate',
-    monthlyPrice: 'monthlyPrice',
-    annualPrice: 'annualPrice',
     adsUsedThisPeriod: 'adsUsedThisPeriod',
     adsResetAt: 'adsResetAt',
-    downgradeToPlan: 'downgradeToPlan',
-    downgradeScheduledAt: 'downgradeScheduledAt'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type StoreSubscriptionScalarFieldEnum = (typeof StoreSubscriptionScalarFieldEnum)[keyof typeof StoreSubscriptionScalarFieldEnum]
@@ -49209,6 +49200,7 @@ export namespace Prisma {
     passwordChangeBefore: 'passwordChangeBefore',
     role: 'role',
     status: 'status',
+    subscriptionId: 'subscriptionId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -49504,16 +49496,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Decimal'
+   * Reference to a field of type 'StoreRole'
    */
-  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+  export type EnumStoreRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StoreRole'>
     
 
 
   /**
-   * Reference to a field of type 'Decimal[]'
+   * Reference to a field of type 'StoreRole[]'
    */
-  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+  export type ListEnumStoreRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StoreRole[]'>
     
 
 
@@ -50953,7 +50945,6 @@ export namespace Prisma {
     AND?: PlanLimitWhereInput | PlanLimitWhereInput[]
     OR?: PlanLimitWhereInput[]
     NOT?: PlanLimitWhereInput | PlanLimitWhereInput[]
-    id?: StringFilter<"PlanLimit"> | string
     planName?: EnumPlanNameFilter<"PlanLimit"> | $Enums.PlanName
     maxProducts?: IntFilter<"PlanLimit"> | number
     maxBranches?: IntFilter<"PlanLimit"> | number
@@ -50969,7 +50960,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitOrderByWithRelationInput = {
-    id?: SortOrder
     planName?: SortOrder
     maxProducts?: SortOrder
     maxBranches?: SortOrder
@@ -50985,7 +50975,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
     planName?: $Enums.PlanName
     AND?: PlanLimitWhereInput | PlanLimitWhereInput[]
     OR?: PlanLimitWhereInput[]
@@ -51001,10 +50990,9 @@ export namespace Prisma {
     monthlyPrice?: FloatNullableFilter<"PlanLimit"> | number | null
     annualPrice?: FloatNullableFilter<"PlanLimit"> | number | null
     storeSubscription?: StoreSubscriptionListRelationFilter
-  }, "id" | "planName">
+  }, "planName">
 
   export type PlanLimitOrderByWithAggregationInput = {
-    id?: SortOrder
     planName?: SortOrder
     maxProducts?: SortOrder
     maxBranches?: SortOrder
@@ -51027,7 +51015,6 @@ export namespace Prisma {
     AND?: PlanLimitScalarWhereWithAggregatesInput | PlanLimitScalarWhereWithAggregatesInput[]
     OR?: PlanLimitScalarWhereWithAggregatesInput[]
     NOT?: PlanLimitScalarWhereWithAggregatesInput | PlanLimitScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"PlanLimit"> | string
     planName?: EnumPlanNameWithAggregatesFilter<"PlanLimit"> | $Enums.PlanName
     maxProducts?: IntWithAggregatesFilter<"PlanLimit"> | number
     maxBranches?: IntWithAggregatesFilter<"PlanLimit"> | number
@@ -51769,12 +51756,10 @@ export namespace Prisma {
     OR?: StoreSubscriptionWhereInput[]
     NOT?: StoreSubscriptionWhereInput | StoreSubscriptionWhereInput[]
     id?: StringFilter<"StoreSubscription"> | string
-    createdAt?: DateTimeFilter<"StoreSubscription"> | Date | string
-    updatedAt?: DateTimeFilter<"StoreSubscription"> | Date | string
-    planLimitId?: StringNullableFilter<"StoreSubscription"> | string | null
+    planLimitId?: EnumPlanNameFilter<"StoreSubscription"> | $Enums.PlanName
     status?: EnumSubscriptionStatusFilter<"StoreSubscription"> | $Enums.SubscriptionStatus
-    currentPeriodStart?: DateTimeFilter<"StoreSubscription"> | Date | string
-    currentPeriodEnd?: DateTimeFilter<"StoreSubscription"> | Date | string
+    lastUpgradeDate?: DateTimeFilter<"StoreSubscription"> | Date | string
+    minimumPlanPeriodUntil?: DateTimeNullableFilter<"StoreSubscription"> | Date | string | null
     maxTotalProducts?: IntFilter<"StoreSubscription"> | number
     maxBranches?: IntFilter<"StoreSubscription"> | number
     maxDiscountCodes?: IntFilter<"StoreSubscription"> | number
@@ -51783,24 +51768,21 @@ export namespace Prisma {
     allowsBoxes?: BoolFilter<"StoreSubscription"> | boolean
     allowsCollaborations?: BoolFilter<"StoreSubscription"> | boolean
     commissionRate?: FloatFilter<"StoreSubscription"> | number
-    monthlyPrice?: FloatNullableFilter<"StoreSubscription"> | number | null
-    annualPrice?: FloatNullableFilter<"StoreSubscription"> | number | null
     adsUsedThisPeriod?: IntFilter<"StoreSubscription"> | number
     adsResetAt?: DateTimeNullableFilter<"StoreSubscription"> | Date | string | null
-    downgradeToPlan?: EnumPlanNameNullableFilter<"StoreSubscription"> | $Enums.PlanName | null
-    downgradeScheduledAt?: DateTimeNullableFilter<"StoreSubscription"> | Date | string | null
-    planLimit?: XOR<PlanLimitNullableScalarRelationFilter, PlanLimitWhereInput> | null
+    createdAt?: DateTimeFilter<"StoreSubscription"> | Date | string
+    updatedAt?: DateTimeFilter<"StoreSubscription"> | Date | string
+    planLimit?: XOR<PlanLimitScalarRelationFilter, PlanLimitWhereInput>
     planChanges?: SubscriptionPlanChangeListRelationFilter
+    store?: StoreListRelationFilter
   }
 
   export type StoreSubscriptionOrderByWithRelationInput = {
     id?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    planLimitId?: SortOrderInput | SortOrder
+    planLimitId?: SortOrder
     status?: SortOrder
-    currentPeriodStart?: SortOrder
-    currentPeriodEnd?: SortOrder
+    lastUpgradeDate?: SortOrder
+    minimumPlanPeriodUntil?: SortOrderInput | SortOrder
     maxTotalProducts?: SortOrder
     maxBranches?: SortOrder
     maxDiscountCodes?: SortOrder
@@ -51809,14 +51791,13 @@ export namespace Prisma {
     allowsBoxes?: SortOrder
     allowsCollaborations?: SortOrder
     commissionRate?: SortOrder
-    monthlyPrice?: SortOrderInput | SortOrder
-    annualPrice?: SortOrderInput | SortOrder
     adsUsedThisPeriod?: SortOrder
     adsResetAt?: SortOrderInput | SortOrder
-    downgradeToPlan?: SortOrderInput | SortOrder
-    downgradeScheduledAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     planLimit?: PlanLimitOrderByWithRelationInput
     planChanges?: SubscriptionPlanChangeOrderByRelationAggregateInput
+    store?: storeOrderByRelationAggregateInput
   }
 
   export type StoreSubscriptionWhereUniqueInput = Prisma.AtLeast<{
@@ -51824,12 +51805,10 @@ export namespace Prisma {
     AND?: StoreSubscriptionWhereInput | StoreSubscriptionWhereInput[]
     OR?: StoreSubscriptionWhereInput[]
     NOT?: StoreSubscriptionWhereInput | StoreSubscriptionWhereInput[]
-    createdAt?: DateTimeFilter<"StoreSubscription"> | Date | string
-    updatedAt?: DateTimeFilter<"StoreSubscription"> | Date | string
-    planLimitId?: StringNullableFilter<"StoreSubscription"> | string | null
+    planLimitId?: EnumPlanNameFilter<"StoreSubscription"> | $Enums.PlanName
     status?: EnumSubscriptionStatusFilter<"StoreSubscription"> | $Enums.SubscriptionStatus
-    currentPeriodStart?: DateTimeFilter<"StoreSubscription"> | Date | string
-    currentPeriodEnd?: DateTimeFilter<"StoreSubscription"> | Date | string
+    lastUpgradeDate?: DateTimeFilter<"StoreSubscription"> | Date | string
+    minimumPlanPeriodUntil?: DateTimeNullableFilter<"StoreSubscription"> | Date | string | null
     maxTotalProducts?: IntFilter<"StoreSubscription"> | number
     maxBranches?: IntFilter<"StoreSubscription"> | number
     maxDiscountCodes?: IntFilter<"StoreSubscription"> | number
@@ -51838,24 +51817,21 @@ export namespace Prisma {
     allowsBoxes?: BoolFilter<"StoreSubscription"> | boolean
     allowsCollaborations?: BoolFilter<"StoreSubscription"> | boolean
     commissionRate?: FloatFilter<"StoreSubscription"> | number
-    monthlyPrice?: FloatNullableFilter<"StoreSubscription"> | number | null
-    annualPrice?: FloatNullableFilter<"StoreSubscription"> | number | null
     adsUsedThisPeriod?: IntFilter<"StoreSubscription"> | number
     adsResetAt?: DateTimeNullableFilter<"StoreSubscription"> | Date | string | null
-    downgradeToPlan?: EnumPlanNameNullableFilter<"StoreSubscription"> | $Enums.PlanName | null
-    downgradeScheduledAt?: DateTimeNullableFilter<"StoreSubscription"> | Date | string | null
-    planLimit?: XOR<PlanLimitNullableScalarRelationFilter, PlanLimitWhereInput> | null
+    createdAt?: DateTimeFilter<"StoreSubscription"> | Date | string
+    updatedAt?: DateTimeFilter<"StoreSubscription"> | Date | string
+    planLimit?: XOR<PlanLimitScalarRelationFilter, PlanLimitWhereInput>
     planChanges?: SubscriptionPlanChangeListRelationFilter
+    store?: StoreListRelationFilter
   }, "id">
 
   export type StoreSubscriptionOrderByWithAggregationInput = {
     id?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    planLimitId?: SortOrderInput | SortOrder
+    planLimitId?: SortOrder
     status?: SortOrder
-    currentPeriodStart?: SortOrder
-    currentPeriodEnd?: SortOrder
+    lastUpgradeDate?: SortOrder
+    minimumPlanPeriodUntil?: SortOrderInput | SortOrder
     maxTotalProducts?: SortOrder
     maxBranches?: SortOrder
     maxDiscountCodes?: SortOrder
@@ -51864,12 +51840,10 @@ export namespace Prisma {
     allowsBoxes?: SortOrder
     allowsCollaborations?: SortOrder
     commissionRate?: SortOrder
-    monthlyPrice?: SortOrderInput | SortOrder
-    annualPrice?: SortOrderInput | SortOrder
     adsUsedThisPeriod?: SortOrder
     adsResetAt?: SortOrderInput | SortOrder
-    downgradeToPlan?: SortOrderInput | SortOrder
-    downgradeScheduledAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: StoreSubscriptionCountOrderByAggregateInput
     _avg?: StoreSubscriptionAvgOrderByAggregateInput
     _max?: StoreSubscriptionMaxOrderByAggregateInput
@@ -51882,12 +51856,10 @@ export namespace Prisma {
     OR?: StoreSubscriptionScalarWhereWithAggregatesInput[]
     NOT?: StoreSubscriptionScalarWhereWithAggregatesInput | StoreSubscriptionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"StoreSubscription"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"StoreSubscription"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"StoreSubscription"> | Date | string
-    planLimitId?: StringNullableWithAggregatesFilter<"StoreSubscription"> | string | null
+    planLimitId?: EnumPlanNameWithAggregatesFilter<"StoreSubscription"> | $Enums.PlanName
     status?: EnumSubscriptionStatusWithAggregatesFilter<"StoreSubscription"> | $Enums.SubscriptionStatus
-    currentPeriodStart?: DateTimeWithAggregatesFilter<"StoreSubscription"> | Date | string
-    currentPeriodEnd?: DateTimeWithAggregatesFilter<"StoreSubscription"> | Date | string
+    lastUpgradeDate?: DateTimeWithAggregatesFilter<"StoreSubscription"> | Date | string
+    minimumPlanPeriodUntil?: DateTimeNullableWithAggregatesFilter<"StoreSubscription"> | Date | string | null
     maxTotalProducts?: IntWithAggregatesFilter<"StoreSubscription"> | number
     maxBranches?: IntWithAggregatesFilter<"StoreSubscription"> | number
     maxDiscountCodes?: IntWithAggregatesFilter<"StoreSubscription"> | number
@@ -51896,12 +51868,10 @@ export namespace Prisma {
     allowsBoxes?: BoolWithAggregatesFilter<"StoreSubscription"> | boolean
     allowsCollaborations?: BoolWithAggregatesFilter<"StoreSubscription"> | boolean
     commissionRate?: FloatWithAggregatesFilter<"StoreSubscription"> | number
-    monthlyPrice?: FloatNullableWithAggregatesFilter<"StoreSubscription"> | number | null
-    annualPrice?: FloatNullableWithAggregatesFilter<"StoreSubscription"> | number | null
     adsUsedThisPeriod?: IntWithAggregatesFilter<"StoreSubscription"> | number
     adsResetAt?: DateTimeNullableWithAggregatesFilter<"StoreSubscription"> | Date | string | null
-    downgradeToPlan?: EnumPlanNameNullableWithAggregatesFilter<"StoreSubscription"> | $Enums.PlanName | null
-    downgradeScheduledAt?: DateTimeNullableWithAggregatesFilter<"StoreSubscription"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"StoreSubscription"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"StoreSubscription"> | Date | string
   }
 
   export type storeWhereInput = {
@@ -51916,10 +51886,11 @@ export namespace Prisma {
     phone?: StringFilter<"store"> | string
     email?: StringFilter<"store"> | string
     password?: StringFilter<"store"> | string
-    moneyInPocket?: DecimalFilter<"store"> | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFilter<"store"> | number
     passwordChangeBefore?: DateTimeNullableFilter<"store"> | Date | string | null
-    role?: StringFilter<"store"> | string
+    role?: EnumStoreRoleFilter<"store"> | $Enums.StoreRole
     status?: EnumStoreStatusFilter<"store"> | $Enums.StoreStatus
+    subscriptionId?: StringNullableFilter<"store"> | string | null
     createdAt?: DateTimeFilter<"store"> | Date | string
     updatedAt?: DateTimeFilter<"store"> | Date | string
     name?: XOR<LocaleScalarRelationFilter, localeWhereInput>
@@ -51930,6 +51901,7 @@ export namespace Prisma {
     branches?: BranchListRelationFilter
     transactions?: TransactionListRelationFilter
     sessions?: SessionListRelationFilter
+    subscription?: XOR<StoreSubscriptionNullableScalarRelationFilter, StoreSubscriptionWhereInput> | null
     adCampaigns?: AdCampaignListRelationFilter
   }
 
@@ -51946,6 +51918,7 @@ export namespace Prisma {
     passwordChangeBefore?: SortOrderInput | SortOrder
     role?: SortOrder
     status?: SortOrder
+    subscriptionId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     name?: localeOrderByWithRelationInput
@@ -51956,6 +51929,7 @@ export namespace Prisma {
     branches?: branchOrderByRelationAggregateInput
     transactions?: transactionOrderByRelationAggregateInput
     sessions?: sessionOrderByRelationAggregateInput
+    subscription?: StoreSubscriptionOrderByWithRelationInput
     adCampaigns?: AdCampaignOrderByRelationAggregateInput
   }
 
@@ -51971,10 +51945,11 @@ export namespace Prisma {
     OR?: storeWhereInput[]
     NOT?: storeWhereInput | storeWhereInput[]
     password?: StringFilter<"store"> | string
-    moneyInPocket?: DecimalFilter<"store"> | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFilter<"store"> | number
     passwordChangeBefore?: DateTimeNullableFilter<"store"> | Date | string | null
-    role?: StringFilter<"store"> | string
+    role?: EnumStoreRoleFilter<"store"> | $Enums.StoreRole
     status?: EnumStoreStatusFilter<"store"> | $Enums.StoreStatus
+    subscriptionId?: StringNullableFilter<"store"> | string | null
     createdAt?: DateTimeFilter<"store"> | Date | string
     updatedAt?: DateTimeFilter<"store"> | Date | string
     name?: XOR<LocaleScalarRelationFilter, localeWhereInput>
@@ -51985,6 +51960,7 @@ export namespace Prisma {
     branches?: BranchListRelationFilter
     transactions?: TransactionListRelationFilter
     sessions?: SessionListRelationFilter
+    subscription?: XOR<StoreSubscriptionNullableScalarRelationFilter, StoreSubscriptionWhereInput> | null
     adCampaigns?: AdCampaignListRelationFilter
   }, "id" | "id" | "nameId" | "bioId" | "logoId" | "bannerId" | "phone" | "email">
 
@@ -52001,6 +51977,7 @@ export namespace Prisma {
     passwordChangeBefore?: SortOrderInput | SortOrder
     role?: SortOrder
     status?: SortOrder
+    subscriptionId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: storeCountOrderByAggregateInput
@@ -52022,10 +51999,11 @@ export namespace Prisma {
     phone?: StringWithAggregatesFilter<"store"> | string
     email?: StringWithAggregatesFilter<"store"> | string
     password?: StringWithAggregatesFilter<"store"> | string
-    moneyInPocket?: DecimalWithAggregatesFilter<"store"> | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatWithAggregatesFilter<"store"> | number
     passwordChangeBefore?: DateTimeNullableWithAggregatesFilter<"store"> | Date | string | null
-    role?: StringWithAggregatesFilter<"store"> | string
+    role?: EnumStoreRoleWithAggregatesFilter<"store"> | $Enums.StoreRole
     status?: EnumStoreStatusWithAggregatesFilter<"store"> | $Enums.StoreStatus
+    subscriptionId?: StringNullableWithAggregatesFilter<"store"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"store"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"store"> | Date | string
   }
@@ -52329,7 +52307,7 @@ export namespace Prisma {
     name?: StringFilter<"user"> | string
     dateOfBirth?: DateTimeNullableFilter<"user"> | Date | string | null
     gender?: StringNullableFilter<"user"> | string | null
-    moneyInPocket?: DecimalFilter<"user"> | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFilter<"user"> | number
     stateId?: StringNullableFilter<"user"> | string | null
     phone?: StringFilter<"user"> | string
     email?: StringFilter<"user"> | string
@@ -52378,7 +52356,7 @@ export namespace Prisma {
     name?: StringFilter<"user"> | string
     dateOfBirth?: DateTimeNullableFilter<"user"> | Date | string | null
     gender?: StringNullableFilter<"user"> | string | null
-    moneyInPocket?: DecimalFilter<"user"> | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFilter<"user"> | number
     stateId?: StringNullableFilter<"user"> | string | null
     role?: StringFilter<"user"> | string
     isVerified?: BoolFilter<"user"> | boolean
@@ -52421,7 +52399,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"user"> | string
     dateOfBirth?: DateTimeNullableWithAggregatesFilter<"user"> | Date | string | null
     gender?: StringNullableWithAggregatesFilter<"user"> | string | null
-    moneyInPocket?: DecimalWithAggregatesFilter<"user"> | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatWithAggregatesFilter<"user"> | number
     stateId?: StringNullableWithAggregatesFilter<"user"> | string | null
     phone?: StringWithAggregatesFilter<"user"> | string
     email?: StringWithAggregatesFilter<"user"> | string
@@ -53947,7 +53925,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitCreateInput = {
-    id?: string
     planName?: $Enums.PlanName
     maxProducts?: number
     maxBranches?: number
@@ -53963,7 +53940,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitUncheckedCreateInput = {
-    id?: string
     planName?: $Enums.PlanName
     maxProducts?: number
     maxBranches?: number
@@ -53979,7 +53955,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
     planName?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
     maxProducts?: IntFieldUpdateOperationsInput | number
     maxBranches?: IntFieldUpdateOperationsInput | number
@@ -53995,7 +53970,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
     planName?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
     maxProducts?: IntFieldUpdateOperationsInput | number
     maxBranches?: IntFieldUpdateOperationsInput | number
@@ -54011,7 +53985,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitCreateManyInput = {
-    id?: string
     planName?: $Enums.PlanName
     maxProducts?: number
     maxBranches?: number
@@ -54026,7 +53999,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
     planName?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
     maxProducts?: IntFieldUpdateOperationsInput | number
     maxBranches?: IntFieldUpdateOperationsInput | number
@@ -54041,7 +54013,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
     planName?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
     maxProducts?: IntFieldUpdateOperationsInput | number
     maxBranches?: IntFieldUpdateOperationsInput | number
@@ -54785,11 +54756,9 @@ export namespace Prisma {
 
   export type StoreSubscriptionCreateInput = {
     id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
     status?: $Enums.SubscriptionStatus
-    currentPeriodStart: Date | string
-    currentPeriodEnd: Date | string
+    lastUpgradeDate?: Date | string
+    minimumPlanPeriodUntil?: Date | string | null
     maxTotalProducts?: number
     maxBranches?: number
     maxDiscountCodes?: number
@@ -54798,24 +54767,21 @@ export namespace Prisma {
     allowsBoxes?: boolean
     allowsCollaborations?: boolean
     commissionRate?: number
-    monthlyPrice?: number | null
-    annualPrice?: number | null
     adsUsedThisPeriod?: number
     adsResetAt?: Date | string | null
-    downgradeToPlan?: $Enums.PlanName | null
-    downgradeScheduledAt?: Date | string | null
-    planLimit?: PlanLimitCreateNestedOneWithoutStoreSubscriptionInput
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    planLimit: PlanLimitCreateNestedOneWithoutStoreSubscriptionInput
     planChanges?: SubscriptionPlanChangeCreateNestedManyWithoutSubscriptionInput
+    store?: storeCreateNestedManyWithoutSubscriptionInput
   }
 
   export type StoreSubscriptionUncheckedCreateInput = {
     id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    planLimitId?: string | null
+    planLimitId: $Enums.PlanName
     status?: $Enums.SubscriptionStatus
-    currentPeriodStart: Date | string
-    currentPeriodEnd: Date | string
+    lastUpgradeDate?: Date | string
+    minimumPlanPeriodUntil?: Date | string | null
     maxTotalProducts?: number
     maxBranches?: number
     maxDiscountCodes?: number
@@ -54824,22 +54790,19 @@ export namespace Prisma {
     allowsBoxes?: boolean
     allowsCollaborations?: boolean
     commissionRate?: number
-    monthlyPrice?: number | null
-    annualPrice?: number | null
     adsUsedThisPeriod?: number
     adsResetAt?: Date | string | null
-    downgradeToPlan?: $Enums.PlanName | null
-    downgradeScheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     planChanges?: SubscriptionPlanChangeUncheckedCreateNestedManyWithoutSubscriptionInput
+    store?: storeUncheckedCreateNestedManyWithoutSubscriptionInput
   }
 
   export type StoreSubscriptionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
-    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
-    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastUpgradeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    minimumPlanPeriodUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     maxTotalProducts?: IntFieldUpdateOperationsInput | number
     maxBranches?: IntFieldUpdateOperationsInput | number
     maxDiscountCodes?: IntFieldUpdateOperationsInput | number
@@ -54848,24 +54811,21 @@ export namespace Prisma {
     allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
     allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
     commissionRate?: FloatFieldUpdateOperationsInput | number
-    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
-    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
     adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    downgradeToPlan?: NullableEnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName | null
-    downgradeScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    planLimit?: PlanLimitUpdateOneWithoutStoreSubscriptionNestedInput
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    planLimit?: PlanLimitUpdateOneRequiredWithoutStoreSubscriptionNestedInput
     planChanges?: SubscriptionPlanChangeUpdateManyWithoutSubscriptionNestedInput
+    store?: storeUpdateManyWithoutSubscriptionNestedInput
   }
 
   export type StoreSubscriptionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    planLimitId?: NullableStringFieldUpdateOperationsInput | string | null
+    planLimitId?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
-    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
-    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastUpgradeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    minimumPlanPeriodUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     maxTotalProducts?: IntFieldUpdateOperationsInput | number
     maxBranches?: IntFieldUpdateOperationsInput | number
     maxDiscountCodes?: IntFieldUpdateOperationsInput | number
@@ -54874,23 +54834,20 @@ export namespace Prisma {
     allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
     allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
     commissionRate?: FloatFieldUpdateOperationsInput | number
-    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
-    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
     adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    downgradeToPlan?: NullableEnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName | null
-    downgradeScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     planChanges?: SubscriptionPlanChangeUncheckedUpdateManyWithoutSubscriptionNestedInput
+    store?: storeUncheckedUpdateManyWithoutSubscriptionNestedInput
   }
 
   export type StoreSubscriptionCreateManyInput = {
     id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    planLimitId?: string | null
+    planLimitId: $Enums.PlanName
     status?: $Enums.SubscriptionStatus
-    currentPeriodStart: Date | string
-    currentPeriodEnd: Date | string
+    lastUpgradeDate?: Date | string
+    minimumPlanPeriodUntil?: Date | string | null
     maxTotalProducts?: number
     maxBranches?: number
     maxDiscountCodes?: number
@@ -54899,21 +54856,17 @@ export namespace Prisma {
     allowsBoxes?: boolean
     allowsCollaborations?: boolean
     commissionRate?: number
-    monthlyPrice?: number | null
-    annualPrice?: number | null
     adsUsedThisPeriod?: number
     adsResetAt?: Date | string | null
-    downgradeToPlan?: $Enums.PlanName | null
-    downgradeScheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type StoreSubscriptionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
-    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
-    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastUpgradeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    minimumPlanPeriodUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     maxTotalProducts?: IntFieldUpdateOperationsInput | number
     maxBranches?: IntFieldUpdateOperationsInput | number
     maxDiscountCodes?: IntFieldUpdateOperationsInput | number
@@ -54922,22 +54875,18 @@ export namespace Prisma {
     allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
     allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
     commissionRate?: FloatFieldUpdateOperationsInput | number
-    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
-    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
     adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    downgradeToPlan?: NullableEnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName | null
-    downgradeScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StoreSubscriptionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    planLimitId?: NullableStringFieldUpdateOperationsInput | string | null
+    planLimitId?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
-    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
-    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastUpgradeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    minimumPlanPeriodUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     maxTotalProducts?: IntFieldUpdateOperationsInput | number
     maxBranches?: IntFieldUpdateOperationsInput | number
     maxDiscountCodes?: IntFieldUpdateOperationsInput | number
@@ -54946,12 +54895,10 @@ export namespace Prisma {
     allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
     allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
     commissionRate?: FloatFieldUpdateOperationsInput | number
-    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
-    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
     adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    downgradeToPlan?: NullableEnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName | null
-    downgradeScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type storeCreateInput = {
@@ -54959,9 +54906,9 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -54973,6 +54920,7 @@ export namespace Prisma {
     branches?: branchCreateNestedManyWithoutStoreInput
     transactions?: transactionCreateNestedManyWithoutStoreInput
     sessions?: sessionCreateNestedManyWithoutStoreInput
+    subscription?: StoreSubscriptionCreateNestedOneWithoutStoreInput
     adCampaigns?: AdCampaignCreateNestedManyWithoutStoreInput
   }
 
@@ -54985,10 +54933,11 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
+    subscriptionId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     socialLinks?: socialLinkUncheckedCreateNestedOneWithoutStoreInput
@@ -55003,9 +54952,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -55017,6 +54966,7 @@ export namespace Prisma {
     branches?: branchUpdateManyWithoutStoreNestedInput
     transactions?: transactionUpdateManyWithoutStoreNestedInput
     sessions?: sessionUpdateManyWithoutStoreNestedInput
+    subscription?: StoreSubscriptionUpdateOneWithoutStoreNestedInput
     adCampaigns?: AdCampaignUpdateManyWithoutStoreNestedInput
   }
 
@@ -55029,10 +54979,11 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
+    subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     socialLinks?: socialLinkUncheckedUpdateOneWithoutStoreNestedInput
@@ -55051,10 +55002,11 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
+    subscriptionId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -55064,9 +55016,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -55081,10 +55033,11 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
+    subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -55392,7 +55345,7 @@ export namespace Prisma {
     name: string
     dateOfBirth?: Date | string | null
     gender?: string | null
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     phone: string
     email: string
     role?: string
@@ -55413,7 +55366,7 @@ export namespace Prisma {
     name: string
     dateOfBirth?: Date | string | null
     gender?: string | null
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     stateId?: string | null
     phone: string
     email: string
@@ -55434,7 +55387,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -55455,7 +55408,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     stateId?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -55476,7 +55429,7 @@ export namespace Prisma {
     name: string
     dateOfBirth?: Date | string | null
     gender?: string | null
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     stateId?: string | null
     phone: string
     email: string
@@ -55491,7 +55444,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -55505,7 +55458,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     stateId?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -56762,7 +56715,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitCountOrderByAggregateInput = {
-    id?: SortOrder
     planName?: SortOrder
     maxProducts?: SortOrder
     maxBranches?: SortOrder
@@ -56788,7 +56740,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitMaxOrderByAggregateInput = {
-    id?: SortOrder
     planName?: SortOrder
     maxProducts?: SortOrder
     maxBranches?: SortOrder
@@ -56803,7 +56754,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitMinOrderByAggregateInput = {
-    id?: SortOrder
     planName?: SortOrder
     maxProducts?: SortOrder
     maxBranches?: SortOrder
@@ -57448,16 +57398,9 @@ export namespace Prisma {
     not?: NestedEnumSubscriptionStatusFilter<$PrismaModel> | $Enums.SubscriptionStatus
   }
 
-  export type EnumPlanNameNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.PlanName | EnumPlanNameFieldRefInput<$PrismaModel> | null
-    in?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumPlanNameNullableFilter<$PrismaModel> | $Enums.PlanName | null
-  }
-
-  export type PlanLimitNullableScalarRelationFilter = {
-    is?: PlanLimitWhereInput | null
-    isNot?: PlanLimitWhereInput | null
+  export type PlanLimitScalarRelationFilter = {
+    is?: PlanLimitWhereInput
+    isNot?: PlanLimitWhereInput
   }
 
   export type SubscriptionPlanChangeListRelationFilter = {
@@ -57472,12 +57415,10 @@ export namespace Prisma {
 
   export type StoreSubscriptionCountOrderByAggregateInput = {
     id?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
     planLimitId?: SortOrder
     status?: SortOrder
-    currentPeriodStart?: SortOrder
-    currentPeriodEnd?: SortOrder
+    lastUpgradeDate?: SortOrder
+    minimumPlanPeriodUntil?: SortOrder
     maxTotalProducts?: SortOrder
     maxBranches?: SortOrder
     maxDiscountCodes?: SortOrder
@@ -57486,12 +57427,10 @@ export namespace Prisma {
     allowsBoxes?: SortOrder
     allowsCollaborations?: SortOrder
     commissionRate?: SortOrder
-    monthlyPrice?: SortOrder
-    annualPrice?: SortOrder
     adsUsedThisPeriod?: SortOrder
     adsResetAt?: SortOrder
-    downgradeToPlan?: SortOrder
-    downgradeScheduledAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type StoreSubscriptionAvgOrderByAggregateInput = {
@@ -57501,19 +57440,15 @@ export namespace Prisma {
     notificationsPerWeek?: SortOrder
     adsPerWeek?: SortOrder
     commissionRate?: SortOrder
-    monthlyPrice?: SortOrder
-    annualPrice?: SortOrder
     adsUsedThisPeriod?: SortOrder
   }
 
   export type StoreSubscriptionMaxOrderByAggregateInput = {
     id?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
     planLimitId?: SortOrder
     status?: SortOrder
-    currentPeriodStart?: SortOrder
-    currentPeriodEnd?: SortOrder
+    lastUpgradeDate?: SortOrder
+    minimumPlanPeriodUntil?: SortOrder
     maxTotalProducts?: SortOrder
     maxBranches?: SortOrder
     maxDiscountCodes?: SortOrder
@@ -57522,22 +57457,18 @@ export namespace Prisma {
     allowsBoxes?: SortOrder
     allowsCollaborations?: SortOrder
     commissionRate?: SortOrder
-    monthlyPrice?: SortOrder
-    annualPrice?: SortOrder
     adsUsedThisPeriod?: SortOrder
     adsResetAt?: SortOrder
-    downgradeToPlan?: SortOrder
-    downgradeScheduledAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type StoreSubscriptionMinOrderByAggregateInput = {
     id?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
     planLimitId?: SortOrder
     status?: SortOrder
-    currentPeriodStart?: SortOrder
-    currentPeriodEnd?: SortOrder
+    lastUpgradeDate?: SortOrder
+    minimumPlanPeriodUntil?: SortOrder
     maxTotalProducts?: SortOrder
     maxBranches?: SortOrder
     maxDiscountCodes?: SortOrder
@@ -57546,12 +57477,10 @@ export namespace Prisma {
     allowsBoxes?: SortOrder
     allowsCollaborations?: SortOrder
     commissionRate?: SortOrder
-    monthlyPrice?: SortOrder
-    annualPrice?: SortOrder
     adsUsedThisPeriod?: SortOrder
     adsResetAt?: SortOrder
-    downgradeToPlan?: SortOrder
-    downgradeScheduledAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type StoreSubscriptionSumOrderByAggregateInput = {
@@ -57561,8 +57490,6 @@ export namespace Prisma {
     notificationsPerWeek?: SortOrder
     adsPerWeek?: SortOrder
     commissionRate?: SortOrder
-    monthlyPrice?: SortOrder
-    annualPrice?: SortOrder
     adsUsedThisPeriod?: SortOrder
   }
 
@@ -57576,25 +57503,11 @@ export namespace Prisma {
     _max?: NestedEnumSubscriptionStatusFilter<$PrismaModel>
   }
 
-  export type EnumPlanNameNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.PlanName | EnumPlanNameFieldRefInput<$PrismaModel> | null
-    in?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumPlanNameNullableWithAggregatesFilter<$PrismaModel> | $Enums.PlanName | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumPlanNameNullableFilter<$PrismaModel>
-    _max?: NestedEnumPlanNameNullableFilter<$PrismaModel>
-  }
-
-  export type DecimalFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  export type EnumStoreRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.StoreRole | EnumStoreRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.StoreRole[] | ListEnumStoreRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StoreRole[] | ListEnumStoreRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumStoreRoleFilter<$PrismaModel> | $Enums.StoreRole
   }
 
   export type EnumStoreStatusFilter<$PrismaModel = never> = {
@@ -57613,6 +57526,11 @@ export namespace Prisma {
     every?: branchWhereInput
     some?: branchWhereInput
     none?: branchWhereInput
+  }
+
+  export type StoreSubscriptionNullableScalarRelationFilter = {
+    is?: StoreSubscriptionWhereInput | null
+    isNot?: StoreSubscriptionWhereInput | null
   }
 
   export type AdCampaignListRelationFilter = {
@@ -57642,6 +57560,7 @@ export namespace Prisma {
     passwordChangeBefore?: SortOrder
     role?: SortOrder
     status?: SortOrder
+    subscriptionId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -57663,6 +57582,7 @@ export namespace Prisma {
     passwordChangeBefore?: SortOrder
     role?: SortOrder
     status?: SortOrder
+    subscriptionId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -57680,6 +57600,7 @@ export namespace Prisma {
     passwordChangeBefore?: SortOrder
     role?: SortOrder
     status?: SortOrder
+    subscriptionId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -57688,20 +57609,14 @@ export namespace Prisma {
     moneyInPocket?: SortOrder
   }
 
-  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  export type EnumStoreRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StoreRole | EnumStoreRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.StoreRole[] | ListEnumStoreRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StoreRole[] | ListEnumStoreRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumStoreRoleWithAggregatesFilter<$PrismaModel> | $Enums.StoreRole
     _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedDecimalFilter<$PrismaModel>
-    _sum?: NestedDecimalFilter<$PrismaModel>
-    _min?: NestedDecimalFilter<$PrismaModel>
-    _max?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedEnumStoreRoleFilter<$PrismaModel>
+    _max?: NestedEnumStoreRoleFilter<$PrismaModel>
   }
 
   export type EnumStoreStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -60710,6 +60625,13 @@ export namespace Prisma {
     connect?: SubscriptionPlanChangeWhereUniqueInput | SubscriptionPlanChangeWhereUniqueInput[]
   }
 
+  export type storeCreateNestedManyWithoutSubscriptionInput = {
+    create?: XOR<storeCreateWithoutSubscriptionInput, storeUncheckedCreateWithoutSubscriptionInput> | storeCreateWithoutSubscriptionInput[] | storeUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: storeCreateOrConnectWithoutSubscriptionInput | storeCreateOrConnectWithoutSubscriptionInput[]
+    createMany?: storeCreateManySubscriptionInputEnvelope
+    connect?: storeWhereUniqueInput | storeWhereUniqueInput[]
+  }
+
   export type SubscriptionPlanChangeUncheckedCreateNestedManyWithoutSubscriptionInput = {
     create?: XOR<SubscriptionPlanChangeCreateWithoutSubscriptionInput, SubscriptionPlanChangeUncheckedCreateWithoutSubscriptionInput> | SubscriptionPlanChangeCreateWithoutSubscriptionInput[] | SubscriptionPlanChangeUncheckedCreateWithoutSubscriptionInput[]
     connectOrCreate?: SubscriptionPlanChangeCreateOrConnectWithoutSubscriptionInput | SubscriptionPlanChangeCreateOrConnectWithoutSubscriptionInput[]
@@ -60717,20 +60639,21 @@ export namespace Prisma {
     connect?: SubscriptionPlanChangeWhereUniqueInput | SubscriptionPlanChangeWhereUniqueInput[]
   }
 
+  export type storeUncheckedCreateNestedManyWithoutSubscriptionInput = {
+    create?: XOR<storeCreateWithoutSubscriptionInput, storeUncheckedCreateWithoutSubscriptionInput> | storeCreateWithoutSubscriptionInput[] | storeUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: storeCreateOrConnectWithoutSubscriptionInput | storeCreateOrConnectWithoutSubscriptionInput[]
+    createMany?: storeCreateManySubscriptionInputEnvelope
+    connect?: storeWhereUniqueInput | storeWhereUniqueInput[]
+  }
+
   export type EnumSubscriptionStatusFieldUpdateOperationsInput = {
     set?: $Enums.SubscriptionStatus
   }
 
-  export type NullableEnumPlanNameFieldUpdateOperationsInput = {
-    set?: $Enums.PlanName | null
-  }
-
-  export type PlanLimitUpdateOneWithoutStoreSubscriptionNestedInput = {
+  export type PlanLimitUpdateOneRequiredWithoutStoreSubscriptionNestedInput = {
     create?: XOR<PlanLimitCreateWithoutStoreSubscriptionInput, PlanLimitUncheckedCreateWithoutStoreSubscriptionInput>
     connectOrCreate?: PlanLimitCreateOrConnectWithoutStoreSubscriptionInput
     upsert?: PlanLimitUpsertWithoutStoreSubscriptionInput
-    disconnect?: PlanLimitWhereInput | boolean
-    delete?: PlanLimitWhereInput | boolean
     connect?: PlanLimitWhereUniqueInput
     update?: XOR<XOR<PlanLimitUpdateToOneWithWhereWithoutStoreSubscriptionInput, PlanLimitUpdateWithoutStoreSubscriptionInput>, PlanLimitUncheckedUpdateWithoutStoreSubscriptionInput>
   }
@@ -60749,6 +60672,20 @@ export namespace Prisma {
     deleteMany?: SubscriptionPlanChangeScalarWhereInput | SubscriptionPlanChangeScalarWhereInput[]
   }
 
+  export type storeUpdateManyWithoutSubscriptionNestedInput = {
+    create?: XOR<storeCreateWithoutSubscriptionInput, storeUncheckedCreateWithoutSubscriptionInput> | storeCreateWithoutSubscriptionInput[] | storeUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: storeCreateOrConnectWithoutSubscriptionInput | storeCreateOrConnectWithoutSubscriptionInput[]
+    upsert?: storeUpsertWithWhereUniqueWithoutSubscriptionInput | storeUpsertWithWhereUniqueWithoutSubscriptionInput[]
+    createMany?: storeCreateManySubscriptionInputEnvelope
+    set?: storeWhereUniqueInput | storeWhereUniqueInput[]
+    disconnect?: storeWhereUniqueInput | storeWhereUniqueInput[]
+    delete?: storeWhereUniqueInput | storeWhereUniqueInput[]
+    connect?: storeWhereUniqueInput | storeWhereUniqueInput[]
+    update?: storeUpdateWithWhereUniqueWithoutSubscriptionInput | storeUpdateWithWhereUniqueWithoutSubscriptionInput[]
+    updateMany?: storeUpdateManyWithWhereWithoutSubscriptionInput | storeUpdateManyWithWhereWithoutSubscriptionInput[]
+    deleteMany?: storeScalarWhereInput | storeScalarWhereInput[]
+  }
+
   export type SubscriptionPlanChangeUncheckedUpdateManyWithoutSubscriptionNestedInput = {
     create?: XOR<SubscriptionPlanChangeCreateWithoutSubscriptionInput, SubscriptionPlanChangeUncheckedCreateWithoutSubscriptionInput> | SubscriptionPlanChangeCreateWithoutSubscriptionInput[] | SubscriptionPlanChangeUncheckedCreateWithoutSubscriptionInput[]
     connectOrCreate?: SubscriptionPlanChangeCreateOrConnectWithoutSubscriptionInput | SubscriptionPlanChangeCreateOrConnectWithoutSubscriptionInput[]
@@ -60761,6 +60698,20 @@ export namespace Prisma {
     update?: SubscriptionPlanChangeUpdateWithWhereUniqueWithoutSubscriptionInput | SubscriptionPlanChangeUpdateWithWhereUniqueWithoutSubscriptionInput[]
     updateMany?: SubscriptionPlanChangeUpdateManyWithWhereWithoutSubscriptionInput | SubscriptionPlanChangeUpdateManyWithWhereWithoutSubscriptionInput[]
     deleteMany?: SubscriptionPlanChangeScalarWhereInput | SubscriptionPlanChangeScalarWhereInput[]
+  }
+
+  export type storeUncheckedUpdateManyWithoutSubscriptionNestedInput = {
+    create?: XOR<storeCreateWithoutSubscriptionInput, storeUncheckedCreateWithoutSubscriptionInput> | storeCreateWithoutSubscriptionInput[] | storeUncheckedCreateWithoutSubscriptionInput[]
+    connectOrCreate?: storeCreateOrConnectWithoutSubscriptionInput | storeCreateOrConnectWithoutSubscriptionInput[]
+    upsert?: storeUpsertWithWhereUniqueWithoutSubscriptionInput | storeUpsertWithWhereUniqueWithoutSubscriptionInput[]
+    createMany?: storeCreateManySubscriptionInputEnvelope
+    set?: storeWhereUniqueInput | storeWhereUniqueInput[]
+    disconnect?: storeWhereUniqueInput | storeWhereUniqueInput[]
+    delete?: storeWhereUniqueInput | storeWhereUniqueInput[]
+    connect?: storeWhereUniqueInput | storeWhereUniqueInput[]
+    update?: storeUpdateWithWhereUniqueWithoutSubscriptionInput | storeUpdateWithWhereUniqueWithoutSubscriptionInput[]
+    updateMany?: storeUpdateManyWithWhereWithoutSubscriptionInput | storeUpdateManyWithWhereWithoutSubscriptionInput[]
+    deleteMany?: storeScalarWhereInput | storeScalarWhereInput[]
   }
 
   export type localeCreateNestedOneWithoutStoreNameInput = {
@@ -60814,6 +60765,12 @@ export namespace Prisma {
     connect?: sessionWhereUniqueInput | sessionWhereUniqueInput[]
   }
 
+  export type StoreSubscriptionCreateNestedOneWithoutStoreInput = {
+    create?: XOR<StoreSubscriptionCreateWithoutStoreInput, StoreSubscriptionUncheckedCreateWithoutStoreInput>
+    connectOrCreate?: StoreSubscriptionCreateOrConnectWithoutStoreInput
+    connect?: StoreSubscriptionWhereUniqueInput
+  }
+
   export type AdCampaignCreateNestedManyWithoutStoreInput = {
     create?: XOR<AdCampaignCreateWithoutStoreInput, AdCampaignUncheckedCreateWithoutStoreInput> | AdCampaignCreateWithoutStoreInput[] | AdCampaignUncheckedCreateWithoutStoreInput[]
     connectOrCreate?: AdCampaignCreateOrConnectWithoutStoreInput | AdCampaignCreateOrConnectWithoutStoreInput[]
@@ -60855,12 +60812,8 @@ export namespace Prisma {
     connect?: AdCampaignWhereUniqueInput | AdCampaignWhereUniqueInput[]
   }
 
-  export type DecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string
-    increment?: Decimal | DecimalJsLike | number | string
-    decrement?: Decimal | DecimalJsLike | number | string
-    multiply?: Decimal | DecimalJsLike | number | string
-    divide?: Decimal | DecimalJsLike | number | string
+  export type EnumStoreRoleFieldUpdateOperationsInput = {
+    set?: $Enums.StoreRole
   }
 
   export type EnumStoreStatusFieldUpdateOperationsInput = {
@@ -60949,6 +60902,16 @@ export namespace Prisma {
     update?: sessionUpdateWithWhereUniqueWithoutStoreInput | sessionUpdateWithWhereUniqueWithoutStoreInput[]
     updateMany?: sessionUpdateManyWithWhereWithoutStoreInput | sessionUpdateManyWithWhereWithoutStoreInput[]
     deleteMany?: sessionScalarWhereInput | sessionScalarWhereInput[]
+  }
+
+  export type StoreSubscriptionUpdateOneWithoutStoreNestedInput = {
+    create?: XOR<StoreSubscriptionCreateWithoutStoreInput, StoreSubscriptionUncheckedCreateWithoutStoreInput>
+    connectOrCreate?: StoreSubscriptionCreateOrConnectWithoutStoreInput
+    upsert?: StoreSubscriptionUpsertWithoutStoreInput
+    disconnect?: StoreSubscriptionWhereInput | boolean
+    delete?: StoreSubscriptionWhereInput | boolean
+    connect?: StoreSubscriptionWhereUniqueInput
+    update?: XOR<XOR<StoreSubscriptionUpdateToOneWithWhereWithoutStoreInput, StoreSubscriptionUpdateWithoutStoreInput>, StoreSubscriptionUncheckedUpdateWithoutStoreInput>
   }
 
   export type AdCampaignUpdateManyWithoutStoreNestedInput = {
@@ -61834,13 +61797,6 @@ export namespace Prisma {
     not?: NestedEnumSubscriptionStatusFilter<$PrismaModel> | $Enums.SubscriptionStatus
   }
 
-  export type NestedEnumPlanNameNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.PlanName | EnumPlanNameFieldRefInput<$PrismaModel> | null
-    in?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumPlanNameNullableFilter<$PrismaModel> | $Enums.PlanName | null
-  }
-
   export type NestedEnumSubscriptionStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.SubscriptionStatus | EnumSubscriptionStatusFieldRefInput<$PrismaModel>
     in?: $Enums.SubscriptionStatus[] | ListEnumSubscriptionStatusFieldRefInput<$PrismaModel>
@@ -61851,25 +61807,11 @@ export namespace Prisma {
     _max?: NestedEnumSubscriptionStatusFilter<$PrismaModel>
   }
 
-  export type NestedEnumPlanNameNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.PlanName | EnumPlanNameFieldRefInput<$PrismaModel> | null
-    in?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.PlanName[] | ListEnumPlanNameFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumPlanNameNullableWithAggregatesFilter<$PrismaModel> | $Enums.PlanName | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumPlanNameNullableFilter<$PrismaModel>
-    _max?: NestedEnumPlanNameNullableFilter<$PrismaModel>
-  }
-
-  export type NestedDecimalFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  export type NestedEnumStoreRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.StoreRole | EnumStoreRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.StoreRole[] | ListEnumStoreRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StoreRole[] | ListEnumStoreRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumStoreRoleFilter<$PrismaModel> | $Enums.StoreRole
   }
 
   export type NestedEnumStoreStatusFilter<$PrismaModel = never> = {
@@ -61879,20 +61821,14 @@ export namespace Prisma {
     not?: NestedEnumStoreStatusFilter<$PrismaModel> | $Enums.StoreStatus
   }
 
-  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  export type NestedEnumStoreRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StoreRole | EnumStoreRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.StoreRole[] | ListEnumStoreRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StoreRole[] | ListEnumStoreRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumStoreRoleWithAggregatesFilter<$PrismaModel> | $Enums.StoreRole
     _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedDecimalFilter<$PrismaModel>
-    _sum?: NestedDecimalFilter<$PrismaModel>
-    _min?: NestedDecimalFilter<$PrismaModel>
-    _max?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedEnumStoreRoleFilter<$PrismaModel>
+    _max?: NestedEnumStoreRoleFilter<$PrismaModel>
   }
 
   export type NestedEnumStoreStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -62172,9 +62108,9 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -62186,6 +62122,7 @@ export namespace Prisma {
     branches?: branchCreateNestedManyWithoutStoreInput
     transactions?: transactionCreateNestedManyWithoutStoreInput
     sessions?: sessionCreateNestedManyWithoutStoreInput
+    subscription?: StoreSubscriptionCreateNestedOneWithoutStoreInput
   }
 
   export type storeUncheckedCreateWithoutAdCampaignsInput = {
@@ -62197,10 +62134,11 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
+    subscriptionId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     socialLinks?: socialLinkUncheckedCreateNestedOneWithoutStoreInput
@@ -62286,9 +62224,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -62300,6 +62238,7 @@ export namespace Prisma {
     branches?: branchUpdateManyWithoutStoreNestedInput
     transactions?: transactionUpdateManyWithoutStoreNestedInput
     sessions?: sessionUpdateManyWithoutStoreNestedInput
+    subscription?: StoreSubscriptionUpdateOneWithoutStoreNestedInput
   }
 
   export type storeUncheckedUpdateWithoutAdCampaignsInput = {
@@ -62311,10 +62250,11 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
+    subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     socialLinks?: socialLinkUncheckedUpdateOneWithoutStoreNestedInput
@@ -62552,9 +62492,9 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -62565,6 +62505,7 @@ export namespace Prisma {
     socialLinks?: socialLinkCreateNestedOneWithoutStoreInput
     transactions?: transactionCreateNestedManyWithoutStoreInput
     sessions?: sessionCreateNestedManyWithoutStoreInput
+    subscription?: StoreSubscriptionCreateNestedOneWithoutStoreInput
     adCampaigns?: AdCampaignCreateNestedManyWithoutStoreInput
   }
 
@@ -62577,10 +62518,11 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
+    subscriptionId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     socialLinks?: socialLinkUncheckedCreateNestedOneWithoutStoreInput
@@ -62723,9 +62665,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -62736,6 +62678,7 @@ export namespace Prisma {
     socialLinks?: socialLinkUpdateOneWithoutStoreNestedInput
     transactions?: transactionUpdateManyWithoutStoreNestedInput
     sessions?: sessionUpdateManyWithoutStoreNestedInput
+    subscription?: StoreSubscriptionUpdateOneWithoutStoreNestedInput
     adCampaigns?: AdCampaignUpdateManyWithoutStoreNestedInput
   }
 
@@ -62748,10 +62691,11 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
+    subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     socialLinks?: socialLinkUncheckedUpdateOneWithoutStoreNestedInput
@@ -64385,9 +64329,9 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -64398,6 +64342,7 @@ export namespace Prisma {
     branches?: branchCreateNestedManyWithoutStoreInput
     transactions?: transactionCreateNestedManyWithoutStoreInput
     sessions?: sessionCreateNestedManyWithoutStoreInput
+    subscription?: StoreSubscriptionCreateNestedOneWithoutStoreInput
     adCampaigns?: AdCampaignCreateNestedManyWithoutStoreInput
   }
 
@@ -64409,10 +64354,11 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
+    subscriptionId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     socialLinks?: socialLinkUncheckedCreateNestedOneWithoutStoreInput
@@ -64437,9 +64383,9 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -64450,6 +64396,7 @@ export namespace Prisma {
     branches?: branchCreateNestedManyWithoutStoreInput
     transactions?: transactionCreateNestedManyWithoutStoreInput
     sessions?: sessionCreateNestedManyWithoutStoreInput
+    subscription?: StoreSubscriptionCreateNestedOneWithoutStoreInput
     adCampaigns?: AdCampaignCreateNestedManyWithoutStoreInput
   }
 
@@ -64461,10 +64408,11 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
+    subscriptionId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     socialLinks?: socialLinkUncheckedCreateNestedOneWithoutStoreInput
@@ -64697,10 +64645,11 @@ export namespace Prisma {
     phone?: StringFilter<"store"> | string
     email?: StringFilter<"store"> | string
     password?: StringFilter<"store"> | string
-    moneyInPocket?: DecimalFilter<"store"> | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFilter<"store"> | number
     passwordChangeBefore?: DateTimeNullableFilter<"store"> | Date | string | null
-    role?: StringFilter<"store"> | string
+    role?: EnumStoreRoleFilter<"store"> | $Enums.StoreRole
     status?: EnumStoreStatusFilter<"store"> | $Enums.StoreStatus
+    subscriptionId?: StringNullableFilter<"store"> | string | null
     createdAt?: DateTimeFilter<"store"> | Date | string
     updatedAt?: DateTimeFilter<"store"> | Date | string
   }
@@ -64933,9 +64882,9 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -64946,6 +64895,7 @@ export namespace Prisma {
     branches?: branchCreateNestedManyWithoutStoreInput
     transactions?: transactionCreateNestedManyWithoutStoreInput
     sessions?: sessionCreateNestedManyWithoutStoreInput
+    subscription?: StoreSubscriptionCreateNestedOneWithoutStoreInput
     adCampaigns?: AdCampaignCreateNestedManyWithoutStoreInput
   }
 
@@ -64957,10 +64907,11 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
+    subscriptionId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     socialLinks?: socialLinkUncheckedCreateNestedOneWithoutStoreInput
@@ -64980,9 +64931,9 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -64993,6 +64944,7 @@ export namespace Prisma {
     branches?: branchCreateNestedManyWithoutStoreInput
     transactions?: transactionCreateNestedManyWithoutStoreInput
     sessions?: sessionCreateNestedManyWithoutStoreInput
+    subscription?: StoreSubscriptionCreateNestedOneWithoutStoreInput
     adCampaigns?: AdCampaignCreateNestedManyWithoutStoreInput
   }
 
@@ -65004,10 +64956,11 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
+    subscriptionId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     socialLinks?: socialLinkUncheckedCreateNestedOneWithoutStoreInput
@@ -65421,9 +65374,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -65434,6 +65387,7 @@ export namespace Prisma {
     branches?: branchUpdateManyWithoutStoreNestedInput
     transactions?: transactionUpdateManyWithoutStoreNestedInput
     sessions?: sessionUpdateManyWithoutStoreNestedInput
+    subscription?: StoreSubscriptionUpdateOneWithoutStoreNestedInput
     adCampaigns?: AdCampaignUpdateManyWithoutStoreNestedInput
   }
 
@@ -65445,10 +65399,11 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
+    subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     socialLinks?: socialLinkUncheckedUpdateOneWithoutStoreNestedInput
@@ -65474,9 +65429,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -65487,6 +65442,7 @@ export namespace Prisma {
     branches?: branchUpdateManyWithoutStoreNestedInput
     transactions?: transactionUpdateManyWithoutStoreNestedInput
     sessions?: sessionUpdateManyWithoutStoreNestedInput
+    subscription?: StoreSubscriptionUpdateOneWithoutStoreNestedInput
     adCampaigns?: AdCampaignUpdateManyWithoutStoreNestedInput
   }
 
@@ -65498,10 +65454,11 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
+    subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     socialLinks?: socialLinkUncheckedUpdateOneWithoutStoreNestedInput
@@ -66265,7 +66222,7 @@ export namespace Prisma {
     name: string
     dateOfBirth?: Date | string | null
     gender?: string | null
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     phone: string
     email: string
     role?: string
@@ -66285,7 +66242,7 @@ export namespace Prisma {
     name: string
     dateOfBirth?: Date | string | null
     gender?: string | null
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     stateId?: string | null
     phone: string
     email: string
@@ -66405,7 +66362,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -66425,7 +66382,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     stateId?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -66534,11 +66491,9 @@ export namespace Prisma {
 
   export type StoreSubscriptionCreateWithoutPlanLimitInput = {
     id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
     status?: $Enums.SubscriptionStatus
-    currentPeriodStart: Date | string
-    currentPeriodEnd: Date | string
+    lastUpgradeDate?: Date | string
+    minimumPlanPeriodUntil?: Date | string | null
     maxTotalProducts?: number
     maxBranches?: number
     maxDiscountCodes?: number
@@ -66547,22 +66502,19 @@ export namespace Prisma {
     allowsBoxes?: boolean
     allowsCollaborations?: boolean
     commissionRate?: number
-    monthlyPrice?: number | null
-    annualPrice?: number | null
     adsUsedThisPeriod?: number
     adsResetAt?: Date | string | null
-    downgradeToPlan?: $Enums.PlanName | null
-    downgradeScheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     planChanges?: SubscriptionPlanChangeCreateNestedManyWithoutSubscriptionInput
+    store?: storeCreateNestedManyWithoutSubscriptionInput
   }
 
   export type StoreSubscriptionUncheckedCreateWithoutPlanLimitInput = {
     id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
     status?: $Enums.SubscriptionStatus
-    currentPeriodStart: Date | string
-    currentPeriodEnd: Date | string
+    lastUpgradeDate?: Date | string
+    minimumPlanPeriodUntil?: Date | string | null
     maxTotalProducts?: number
     maxBranches?: number
     maxDiscountCodes?: number
@@ -66571,13 +66523,12 @@ export namespace Prisma {
     allowsBoxes?: boolean
     allowsCollaborations?: boolean
     commissionRate?: number
-    monthlyPrice?: number | null
-    annualPrice?: number | null
     adsUsedThisPeriod?: number
     adsResetAt?: Date | string | null
-    downgradeToPlan?: $Enums.PlanName | null
-    downgradeScheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     planChanges?: SubscriptionPlanChangeUncheckedCreateNestedManyWithoutSubscriptionInput
+    store?: storeUncheckedCreateNestedManyWithoutSubscriptionInput
   }
 
   export type StoreSubscriptionCreateOrConnectWithoutPlanLimitInput = {
@@ -66611,12 +66562,10 @@ export namespace Prisma {
     OR?: StoreSubscriptionScalarWhereInput[]
     NOT?: StoreSubscriptionScalarWhereInput | StoreSubscriptionScalarWhereInput[]
     id?: StringFilter<"StoreSubscription"> | string
-    createdAt?: DateTimeFilter<"StoreSubscription"> | Date | string
-    updatedAt?: DateTimeFilter<"StoreSubscription"> | Date | string
-    planLimitId?: StringNullableFilter<"StoreSubscription"> | string | null
+    planLimitId?: EnumPlanNameFilter<"StoreSubscription"> | $Enums.PlanName
     status?: EnumSubscriptionStatusFilter<"StoreSubscription"> | $Enums.SubscriptionStatus
-    currentPeriodStart?: DateTimeFilter<"StoreSubscription"> | Date | string
-    currentPeriodEnd?: DateTimeFilter<"StoreSubscription"> | Date | string
+    lastUpgradeDate?: DateTimeFilter<"StoreSubscription"> | Date | string
+    minimumPlanPeriodUntil?: DateTimeNullableFilter<"StoreSubscription"> | Date | string | null
     maxTotalProducts?: IntFilter<"StoreSubscription"> | number
     maxBranches?: IntFilter<"StoreSubscription"> | number
     maxDiscountCodes?: IntFilter<"StoreSubscription"> | number
@@ -66625,12 +66574,10 @@ export namespace Prisma {
     allowsBoxes?: BoolFilter<"StoreSubscription"> | boolean
     allowsCollaborations?: BoolFilter<"StoreSubscription"> | boolean
     commissionRate?: FloatFilter<"StoreSubscription"> | number
-    monthlyPrice?: FloatNullableFilter<"StoreSubscription"> | number | null
-    annualPrice?: FloatNullableFilter<"StoreSubscription"> | number | null
     adsUsedThisPeriod?: IntFilter<"StoreSubscription"> | number
     adsResetAt?: DateTimeNullableFilter<"StoreSubscription"> | Date | string | null
-    downgradeToPlan?: EnumPlanNameNullableFilter<"StoreSubscription"> | $Enums.PlanName | null
-    downgradeScheduledAt?: DateTimeNullableFilter<"StoreSubscription"> | Date | string | null
+    createdAt?: DateTimeFilter<"StoreSubscription"> | Date | string
+    updatedAt?: DateTimeFilter<"StoreSubscription"> | Date | string
   }
 
   export type userCartCreateWithoutProductCartInput = {
@@ -68099,7 +68046,7 @@ export namespace Prisma {
     name: string
     dateOfBirth?: Date | string | null
     gender?: string | null
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     phone: string
     email: string
     role?: string
@@ -68119,7 +68066,7 @@ export namespace Prisma {
     name: string
     dateOfBirth?: Date | string | null
     gender?: string | null
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     stateId?: string | null
     phone: string
     email: string
@@ -68214,7 +68161,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -68234,7 +68181,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     stateId?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -68319,7 +68266,7 @@ export namespace Prisma {
     name: string
     dateOfBirth?: Date | string | null
     gender?: string | null
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     phone: string
     email: string
     role?: string
@@ -68339,7 +68286,7 @@ export namespace Prisma {
     name: string
     dateOfBirth?: Date | string | null
     gender?: string | null
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     stateId?: string | null
     phone: string
     email: string
@@ -68364,9 +68311,9 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -68377,6 +68324,7 @@ export namespace Prisma {
     socialLinks?: socialLinkCreateNestedOneWithoutStoreInput
     branches?: branchCreateNestedManyWithoutStoreInput
     transactions?: transactionCreateNestedManyWithoutStoreInput
+    subscription?: StoreSubscriptionCreateNestedOneWithoutStoreInput
     adCampaigns?: AdCampaignCreateNestedManyWithoutStoreInput
   }
 
@@ -68389,10 +68337,11 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
+    subscriptionId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     socialLinks?: socialLinkUncheckedCreateNestedOneWithoutStoreInput
@@ -68453,7 +68402,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -68473,7 +68422,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     stateId?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -68504,9 +68453,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -68517,6 +68466,7 @@ export namespace Prisma {
     socialLinks?: socialLinkUpdateOneWithoutStoreNestedInput
     branches?: branchUpdateManyWithoutStoreNestedInput
     transactions?: transactionUpdateManyWithoutStoreNestedInput
+    subscription?: StoreSubscriptionUpdateOneWithoutStoreNestedInput
     adCampaigns?: AdCampaignUpdateManyWithoutStoreNestedInput
   }
 
@@ -68529,10 +68479,11 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
+    subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     socialLinks?: socialLinkUncheckedUpdateOneWithoutStoreNestedInput
@@ -68773,7 +68724,7 @@ export namespace Prisma {
     name: string
     dateOfBirth?: Date | string | null
     gender?: string | null
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     phone: string
     email: string
     role?: string
@@ -68793,7 +68744,7 @@ export namespace Prisma {
     name: string
     dateOfBirth?: Date | string | null
     gender?: string | null
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     phone: string
     email: string
     role?: string
@@ -69050,7 +69001,7 @@ export namespace Prisma {
     name?: StringFilter<"user"> | string
     dateOfBirth?: DateTimeNullableFilter<"user"> | Date | string | null
     gender?: StringNullableFilter<"user"> | string | null
-    moneyInPocket?: DecimalFilter<"user"> | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFilter<"user"> | number
     stateId?: StringNullableFilter<"user"> | string | null
     phone?: StringFilter<"user"> | string
     email?: StringFilter<"user"> | string
@@ -69087,7 +69038,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitCreateWithoutStoreSubscriptionInput = {
-    id?: string
     planName?: $Enums.PlanName
     maxProducts?: number
     maxBranches?: number
@@ -69102,7 +69052,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitUncheckedCreateWithoutStoreSubscriptionInput = {
-    id?: string
     planName?: $Enums.PlanName
     maxProducts?: number
     maxBranches?: number
@@ -69149,6 +69098,60 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type storeCreateWithoutSubscriptionInput = {
+    id?: string
+    phone: string
+    email: string
+    password: string
+    moneyInPocket?: number
+    passwordChangeBefore?: Date | string | null
+    role?: $Enums.StoreRole
+    status?: $Enums.StoreStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: localeCreateNestedOneWithoutStoreNameInput
+    bio: localeCreateNestedOneWithoutStoreBioInput
+    logo: imageCreateNestedOneWithoutStoreLogoInput
+    banner: imageCreateNestedOneWithoutStoreBannerInput
+    socialLinks?: socialLinkCreateNestedOneWithoutStoreInput
+    branches?: branchCreateNestedManyWithoutStoreInput
+    transactions?: transactionCreateNestedManyWithoutStoreInput
+    sessions?: sessionCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignCreateNestedManyWithoutStoreInput
+  }
+
+  export type storeUncheckedCreateWithoutSubscriptionInput = {
+    id?: string
+    nameId: string
+    bioId: string
+    logoId: string
+    bannerId: string
+    phone: string
+    email: string
+    password: string
+    moneyInPocket?: number
+    passwordChangeBefore?: Date | string | null
+    role?: $Enums.StoreRole
+    status?: $Enums.StoreStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    socialLinks?: socialLinkUncheckedCreateNestedOneWithoutStoreInput
+    branches?: branchUncheckedCreateNestedManyWithoutStoreInput
+    transactions?: transactionUncheckedCreateNestedManyWithoutStoreInput
+    sessions?: sessionUncheckedCreateNestedManyWithoutStoreInput
+    adCampaigns?: AdCampaignUncheckedCreateNestedManyWithoutStoreInput
+  }
+
+  export type storeCreateOrConnectWithoutSubscriptionInput = {
+    where: storeWhereUniqueInput
+    create: XOR<storeCreateWithoutSubscriptionInput, storeUncheckedCreateWithoutSubscriptionInput>
+  }
+
+  export type storeCreateManySubscriptionInputEnvelope = {
+    data: storeCreateManySubscriptionInput | storeCreateManySubscriptionInput[]
+    skipDuplicates?: boolean
+  }
+
   export type PlanLimitUpsertWithoutStoreSubscriptionInput = {
     update: XOR<PlanLimitUpdateWithoutStoreSubscriptionInput, PlanLimitUncheckedUpdateWithoutStoreSubscriptionInput>
     create: XOR<PlanLimitCreateWithoutStoreSubscriptionInput, PlanLimitUncheckedCreateWithoutStoreSubscriptionInput>
@@ -69161,7 +69164,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitUpdateWithoutStoreSubscriptionInput = {
-    id?: StringFieldUpdateOperationsInput | string
     planName?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
     maxProducts?: IntFieldUpdateOperationsInput | number
     maxBranches?: IntFieldUpdateOperationsInput | number
@@ -69176,7 +69178,6 @@ export namespace Prisma {
   }
 
   export type PlanLimitUncheckedUpdateWithoutStoreSubscriptionInput = {
-    id?: StringFieldUpdateOperationsInput | string
     planName?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
     maxProducts?: IntFieldUpdateOperationsInput | number
     maxBranches?: IntFieldUpdateOperationsInput | number
@@ -69217,6 +69218,22 @@ export namespace Prisma {
     changeType?: EnumChangeTypeFilter<"SubscriptionPlanChange"> | $Enums.ChangeType
     reason?: StringNullableFilter<"SubscriptionPlanChange"> | string | null
     subscriptionId?: StringFilter<"SubscriptionPlanChange"> | string
+  }
+
+  export type storeUpsertWithWhereUniqueWithoutSubscriptionInput = {
+    where: storeWhereUniqueInput
+    update: XOR<storeUpdateWithoutSubscriptionInput, storeUncheckedUpdateWithoutSubscriptionInput>
+    create: XOR<storeCreateWithoutSubscriptionInput, storeUncheckedCreateWithoutSubscriptionInput>
+  }
+
+  export type storeUpdateWithWhereUniqueWithoutSubscriptionInput = {
+    where: storeWhereUniqueInput
+    data: XOR<storeUpdateWithoutSubscriptionInput, storeUncheckedUpdateWithoutSubscriptionInput>
+  }
+
+  export type storeUpdateManyWithWhereWithoutSubscriptionInput = {
+    where: storeScalarWhereInput
+    data: XOR<storeUpdateManyMutationInput, storeUncheckedUpdateManyWithoutSubscriptionInput>
   }
 
   export type localeCreateWithoutStoreNameInput = {
@@ -69474,6 +69491,53 @@ export namespace Prisma {
   export type sessionCreateManyStoreInputEnvelope = {
     data: sessionCreateManyStoreInput | sessionCreateManyStoreInput[]
     skipDuplicates?: boolean
+  }
+
+  export type StoreSubscriptionCreateWithoutStoreInput = {
+    id?: string
+    status?: $Enums.SubscriptionStatus
+    lastUpgradeDate?: Date | string
+    minimumPlanPeriodUntil?: Date | string | null
+    maxTotalProducts?: number
+    maxBranches?: number
+    maxDiscountCodes?: number
+    notificationsPerWeek?: number
+    adsPerWeek?: number
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: number
+    adsUsedThisPeriod?: number
+    adsResetAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    planLimit: PlanLimitCreateNestedOneWithoutStoreSubscriptionInput
+    planChanges?: SubscriptionPlanChangeCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type StoreSubscriptionUncheckedCreateWithoutStoreInput = {
+    id?: string
+    planLimitId: $Enums.PlanName
+    status?: $Enums.SubscriptionStatus
+    lastUpgradeDate?: Date | string
+    minimumPlanPeriodUntil?: Date | string | null
+    maxTotalProducts?: number
+    maxBranches?: number
+    maxDiscountCodes?: number
+    notificationsPerWeek?: number
+    adsPerWeek?: number
+    allowsBoxes?: boolean
+    allowsCollaborations?: boolean
+    commissionRate?: number
+    adsUsedThisPeriod?: number
+    adsResetAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    planChanges?: SubscriptionPlanChangeUncheckedCreateNestedManyWithoutSubscriptionInput
+  }
+
+  export type StoreSubscriptionCreateOrConnectWithoutStoreInput = {
+    where: StoreSubscriptionWhereUniqueInput
+    create: XOR<StoreSubscriptionCreateWithoutStoreInput, StoreSubscriptionUncheckedCreateWithoutStoreInput>
   }
 
   export type AdCampaignCreateWithoutStoreInput = {
@@ -69772,6 +69836,59 @@ export namespace Prisma {
     data: XOR<sessionUpdateManyMutationInput, sessionUncheckedUpdateManyWithoutStoreInput>
   }
 
+  export type StoreSubscriptionUpsertWithoutStoreInput = {
+    update: XOR<StoreSubscriptionUpdateWithoutStoreInput, StoreSubscriptionUncheckedUpdateWithoutStoreInput>
+    create: XOR<StoreSubscriptionCreateWithoutStoreInput, StoreSubscriptionUncheckedCreateWithoutStoreInput>
+    where?: StoreSubscriptionWhereInput
+  }
+
+  export type StoreSubscriptionUpdateToOneWithWhereWithoutStoreInput = {
+    where?: StoreSubscriptionWhereInput
+    data: XOR<StoreSubscriptionUpdateWithoutStoreInput, StoreSubscriptionUncheckedUpdateWithoutStoreInput>
+  }
+
+  export type StoreSubscriptionUpdateWithoutStoreInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    lastUpgradeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    minimumPlanPeriodUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maxTotalProducts?: IntFieldUpdateOperationsInput | number
+    maxBranches?: IntFieldUpdateOperationsInput | number
+    maxDiscountCodes?: IntFieldUpdateOperationsInput | number
+    notificationsPerWeek?: IntFieldUpdateOperationsInput | number
+    adsPerWeek?: IntFieldUpdateOperationsInput | number
+    allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
+    allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
+    commissionRate?: FloatFieldUpdateOperationsInput | number
+    adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
+    adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    planLimit?: PlanLimitUpdateOneRequiredWithoutStoreSubscriptionNestedInput
+    planChanges?: SubscriptionPlanChangeUpdateManyWithoutSubscriptionNestedInput
+  }
+
+  export type StoreSubscriptionUncheckedUpdateWithoutStoreInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    planLimitId?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
+    status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
+    lastUpgradeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    minimumPlanPeriodUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maxTotalProducts?: IntFieldUpdateOperationsInput | number
+    maxBranches?: IntFieldUpdateOperationsInput | number
+    maxDiscountCodes?: IntFieldUpdateOperationsInput | number
+    notificationsPerWeek?: IntFieldUpdateOperationsInput | number
+    adsPerWeek?: IntFieldUpdateOperationsInput | number
+    allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
+    allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
+    commissionRate?: FloatFieldUpdateOperationsInput | number
+    adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
+    adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    planChanges?: SubscriptionPlanChangeUncheckedUpdateManyWithoutSubscriptionNestedInput
+  }
+
   export type AdCampaignUpsertWithWhereUniqueWithoutStoreInput = {
     where: AdCampaignWhereUniqueInput
     update: XOR<AdCampaignUpdateWithoutStoreInput, AdCampaignUncheckedUpdateWithoutStoreInput>
@@ -69811,9 +69928,9 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -69824,6 +69941,7 @@ export namespace Prisma {
     branches?: branchCreateNestedManyWithoutStoreInput
     transactions?: transactionCreateNestedManyWithoutStoreInput
     sessions?: sessionCreateNestedManyWithoutStoreInput
+    subscription?: StoreSubscriptionCreateNestedOneWithoutStoreInput
     adCampaigns?: AdCampaignCreateNestedManyWithoutStoreInput
   }
 
@@ -69836,10 +69954,11 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
+    subscriptionId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     branches?: branchUncheckedCreateNestedManyWithoutStoreInput
@@ -69869,9 +69988,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -69882,6 +70001,7 @@ export namespace Prisma {
     branches?: branchUpdateManyWithoutStoreNestedInput
     transactions?: transactionUpdateManyWithoutStoreNestedInput
     sessions?: sessionUpdateManyWithoutStoreNestedInput
+    subscription?: StoreSubscriptionUpdateOneWithoutStoreNestedInput
     adCampaigns?: AdCampaignUpdateManyWithoutStoreNestedInput
   }
 
@@ -69894,10 +70014,11 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
+    subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     branches?: branchUncheckedUpdateManyWithoutStoreNestedInput
@@ -69908,11 +70029,9 @@ export namespace Prisma {
 
   export type StoreSubscriptionCreateWithoutPlanChangesInput = {
     id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
     status?: $Enums.SubscriptionStatus
-    currentPeriodStart: Date | string
-    currentPeriodEnd: Date | string
+    lastUpgradeDate?: Date | string
+    minimumPlanPeriodUntil?: Date | string | null
     maxTotalProducts?: number
     maxBranches?: number
     maxDiscountCodes?: number
@@ -69921,23 +70040,20 @@ export namespace Prisma {
     allowsBoxes?: boolean
     allowsCollaborations?: boolean
     commissionRate?: number
-    monthlyPrice?: number | null
-    annualPrice?: number | null
     adsUsedThisPeriod?: number
     adsResetAt?: Date | string | null
-    downgradeToPlan?: $Enums.PlanName | null
-    downgradeScheduledAt?: Date | string | null
-    planLimit?: PlanLimitCreateNestedOneWithoutStoreSubscriptionInput
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    planLimit: PlanLimitCreateNestedOneWithoutStoreSubscriptionInput
+    store?: storeCreateNestedManyWithoutSubscriptionInput
   }
 
   export type StoreSubscriptionUncheckedCreateWithoutPlanChangesInput = {
     id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    planLimitId?: string | null
+    planLimitId: $Enums.PlanName
     status?: $Enums.SubscriptionStatus
-    currentPeriodStart: Date | string
-    currentPeriodEnd: Date | string
+    lastUpgradeDate?: Date | string
+    minimumPlanPeriodUntil?: Date | string | null
     maxTotalProducts?: number
     maxBranches?: number
     maxDiscountCodes?: number
@@ -69946,12 +70062,11 @@ export namespace Prisma {
     allowsBoxes?: boolean
     allowsCollaborations?: boolean
     commissionRate?: number
-    monthlyPrice?: number | null
-    annualPrice?: number | null
     adsUsedThisPeriod?: number
     adsResetAt?: Date | string | null
-    downgradeToPlan?: $Enums.PlanName | null
-    downgradeScheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    store?: storeUncheckedCreateNestedManyWithoutSubscriptionInput
   }
 
   export type StoreSubscriptionCreateOrConnectWithoutPlanChangesInput = {
@@ -69972,11 +70087,9 @@ export namespace Prisma {
 
   export type StoreSubscriptionUpdateWithoutPlanChangesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
-    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
-    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastUpgradeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    minimumPlanPeriodUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     maxTotalProducts?: IntFieldUpdateOperationsInput | number
     maxBranches?: IntFieldUpdateOperationsInput | number
     maxDiscountCodes?: IntFieldUpdateOperationsInput | number
@@ -69985,23 +70098,20 @@ export namespace Prisma {
     allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
     allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
     commissionRate?: FloatFieldUpdateOperationsInput | number
-    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
-    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
     adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    downgradeToPlan?: NullableEnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName | null
-    downgradeScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    planLimit?: PlanLimitUpdateOneWithoutStoreSubscriptionNestedInput
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    planLimit?: PlanLimitUpdateOneRequiredWithoutStoreSubscriptionNestedInput
+    store?: storeUpdateManyWithoutSubscriptionNestedInput
   }
 
   export type StoreSubscriptionUncheckedUpdateWithoutPlanChangesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    planLimitId?: NullableStringFieldUpdateOperationsInput | string | null
+    planLimitId?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
-    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
-    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastUpgradeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    minimumPlanPeriodUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     maxTotalProducts?: IntFieldUpdateOperationsInput | number
     maxBranches?: IntFieldUpdateOperationsInput | number
     maxDiscountCodes?: IntFieldUpdateOperationsInput | number
@@ -70010,12 +70120,11 @@ export namespace Prisma {
     allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
     allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
     commissionRate?: FloatFieldUpdateOperationsInput | number
-    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
-    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
     adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    downgradeToPlan?: NullableEnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName | null
-    downgradeScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    store?: storeUncheckedUpdateManyWithoutSubscriptionNestedInput
   }
 
   export type userCreateWithoutTransactionInput = {
@@ -70023,7 +70132,7 @@ export namespace Prisma {
     name: string
     dateOfBirth?: Date | string | null
     gender?: string | null
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     phone: string
     email: string
     role?: string
@@ -70043,7 +70152,7 @@ export namespace Prisma {
     name: string
     dateOfBirth?: Date | string | null
     gender?: string | null
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     stateId?: string | null
     phone: string
     email: string
@@ -70068,9 +70177,9 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -70081,6 +70190,7 @@ export namespace Prisma {
     socialLinks?: socialLinkCreateNestedOneWithoutStoreInput
     branches?: branchCreateNestedManyWithoutStoreInput
     sessions?: sessionCreateNestedManyWithoutStoreInput
+    subscription?: StoreSubscriptionCreateNestedOneWithoutStoreInput
     adCampaigns?: AdCampaignCreateNestedManyWithoutStoreInput
   }
 
@@ -70093,10 +70203,11 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
+    subscriptionId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     socialLinks?: socialLinkUncheckedCreateNestedOneWithoutStoreInput
@@ -70182,7 +70293,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -70202,7 +70313,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     stateId?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -70233,9 +70344,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -70246,6 +70357,7 @@ export namespace Prisma {
     socialLinks?: socialLinkUpdateOneWithoutStoreNestedInput
     branches?: branchUpdateManyWithoutStoreNestedInput
     sessions?: sessionUpdateManyWithoutStoreNestedInput
+    subscription?: StoreSubscriptionUpdateOneWithoutStoreNestedInput
     adCampaigns?: AdCampaignUpdateManyWithoutStoreNestedInput
   }
 
@@ -70258,10 +70370,11 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
+    subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     socialLinks?: socialLinkUncheckedUpdateOneWithoutStoreNestedInput
@@ -70343,7 +70456,7 @@ export namespace Prisma {
     name: string
     dateOfBirth?: Date | string | null
     gender?: string | null
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     phone: string
     email: string
     role?: string
@@ -70363,7 +70476,7 @@ export namespace Prisma {
     name: string
     dateOfBirth?: Date | string | null
     gender?: string | null
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     stateId?: string | null
     phone: string
     email: string
@@ -70429,7 +70542,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -70449,7 +70562,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     stateId?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -70847,7 +70960,7 @@ export namespace Prisma {
     name: string
     dateOfBirth?: Date | string | null
     gender?: string | null
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     phone: string
     email: string
     role?: string
@@ -70867,7 +70980,7 @@ export namespace Prisma {
     name: string
     dateOfBirth?: Date | string | null
     gender?: string | null
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     stateId?: string | null
     phone: string
     email: string
@@ -70934,7 +71047,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -70954,7 +71067,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     stateId?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -71641,10 +71754,11 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
+    subscriptionId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -71657,10 +71771,11 @@ export namespace Prisma {
     phone: string
     email: string
     password: string
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     passwordChangeBefore?: Date | string | null
-    role?: string
+    role?: $Enums.StoreRole
     status?: $Enums.StoreStatus
+    subscriptionId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -71719,9 +71834,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -71732,6 +71847,7 @@ export namespace Prisma {
     branches?: branchUpdateManyWithoutStoreNestedInput
     transactions?: transactionUpdateManyWithoutStoreNestedInput
     sessions?: sessionUpdateManyWithoutStoreNestedInput
+    subscription?: StoreSubscriptionUpdateOneWithoutStoreNestedInput
     adCampaigns?: AdCampaignUpdateManyWithoutStoreNestedInput
   }
 
@@ -71743,10 +71859,11 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
+    subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     socialLinks?: socialLinkUncheckedUpdateOneWithoutStoreNestedInput
@@ -71764,10 +71881,11 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
+    subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -71777,9 +71895,9 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -71790,6 +71908,7 @@ export namespace Prisma {
     branches?: branchUpdateManyWithoutStoreNestedInput
     transactions?: transactionUpdateManyWithoutStoreNestedInput
     sessions?: sessionUpdateManyWithoutStoreNestedInput
+    subscription?: StoreSubscriptionUpdateOneWithoutStoreNestedInput
     adCampaigns?: AdCampaignUpdateManyWithoutStoreNestedInput
   }
 
@@ -71801,10 +71920,11 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
+    subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     socialLinks?: socialLinkUncheckedUpdateOneWithoutStoreNestedInput
@@ -71822,10 +71942,11 @@ export namespace Prisma {
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: StringFieldUpdateOperationsInput | string
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
     status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
+    subscriptionId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -71965,11 +72086,9 @@ export namespace Prisma {
 
   export type StoreSubscriptionCreateManyPlanLimitInput = {
     id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
     status?: $Enums.SubscriptionStatus
-    currentPeriodStart: Date | string
-    currentPeriodEnd: Date | string
+    lastUpgradeDate?: Date | string
+    minimumPlanPeriodUntil?: Date | string | null
     maxTotalProducts?: number
     maxBranches?: number
     maxDiscountCodes?: number
@@ -71978,21 +72097,17 @@ export namespace Prisma {
     allowsBoxes?: boolean
     allowsCollaborations?: boolean
     commissionRate?: number
-    monthlyPrice?: number | null
-    annualPrice?: number | null
     adsUsedThisPeriod?: number
     adsResetAt?: Date | string | null
-    downgradeToPlan?: $Enums.PlanName | null
-    downgradeScheduledAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type StoreSubscriptionUpdateWithoutPlanLimitInput = {
     id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
-    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
-    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastUpgradeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    minimumPlanPeriodUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     maxTotalProducts?: IntFieldUpdateOperationsInput | number
     maxBranches?: IntFieldUpdateOperationsInput | number
     maxDiscountCodes?: IntFieldUpdateOperationsInput | number
@@ -72001,22 +72116,19 @@ export namespace Prisma {
     allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
     allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
     commissionRate?: FloatFieldUpdateOperationsInput | number
-    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
-    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
     adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    downgradeToPlan?: NullableEnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName | null
-    downgradeScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     planChanges?: SubscriptionPlanChangeUpdateManyWithoutSubscriptionNestedInput
+    store?: storeUpdateManyWithoutSubscriptionNestedInput
   }
 
   export type StoreSubscriptionUncheckedUpdateWithoutPlanLimitInput = {
     id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
-    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
-    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastUpgradeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    minimumPlanPeriodUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     maxTotalProducts?: IntFieldUpdateOperationsInput | number
     maxBranches?: IntFieldUpdateOperationsInput | number
     maxDiscountCodes?: IntFieldUpdateOperationsInput | number
@@ -72025,22 +72137,19 @@ export namespace Prisma {
     allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
     allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
     commissionRate?: FloatFieldUpdateOperationsInput | number
-    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
-    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
     adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    downgradeToPlan?: NullableEnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName | null
-    downgradeScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     planChanges?: SubscriptionPlanChangeUncheckedUpdateManyWithoutSubscriptionNestedInput
+    store?: storeUncheckedUpdateManyWithoutSubscriptionNestedInput
   }
 
   export type StoreSubscriptionUncheckedUpdateManyWithoutPlanLimitInput = {
     id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
-    currentPeriodStart?: DateTimeFieldUpdateOperationsInput | Date | string
-    currentPeriodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastUpgradeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    minimumPlanPeriodUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     maxTotalProducts?: IntFieldUpdateOperationsInput | number
     maxBranches?: IntFieldUpdateOperationsInput | number
     maxDiscountCodes?: IntFieldUpdateOperationsInput | number
@@ -72049,12 +72158,10 @@ export namespace Prisma {
     allowsBoxes?: BoolFieldUpdateOperationsInput | boolean
     allowsCollaborations?: BoolFieldUpdateOperationsInput | boolean
     commissionRate?: FloatFieldUpdateOperationsInput | number
-    monthlyPrice?: NullableFloatFieldUpdateOperationsInput | number | null
-    annualPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     adsUsedThisPeriod?: IntFieldUpdateOperationsInput | number
     adsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    downgradeToPlan?: NullableEnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName | null
-    downgradeScheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type productOrderCreateManyProductStockInput = {
@@ -72349,7 +72456,7 @@ export namespace Prisma {
     name: string
     dateOfBirth?: Date | string | null
     gender?: string | null
-    moneyInPocket?: Decimal | DecimalJsLike | number | string
+    moneyInPocket?: number
     phone: string
     email: string
     role?: string
@@ -72490,7 +72597,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -72510,7 +72617,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -72530,7 +72637,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -72570,6 +72677,23 @@ export namespace Prisma {
     reason?: string | null
   }
 
+  export type storeCreateManySubscriptionInput = {
+    id?: string
+    nameId: string
+    bioId: string
+    logoId: string
+    bannerId: string
+    phone: string
+    email: string
+    password: string
+    moneyInPocket?: number
+    passwordChangeBefore?: Date | string | null
+    role?: $Enums.StoreRole
+    status?: $Enums.StoreStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type SubscriptionPlanChangeUpdateWithoutSubscriptionInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -72595,6 +72719,67 @@ export namespace Prisma {
     toPlan?: EnumPlanNameFieldUpdateOperationsInput | $Enums.PlanName
     changeType?: EnumChangeTypeFieldUpdateOperationsInput | $Enums.ChangeType
     reason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type storeUpdateWithoutSubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
+    status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: localeUpdateOneRequiredWithoutStoreNameNestedInput
+    bio?: localeUpdateOneRequiredWithoutStoreBioNestedInput
+    logo?: imageUpdateOneRequiredWithoutStoreLogoNestedInput
+    banner?: imageUpdateOneRequiredWithoutStoreBannerNestedInput
+    socialLinks?: socialLinkUpdateOneWithoutStoreNestedInput
+    branches?: branchUpdateManyWithoutStoreNestedInput
+    transactions?: transactionUpdateManyWithoutStoreNestedInput
+    sessions?: sessionUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUpdateManyWithoutStoreNestedInput
+  }
+
+  export type storeUncheckedUpdateWithoutSubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nameId?: StringFieldUpdateOperationsInput | string
+    bioId?: StringFieldUpdateOperationsInput | string
+    logoId?: StringFieldUpdateOperationsInput | string
+    bannerId?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
+    status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    socialLinks?: socialLinkUncheckedUpdateOneWithoutStoreNestedInput
+    branches?: branchUncheckedUpdateManyWithoutStoreNestedInput
+    transactions?: transactionUncheckedUpdateManyWithoutStoreNestedInput
+    sessions?: sessionUncheckedUpdateManyWithoutStoreNestedInput
+    adCampaigns?: AdCampaignUncheckedUpdateManyWithoutStoreNestedInput
+  }
+
+  export type storeUncheckedUpdateManyWithoutSubscriptionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nameId?: StringFieldUpdateOperationsInput | string
+    bioId?: StringFieldUpdateOperationsInput | string
+    logoId?: StringFieldUpdateOperationsInput | string
+    bannerId?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    moneyInPocket?: FloatFieldUpdateOperationsInput | number
+    passwordChangeBefore?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: EnumStoreRoleFieldUpdateOperationsInput | $Enums.StoreRole
+    status?: EnumStoreStatusFieldUpdateOperationsInput | $Enums.StoreStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type branchCreateManyStoreInput = {

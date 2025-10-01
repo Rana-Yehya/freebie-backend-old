@@ -31,7 +31,7 @@ router
   )
   .post(
     authenticateUserMiddleware,
-    authorizeMiddleware(adminConstant, storeConstant),
+    authorizeMiddleware(storeConstant),
     createBranch
   );
 router
@@ -44,7 +44,7 @@ router
   )
   .delete(
     authenticateUserMiddleware,
-    authorizeMiddleware(adminConstant, storeConstant),
+    authorizeMiddleware(storeConstant),
     deleteBranch
   );
 

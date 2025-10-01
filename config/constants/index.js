@@ -1,7 +1,7 @@
 const adminConstant = "admin";
 const userConstant = "user";
 const guestConstant = "guest";
-const storeConstant = "store";
+const storeConstant = "STORE";
 
 module.exports = {
   storeConstant,

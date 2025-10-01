@@ -313,7 +313,6 @@ exports.Prisma.OrderScalarFieldEnum = {
 };
 
 exports.Prisma.PlanLimitScalarFieldEnum = {
-  id: 'id',
   planName: 'planName',
   maxProducts: 'maxProducts',
   maxBranches: 'maxBranches',
@@ -428,12 +427,10 @@ exports.Prisma.StateScalarFieldEnum = {
 
 exports.Prisma.StoreSubscriptionScalarFieldEnum = {
   id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
   planLimitId: 'planLimitId',
   status: 'status',
-  currentPeriodStart: 'currentPeriodStart',
-  currentPeriodEnd: 'currentPeriodEnd',
+  lastUpgradeDate: 'lastUpgradeDate',
+  minimumPlanPeriodUntil: 'minimumPlanPeriodUntil',
   maxTotalProducts: 'maxTotalProducts',
   maxBranches: 'maxBranches',
   maxDiscountCodes: 'maxDiscountCodes',
@@ -442,12 +439,10 @@ exports.Prisma.StoreSubscriptionScalarFieldEnum = {
   allowsBoxes: 'allowsBoxes',
   allowsCollaborations: 'allowsCollaborations',
   commissionRate: 'commissionRate',
-  monthlyPrice: 'monthlyPrice',
-  annualPrice: 'annualPrice',
   adsUsedThisPeriod: 'adsUsedThisPeriod',
   adsResetAt: 'adsResetAt',
-  downgradeToPlan: 'downgradeToPlan',
-  downgradeScheduledAt: 'downgradeScheduledAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.StoreScalarFieldEnum = {
@@ -463,6 +458,7 @@ exports.Prisma.StoreScalarFieldEnum = {
   passwordChangeBefore: 'passwordChangeBefore',
   role: 'role',
   status: 'status',
+  subscriptionId: 'subscriptionId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -596,6 +592,10 @@ exports.SubscriptionStatus = exports.$Enums.SubscriptionStatus = {
   PENDING_DOWNGRADE: 'PENDING_DOWNGRADE',
   CANCELLED: 'CANCELLED',
   EXPIRED: 'EXPIRED'
+};
+
+exports.StoreRole = exports.$Enums.StoreRole = {
+  STORE: 'STORE'
 };
 
 exports.StoreStatus = exports.$Enums.StoreStatus = {
