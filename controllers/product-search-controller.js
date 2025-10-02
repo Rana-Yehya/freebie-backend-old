@@ -17,7 +17,7 @@ const selectedQuery = {
   id: true,
   name: true,
   // description: true,
-  productPrice: true,
+  actualPrice: true,
   price: true,
   doesNeedPreparation: true,
   avgRating: true,
@@ -82,7 +82,7 @@ const getProductsQuery = async (req, res, next) => {
       price: true, // Gets the lowest price
     },
   });
-  const groupActualPrices = await prisma.productPrice.aggregate({
+  const groupActualPrices = await prisma.product.aggregate({
     _max: {
       actualPrice: true, // Gets the highest price
     },
@@ -474,9 +474,9 @@ const searchAllProducts = async (req, res, next) => {
         OR: [
           { price: { gte: priceSmallFloat, lte: priceHighFloat } },
           {
-            productPrice: {
-              actualPrice: { gte: priceSmallFloat, lte: priceHighFloat },
-            },
+            // productPrice: {
+            actualPrice: { gte: priceSmallFloat, lte: priceHighFloat },
+            //            },
           },
         ],
         tags: tags,
@@ -589,7 +589,6 @@ const getProduct = async (req, res, next) => {
           },
         },
       },
-      productPrice: true,
       productVariant: {
         include: {
           productStock: {

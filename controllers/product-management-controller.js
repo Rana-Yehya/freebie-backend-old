@@ -14,6 +14,7 @@ const {
   destroyImage,
 } = require("../helpers/image-kit/delete-image");
 const { ProductTags, ProductStatus } = require("../generated/prisma");
+const { default: z } = require("zod");
 const getAllProducts = async (req, res, next) => {
   const products = await prisma.product.findMany({
     include: { occasions: true },
@@ -96,6 +97,15 @@ const createProduct = async (req, res, next) => {
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
+
+  if (
+    req.user.subscription.maxTotalProducts >=
+    req.user.subscription.planLimit.maxProducts
+  ) {
+    throw new BadRequestError(
+      "You have reached the maximum number of products"
+    );
+  }
   const category = await prisma.category.findUnique({
     where: { id: categoryId },
   });
@@ -150,39 +160,8 @@ const createProduct = async (req, res, next) => {
       publicId: imagePublicIdsToStore[imageIndex],
     });
   }
-  // console.log(category.canBeDeliveredOutsideState);
-  // console.log(canBeDeliveredOutsideState);
-  // console.log(
-  //   category.canBeDeliveredOutsideState == true
-  //     ? canBeDeliveredOutsideState == undefined
-  //       ? undefined
-  //       : canBeDeliveredOutsideState === "false"
-  //       ? false
-  //       : true
-  //     : false
-  // );
-  // if (category.canBeDeliveredOutsideState == true) {
-  //   console.log("here");
 
-  //   console.log(canBeDeliveredOutsideState == undefined);
-  //   console.log("here");
-  //   const x = Boolean(canBeDeliveredOutsideState);
-  //   console.log(x);
-  //   //   ? undefined
-  //   //   : Boolean(canBeDeliveredOutsideState);
-  //   // false;
-  // }
   const productStockListToStore = productStockList.map((product) => {
-    //   return {
-    //     branch: {
-    //       connect: {
-    //         id: product.branchId,
-    //       },
-    //     },
-    //     stock: product.stock,
-    //     color: product.color,
-    //   };
-    // });
     return {
       color: product.color,
       productStock: {
@@ -227,13 +206,18 @@ const createProduct = async (req, res, next) => {
       },
       tags: ProductTags.NONE,
       price: parseFloat(price),
-      productPrice:
+      // actualPrice:
+      //   discountStartTime && discountEndTime && discountPercent
+      //     ? parseFloat(price) -
+      //       (parseFloat(price) * parseFloat(discountPercent) * 100) / 100
+      //     : undefined,
+      discount:
         discountStartTime && discountEndTime && discountPercent
           ? {
               create: {
-                actualPrice:
-                  parseFloat(price) -
-                  (parseFloat(price) * parseFloat(discountPercent) * 100) / 100,
+                // actualPrice:
+                //   parseFloat(price) -
+                //   (parseFloat(price) * parseFloat(discountPercent) * 100) / 100,
                 discountPercent: parseFloat(discountPercent),
                 discountStartTime: dateDiscountStartTime,
                 discountEndTime: dateDiscountEndTime,
@@ -278,11 +262,22 @@ const createProduct = async (req, res, next) => {
       weightInKg: parseFloat(weightInKg),
     },
     include: {
-      productPrice: true,
       image: true,
       occasions: true,
     },
   });
+  if (createdProduct) {
+    await prisma.store.update({
+      where: { id: req.user.id },
+      data: {
+        subscription: {
+          update: {
+            maxTotalProducts: { increment: 1 },
+          },
+        },
+      },
+    });
+  }
   /*
   let productStockDb = [];
   for (
@@ -350,7 +345,6 @@ const updateProduct = async (req, res, next) => {
   const productStockList =
     productStock == undefined ? [] : JSON.parse(productStock);
   const occasionsList = occasions == undefined ? [] : JSON.parse(occasions);
-
   const zodModel = UpdateProductZodModel.safeParse({
     id: id,
     name: {
@@ -516,7 +510,15 @@ const updateProduct = async (req, res, next) => {
       //     },
 
       price: price == undefined ? undefined : parseFloat(price),
-      productPrice:
+      // actualPrice:
+      //   discountStartTime || discountEndTime || discountPercent
+      //     ? parseFloat(price || product.price) -
+      //       (parseFloat(price || product.price) *
+      //         parseFloat(discountPercent || product.discountPercent) *
+      //         100) /
+      //         100
+      //     : undefined,
+      discount:
         discountStartTime || discountEndTime || discountPercent
           ? {
               connectOrCreate: {
@@ -524,24 +526,24 @@ const updateProduct = async (req, res, next) => {
                   productId: id,
                 },
                 create: {
-                  actualPrice:
-                    parseFloat(price || product.price) -
-                      (parseFloat(price || product.price) *
-                        parseFloat(discountPercent || product.discountPercent) *
-                        100) /
-                        100 || undefined,
+                  // actualPrice:
+                  //   parseFloat(price || product.price) -
+                  //     (parseFloat(price || product.price) *
+                  //       parseFloat(discountPercent || product.discountPercent) *
+                  //       100) /
+                  //       100 || undefined,
                   discountPercent: parseFloat(discountPercent) || undefined,
                   discountStartTime: dateDiscountStartTime || undefined,
                   discountEndTime: dateDiscountEndTime || undefined,
                 },
               },
               update: {
-                actualPrice:
-                  parseFloat(price || product.price) -
-                    (parseFloat(price || product.price) *
-                      parseFloat(discountPercent || product.discountPercent) *
-                      100) /
-                      100 || undefined,
+                // actualPrice:
+                //   parseFloat(price || product.price) -
+                //     (parseFloat(price || product.price) *
+                //       parseFloat(discountPercent || product.discountPercent) *
+                //       100) /
+                //       100 || undefined,
                 discountPercent: parseFloat(discountPercent) || undefined,
                 discountStartTime: dateDiscountStartTime || undefined,
                 discountEndTime: dateDiscountEndTime || undefined,
@@ -686,7 +688,6 @@ const updateProduct = async (req, res, next) => {
       // isPopular: isPopular || undefined,
     },
     include: {
-      productPrice: true,
       productVariant: { include: { productStock: true } },
       occasions: true,
       image: true,

@@ -7,32 +7,40 @@ model store {
 
   // name               String
   // bio                String
-  logoId               String        @unique
-  logo                 image         @relation("storeLogo", fields: [logoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  bannerId             String        @unique
-  banner               image         @relation("storeBanner", fields: [bannerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  phone                String        @unique
-  email                String        @unique
+  logoId               String             @unique
+  logo                 image              @relation("storeLogo", fields: [logoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bannerId             String             @unique
+  banner               image              @relation("storeBanner", fields: [bannerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  phone                String             @unique
+  email                String             @unique
   password             String
   // socialLinksId      String    
   socialLinks          socialLink? //  @relation(fields: [socialLinksId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   branches             branch[]
   transactions         transaction[]
-  moneyInPocket        Decimal       @default(0)
-  sessions             session[]     @relation("storeSession")
+  moneyInPocket        Float              @default(0)
+  sessions             session[]          @relation("storeSession")
   passwordChangeBefore DateTime?
   // product            product[]
   // store - restaurant - place for weddings
-  role                 String        @default("store")
-  status               StoreStatus   @default(PENDING)
-
+  role                 StoreRole          @default(STORE)
+  status               StoreStatus        @default(PENDING)
+  subscription         StoreSubscription? @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  subscriptionId       String? //@unique
+  // Store can have multiple ad campaigns
+  adCampaigns          AdCampaign[]
+  discounts            discount[]
   // isApprovedByAdmin Boolean  @default(false)
   // isFreezed         Boolean  @default(false)
   // isBanned          Boolean  @default(false)
   // isDeleted         Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
   // storeAddress storeAddress[]
+}
+
+enum StoreRole {
+  STORE
 }
 
 enum StoreStatus {

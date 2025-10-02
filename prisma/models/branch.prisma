@@ -6,14 +6,16 @@ model branch {
   locationId String?   @unique
   // location     location?
 
-  phone        String?
-  isFreezed    Boolean        @default(false)
-  workHours    workHour[]
-  productStock productStock[]
+  phone         String?
+  isFreezed     Boolean              @default(false)
+  workHours     workHour[]
+  productStock  productStock[]
+  discountCodes BranchDiscountCode[]
+
   // productUser  productCart[]
   // productOrder productOrder[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   // branchCity        String
   // branchState       String
   // branchZip         String

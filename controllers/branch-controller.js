@@ -13,6 +13,7 @@ const { UpdateBranchZodModel } = require("../models/update-branch-zod-model");
 const { OrderStatus } = require("../generated/prisma");
 const getAllStoreBranches = async (req, res, next) => {
   let id = req.query.id;
+  console.log(req.user);
   if (req.user != undefined && req.user.role === storeConstant) {
     id = req.user.id;
     // if (!id) {
@@ -54,13 +55,24 @@ const getBranch = async (req, res, next) => {
 };
 
 const createBranch = async (req, res, next) => {
-  let id = req.query.id;
-  if (req.user != undefined && req.user.role === storeConstant) {
-    id = req.user.id;
+  // let id = req.query.id;
+  // if (req.user != undefined && req.user.role === storeConstant) {
+  //   id = req.user.id;
+  // }
+  console.log(req.user);
+  console.log(req.user.subscription);
+  console.log(req.user.subscription.planLimit);
+  if (
+    req.user.subscription.maxBranches >=
+    req.user.subscription.planLimit.maxBranches
+  ) {
+    throw new BadRequestError(
+      "You have reached the maximum number of branches allowed for your subscription"
+    );
   }
   const { address, phone: phoneNumber, stateId } = req.body;
   const zodModel = CreateBranchZodModel.safeParse({
-    storeId: id,
+    storeId: req.user.id,
     phone: phoneNumber,
     location: {
       address: address,
@@ -71,16 +83,22 @@ const createBranch = async (req, res, next) => {
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
-  const createdBranch = await prisma.branch.create({
+  const createdBranch = await prisma.store.update({
+    where: { id: req.user.id },
     data: {
-      phone: phoneNumber,
-      location: {
+      subscription: { update: { maxBranches: { increment: 1 } } },
+      branches: {
         create: {
-          state: { connect: { id: stateId } },
-          address: address,
+          phone: phoneNumber,
+          location: {
+            create: {
+              state: { connect: { id: stateId } },
+              address: address,
+            },
+          },
+          // store: { connect: { id: req.user.id } },
         },
       },
-      store: { connect: { id: id } },
     },
   });
 
@@ -131,19 +149,45 @@ const updateBranch = async (req, res, next) => {
 
 const deleteBranch = async (req, res, next) => {
   const { id: branchId } = req.params;
-  // TODO SHOULD I CHECK ON THE ONGOING ORDERS
-  // const productOrder = await prisma.productOrder.findFirst({
-  //  where: {
-  //   status: {notIn: [OrderStatus.DELIVERED, OrderStatus.CANCELLED]},
-  //   variant:
-  //  }
-  // }
-  // )
   if (!branchId) {
     throw new BadRequestError("Please enter a branch id");
   }
-  const branch = await prisma.branch.delete({
-    where: { id: branchId },
+  const ordersInStore = await prisma.order.findFirst({
+    where: {
+      AND: [
+        {
+          productOrder: {
+            every: {
+              productStock: { branch: { id: branchId } },
+            },
+          },
+        },
+        {
+          productOrder: {
+            every: {
+              status: { notIn: [OrderStatus.DELIVERED, OrderStatus.CANCELLED] },
+            },
+          },
+        },
+        // { productOrder: { every: { status: { not: "pending" } } } },
+      ],
+    },
+  });
+  if (ordersInStore) {
+    throw new BadRequestError("Store has orders in progress");
+  }
+
+  const branch = await prisma.store.update({
+    where: { id: req.user.id },
+    data: {
+      subscription: { update: { maxBranches: { decrement: 1 } } },
+      branches: {
+        delete: {
+          id: branchId,
+          // store: { id: req.user.id },
+        },
+      },
+    },
   });
   if (!branch) {
     throw new NotFoundError("Branch not found");

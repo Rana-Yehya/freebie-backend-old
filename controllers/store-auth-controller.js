@@ -16,14 +16,17 @@ const { createAccessJWT, createRefreshJWT } = require("../utils/jwt-utils");
 const { passwordEncrypt, passwordCompare } = require("../utils/password-utils");
 const { storeConstant } = require("../config/constants");
 const { uploadImage } = require("../helpers/image-kit/upload-image");
-const { StoreStatus, OrderStatus } = require("../generated/prisma");
+const { StoreStatus, OrderStatus, PlanName } = require("../generated/prisma");
 const {
   checkOtpRestirictionsHelper,
   spamOtpRequestHelper,
   verifyOtpHelper,
 } = require("../helpers/redis");
 const { sendOtpHelper } = require("../helpers/redis/send-otp-helper");
-const { destroyImage } = require("../helpers/image-kit/delete-image");
+const {
+  destroyImage,
+  destroyMultipleImages,
+} = require("../helpers/image-kit/delete-image");
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -212,6 +215,7 @@ const register = async (req, res, next) => {
           instagram: instagram || undefined,
         },
       },
+
       type: type || undefined,
     },
   });
@@ -241,9 +245,7 @@ const deleteStore = async (req, res) => {
         {
           productOrder: {
             every: {
-              variant: {
-                productStock: { every: { branch: { storeId: storeId } } },
-              },
+              productStock: { branch: { storeId: storeId } },
             },
           },
         },
@@ -261,8 +263,15 @@ const deleteStore = async (req, res) => {
   if (ordersInStore) {
     throw new BadRequestError("Store has orders in progress");
   }
+  console.log(req.user);
   await prisma.store.delete({
     where: { id: storeId },
+  });
+  await destroyImage({
+    imagePublicId: req.user.logo.publicId,
+  });
+  await destroyImage({
+    imagePublicId: req.user.banner.publicId,
   });
   await prisma.session.deleteMany({
     where: { storeId: storeId },

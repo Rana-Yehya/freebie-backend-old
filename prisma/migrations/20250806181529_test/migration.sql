@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "review" ALTER COLUMN "id" DROP DEFAULT;

@@ -13,12 +13,7 @@ const {
   TransactionType,
   UserOrderStatus,
 } = require("../generated/prisma");
-const {
-  createOrderHelper,
-  verifyUserOrderHelper,
-} = require("../helpers/redis");
 const { OrderStatusZodModel } = require("../models/order-status-zod-model");
-let PERCENTAGE = 0.85;
 //for now create a function for each status
 
 //pending, confirmed, shipped, delivered, cancelled, refunded
@@ -171,7 +166,7 @@ const createOrder = async (req, res, next) => {
                   product: {
                     select: {
                       price: true,
-                      productPrice: true,
+                      actualPrice: true,
                       weightInKg: true,
                     },
                   },
@@ -199,13 +194,13 @@ const createOrder = async (req, res, next) => {
     return {
       // variantId: item.productStock.variant.id,
       productStockId: item.productStockId,
-      price: item.productStock.variant.product.productPrice
-        ? item.productStock.variant.product.productPrice.actualPrice
+      price: item.productStock.variant.product.actualPrice
+        ? item.productStock.variant.product.actualPrice
         : item.productStock.variant.product.price,
       deliveryFee: deliverySum,
       subtotal:
-        (item.productStock.variant.product.productPrice
-          ? item.productStock.variant.product.productPrice.actualPrice
+        (item.productStock.variant.product.actualPrice
+          ? item.productStock.variant.product.actualPrice
           : item.productStock.variant.product.price) * item.quantity,
       // productStock: { connect: { id: item.productStockId } },
       // productStockId: item.productStockId,
@@ -281,8 +276,6 @@ const createOrder = async (req, res, next) => {
   if (!order) {
     throw new BadRequestError("Order was not created. Please contact support");
   }
-  console.log(order);
-  console.log(req.user.id);
 
   return res.status(StatusCodes.CREATED).json({ isSuccess: true, data: order });
 };
@@ -299,6 +292,7 @@ const createPaidOrder = async (req, res, next) => {
           productStockId: true,
           productStock: {
             select: {
+              stock: true,
               variant: {
                 select: {
                   id: true,
@@ -307,7 +301,8 @@ const createPaidOrder = async (req, res, next) => {
                   product: {
                     select: {
                       price: true,
-                      productPrice: true,
+                      actualPrice: true,
+                      doesNeedPreparation: true,
                     },
                   },
                 },
@@ -322,39 +317,45 @@ const createPaidOrder = async (req, res, next) => {
   await prisma.userCart.delete({
     where: { userId: userId },
   });
-  userCart.productCart.map(async (item) => {
-    await prisma.product.update({
-      where: {
-        id: item.productStock.variant.productId,
-        // {
-        //   in: userCart.productCart.map((item) => item.productStock.productId),
-        // },
-      },
-      data: {
-        productVariant: {
-          update: {
-            where: {
-              productId_color: {
-                productId: item.productStock.variant.productId,
-                color: item.productStock.variant.color,
-                // branchId: item.branchId,
+  for (let i = 0; i < userCart.productCart.length; i++) {
+    const item = userCart.productCart[i];
+    if (item.productStock.variant.product.doesNeedPreparation != true) {
+      //TODO SHOULD I CHECK FOR THE NUMBER BEING GREATER THAN ZERO
+      //&& item.productStock.stock
+      await prisma.product.update({
+        where: {
+          id: item.productStock.variant.productId,
+          // {
+          //   in: userCart.productCart.map((item) => item.productStock.productId),
+          // },
+        },
+        data: {
+          productVariant: {
+            update: {
+              where: {
+                id: item.productStock.variant.id,
+                // productId_color: {
+                //   productId: item.productStock.variant.productId,
+                //   color: item.productStock.variant.color,
+                //   // branchId: item.branchId,
+                // },
               },
-            },
-            data: {
-              productStock: {
-                update: {
-                  where: {
-                    id: item.productStockId,
+              data: {
+                productStock: {
+                  update: {
+                    where: {
+                      id: item.productStockId,
+                    },
+                    data: { stock: { decrement: item.quantity } },
                   },
-                  data: { stock: { decrement: item.quantity } },
                 },
               },
             },
           },
         },
-      },
-    });
-  });
+      });
+    }
+  }
   const order = await prisma.order.update({
     where: { id: orderId },
     data: {
@@ -535,7 +536,6 @@ const changeOrderStatusByStore = async (req, res, next) => {
 
 const changeOrderStatusAsDeliveredByAdmin = async (req, res, next) => {
   const { orderId, storeId } = req.body;
-  console.log(storeId);
 
   const order = await prisma.order.findMany({
     where: {
@@ -555,8 +555,14 @@ const changeOrderStatusAsDeliveredByAdmin = async (req, res, next) => {
       productOrder: {
         select: {
           id: true,
+          commissionRate: true,
           subtotal: true,
           quantity: true,
+          // productStock: {
+          //   select: {
+          //     branch: { select: { store: { select: { subscription: true } } } },
+          //   },
+          // },
           // productStock: { select: { branchId: true } },
           status: true,
         },
@@ -619,11 +625,12 @@ const changeOrderStatusAsDeliveredByAdmin = async (req, res, next) => {
       },
     },
   });
+  const percentage = order[0].productOrder[0].commissionRate;
   await createDepositPayment({
     type: TransactionType.DEPOSIT,
     isUser: false,
     userId: storeId,
-    amount: deliverSum * PERCENTAGE,
+    amount: deliverSum * (1 - percentage),
     purpose: "deliver_order",
   });
   return res.status(StatusCodes.OK).json({
@@ -833,12 +840,13 @@ const cancelProductOrderByUser = async (req, res, next) => {
   // } else {
 
   // }
+  const percentage = order.commissionRate;
   const orderUpdated = await prisma.productOrder.update({
     where: { id: productOrderId },
     data: {
       cancellationReason: cancellationReason,
       userRefundAmount: userRefundValue,
-      storerRefundAmount: storeRefundValue * PERCENTAGE,
+      storerRefundAmount: storeRefundValue * percentage,
       status: OrderStatus.CANCELLED,
     },
   });
@@ -889,7 +897,7 @@ const cancelProductOrderByUser = async (req, res, next) => {
       type: TransactionType.DEPOSIT,
       isUser: false,
       userId: order.productStock.branch.storeId,
-      amount: storeRefundValue * PERCENTAGE,
+      amount: storeRefundValue * percentage,
       purpose: "cancel_order",
     });
   }

@@ -29,7 +29,8 @@ model product {
   // user                     user?             @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   // userId                   String?
   price                      Float            @default(1)
-  productPrice               productPrice?
+  discount                   discount?
+  actualPrice                Float?
   doesNeedPreparation        Boolean          @default(false)
   status                     ProductStatus    @default(PENDING)
   // isFeatured               Boolean   @default(false)

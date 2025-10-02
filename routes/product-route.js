@@ -29,7 +29,6 @@ const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
 const { storeConstant, adminConstant } = require("../config/constants");
-const { route } = require("./country-route");
 
 const router = express.Router();
 
@@ -80,19 +79,19 @@ router
   .get(optionalAuthenticateUserMiddleware, getProduct)
   .patch(
     authenticateUserMiddleware,
-    authorizeMiddleware(adminConstant, storeConstant),
+    authorizeMiddleware(storeConstant),
     updateProduct
   )
   .delete(
     authenticateUserMiddleware,
-    authorizeMiddleware(adminConstant, storeConstant),
+    authorizeMiddleware(storeConstant),
     deleteProduct
   );
 router
   .route("/")
   .post(
     authenticateUserMiddleware,
-    authorizeMiddleware(adminConstant, storeConstant),
+    authorizeMiddleware(storeConstant),
     createProduct
   );
 

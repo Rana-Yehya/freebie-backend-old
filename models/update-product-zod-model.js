@@ -125,8 +125,8 @@ const UpdateProductZodModel = z
       .optional(),
     preparationTimeInMinutes: z.string().optional(),
     discountPercent: z.string().optional(),
-    discountStartTime: z.string().date().optional(),
-    discountEndTime: z.string().date().optional(),
+    discountStartTime: z.string().datetime().optional(),
+    discountEndTime: z.string().datetime().optional(),
     // color: z
     //   .array(
     //     z

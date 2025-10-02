@@ -1,0 +1,76 @@
+// Add these to your existing schema
+
+model AdCampaign {
+    id          String  @id @default(uuid())
+    title       String
+    description String?
+    imageUrl    String
+    targetUrl   String // Where the ad clicks go (e.g., store page, product page)
+
+    // // Ad status and timing
+    // status       AdStatus  @default(PENDING)
+    // startDate    DateTime?
+    // endDate      DateTime?
+
+    // scheduledFor DateTime? // When the ad is scheduled to run
+    // Ad scheduling (independent of billing period)
+    startDate     DateTime? // 2024-11-05 (when ad should start showing)
+    endDate       DateTime? // 2024-11-12 (when ad should stop showing)
+    // Tracking
+    clicks        Int            @default(0)
+    impressions   Int            @default(0)
+    adImpressions AdImpression[]
+    adClick       AdClick[]
+
+    // budget      Float? // Maximum budget for the ad
+    // spent       Float  @default(0)
+
+    // Relations - Ad belongs to a specific store (not branch)
+    store   store  @relation(fields: [storeId], references: [id])
+    storeId String
+
+    // // Which branch this ad promotes (optional)
+    // branch   branch? @relation(fields: [branchId], references: [id])
+    // branchId String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("ad_campaigns")
+}
+
+model AdImpression {
+    id           String     @id @default(uuid())
+    adCampaign   AdCampaign @relation(fields: [adCampaignId], references: [id])
+    adCampaignId String
+    userId       String? // If user is logged in
+    ipAddress    String?
+    userAgent    String?
+    createdAt    DateTime   @default(now())
+
+    @@map("ad_impressions")
+}
+
+model AdClick {
+    id           String     @id @default(uuid())
+    adCampaign   AdCampaign @relation(fields: [adCampaignId], references: [id])
+    adCampaignId String
+    userId       String?
+    ipAddress    String?
+    userAgent    String?
+    createdAt    DateTime   @default(now())
+
+    @@map("ad_clicks")
+}
+
+// Add to your existing enums
+enum AdStatus {
+    DRAFT
+    PENDING
+    APPROVED
+    REJECTED
+    ACTIVE
+    PAUSED
+    COMPLETED
+    CANCELLED
+}

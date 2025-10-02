@@ -111,9 +111,26 @@ const CreateProductZodModel = z
       })
       .default("false"),
     preparationTimeInMinutes: z.string().default("0"),
-    discountPercent: z.string().default("0"),
-    discountStartTime: z.string().date().optional(),
-    discountEndTime: z.string().date().optional(),
+    discountPercent: z
+      .string()
+      .refine(
+        (discountPercent) =>
+          parseFloat(discountPercent) >= 0 &&
+          parseFloat(discountPercent) <= 100,
+        {
+          message:
+            "Discount Percent is not a number or it is less than zero or it is bigger than 100",
+        }
+      )
+      .default("0"),
+    discountStartTime: z
+      .string()
+      .datetime({ message: "Invalid discount start time" })
+      .optional(),
+    discountEndTime: z
+      .string()
+      .datetime({ message: "Invalid discount end time" })
+      .optional(),
     // color: z.array(
     //   z
     //     .string()
@@ -183,13 +200,13 @@ const CreateProductZodModel = z
     // isDeleted: z.boolean().default(false),
   })
   .superRefine((data, ctx) => {
-    if (data.stock <= 0 || (data.stock > 0 && data.isAvailable === false)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Stock must be greater than 0 and isAvailable must be true",
-        path: ["stock", "isAvailable"],
-      });
-    }
+    // if (data.stock <= 0 || (data.stock > 0 && data.isAvailable === false)) {
+    //   ctx.addIssue({
+    //     code: z.ZodIssueCode.custom,
+    //     message: "Stock must be greater than 0 and isAvailable must be true",
+    //     path: ["stock", "isAvailable"],
+    //   });
+    // }
     // if (
     //   data.dimensionsWCm <= 1 ||
     //   data.dimensionsHCm <= 1 ||
@@ -221,70 +238,63 @@ const CreateProductZodModel = z
       }
     }
     if (data.discountPercent) {
+      // if (
+      //   !(
+      //     parseFloat(data.discountPercent) * 100 >= 0 &&
+      //     parseFloat(data.discountPercent) * 100 < 100
+      //   )
+      // ) {
+      //   ctx.addIssue({
+      //     code: z.ZodIssueCode.custom,
+      //     message: "Discount must be between 0 and 100",
+      //     path: ["discountPercent"],
+      //   });
+      // }
+      // if (parseFloat(data.discountPercent) > 0) {
       if (
-        !(
-          parseFloat(data.discountPercent) * 100 >= 0 &&
-          parseFloat(data.discountPercent) * 100 < 100
-        )
+        data.discountStartTime === undefined ||
+        data.discountEndTime === undefined ||
+        data.discountStartTime === null ||
+        data.discountEndTime === null
       ) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Discount must be between 0 and 100",
-          path: ["discountPercent"],
+          message: "Discount start time and end time must be provided",
+          path: ["discountStartTime", "discountEndTime"],
         });
       }
-      if (parseFloat(data.discountPercent) > 0) {
-        if (
-          data.discountStartTime === undefined ||
-          data.discountEndTime === undefined ||
-          data.discountStartTime === null ||
-          data.discountEndTime === null
-        ) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Discount start time and end time must be provided",
-            path: ["discountStartTime", "discountEndTime"],
-          });
-        }
-        const discountStartTime = new Date(Date.parse(data.discountStartTime));
-        const discountEndTime = new Date(Date.parse(data.discountEndTime));
+      const discountStartTime = new Date(Date.parse(data.discountStartTime));
+      const discountEndTime = new Date(Date.parse(data.discountEndTime));
 
-        if (discountStartTime >= discountEndTime) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Discount start time must be before discount end time",
-            path: ["discountStartTime", "discountEndTime"],
-          });
-        }
-        if (discountStartTime < new Date()) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Discount start time must be in the future",
-            path: ["discountStartTime"],
-          });
-        }
-        if (discountEndTime < new Date()) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Discount end time must be in the future",
-            path: ["discountEndTime"],
-          });
-        }
-        // if (discountStartTime > discountEndTime) {
-        //   ctx.addIssue({
-        //     code: z.ZodIssueCode.custom,
-        //     message: "Discount start time must be before discount end time",
-        //     path: ["discountStartTime", "discountEndTime"],
-        //   });
-        // }
+      if (discountStartTime >= discountEndTime) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Discount start time must be before discount end time",
+          path: ["discountStartTime", "discountEndTime"],
+        });
       }
-    }
-    if (data.price <= 0) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Price must be greater than 0",
-        path: ["price"],
-      });
+      if (discountStartTime < new Date()) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Discount start time must be in the future",
+          path: ["discountStartTime"],
+        });
+      }
+      if (discountEndTime < new Date()) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Discount end time must be in the future",
+          path: ["discountEndTime"],
+        });
+      }
+      // if (discountStartTime > discountEndTime) {
+      //   ctx.addIssue({
+      //     code: z.ZodIssueCode.custom,
+      //     message: "Discount start time must be before discount end time",
+      //     path: ["discountStartTime", "discountEndTime"],
+      //   });
+      // }
+      // }
     }
     if (
       data.doesNeedPreparation == true &&

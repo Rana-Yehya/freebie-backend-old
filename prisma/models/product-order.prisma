@@ -13,6 +13,7 @@ model productOrder {
   // variantId          String
   productStock       productStock?  @relation(fields: [productStockId], references: [id])
   productStockId     String?
+  commissionRate     Float         
   quantity           Int            @default(1)
   price              Float          @default(0)
   deliveryFee        Float          @default(0)
