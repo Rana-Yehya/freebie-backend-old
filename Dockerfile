@@ -8,9 +8,11 @@ RUN npm install
 COPY . .
 RUN npx prisma generate
 # RUN npx prisma migrate dev --name=test
-
+# RUN  docker-compose run --name redis -p 6379:6379 -d redis
 #ENV NODE_ENV=production
 # RUN npx prisma migrate dev --name=test
+COPY ./docker-entrypoint.sh /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
 EXPOSE 5003 
 
 #3000
