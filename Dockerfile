@@ -12,6 +12,7 @@ RUN npx prisma generate
 #ENV NODE_ENV=production
 # RUN npx prisma migrate dev --name=test
 COPY ./docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod -R 765 /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 EXPOSE 5003 
 
