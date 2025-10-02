@@ -6,6 +6,8 @@ COPY package.json .
 RUN npm install
 #RUN npm ci --only=production
 COPY . .
+RUN npx prisma migrate dev --name=test
+
 #ENV NODE_ENV=production
 EXPOSE 5003 
 #3000
