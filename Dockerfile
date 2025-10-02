@@ -7,7 +7,9 @@ RUN npm install
 #RUN npm ci --only=production
 COPY . .
 #ENV NODE_ENV=production
+RUN npx prisma migrate dev --name=test
 EXPOSE 5003 
+
 #3000
 # CMD ["node", "index.js", "--watch"]
 CMD ["npm", "run", "dev"]

@@ -206,11 +206,11 @@ const createProduct = async (req, res, next) => {
       },
       tags: ProductTags.NONE,
       price: parseFloat(price),
-      actualPrice:
-        discountStartTime && discountEndTime && discountPercent
-          ? parseFloat(price) -
-            (parseFloat(price) * parseFloat(discountPercent) * 100) / 100
-          : undefined,
+      // actualPrice:
+      //   discountStartTime && discountEndTime && discountPercent
+      //     ? parseFloat(price) -
+      //       (parseFloat(price) * parseFloat(discountPercent) * 100) / 100
+      //     : undefined,
       discount:
         discountStartTime && discountEndTime && discountPercent
           ? {
@@ -510,14 +510,14 @@ const updateProduct = async (req, res, next) => {
       //     },
 
       price: price == undefined ? undefined : parseFloat(price),
-      actualPrice:
-        discountStartTime || discountEndTime || discountPercent
-          ? parseFloat(price || product.price) -
-            (parseFloat(price || product.price) *
-              parseFloat(discountPercent || product.discountPercent) *
-              100) /
-              100
-          : undefined,
+      // actualPrice:
+      //   discountStartTime || discountEndTime || discountPercent
+      //     ? parseFloat(price || product.price) -
+      //       (parseFloat(price || product.price) *
+      //         parseFloat(discountPercent || product.discountPercent) *
+      //         100) /
+      //         100
+      //     : undefined,
       discount:
         discountStartTime || discountEndTime || discountPercent
           ? {
