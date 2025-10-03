@@ -130,7 +130,21 @@ i18n.configure({
 app.use(i18n.init);
 
 app.use(localizationMiddleware);
+app.get("/", (req, res) => {
+  const offsetInMinutes = new Date().getTimezoneOffset();
 
+  const localDate = new Date();
+  const utcDate = new Date(localDate.getTime() - offsetInMinutes * 60000);
+  console.log(Intl.DateTimeFormat().resolvedOptions().timeZone);
+
+  console.log(offsetInMinutes);
+  console.log(localDate);
+  console.log(utcDate);
+  console.log(Date.now().valueOf());
+  console.log(new Date(Date.now()));
+  console.log(Date.now().toLocaleString());
+  res.send(Date.now().toLocaleString());
+});
 // app.use(cookieParser(process.env.JWT_SECRET));
 // app.use(express.static("./public"));
 app.use("/api/v1/users/auth", userAuthRouter);

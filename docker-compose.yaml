@@ -5,6 +5,7 @@ services:
     container_name: freebie
     restart: always
     environment:
+      - TZ=Africa/Cairo
       - REDIS_PORT=6379
       - REDIS_HOST=redis
       - REDIS_USERNAME=username
@@ -24,20 +25,44 @@ services:
           target: /docker      
     volumes:
       - .:/docker
-
   redis:
     image: redis:7.2
     command: redis-server --requirepass authpassword --user username
     container_name: redis-server
+    environment:
+      - TZ=Africa/Cairo
     restart: always
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
+  worker:
+    build:
+      context: .
+    container_name: freebie-worker
+    restart: always
+    environment:
+      - TZ=Africa/Cairo
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/freebie?schema=public
+      - REDIS_PORT=6379
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=authpassword
+      - NODE_ENV=development
+    depends_on:
+      - redis
+      - db
+    command: node helpers/cron/execute-job-in-bullmq.js  --watch
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./*
+          target: /docker      
   db:
     image: postgres:16
     container_name: postgres
+    restart: always
     environment:
+      - TZ=Africa/Cairo
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=freebie

@@ -15,6 +15,11 @@ const {
 } = require("../helpers/image-kit/delete-image");
 const { ProductTags, ProductStatus } = require("../generated/prisma");
 const { default: z } = require("zod");
+const {
+  addJob,
+  addProductDiscountQueue,
+  removeProductDiscountQueue,
+} = require("../helpers/cron/add-job-to-bullmq");
 const getAllProducts = async (req, res, next) => {
   const products = await prisma.product.findMany({
     include: { occasions: true },
@@ -426,14 +431,17 @@ const updateProduct = async (req, res, next) => {
   // }
   let dateDiscountStartTime = null;
   let dateDiscountEndTime = null;
+  // const offsetInMinutes = new Date().getTimezoneOffset();
 
+  // const localDate = new Date();
+  // const utcDate = new Date(localDate.getTime() - offsetInMinutes * 60000);
   if (discountStartTime) {
-    const parseDiscountStartTime = Date.parse(discountStartTime);
-    dateDiscountStartTime = new Date(parseDiscountStartTime);
+    // const parseDiscountStartTime = Date.parse(discountStartTime);
+    dateDiscountStartTime = new Date(discountStartTime);
   }
   if (discountEndTime) {
-    const parseDiscountEndTime = Date.parse(discountEndTime);
-    dateDiscountEndTime = new Date(parseDiscountEndTime);
+    // const parseDiscountEndTime = Date.parse(discountEndTime);
+    dateDiscountEndTime = new Date(discountEndTime);
   }
   const product = await prisma.product.findUnique({
     where: { id: id },
@@ -683,7 +691,6 @@ const updateProduct = async (req, res, next) => {
           },
         })),
       },
-
       // isFeatured: isFeatured || undefined,
       // isPopular: isPopular || undefined,
     },
@@ -696,6 +703,19 @@ const updateProduct = async (req, res, next) => {
   if (mainImage) {
     await destroyImage({
       imagePublicId: product.mainImage.publicId,
+    });
+  }
+  //TODO
+  if (dateDiscountEndTime != undefined) {
+    removeProductDiscountQueue({
+      productId: updatedProduct.id,
+      delay: dateDiscountEndTime,
+    });
+  }
+  if (dateDiscountStartTime != undefined) {
+    addProductDiscountQueue({
+      productId: updatedProduct.id,
+      delay: dateDiscountStartTime,
     });
   }
   // if (image) {

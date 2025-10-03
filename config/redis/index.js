@@ -12,5 +12,6 @@ const redis = new Redis({
   host: process.env.REDIS_HOST, // Redis host
   // username: process.env.REDIS_USERNAME, // needs Redis >= 6
   password: process.env.REDIS_PASSWORD,
+  maxRetriesPerRequest: null,
 });
 module.exports = { redis };

@@ -292,5 +292,10 @@
 	"No 'user' record (needed to inline the relation on 'user' record(s)) was found for a nested create on one-to-many relation 'userSession'.": "No 'user' record (needed to inline the relation on 'user' record(s)) was found for a nested create on one-to-many relation 'userSession'.",
 	"No 'state' record (needed to inline the relation on 'user' record(s)) was found for a nested connect on one-to-many relation 'stateTouser'.": "No 'state' record (needed to inline the relation on 'user' record(s)) was found for a nested connect on one-to-many relation 'stateTouser'.",
 	"Invalid date": "Invalid date",
-	"[\n  {\n    \"code\": \"invalid_string\",\n    \"validation\": \"datetime\",\n    \"message\": \"Invalid datetime\",\n    \"path\": []\n  }\n]": "[\n  {\n    \"code\": \"invalid_string\",\n    \"validation\": \"datetime\",\n    \"message\": \"Invalid datetime\",\n    \"path\": []\n  }\n]"
+	"[\n  {\n    \"code\": \"invalid_string\",\n    \"validation\": \"datetime\",\n    \"message\": \"Invalid datetime\",\n    \"path\": []\n  }\n]": "[\n  {\n    \"code\": \"invalid_string\",\n    \"validation\": \"datetime\",\n    \"message\": \"Invalid datetime\",\n    \"path\": []\n  }\n]",
+	"Date.now is not a constructor": "Date.now is not a constructor",
+	"Invalid status code: 1759518313678": "Invalid status code: 1759518313678",
+	"Date.now(...).getTime is not a function": "Date.now(...).getTime is not a function",
+	"Date(...).getTime is not a function": "Date(...).getTime is not a function",
+	"parseDiscountStartTime is not defined": "parseDiscountStartTime is not defined"
 }

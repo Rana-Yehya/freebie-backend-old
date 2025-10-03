@@ -49,6 +49,15 @@ const createDiscount = async (req, res, next) => {
       ],
     },
   });
+
+  removeStoreDiscountQueue({
+    productId: updatedProduct.id,
+    delay: dateDiscountEndTime,
+  });
+  addStoreDiscountQueue({
+    productId: updatedProduct.id,
+    delay: dateDiscountEndTime,
+  });
   if (exuistingDiscount) {
     throw new BadRequestError("There is another discount in this time range");
   }

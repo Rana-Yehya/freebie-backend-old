@@ -19,6 +19,7 @@ const selectedQuery = {
   // description: true,
   actualPrice: true,
   price: true,
+  discount: true,
   doesNeedPreparation: true,
   avgRating: true,
   reviewsCount: true,
@@ -572,6 +573,8 @@ const getProduct = async (req, res, next) => {
     where: { id: productId },
     include: {
       name: true,
+      discount: true,
+
       description: true,
       detailedDescription: true,
       category: {
