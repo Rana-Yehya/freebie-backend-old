@@ -15,8 +15,7 @@ const CreateDiscountZodModel = z
       })
       .refine(
         (discountPercent) =>
-          parseFloat(discountPercent) >= 0 &&
-          parseFloat(discountPercent) <= 100,
+          parseInt(discountPercent) > 0 && parseInt(discountPercent) < 100,
         {
           message:
             "Discount Percent is not a number or it is less than zero or it is bigger than 100",
@@ -26,14 +25,14 @@ const CreateDiscountZodModel = z
     discountStartTime: z
       .string()
       .datetime({ message: "Invalid discount start time" })
-      .refine((discountStartTime) => discountStartTime < new Date(), {
+      .refine((discountStartTime) => new Date(discountStartTime) > new Date(), {
         message: "Discount start time must be in the future",
       }),
 
     discountEndTime: z
       .string()
       .datetime({ message: "Invalid discount end time" })
-      .refine((discountEndTime) => discountEndTime < new Date(), {
+      .refine((discountEndTime) => new Date(discountEndTime) > new Date(), {
         message: "Discount end time must be in the future",
       }),
     // .min(3, { message: "Name must be at least 3 characters long" })
@@ -42,10 +41,10 @@ const CreateDiscountZodModel = z
     // gender: z.enum(["male", "female"], { message: "Invalid gender" }),
   })
   .superRefine((data, ctx) => {
-    const discountStartTime = new Date(Date.parse(data.discountStartTime));
-    const discountEndTime = new Date(Date.parse(data.discountEndTime));
+    const discountStartTime = new Date(data.discountStartTime);
+    const discountEndTime = new Date(data.discountEndTime);
 
-    if (discountStartTime >= discountEndTime) {
+    if (discountStartTime > discountEndTime) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Discount start time must be before discount end time",

@@ -1,8 +1,8 @@
 FROM node:22
 WORKDIR /docker
 #WORKDIR /usr/src/app
-ENV TZ=Africa/Cairo
-RUN apk add --no-cache tzdata
+# ENV TZ=Africa/Cairo
+# RUN apk add --no-cache tzdata
 
 COPY package.json .
 #COPY package*.json ./

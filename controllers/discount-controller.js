@@ -11,6 +11,10 @@ const {
 const {
   UpdateDiscountZodModel,
 } = require("../models/update-discount-zod-model");
+const {
+  removeStoreDiscountQueue,
+  addStoreDiscountQueue,
+} = require("../helpers/cron/add-job-to-bullmq");
 
 const getAllStoreDiscounts = async (req, res, next) => {
   // }
@@ -35,11 +39,9 @@ const createDiscount = async (req, res, next) => {
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
-  const parseDiscountStartTime = Date.parse(discountStartTime);
-  const dateDiscountStartTime = new Date(parseDiscountStartTime);
+  const dateDiscountStartTime = new Date(discountStartTime);
 
-  const parseDiscountEndTime = Date.parse(discountEndTime);
-  const dateDiscountEndTime = new Date(parseDiscountEndTime);
+  const dateDiscountEndTime = new Date(discountEndTime);
   const exuistingDiscount = await prisma.discount.findFirst({
     where: {
       AND: [
@@ -50,26 +52,32 @@ const createDiscount = async (req, res, next) => {
     },
   });
 
-  removeStoreDiscountQueue({
-    productId: updatedProduct.id,
-    delay: dateDiscountEndTime,
-  });
-  addStoreDiscountQueue({
-    productId: updatedProduct.id,
-    delay: dateDiscountEndTime,
-  });
   if (exuistingDiscount) {
     throw new BadRequestError("There is another discount in this time range");
   }
   const discount = await prisma.discount.create({
+    // where: { id: req.user.id },
     data: {
+      // discounts: {
+      //   create: {
       discountPercent: discountPercent,
       discountStartTime: discountStartTime,
       discountEndTime: discountEndTime,
       store: { connect: { id: req.user.id } },
+      // // storeId: req.user.id, //{ connect: req.user.id },
+      // product: null,
     },
+    //   },
+    // },
   });
-
+  removeStoreDiscountQueue({
+    discountId: discount.id,
+    delay: dateDiscountEndTime,
+  });
+  addStoreDiscountQueue({
+    discountId: discount.id,
+    delay: dateDiscountStartTime,
+  });
   return res
     .status(StatusCodes.CREATED)
     .json({ isSuccess: true, data: discount });
@@ -119,7 +127,14 @@ const updateDiscount = async (req, res, next) => {
       store: { connect: { id: req.user.id } },
     },
   });
-
+  removeStoreDiscountQueue({
+    discountId: updatedDiscount.id,
+    delay: discountEndTime,
+  });
+  addStoreDiscountQueue({
+    discountId: updatedDiscount.id,
+    delay: discountStartTime,
+  });
   return res
     .status(StatusCodes.OK)
     .json({ isSuccess: true, data: updatedDiscount });
@@ -143,29 +158,17 @@ const deleteDiscount = async (req, res, next) => {
     discount.discountStartTime < new Date() &&
     discount.discountEndTime > new Date()
   ) {
-    await prisma.product.updateMany({
+    const products = await prisma.product.findMany({
       where: {
+        // AND: [
+        // {
         productVariant: {
           every: {
             productStock: { every: { branch: { storeId: req.user.id } } },
           },
         },
       },
-      data: {
-        actualPrice: undefined,
-      },
-    });
-
-    const products = await prisma.product.findMany({
-      where: {
-        AND: [
-          {
-            productVariant: {
-              every: {
-                productStock: { every: { branch: { storeId: req.user.id } } },
-              },
-            },
-          },
+      /*
           {
             discount: {
               AND: [
@@ -174,8 +177,9 @@ const deleteDiscount = async (req, res, next) => {
               ],
             },
           },
-        ],
-      },
+          */
+      //   ],
+      // },
 
       select: {
         id: true,
@@ -185,18 +189,33 @@ const deleteDiscount = async (req, res, next) => {
     });
     for (let i = 0; i < products.length; i++) {
       const product = products[i];
-      const actualPrice =
-        parseFloat(product.price) -
-        parseFloat(product.price) * parseFloat(product.discountPercent);
+      let updatedProduct = null;
+      if (
+        product.discount != undefined &&
+        product.discount.discountStartTime < new Date()
+      ) {
+        const actualPrice =
+          parseFloat(product.price) -
+          parseFloat(product.price) * parseFloat(product.discountPercent);
 
-      const updatedProduct = await prisma.product.update({
-        where: {
-          id: id,
-        },
-        data: {
-          actualPrice: actualPrice,
-        },
-      });
+        updatedProduct = await prisma.product.update({
+          where: {
+            id: id,
+          },
+          data: {
+            actualPrice: actualPrice,
+          },
+        });
+      } else {
+        updatedProduct = await prisma.product.update({
+          where: {
+            id: product.id,
+          },
+          data: {
+            actualPrice: undefined,
+          },
+        });
+      }
       if (!updatedProduct) {
         throw new BadRequestError(
           "Something went wrong when updating a product that actually had a discount"

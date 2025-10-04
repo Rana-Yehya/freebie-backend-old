@@ -142,13 +142,10 @@ const createProduct = async (req, res, next) => {
   let dateDiscountEndTime = null;
 
   if (discountStartTime) {
-    const parseDiscountStartTime = Date.parse(discountStartTime);
-
-    dateDiscountStartTime = new Date(parseDiscountStartTime);
+    dateDiscountStartTime = new Date(discountStartTime);
   }
   if (discountEndTime) {
-    const parseDiscountEndTime = Date.parse(discountEndTime);
-    dateDiscountEndTime = new Date(parseDiscountEndTime);
+    dateDiscountEndTime = new Date(discountEndTime);
   }
   const [imageUrlsToStore, imagePublicIdsToStore] = await uploadMultipleImages({
     req: req,
@@ -211,11 +208,6 @@ const createProduct = async (req, res, next) => {
       },
       tags: ProductTags.NONE,
       price: parseFloat(price),
-      // actualPrice:
-      //   discountStartTime && discountEndTime && discountPercent
-      //     ? parseFloat(price) -
-      //       (parseFloat(price) * parseFloat(discountPercent) * 100) / 100
-      //     : undefined,
       discount:
         discountStartTime && discountEndTime && discountPercent
           ? {
@@ -283,32 +275,18 @@ const createProduct = async (req, res, next) => {
       },
     });
   }
-  /*
-  let productStockDb = [];
-  for (
-    let productStockIndex = 0;
-    productStockIndex < productStock.length;
-    productStockIndex++
-  ) {
-    productStockDb.push(
-      await prisma.productStock.create({
-        data: {
-          branchId: productStock[productStockIndex].branchId,
-          stock: productStock[productStockIndex].stock,
-          productId: createdProduct.id,
-        },
-      })
-    );
+  if (dateDiscountEndTime != undefined) {
+    removeProductDiscountQueue({
+      productId: updatedProduct.id,
+      delay: dateDiscountEndTime,
+    });
   }
-  const updatedProduct = await prisma.product.update({
-    where: { id: createdProduct.id },
-    data: {
-      productStock: productStockDb,
-    },
-  });
-  console.log(updatedProduct);
-
-  */
+  if (dateDiscountStartTime != undefined) {
+    addProductDiscountQueue({
+      productId: updatedProduct.id,
+      delay: dateDiscountStartTime,
+    });
+  }
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
     message: i18n.__("Product created successfully"),
@@ -389,13 +367,6 @@ const updateProduct = async (req, res, next) => {
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
-  // const productToUpdate = await prisma.product.findUnique({
-  //   where: { id: id },
-  // });
-
-  // if (!productToUpdate) {
-  //   throw new BadRequestError("Product not found");
-  // }
   let category;
   if (categoryId) {
     category = await prisma.category.findUnique({
@@ -405,30 +376,7 @@ const updateProduct = async (req, res, next) => {
       throw new BadRequestError("Category not found");
     }
   }
-  // if (occasions) {
-  //   for (var occasionIdElement in occasions) {
-  //     const occasion = await prisma.occasion.findUnique({
-  //       where: { id: occasionIdElement },
-  //     });
-  //     if (!occasion) {
-  //       throw new BadRequestError("Occasion not found");
-  //     }
-  //   }
-  // }
-  // if (productStockList) {
-  //   for (
-  //     let productStockIndex = 0;
-  //     productStockIndex < productStockList.length;
-  //     productStockIndex++
-  //   ) {
-  //     const branch = await prisma.branch.findUnique({
-  //       where: { id: productStockList[productStockIndex].branchId },
-  //     });
-  //     if (!branch) {
-  //       throw new BadRequestError("Branch not found");
-  //     }
-  //   }
-  // }
+
   let dateDiscountStartTime = null;
   let dateDiscountEndTime = null;
   // const offsetInMinutes = new Date().getTimezoneOffset();
@@ -511,21 +459,7 @@ const updateProduct = async (req, res, next) => {
       image: {
         createMany: image == undefined ? undefined : { data: imageToStore },
       },
-      // image == undefined
-      //   ? undefined
-      //   : {
-      //       createMany: { data: imageToStore },
-      //     },
-
       price: price == undefined ? undefined : parseFloat(price),
-      // actualPrice:
-      //   discountStartTime || discountEndTime || discountPercent
-      //     ? parseFloat(price || product.price) -
-      //       (parseFloat(price || product.price) *
-      //         parseFloat(discountPercent || product.discountPercent) *
-      //         100) /
-      //         100
-      //     : undefined,
       discount:
         discountStartTime || discountEndTime || discountPercent
           ? {
@@ -558,11 +492,6 @@ const updateProduct = async (req, res, next) => {
               },
             }
           : undefined,
-      // actualPrice:
-      //   discountPercent == undefined || discountPercent == 0
-      //     ? undefined
-      //     : parseFloat(product.price) -
-      //       (parseFloat(product.price) * parseFloat(discountPercent)) / 100,
       name: {
         update: {
           default: name || undefined,
@@ -590,18 +519,6 @@ const updateProduct = async (req, res, next) => {
           : doesNeedPreparation === "false"
           ? false
           : true,
-      // isPopular:
-      //   isPopular == undefined
-      //     ? undefined
-      //     : isPopular === "false"
-      //     ? false
-      //     : true,
-      // isFeatured:
-      //   isFeatured == undefined
-      //     ? undefined
-      //     : isFeatured === "false"
-      //     ? false
-      //     : true,
       canBeDeliveredOutsideState:
         product.category.canBeDeliveredOutsideState == true
           ? canBeDeliveredOutsideState == undefined
@@ -631,22 +548,6 @@ const updateProduct = async (req, res, next) => {
       dimensionsLCm:
         dimensionsLCm == undefined ? undefined : parseFloat(dimensionsLCm),
       weightInKg: weightInKg == undefined ? undefined : parseFloat(weightInKg),
-      // productVariant: {
-      //   upsert: {
-      //     where: {
-
-      //     },
-      //     update: {
-      //       productStock: {
-      //         upsert: {
-      //           where: {
-
-      //           }
-      //         }
-      //       }
-      //     }
-      //   }
-      // }
 
       productVariant: {
         // productStockList.map((productIndex) => ({
@@ -698,6 +599,7 @@ const updateProduct = async (req, res, next) => {
       productVariant: { include: { productStock: true } },
       occasions: true,
       image: true,
+      discount: true,
     },
   });
   if (mainImage) {
@@ -705,7 +607,6 @@ const updateProduct = async (req, res, next) => {
       imagePublicId: product.mainImage.publicId,
     });
   }
-  //TODO
   if (dateDiscountEndTime != undefined) {
     removeProductDiscountQueue({
       productId: updatedProduct.id,
@@ -735,21 +636,6 @@ const deleteProduct = async (req, res, next) => {
   if (!ProductId) {
     throw new BadRequestError("Please send a product id");
   }
-  // const order = await prisma.order.findFirst({
-  //   where: {
-  //     productOrder: {
-  //       every: {
-  //         productStock: { product: { id: ProductId } },
-  //         status: { not: "delivered" },
-  //       },
-  //     },
-  //   },
-  // });
-  // if (order) {
-  //   throw new BadRequestError({
-  //     message: "Product can not be deleted. Some orders are not delivered yet",
-  //   });
-  // }
   const product = await prisma.product.update({
     where: { id: ProductId },
     data: { status: ProductStatus.DELETED },

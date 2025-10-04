@@ -1,7 +1,4 @@
 const { z } = require("zod");
-const {
-  CreateProductStockZodModel,
-} = require("./create-product-stock-zod-model");
 const { UpdateLocaleZodModel } = require("./update-locale-zod-model");
 const {
   UpdateProductStockZodModel,
@@ -124,35 +121,32 @@ const UpdateProductZodModel = z
       )
       .optional(),
     preparationTimeInMinutes: z.string().optional(),
-    discountPercent: z.string().optional(),
-    discountStartTime: z.string().datetime().optional(),
-    discountEndTime: z.string().datetime().optional(),
-    // color: z
-    //   .array(
-    //     z
-    //       .string()
-    //       .min(6, { message: "Color should be a 6 octal hex digit" })
-    //       .max(6, { message: "Color should be a 6 octal hex digit" }),
-    //     {
-    //       message: "Product must be in at least one color",
-    //     }
-    //   )
-    //   .optional(),
+    discountPercent: z
+      .string()
+      .refine(
+        (discountPercent) =>
+          parseInt(discountPercent) > 0 && parseInt(discountPercent) < 100,
+        {
+          message:
+            "Discount Percent is not a number or it is less than zero or it is bigger than 100",
+        }
+      )
+      .optional(),
+    discountStartTime: z
+      .string()
+      .datetime({ message: "Invalid discount start time" })
+      .refine((discountStartTime) => new Date(discountStartTime) > new Date(), {
+        message: "Discount start time must be in the future",
+      })
+      .optional(),
+    discountEndTime: z
+      .string()
+      .datetime({ message: "Invalid discount end time" })
+      .refine((discountEndTime) => new Date(discountEndTime) > new Date(), {
+        message: "Discount end time must be in the future",
+      })
+      .optional(),
 
-    // .superRefine((data, ctx) => {
-    //   if (
-    //     data.color === undefined ||
-    //     data.color.isEmpty ||
-    //     data.color === null
-    //   ) {
-    //     ctx.addIssue({
-    //       code: z.ZodIssueCode.custom,
-    //       message: "Product must be in at least one color",
-    //       path: ["color"],
-    //     });
-    //   }
-    // }),
-    // stock: z.number().optional(),
     categoryId: z.string({ message: "Category is required" }).optional(),
     occasions: z
       .array(z.string({ message: "Occasion must be a string" }), {
@@ -247,70 +241,42 @@ const UpdateProductZodModel = z
       }
     }
     if (data.discountPercent) {
+      // if (
+      //   !(
+      //     parseInt(data.discountPercent).T >= 0 &&
+      //     parseFloat(data.discountPercent) <= 100
+      //   )
+      // ) {
+      //   ctx.addIssue({
+      //     code: z.ZodIssueCode.custom,
+      //     message:
+      //       "Discount Percent is not a number or it is less than zero or it is bigger than 100",
+
+      //     path: ["discountPercent"],
+      //   });
+      // }
       if (
-        !(
-          parseFloat(data.discountPercent) * 100 >= 0 &&
-          parseFloat(data.discountPercent) * 100 < 100
-        )
+        data.discountStartTime === undefined ||
+        data.discountEndTime === undefined ||
+        data.discountStartTime === null ||
+        data.discountEndTime === null
       ) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Discount must be between 0 and 100",
-          path: ["discountPercent"],
+          message: "Discount start time and end time must be provided",
+          path: ["discountStartTime", "discountEndTime"],
         });
       }
-      if (parseFloat(data.discountPercent) > 0) {
-        if (
-          data.discountStartTime === undefined ||
-          data.discountEndTime === undefined ||
-          data.discountStartTime === null ||
-          data.discountEndTime === null
-        ) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Discount start time and end time must be provided",
-            path: ["discountStartTime", "discountEndTime"],
-          });
-        }
-        const discountStartTime = new Date(Date.parse(data.discountStartTime));
-        const discountEndTime = new Date(Date.parse(data.discountEndTime));
+      const discountStartTime = new Date(data.discountStartTime);
+      const discountEndTime = new Date(data.discountEndTime);
 
-        if (discountStartTime >= discountEndTime) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Discount start time must be before discount end time",
-            path: ["discountStartTime", "discountEndTime"],
-          });
-        }
-        if (discountStartTime < new Date()) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Discount start time must be in the future",
-            path: ["discountStartTime"],
-          });
-        }
-        if (discountEndTime < new Date()) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Discount end time must be in the future",
-            path: ["discountEndTime"],
-          });
-        }
-        if (discountStartTime > discountEndTime) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Discount start time must be before discount end time",
-            path: ["discountStartTime", "discountEndTime"],
-          });
-        }
+      if (discountStartTime > discountEndTime) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Discount start time must be before discount end time",
+          path: ["discountStartTime", "discountEndTime"],
+        });
       }
-    }
-    if (data.price <= 0) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Price must be greater than 0",
-        path: ["price"],
-      });
     }
     if (
       data.doesNeedPreparation == true &&

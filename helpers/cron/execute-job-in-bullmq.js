@@ -6,22 +6,70 @@ async function startRemoveProductDiscountWorker() {
     "removeProductDiscountQueue",
     async (job) => {
       const productId = job.data.productId;
-      //TODO check store has discount
-      console.log("productId", productId);
-      console.log("updatedProduct");
-
-      const updatedProduct = await prisma.product.update({
+      const product = await prisma.product.findUnique({
         where: { id: productId },
-        data: {
-          actualPrice: null,
-          discount: { delete: true },
+        select: {
+          price: true,
+          discount: true,
+          productVariant: {
+            select: {
+              productStock: {
+                select: {
+                  branch: {
+                    select: {
+                      store: {
+                        select: {
+                          id: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       });
-      console.log(updatedProduct);
-      console.log(updatedProduct.actualPrice);
+      if (product) {
+        const storeId =
+          product.productVariant[0].productStock[0].branch.store.id;
+        // console.log("storeId", storeId);
+        const exuistingDiscount = await prisma.discount.findFirst({
+          where: {
+            AND: [
+              { storeId: storeId },
+              { discountStartTime: { lte: new Date() } },
+              { discountEndTime: { gte: new Date() } },
+            ],
+          },
+        });
+        // console.log("exuistingDiscount", exuistingDiscount);
 
-      //console.log(`Job received: ${job.data.message}`);
+        if (exuistingDiscount != undefined) {
+          await prisma.product.update({
+            where: { id: productId },
+            data: {
+              actualPrice:
+                parseFloat(product.price) -
+                (parseFloat(product.price) *
+                  parseFloat(exuistingDiscount.discountPercent)) /
+                  100,
+              discount: { delete: true },
+            },
+          });
+        } else {
+          await prisma.product.update({
+            where: { id: productId },
+            data: {
+              actualPrice: null,
+              discount: { delete: true },
+            },
+          });
+        }
+      }
     },
+    //console.log(`Job received: ${job.data.message}`);
+
     { connection: redis }
   );
 
@@ -51,29 +99,67 @@ async function startAddProductDiscountWorker() {
         select: {
           id: true,
           discount: true,
-
+          productVariant: {
+            select: {
+              productStock: {
+                select: {
+                  branch: {
+                    select: { store: { select: { id: true } } },
+                  },
+                },
+              },
+            },
+          },
           price: true,
         },
       });
       if (product) {
-        //TODO check store has discount
+        const storeId =
+          product.productVariant[0].productStock[0].branch.store.id;
 
-        await prisma.product.update({
-          where: { id: productId },
-          data: {
-            actualPrice:
-              parseFloat(product.price) -
-              (parseFloat(product.price) *
-                parseFloat(product.discount.discountPercent) *
-                100) /
-                100,
+        const exuistingDiscount = await prisma.discount.findFirst({
+          where: {
+            AND: [
+              { storeId: storeId },
+              { discountStartTime: { lte: new Date() } },
+              { discountEndTime: { gte: new Date() } },
+            ],
           },
         });
+        if (
+          exuistingDiscount != undefined &&
+          exuistingDiscount.discountPercent >= product.discount.discountPercent
+        ) {
+        } else {
+          await prisma.product.update({
+            where: { id: productId },
+            data: {
+              actualPrice:
+                parseFloat(product.price) -
+                (parseFloat(product.price) *
+                  parseFloat(product.discount.discountPercent)) /
+                  100,
+            },
+          });
+        }
       }
       //console.log(`Job received: ${job.data.message}`);
     },
     { connection: redis }
   );
+  addProductDiscountWorker.on("progress", (job) => {
+    console.log(`Job ${job.id} progress!`);
+  });
+  addProductDiscountWorker.on("completed", (job) => {
+    console.log(`Job ${job.id} completed!`);
+  });
+
+  addProductDiscountWorker.on("failed", (job, err) => {
+    console.error(`Job ${job.id} failed with error:`, err.message);
+  });
+  addProductDiscountWorker.on("error", (job) => {
+    console.error("Worker error:", err);
+  });
   return addProductDiscountWorker;
 }
 async function startRemoveStoreDiscountWorker() {
@@ -90,7 +176,7 @@ async function startRemoveStoreDiscountWorker() {
             productVariant: {
               every: {
                 productStock: {
-                  every: { branch: { store: discount.storeId } },
+                  every: { branch: { storeId: discount.storeId } },
                 },
               },
             },
@@ -98,16 +184,30 @@ async function startRemoveStoreDiscountWorker() {
           select: {
             id: true,
             price: true,
-            discount: true,
+            discount: {
+              select: {
+                discountEndTime: true,
+                discountPercent: true,
+                discountStartTime: true,
+              },
+            },
           },
         });
-        console.log(products);
+        // console.log(products);
         products.forEach(async (product) => {
-          console.log(product.discount);
-          console.log(product.discount.discountStartTime <= new Date());
+          // console.log(product.discount);
+          // console.log(
+          //   product.discount != undefined &&
+          //     product.discount.discountStartTime <= new Date() &&
+          //     product.discount.discountEndTime > new Date()
+          // );
+          // console.log(product.discount.discountStartTime <= new Date());
+          // console.log(product.discount.discountEndTime > new Date());
+          // console.log(product.discount.discountStartTime <= new Date());
           if (
             product.discount != undefined &&
-            product.discount.discountStartTime <= new Date()
+            product.discount.discountStartTime <= new Date() &&
+            product.discount.discountEndTime > new Date()
           ) {
             await prisma.product.update({
               where: { id: product.id },
@@ -133,6 +233,19 @@ async function startRemoveStoreDiscountWorker() {
     },
     { connection: redis }
   );
+  removeStoreDiscountWorker.on("progress", (job) => {
+    console.log(`Job ${job.id} progress!`);
+  });
+  removeStoreDiscountWorker.on("completed", (job) => {
+    console.log(`Job ${job.id} completed!`);
+  });
+
+  removeStoreDiscountWorker.on("failed", (job, err) => {
+    console.error(`Job ${job.id} failed with error:`, err.message);
+  });
+  removeStoreDiscountWorker.on("error", (job) => {
+    console.error("Worker error:", err);
+  });
   return removeStoreDiscountWorker;
 }
 async function startAddStoreDiscountWorker(params) {
@@ -140,16 +253,19 @@ async function startAddStoreDiscountWorker(params) {
     "addStoreDiscountQueue",
     async (job) => {
       const discountId = job.data.discountId;
-      const discount = await prisma.discount.findFirst({
+      // console.log("discountId:", discountId);
+      const discount = await prisma.discount.findUnique({
         where: { id: discountId },
       });
+      // console.log("discount:", discount);
+
       if (discount) {
         const products = await prisma.product.findMany({
           where: {
             productVariant: {
               every: {
                 productStock: {
-                  every: { branch: { store: discount.storeId } },
+                  every: { branch: { storeId: discount.storeId } },
                 },
               },
             },
@@ -160,17 +276,35 @@ async function startAddStoreDiscountWorker(params) {
             discount: true,
           },
         });
-        console.log(products);
         products.forEach(async (product) => {
-          console.log(product.discount);
-          console.log(product.discount.discountStartTime <= new Date());
+          // console.log(product.discount.discountStartTime <= new Date());
+          // console.log(product.discount);
+          // console.log(product.discount.discountEndTime > new Date());
+          // console.log(discount.discountPercent);
+          // console.log(product.discount.discountPercent);
+          // console.log(
+          //   discount.discountPercent > product.discount.discountPercent
+          // );
+          // console.log(
+          //   product.discount != undefined &&
+          //     product.discount.discountStartTime <= new Date() &&
+          //     product.discount.discountEndTime > new Date() &&
+          //     discount.discountPercent > product.discount.discountPercent
+          // );
           if (
-            !(
-              product.discount != undefined &&
-              product.discount.discountStartTime <= new Date() &&
-              discount.discountPercent > product.discount.discountPercent
-            )
+            product.discount != undefined &&
+            product.discount.discountStartTime <= new Date() &&
+            product.discount.discountEndTime > new Date() &&
+            product.discount.discountPercent > discount.discountPercent
           ) {
+          } else {
+            console.log(
+              "Actual Price:",
+              parseFloat(product.price) -
+                (parseFloat(product.price) *
+                  parseFloat(discount.discountPercent)) /
+                  100
+            );
             await prisma.product.update({
               where: { id: product.id },
               data: {
@@ -181,7 +315,6 @@ async function startAddStoreDiscountWorker(params) {
                     100,
               },
             });
-          } else {
           }
         });
       }
@@ -189,6 +322,20 @@ async function startAddStoreDiscountWorker(params) {
     },
     { connection: redis }
   );
+
+  addStoreDiscountWorker.on("progress", (job) => {
+    console.log(`Job ${job.id} progress!`);
+  });
+  addStoreDiscountWorker.on("completed", (job) => {
+    console.log(`Job ${job.id} completed!`);
+  });
+
+  addStoreDiscountWorker.on("failed", (job, err) => {
+    console.error(`Job ${job.id} failed with error:`, err.message);
+  });
+  addStoreDiscountWorker.on("error", (job) => {
+    console.error("Worker error:", err);
+  });
 
   return addStoreDiscountWorker;
 }

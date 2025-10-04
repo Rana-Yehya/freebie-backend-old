@@ -19159,7 +19159,7 @@ export namespace Prisma {
     discountPercent: number
     discountStartTime: Date
     discountEndTime: Date
-    productId: string
+    productId: string | null
     storeId: string | null
     createdAt: Date
     updatedAt: Date
@@ -19193,7 +19193,7 @@ export namespace Prisma {
     storeId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    product?: boolean | productDefaultArgs<ExtArgs>
+    product?: boolean | discount$productArgs<ExtArgs>
     store?: boolean | discount$storeArgs<ExtArgs>
   }, ExtArgs["result"]["discount"]>
 
@@ -19206,7 +19206,7 @@ export namespace Prisma {
     storeId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    product?: boolean | productDefaultArgs<ExtArgs>
+    product?: boolean | discount$productArgs<ExtArgs>
     store?: boolean | discount$storeArgs<ExtArgs>
   }, ExtArgs["result"]["discount"]>
 
@@ -19219,7 +19219,7 @@ export namespace Prisma {
     storeId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    product?: boolean | productDefaultArgs<ExtArgs>
+    product?: boolean | discount$productArgs<ExtArgs>
     store?: boolean | discount$storeArgs<ExtArgs>
   }, ExtArgs["result"]["discount"]>
 
@@ -19236,22 +19236,22 @@ export namespace Prisma {
 
   export type discountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "discountPercent" | "discountStartTime" | "discountEndTime" | "productId" | "storeId" | "createdAt" | "updatedAt", ExtArgs["result"]["discount"]>
   export type discountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    product?: boolean | productDefaultArgs<ExtArgs>
+    product?: boolean | discount$productArgs<ExtArgs>
     store?: boolean | discount$storeArgs<ExtArgs>
   }
   export type discountIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    product?: boolean | productDefaultArgs<ExtArgs>
+    product?: boolean | discount$productArgs<ExtArgs>
     store?: boolean | discount$storeArgs<ExtArgs>
   }
   export type discountIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    product?: boolean | productDefaultArgs<ExtArgs>
+    product?: boolean | discount$productArgs<ExtArgs>
     store?: boolean | discount$storeArgs<ExtArgs>
   }
 
   export type $discountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "discount"
     objects: {
-      product: Prisma.$productPayload<ExtArgs>
+      product: Prisma.$productPayload<ExtArgs> | null
       store: Prisma.$storePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -19259,7 +19259,7 @@ export namespace Prisma {
       discountPercent: number
       discountStartTime: Date
       discountEndTime: Date
-      productId: string
+      productId: string | null
       storeId: string | null
       createdAt: Date
       updatedAt: Date
@@ -19657,7 +19657,7 @@ export namespace Prisma {
    */
   export interface Prisma__discountClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    product<T extends productDefaultArgs<ExtArgs> = {}>(args?: Subset<T, productDefaultArgs<ExtArgs>>): Prisma__productClient<$Result.GetResult<Prisma.$productPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    product<T extends discount$productArgs<ExtArgs> = {}>(args?: Subset<T, discount$productArgs<ExtArgs>>): Prisma__productClient<$Result.GetResult<Prisma.$productPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     store<T extends discount$storeArgs<ExtArgs> = {}>(args?: Subset<T, discount$storeArgs<ExtArgs>>): Prisma__storeClient<$Result.GetResult<Prisma.$storePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -20089,6 +20089,25 @@ export namespace Prisma {
      * Limit how many discounts to delete.
      */
     limit?: number
+  }
+
+  /**
+   * discount.product
+   */
+  export type discount$productArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the product
+     */
+    select?: productSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the product
+     */
+    omit?: productOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: productInclude<ExtArgs> | null
+    where?: productWhereInput
   }
 
   /**
@@ -50626,11 +50645,11 @@ export namespace Prisma {
     discountPercent?: FloatFilter<"discount"> | number
     discountStartTime?: DateTimeFilter<"discount"> | Date | string
     discountEndTime?: DateTimeFilter<"discount"> | Date | string
-    productId?: StringFilter<"discount"> | string
+    productId?: StringNullableFilter<"discount"> | string | null
     storeId?: StringNullableFilter<"discount"> | string | null
     createdAt?: DateTimeFilter<"discount"> | Date | string
     updatedAt?: DateTimeFilter<"discount"> | Date | string
-    product?: XOR<ProductScalarRelationFilter, productWhereInput>
+    product?: XOR<ProductNullableScalarRelationFilter, productWhereInput> | null
     store?: XOR<StoreNullableScalarRelationFilter, storeWhereInput> | null
   }
 
@@ -50639,7 +50658,7 @@ export namespace Prisma {
     discountPercent?: SortOrder
     discountStartTime?: SortOrder
     discountEndTime?: SortOrder
-    productId?: SortOrder
+    productId?: SortOrderInput | SortOrder
     storeId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -50659,7 +50678,7 @@ export namespace Prisma {
     storeId?: StringNullableFilter<"discount"> | string | null
     createdAt?: DateTimeFilter<"discount"> | Date | string
     updatedAt?: DateTimeFilter<"discount"> | Date | string
-    product?: XOR<ProductScalarRelationFilter, productWhereInput>
+    product?: XOR<ProductNullableScalarRelationFilter, productWhereInput> | null
     store?: XOR<StoreNullableScalarRelationFilter, storeWhereInput> | null
   }, "id" | "id" | "productId">
 
@@ -50668,7 +50687,7 @@ export namespace Prisma {
     discountPercent?: SortOrder
     discountStartTime?: SortOrder
     discountEndTime?: SortOrder
-    productId?: SortOrder
+    productId?: SortOrderInput | SortOrder
     storeId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -50687,7 +50706,7 @@ export namespace Prisma {
     discountPercent?: FloatWithAggregatesFilter<"discount"> | number
     discountStartTime?: DateTimeWithAggregatesFilter<"discount"> | Date | string
     discountEndTime?: DateTimeWithAggregatesFilter<"discount"> | Date | string
-    productId?: StringWithAggregatesFilter<"discount"> | string
+    productId?: StringNullableWithAggregatesFilter<"discount"> | string | null
     storeId?: StringNullableWithAggregatesFilter<"discount"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"discount"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"discount"> | Date | string
@@ -53610,7 +53629,7 @@ export namespace Prisma {
     discountEndTime: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    product: productCreateNestedOneWithoutDiscountInput
+    product?: productCreateNestedOneWithoutDiscountInput
     store?: storeCreateNestedOneWithoutDiscountsInput
   }
 
@@ -53619,7 +53638,7 @@ export namespace Prisma {
     discountPercent?: number
     discountStartTime: Date | string
     discountEndTime: Date | string
-    productId: string
+    productId?: string | null
     storeId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -53632,7 +53651,7 @@ export namespace Prisma {
     discountEndTime?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    product?: productUpdateOneRequiredWithoutDiscountNestedInput
+    product?: productUpdateOneWithoutDiscountNestedInput
     store?: storeUpdateOneWithoutDiscountsNestedInput
   }
 
@@ -53641,7 +53660,7 @@ export namespace Prisma {
     discountPercent?: FloatFieldUpdateOperationsInput | number
     discountStartTime?: DateTimeFieldUpdateOperationsInput | Date | string
     discountEndTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    productId?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
     storeId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53652,7 +53671,7 @@ export namespace Prisma {
     discountPercent?: number
     discountStartTime: Date | string
     discountEndTime: Date | string
-    productId: string
+    productId?: string | null
     storeId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -53672,7 +53691,7 @@ export namespace Prisma {
     discountPercent?: FloatFieldUpdateOperationsInput | number
     discountStartTime?: DateTimeFieldUpdateOperationsInput | Date | string
     discountEndTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    productId?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
     storeId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56650,9 +56669,9 @@ export namespace Prisma {
     estimatedDays?: SortOrder
   }
 
-  export type ProductScalarRelationFilter = {
-    is?: productWhereInput
-    isNot?: productWhereInput
+  export type ProductNullableScalarRelationFilter = {
+    is?: productWhereInput | null
+    isNot?: productWhereInput | null
   }
 
   export type StoreNullableScalarRelationFilter = {
@@ -56711,11 +56730,6 @@ export namespace Prisma {
     every?: occasionWhereInput
     some?: occasionWhereInput
     none?: occasionWhereInput
-  }
-
-  export type ProductNullableScalarRelationFilter = {
-    is?: productWhereInput | null
-    isNot?: productWhereInput | null
   }
 
   export type StoreListRelationFilter = {
@@ -57343,6 +57357,11 @@ export namespace Prisma {
 
   export type productStockSumOrderByAggregateInput = {
     stock?: SortOrder
+  }
+
+  export type ProductScalarRelationFilter = {
+    is?: productWhereInput
+    isNot?: productWhereInput
   }
 
   export type productVariantProductIdColorCompoundUniqueInput = {
@@ -59108,10 +59127,12 @@ export namespace Prisma {
     connect?: storeWhereUniqueInput
   }
 
-  export type productUpdateOneRequiredWithoutDiscountNestedInput = {
+  export type productUpdateOneWithoutDiscountNestedInput = {
     create?: XOR<productCreateWithoutDiscountInput, productUncheckedCreateWithoutDiscountInput>
     connectOrCreate?: productCreateOrConnectWithoutDiscountInput
     upsert?: productUpsertWithoutDiscountInput
+    disconnect?: productWhereInput | boolean
+    delete?: productWhereInput | boolean
     connect?: productWhereUniqueInput
     update?: XOR<XOR<productUpdateToOneWithWhereWithoutDiscountInput, productUpdateWithoutDiscountInput>, productUncheckedUpdateWithoutDiscountInput>
   }
@@ -70169,7 +70190,7 @@ export namespace Prisma {
     discountEndTime: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    product: productCreateNestedOneWithoutDiscountInput
+    product?: productCreateNestedOneWithoutDiscountInput
   }
 
   export type discountUncheckedCreateWithoutStoreInput = {
@@ -70177,7 +70198,7 @@ export namespace Prisma {
     discountPercent?: number
     discountStartTime: Date | string
     discountEndTime: Date | string
-    productId: string
+    productId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -70557,7 +70578,7 @@ export namespace Prisma {
     discountPercent?: FloatFilter<"discount"> | number
     discountStartTime?: DateTimeFilter<"discount"> | Date | string
     discountEndTime?: DateTimeFilter<"discount"> | Date | string
-    productId?: StringFilter<"discount"> | string
+    productId?: StringNullableFilter<"discount"> | string | null
     storeId?: StringNullableFilter<"discount"> | string | null
     createdAt?: DateTimeFilter<"discount"> | Date | string
     updatedAt?: DateTimeFilter<"discount"> | Date | string
@@ -73507,7 +73528,7 @@ export namespace Prisma {
     discountPercent?: number
     discountStartTime: Date | string
     discountEndTime: Date | string
-    productId: string
+    productId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -73658,7 +73679,7 @@ export namespace Prisma {
     discountEndTime?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    product?: productUpdateOneRequiredWithoutDiscountNestedInput
+    product?: productUpdateOneWithoutDiscountNestedInput
   }
 
   export type discountUncheckedUpdateWithoutStoreInput = {
@@ -73666,7 +73687,7 @@ export namespace Prisma {
     discountPercent?: FloatFieldUpdateOperationsInput | number
     discountStartTime?: DateTimeFieldUpdateOperationsInput | Date | string
     discountEndTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    productId?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -73676,7 +73697,7 @@ export namespace Prisma {
     discountPercent?: FloatFieldUpdateOperationsInput | number
     discountStartTime?: DateTimeFieldUpdateOperationsInput | Date | string
     discountEndTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    productId?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
