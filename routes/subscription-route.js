@@ -1,6 +1,7 @@
 const express = require("express");
 const {
   createSubscription,
+  getSubscriptionHistory,
 } = require("../controllers/subscription-controller");
 const {
   authenticateUserMiddleware,
@@ -19,4 +20,12 @@ router
     authorizeMiddleware(storeConstant),
     createSubscription
   );
+router
+  .route("/history")
+  .get(
+    authenticateUserMiddleware,
+    authorizeMiddleware(storeConstant),
+    getSubscriptionHistory
+  );
+
 module.exports = router;

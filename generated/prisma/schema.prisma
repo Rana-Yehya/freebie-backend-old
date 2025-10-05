@@ -34,9 +34,7 @@ enum adminPrivilege {
   DELIVERY
 }
 
-// Add these to your existing schema
-
-model AdCampaign {
+model adCampaign {
   id          String  @id @default(uuid())
   title       String
   description String?
@@ -55,9 +53,10 @@ model AdCampaign {
   // Tracking
   clicks        Int            @default(0)
   impressions   Int            @default(0)
-  adImpressions AdImpression[]
-  adClick       AdClick[]
-
+  adImpressions adImpression[]
+  adClick       adClick[]
+  targetType    TargetType
+  productId     String?
   // budget      Float? // Maximum budget for the ad
   // spent       Float  @default(0)
 
@@ -75,9 +74,9 @@ model AdCampaign {
   @@map("ad_campaigns")
 }
 
-model AdImpression {
+model adImpression {
   id           String     @id @default(uuid())
-  adCampaign   AdCampaign @relation(fields: [adCampaignId], references: [id])
+  adCampaign   adCampaign @relation(fields: [adCampaignId], references: [id])
   adCampaignId String
   userId       String? // If user is logged in
   ipAddress    String?
@@ -87,9 +86,9 @@ model AdImpression {
   @@map("ad_impressions")
 }
 
-model AdClick {
+model adClick {
   id           String     @id @default(uuid())
-  adCampaign   AdCampaign @relation(fields: [adCampaignId], references: [id])
+  adCampaign   adCampaign @relation(fields: [adCampaignId], references: [id])
   adCampaignId String
   userId       String?
   ipAddress    String?
@@ -97,6 +96,18 @@ model AdClick {
   createdAt    DateTime   @default(now())
 
   @@map("ad_clicks")
+}
+
+enum TargetType {
+  STORE_HOME // Store main page
+  PRODUCT_PAGE // Specific product
+  COLLECTION // Product category/collection  
+  //   BRANCH_PAGE     // Specific branch
+  SALE_PAGE // Special offers/sales
+  //   EXTERNAL_URL    // Custom external URL
+  GIFT_BOX // Gift box page
+  FEATURED_PRODUCTS // Store's featured products
+  //   SEARCH_RESULTS  // Pre-filtered search results
 }
 
 // Add to your existing enums
@@ -111,7 +122,7 @@ enum AdStatus {
   CANCELLED
 }
 
-model BranchDiscountCode {
+model branchDiscountCode {
   id                 String    @id @default(uuid())
   code               String // Unique per branch? or per store? Let's make it unique per store
   discountPercentage Int?
@@ -134,18 +145,18 @@ model BranchDiscountCode {
 }
 
 model branch {
-  id         String    @id @unique @default(uuid())
-  storeId    String
-  store      store     @relation(fields: [storeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  location   location? @relation(fields: [locationId], references: [id])
-  locationId String?   @unique
+  id            String                      @id @unique @default(uuid())
+  storeId       String
+  store         store                       @relation(fields: [storeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  location      location?                   @relation(fields: [locationId], references: [id])
+  locationId    String?                     @unique
   // location     location?
-
+  taxOverrides  deliveryTaxBranchOverride[]
   phone         String?
-  isFreezed     Boolean              @default(false)
+  isFreezed     Boolean                     @default(false)
   workHours     workHour[]
   productStock  productStock[]
-  discountCodes BranchDiscountCode[]
+  discountCodes branchDiscountCode[]
 
   // productUser  productCart[]
   // productOrder productOrder[]
@@ -233,6 +244,30 @@ model currency {
   updatedAt     DateTime      @updatedAt
 }
 
+model deliveryTaxBranchOverride {
+  id String @id @default(uuid())
+
+  // Which tax rule this overrides
+  deliveryTax   deliveryTaxes @relation(fields: [deliveryTaxId], references: [id])
+  deliveryTaxId String
+
+  // Which branch has this override
+  branch   branch @relation(fields: [branchId], references: [id])
+  branchId String
+
+  // Override values (null = use default from deliveryTax)
+  baseFeeOverride               Float?
+  feePerKgOverride              Float?
+  additionalFeesAfterKgOverride Float?
+  estimatedDaysOverride         Int?
+
+  // Branch can disable this route
+  isActive Boolean @default(true)
+
+  @@unique([deliveryTaxId, branchId])
+  @@map("delivery_tax_branch_overrides")
+}
+
 model deliveryTaxes {
   id                    String        @id @unique @default(uuid())
   // name               String
@@ -247,8 +282,11 @@ model deliveryTaxes {
   estimatedDays         Int?
   effectiveDate         DateTime      @default(now())
   expiryDate            DateTime?
-  createdAt             DateTime      @default(now())
-  updatedAt             DateTime      @updatedAt
+
+  branchOverrides deliveryTaxBranchOverride[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // government            government?   @relation(fields: [governmentId], references: [id])
   // governmentId          String?
@@ -411,7 +449,7 @@ enum UserOrderStatus {
 // amountPaid Decimal @default(0)
 // amountDue Decimal @default(0) // Calculated as totalAmount - amountPaid
 
-model PlanLimit {
+model planLimit {
   // id                   String             @id @default(uuid())
   planName             PlanName            @default(BASIC)
   maxProducts          Int                 @default(50)
@@ -424,7 +462,7 @@ model PlanLimit {
   commissionRate       Float               @default(0.14) // 14%
   monthlyPrice         Float? // null for commission-based plans
   annualPrice          Float?
-  storeSubscription    StoreSubscription[]
+  storeSubscription    storeSubscription[]
 
   @@unique(planName)
   @@map("plan_limits")
@@ -680,40 +718,36 @@ model state {
   location                 location[]
 }
 
-model StoreSubscription {
+model storeSubscription {
   id          String             @id @default(uuid())
   // Current active plan
-  planLimit   PlanLimit          @relation(fields: [planLimitId], references: [planName])
+  planLimit   planLimit          @relation(fields: [planLimitId], references: [planName])
   planLimitId PlanName
   status      SubscriptionStatus @default(ACTIVE)
 
-  // Billing period (Nov 1 - Nov 30)
-  lastUpgradeDate        DateTime  @default(now()) // 2024-11-01
-  minimumPlanPeriodUntil DateTime?
-
+  lastChangeSubscriptionDate DateTime?
+  periodEnd                  DateTime?
   // Plan limits are now PER STORE (aggregate of all branches)
-  maxTotalProducts     Int @default(0) // Total across all branches
-  maxBranches          Int @default(0) // How many branches allowed
-  maxDiscountCodes     Int @default(0) // Total discount codes across all branches
-  notificationsPerWeek Int @default(0)
-  adsPerWeek           Int @default(0)
+  maxTotalProducts           Int       @default(0) // Total across all branches
+  maxBranches                Int       @default(0) // How many branches allowed
+  maxDiscountCodes           Int       @default(0) // Total discount codes across all branches
+  notificationsPerWeek       Int       @default(0)
+  adsPerWeek                 Int       @default(0)
 
   // Features
-  allowsBoxes          Boolean @default(false)
-  allowsCollaborations Boolean @default(false)
+  // allowsBoxes          Boolean @default(false)
+  // allowsCollaborations Boolean @default(false)
 
   // Pricing
   commissionRate Float @default(0.14)
-  // monthlyPrice   Float?
-  // annualPrice    Float?
 
   // Simple ad counter - reset each period
-  adsUsedThisPeriod Int       @default(0) // Tracks 0, 1, 2...
-  adsResetAt        DateTime? // Set to currentPeriodEnd
+  // adsUsedThisPeriod Int       @default(0) // Tracks 0, 1, 2...
+  // adsResetAt        DateTime? // Set to currentPeriodEnd
 
   // Relations
   // store       store?
-  planChanges SubscriptionPlanChange[]
+  planChanges subscriptionPlanChange[]
   store       store[]
   createdAt   DateTime                 @default(now())
   updatedAt   DateTime                 @updatedAt
@@ -755,10 +789,10 @@ model store {
   // store - restaurant - place for weddings
   role                 StoreRole          @default(STORE)
   status               StoreStatus        @default(PENDING)
-  subscription         StoreSubscription? @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  subscription         storeSubscription? @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
   subscriptionId       String? //@unique
   // Store can have multiple ad campaigns
-  adCampaigns          AdCampaign[]
+  adCampaigns          adCampaign[]
   discounts            discount[]
   // isApprovedByAdmin Boolean  @default(false)
   // isFreezed         Boolean  @default(false)
@@ -794,20 +828,32 @@ model socialLink {
   // store     store[]
 }
 
-model SubscriptionPlanChange {
+model subscriptionPlanChange {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
 
   // What changed
-  fromPlan   PlanName
-  toPlan     PlanName
-  changeType ChangeType // UPGRADE, DOWNGRADE, RENEWAL
+  fromPlan                    PlanName
+  toPlan                      PlanName
+  changeType                  ChangeType // UPGRADE, DOWNGRADE, RENEWAL
+  totalProductsUsedThisPeriod Int        @default(0) // Total across all branches
+  branchesUsedThisPeriod      Int        @default(0) // How many branches allowed
+  discountCodesUsedThisPeriod Int        @default(0) // Total discount codes across all branches
+  notificationsUsedThisPeriod Int        @default(0)
+  adsUsedThisPeriod           Int        @default(0)
+
+  // Features
+  // allowsBoxesUsedThisPeriod          Boolean @default(false)
+  // allowsCollaborationsUsedThisPeriod Boolean @default(false)
+
+  // Pricing
+  commissionRateUsedThisPeriod Float @default(0.14)
 
   // Context
   reason String?
 
   // Relations
-  subscription   StoreSubscription @relation(fields: [subscriptionId], references: [id])
+  subscription   storeSubscription @relation(fields: [subscriptionId], references: [id])
   subscriptionId String
 
   @@map("subscription_plan_changes")
@@ -904,6 +950,69 @@ model userLocations {
   state   state?  @relation(fields: [stateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   stateId String?
   isMain  Boolean @default(false)
+}
+
+model Packaging {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+
+  // PHYSICAL DIMENSIONS (internal space)
+  minWidth  Float? // Minimum width in cm
+  maxWidth  Float? // Maximum width in cm
+  minHeight Float? // Minimum height in cm
+  maxHeight Float? // Maximum height in cm
+  minLength Float? // Minimum length/depth in cm
+  maxLength Float? // Maximum length/depth in cm
+
+  // BASE PRICING
+  baseCost Float    @default(0)
+  costType CostType @default(FIXED)
+
+  // SIZE-BASED PRICING MULTIPLIERS
+  smallMultiplier  Float @default(1.0) // Price for SMALL size
+  mediumMultiplier Float @default(1.2) // Price for MEDIUM size
+  largeMultiplier  Float @default(1.5) // Price for LARGE size
+  xlargeMultiplier Float @default(2.0) // Price for XLARGE size
+
+  // VOLUME-BASED PRICING (if costType = VOLUME_BASED)
+  pricePerCubicCM Float? // Cost per cm³
+
+  // CATEGORIZATION
+  packageType PackageType
+  size        PackageSize // Base size category
+
+  // VISUALS
+  baseImage String? // Standard packaging image
+
+  // STORE MARKUP
+}
+
+enum PackageSize {
+  XSMALL // Jewelry, small accessories
+  SMALL // Phone, cosmetics, small books
+  MEDIUM // Standard gifts, clothing, books
+  LARGE // Multiple items, large gifts
+  XLARGE // Gift baskets, oversized items
+  CUSTOM // Non-standard dimensions
+}
+
+enum CostType {
+  FIXED // Same price regardless of size
+  SIZE_BASED // Price changes with dimensions
+  VOLUME_BASED // Price based on cubic volume
+  TIERED // Different price brackets
+  PER_ITEM // Price per item inside
+}
+
+enum PackageType {
+  GIFT_BOX // Rigid boxes (most common)
+  GIFT_BAG // Bags with handles
+  WRAPPING // Wrap paper, sheets
+  TUBE // Cylindrical for posters/maps
+  ENVELOPE // Flat for cards/documents
+  SPECIALTY // Custom shapes (heart, star, etc.)
+  ECO_WRAP // Sustainable materials
 }
 
 generator client {

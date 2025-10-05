@@ -13,9 +13,8 @@ async function removeProductDiscountQueue({ productId, delay }) {
   await myQueue.add(
     "removeProductDiscountJob",
     { productId: productId }, // job data
-    { delay: calculatedDelay } // delay in ms (10 sec)
+    { delay: calculatedDelay, removeOnComplete: true, removeOnFail: true } // delay in ms (10 sec)
   );
-
   console.log(
     "Remove Product Discount scheduled with",
     calculatedDelay,
@@ -32,7 +31,7 @@ async function addProductDiscountQueue({ productId, delay }) {
   await myQueue.add(
     "addProductDiscountJob",
     { productId: productId }, // job data
-    { delay: calculatedDelay } // delay in ms (10 sec)
+    { delay: calculatedDelay, removeOnComplete: true, removeOnFail: true } // delay in ms (10 sec)
   );
 
   console.log("Add Product Discount scheduled with", calculatedDelay, "delay.");
@@ -45,7 +44,7 @@ async function addStoreDiscountQueue({ discountId, delay }) {
   await myQueue.add(
     "addStoreDiscountJob",
     { discountId: discountId }, // job data
-    { delay: calculatedDelay } // delay in ms (10 sec)
+    { delay: calculatedDelay, removeOnComplete: true, removeOnFail: true } // delay in ms (10 sec)
   );
 
   console.log("Add Store Discount scheduled with", calculatedDelay, "delay.");
@@ -61,11 +60,47 @@ async function removeStoreDiscountQueue({ discountId, delay }) {
   await myQueue.add(
     "removeStoreDiscountJob",
     { discountId: discountId }, // job data
-    { delay: calculatedDelay } // delay in ms (10 sec)
+    { delay: calculatedDelay, removeOnComplete: true, removeOnFail: true } // delay in ms (10 sec)
   );
 
   console.log(
     "Remove Store Discount scheduled with",
+    calculatedDelay,
+    "delay."
+  );
+}
+
+async function storeSubscriptionQueue({ storeId, delay }) {
+  console.log("Add Store Subscription to queue...");
+  const myQueue = new Queue("storeSubscriptionQueue", { connection: redis });
+  const calculatedDelay = delay - new Date();
+
+  const repeatableJobs = await myQueue.getJobSchedulers();
+  console.log("All repeatable jobs:", repeatableJobs);
+  const job = repeatableJobs.find(
+    (element) => element.name === "storeSubscriptionJob"
+  );
+  console.log(job);
+  if (job) {
+    await myQueue.removeJobScheduler(job.key);
+    console.log(`Job removed`);
+  } else {
+    console.log(`Job not found`);
+  }
+  //TODO repeat
+  await myQueue.add(
+    "storeSubscriptionJob",
+    { storeId: storeId }, // job data
+    {
+      delay: calculatedDelay,
+      removeOnComplete: true,
+      removeOnFail: true,
+      jobId: "storeSubscriptionJob",
+      repeat: { every: 120000 }, //2678400000
+    } // delay in ms (10 sec)
+  );
+  console.log(
+    "Add Store Subscription scheduled with",
     calculatedDelay,
     "delay."
   );
@@ -76,4 +111,5 @@ module.exports = {
   removeProductDiscountQueue,
   removeStoreDiscountQueue,
   addStoreDiscountQueue,
+  storeSubscriptionQueue,
 };

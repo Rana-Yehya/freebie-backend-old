@@ -25,10 +25,10 @@ model store {
   // store - restaurant - place for weddings
   role                 StoreRole          @default(STORE)
   status               StoreStatus        @default(PENDING)
-  subscription         StoreSubscription? @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  subscription         storeSubscription? @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
   subscriptionId       String? //@unique
   // Store can have multiple ad campaigns
-  adCampaigns          AdCampaign[]
+  adCampaigns          adCampaign[]
   discounts            discount[]
   // isApprovedByAdmin Boolean  @default(false)
   // isFreezed         Boolean  @default(false)

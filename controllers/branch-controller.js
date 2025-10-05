@@ -135,6 +135,9 @@ const updateBranch = async (req, res, next) => {
           address: address || undefined,
         },
       },
+      ...(stateId != undefined
+        ? { taxOverrides: { updateMany: { data: { isActive: false } } } }
+        : {}),
     },
   });
   if (!updatedBranch) {

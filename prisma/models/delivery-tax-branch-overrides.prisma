@@ -1,0 +1,23 @@
+model deliveryTaxBranchOverride {
+    id String @id @default(uuid())
+
+    // Which tax rule this overrides
+    deliveryTax   deliveryTaxes @relation(fields: [deliveryTaxId], references: [id])
+    deliveryTaxId String
+
+    // Which branch has this override
+    branch   branch @relation(fields: [branchId], references: [id])
+    branchId String
+
+    // Override values (null = use default from deliveryTax)
+    baseFeeOverride               Float?
+    feePerKgOverride              Float?
+    additionalFeesAfterKgOverride Float?
+    estimatedDaysOverride         Int?
+
+    // Branch can disable this route
+    isActive Boolean @default(true)
+
+    @@unique([deliveryTaxId, branchId])
+    @@map("delivery_tax_branch_overrides")
+}

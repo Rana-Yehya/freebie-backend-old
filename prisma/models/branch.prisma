@@ -5,12 +5,12 @@ model branch {
   location   location? @relation(fields: [locationId], references: [id])
   locationId String?   @unique
   // location     location?
-
+  taxOverrides deliveryTaxBranchOverride[]
   phone         String?
   isFreezed     Boolean              @default(false)
   workHours     workHour[]
   productStock  productStock[]
-  discountCodes BranchDiscountCode[]
+  discountCodes branchDiscountCode[]
 
   // productUser  productCart[]
   // productOrder productOrder[]

@@ -1,0 +1,59 @@
+model Packaging {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  
+  // PHYSICAL DIMENSIONS (internal space)
+  minWidth    Float?   // Minimum width in cm
+  maxWidth    Float?   // Maximum width in cm
+  minHeight   Float?   // Minimum height in cm
+  maxHeight   Float?   // Maximum height in cm
+  minLength   Float?   // Minimum length/depth in cm
+  maxLength   Float?   // Maximum length/depth in cm
+  
+  // BASE PRICING
+  baseCost    Float    @default(0)
+  costType    CostType @default(FIXED)
+  
+  // SIZE-BASED PRICING MULTIPLIERS
+  smallMultiplier  Float @default(1.0)   // Price for SMALL size
+  mediumMultiplier Float @default(1.2)   // Price for MEDIUM size
+  largeMultiplier  Float @default(1.5)   // Price for LARGE size
+  xlargeMultiplier Float @default(2.0)   // Price for XLARGE size
+  
+  // VOLUME-BASED PRICING (if costType = VOLUME_BASED)
+  pricePerCubicCM  Float?  // Cost per cm³
+  
+  // CATEGORIZATION
+  packageType PackageType
+  size        PackageSize  // Base size category
+  
+  // VISUALS
+  baseImage   String?      // Standard packaging image
+  
+  // STORE MARKUP
+}
+enum PackageSize {
+  XSMALL    // Jewelry, small accessories
+  SMALL     // Phone, cosmetics, small books
+  MEDIUM    // Standard gifts, clothing, books
+  LARGE     // Multiple items, large gifts
+  XLARGE    // Gift baskets, oversized items
+  CUSTOM    // Non-standard dimensions
+}
+enum CostType {
+  FIXED         // Same price regardless of size
+  SIZE_BASED    // Price changes with dimensions
+  VOLUME_BASED  // Price based on cubic volume
+  TIERED        // Different price brackets
+  PER_ITEM      // Price per item inside
+}
+enum PackageType {
+  GIFT_BOX      // Rigid boxes (most common)
+  GIFT_BAG      // Bags with handles
+  WRAPPING      // Wrap paper, sheets
+  TUBE          // Cylindrical for posters/maps
+  ENVELOPE      // Flat for cards/documents
+  SPECIALTY     // Custom shapes (heart, star, etc.)
+  ECO_WRAP      // Sustainable materials
+}

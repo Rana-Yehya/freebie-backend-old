@@ -143,6 +143,8 @@ exports.Prisma.AdCampaignScalarFieldEnum = {
   endDate: 'endDate',
   clicks: 'clicks',
   impressions: 'impressions',
+  targetType: 'targetType',
+  productId: 'productId',
   storeId: 'storeId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -231,6 +233,17 @@ exports.Prisma.CurrencyScalarFieldEnum = {
   countryId: 'countryId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DeliveryTaxBranchOverrideScalarFieldEnum = {
+  id: 'id',
+  deliveryTaxId: 'deliveryTaxId',
+  branchId: 'branchId',
+  baseFeeOverride: 'baseFeeOverride',
+  feePerKgOverride: 'feePerKgOverride',
+  additionalFeesAfterKgOverride: 'additionalFeesAfterKgOverride',
+  estimatedDaysOverride: 'estimatedDaysOverride',
+  isActive: 'isActive'
 };
 
 exports.Prisma.DeliveryTaxesScalarFieldEnum = {
@@ -435,18 +448,14 @@ exports.Prisma.StoreSubscriptionScalarFieldEnum = {
   id: 'id',
   planLimitId: 'planLimitId',
   status: 'status',
-  lastUpgradeDate: 'lastUpgradeDate',
-  minimumPlanPeriodUntil: 'minimumPlanPeriodUntil',
+  lastChangeSubscriptionDate: 'lastChangeSubscriptionDate',
+  periodEnd: 'periodEnd',
   maxTotalProducts: 'maxTotalProducts',
   maxBranches: 'maxBranches',
   maxDiscountCodes: 'maxDiscountCodes',
   notificationsPerWeek: 'notificationsPerWeek',
   adsPerWeek: 'adsPerWeek',
-  allowsBoxes: 'allowsBoxes',
-  allowsCollaborations: 'allowsCollaborations',
   commissionRate: 'commissionRate',
-  adsUsedThisPeriod: 'adsUsedThisPeriod',
-  adsResetAt: 'adsResetAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -485,6 +494,12 @@ exports.Prisma.SubscriptionPlanChangeScalarFieldEnum = {
   fromPlan: 'fromPlan',
   toPlan: 'toPlan',
   changeType: 'changeType',
+  totalProductsUsedThisPeriod: 'totalProductsUsedThisPeriod',
+  branchesUsedThisPeriod: 'branchesUsedThisPeriod',
+  discountCodesUsedThisPeriod: 'discountCodesUsedThisPeriod',
+  notificationsUsedThisPeriod: 'notificationsUsedThisPeriod',
+  adsUsedThisPeriod: 'adsUsedThisPeriod',
+  commissionRateUsedThisPeriod: 'commissionRateUsedThisPeriod',
   reason: 'reason',
   subscriptionId: 'subscriptionId'
 };
@@ -534,6 +549,28 @@ exports.Prisma.UserLocationsScalarFieldEnum = {
   isMain: 'isMain'
 };
 
+exports.Prisma.PackagingScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  minWidth: 'minWidth',
+  maxWidth: 'maxWidth',
+  minHeight: 'minHeight',
+  maxHeight: 'maxHeight',
+  minLength: 'minLength',
+  maxLength: 'maxLength',
+  baseCost: 'baseCost',
+  costType: 'costType',
+  smallMultiplier: 'smallMultiplier',
+  mediumMultiplier: 'mediumMultiplier',
+  largeMultiplier: 'largeMultiplier',
+  xlargeMultiplier: 'xlargeMultiplier',
+  pricePerCubicCM: 'pricePerCubicCM',
+  packageType: 'packageType',
+  size: 'size',
+  baseImage: 'baseImage'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -551,6 +588,15 @@ exports.Prisma.NullsOrder = {
 exports.adminPrivilege = exports.$Enums.adminPrivilege = {
   ALL: 'ALL',
   DELIVERY: 'DELIVERY'
+};
+
+exports.TargetType = exports.$Enums.TargetType = {
+  STORE_HOME: 'STORE_HOME',
+  PRODUCT_PAGE: 'PRODUCT_PAGE',
+  COLLECTION: 'COLLECTION',
+  SALE_PAGE: 'SALE_PAGE',
+  GIFT_BOX: 'GIFT_BOX',
+  FEATURED_PRODUCTS: 'FEATURED_PRODUCTS'
 };
 
 exports.UserOrderStatus = exports.$Enums.UserOrderStatus = {
@@ -631,18 +677,46 @@ exports.TransactionType = exports.$Enums.TransactionType = {
   REFUND: 'REFUND'
 };
 
+exports.CostType = exports.$Enums.CostType = {
+  FIXED: 'FIXED',
+  SIZE_BASED: 'SIZE_BASED',
+  VOLUME_BASED: 'VOLUME_BASED',
+  TIERED: 'TIERED',
+  PER_ITEM: 'PER_ITEM'
+};
+
+exports.PackageType = exports.$Enums.PackageType = {
+  GIFT_BOX: 'GIFT_BOX',
+  GIFT_BAG: 'GIFT_BAG',
+  WRAPPING: 'WRAPPING',
+  TUBE: 'TUBE',
+  ENVELOPE: 'ENVELOPE',
+  SPECIALTY: 'SPECIALTY',
+  ECO_WRAP: 'ECO_WRAP'
+};
+
+exports.PackageSize = exports.$Enums.PackageSize = {
+  XSMALL: 'XSMALL',
+  SMALL: 'SMALL',
+  MEDIUM: 'MEDIUM',
+  LARGE: 'LARGE',
+  XLARGE: 'XLARGE',
+  CUSTOM: 'CUSTOM'
+};
+
 exports.Prisma.ModelName = {
   admin: 'admin',
-  AdCampaign: 'AdCampaign',
-  AdImpression: 'AdImpression',
-  AdClick: 'AdClick',
-  BranchDiscountCode: 'BranchDiscountCode',
+  adCampaign: 'adCampaign',
+  adImpression: 'adImpression',
+  adClick: 'adClick',
+  branchDiscountCode: 'branchDiscountCode',
   branch: 'branch',
   workHour: 'workHour',
   category: 'category',
   city: 'city',
   country: 'country',
   currency: 'currency',
+  deliveryTaxBranchOverride: 'deliveryTaxBranchOverride',
   deliveryTaxes: 'deliveryTaxes',
   discount: 'discount',
   image: 'image',
@@ -652,7 +726,7 @@ exports.Prisma.ModelName = {
   location: 'location',
   occasion: 'occasion',
   order: 'order',
-  PlanLimit: 'PlanLimit',
+  planLimit: 'planLimit',
   productCart: 'productCart',
   productOrder: 'productOrder',
   productStock: 'productStock',
@@ -661,14 +735,15 @@ exports.Prisma.ModelName = {
   review: 'review',
   session: 'session',
   state: 'state',
-  StoreSubscription: 'StoreSubscription',
+  storeSubscription: 'storeSubscription',
   store: 'store',
   socialLink: 'socialLink',
-  SubscriptionPlanChange: 'SubscriptionPlanChange',
+  subscriptionPlanChange: 'subscriptionPlanChange',
   transaction: 'transaction',
   userCart: 'userCart',
   user: 'user',
-  userLocations: 'userLocations'
+  userLocations: 'userLocations',
+  Packaging: 'Packaging'
 };
 
 /**

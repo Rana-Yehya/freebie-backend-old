@@ -1,22 +1,33 @@
-model SubscriptionPlanChange {
+model subscriptionPlanChange {
     id        String   @id @default(uuid())
     createdAt DateTime @default(now())
 
     // What changed
-    fromPlan   PlanName
-    toPlan     PlanName
-    changeType ChangeType // UPGRADE, DOWNGRADE, RENEWAL
+    fromPlan                    PlanName
+    toPlan                      PlanName
+    changeType                  ChangeType // UPGRADE, DOWNGRADE, RENEWAL
+    totalProductsUsedThisPeriod Int        @default(0) // Total across all branches
+    branchesUsedThisPeriod      Int        @default(0) // How many branches allowed
+    discountCodesUsedThisPeriod Int        @default(0) // Total discount codes across all branches
+    notificationsUsedThisPeriod Int        @default(0)
+    adsUsedThisPeriod           Int        @default(0)
+
+    // Features
+    // allowsBoxesUsedThisPeriod          Boolean @default(false)
+    // allowsCollaborationsUsedThisPeriod Boolean @default(false)
+
+    // Pricing
+    commissionRateUsedThisPeriod Float @default(0.14)
 
     // Context
-    reason String?
+    reason            String?
 
     // Relations
-    subscription   StoreSubscription @relation(fields: [subscriptionId], references: [id])
+    subscription   storeSubscription @relation(fields: [subscriptionId], references: [id])
     subscriptionId String
 
     @@map("subscription_plan_changes")
 }
-
 
 enum ChangeType {
     UPGRADE

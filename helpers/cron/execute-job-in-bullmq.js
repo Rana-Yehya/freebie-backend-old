@@ -1,6 +1,7 @@
 const { Job, Worker } = require("bullmq");
 const { redis } = require("../../config/redis");
 const { prisma } = require("../../config/prisma");
+const { ChangeType } = require("../../generated/prisma");
 async function startRemoveProductDiscountWorker() {
   const removeProductDiscountWorker = new Worker(
     "removeProductDiscountQueue",
@@ -83,7 +84,7 @@ async function startRemoveProductDiscountWorker() {
   removeProductDiscountWorker.on("failed", (job, err) => {
     console.error(`Job ${job.id} failed with error:`, err.message);
   });
-  removeProductDiscountWorker.on("error", (job) => {
+  removeProductDiscountWorker.on("error", (err) => {
     console.error("Worker error:", err);
   });
 
@@ -157,7 +158,7 @@ async function startAddProductDiscountWorker() {
   addProductDiscountWorker.on("failed", (job, err) => {
     console.error(`Job ${job.id} failed with error:`, err.message);
   });
-  addProductDiscountWorker.on("error", (job) => {
+  addProductDiscountWorker.on("error", (err) => {
     console.error("Worker error:", err);
   });
   return addProductDiscountWorker;
@@ -243,12 +244,12 @@ async function startRemoveStoreDiscountWorker() {
   removeStoreDiscountWorker.on("failed", (job, err) => {
     console.error(`Job ${job.id} failed with error:`, err.message);
   });
-  removeStoreDiscountWorker.on("error", (job) => {
+  removeStoreDiscountWorker.on("error", (err) => {
     console.error("Worker error:", err);
   });
   return removeStoreDiscountWorker;
 }
-async function startAddStoreDiscountWorker(params) {
+async function startAddStoreDiscountWorker() {
   const addStoreDiscountWorker = new Worker(
     "addStoreDiscountQueue",
     async (job) => {
@@ -333,13 +334,69 @@ async function startAddStoreDiscountWorker(params) {
   addStoreDiscountWorker.on("failed", (job, err) => {
     console.error(`Job ${job.id} failed with error:`, err.message);
   });
-  addStoreDiscountWorker.on("error", (job) => {
+  addStoreDiscountWorker.on("error", (err) => {
     console.error("Worker error:", err);
   });
 
   return addStoreDiscountWorker;
 }
+async function startStoreSubscriptionWorker() {
+  const storeSubscriptionWorker = new Worker(
+    "storeSubscriptionQueue",
+    async (job) => {
+      const storeId = job.data.storeId;
+      const date = new Date();
+      const store = await prisma.store.findUnique({
+        where: { id: storeId },
+        select: { subscription: true },
+      });
+      const updatedStore = await prisma.store.update({
+        where: { id: storeId },
+        data: {
+          subscription: {
+            update: {
+              periodEnd: new Date(new Date(date).setMonth(date.getMonth() + 1)),
+              maxDiscountCodes: 0,
+              notificationsPerWeek: 0,
+              adsPerWeek: 0,
+              planChanges: {
+                create: {
+                  changeType: ChangeType.RENEWAL,
+                  fromPlan: store.subscription.planLimitId,
+                  toPlan: store.subscription.planLimitId,
+                  discountCodesUsedThisPeriod:
+                    store.subscription.maxDiscountCodes,
+                  notificationsUsedThisPeriod:
+                    store.subscription.notificationsPerWeek,
+                  adsUsedThisPeriod: store.subscription.adsPerWeek,
+                  commissionRateUsedThisPeriod:
+                    store.subscription.commissionRate,
+                },
+              },
+            },
+          },
+        },
+      });
+      console.log("store: ", store);
+      console.log("Updated store: ", updatedStore);
+    },
+    { connection: redis }
+  );
+  storeSubscriptionWorker.on("progress", (job) => {
+    console.log(`Job ${job.id} progress!`);
+  });
+  storeSubscriptionWorker.on("completed", (job) => {
+    console.log(`Job ${job.id} completed!`);
+  });
 
+  storeSubscriptionWorker.on("failed", (job, err) => {
+    console.error(`Job ${job.id} failed with error:`, err.message);
+  });
+  storeSubscriptionWorker.on("error", (err) => {
+    console.error("Worker error:", err);
+  });
+  return storeSubscriptionWorker;
+}
 function startAllWorkers() {
   console.log("🚀 Starting all BullMQ workers...");
 
@@ -348,6 +405,7 @@ function startAllWorkers() {
     startAddProductDiscountWorker(),
     startAddStoreDiscountWorker(),
     startRemoveStoreDiscountWorker(),
+    startStoreSubscriptionWorker(),
   ];
 
   console.log(`✅ All workers started (${workers.length} total)`);

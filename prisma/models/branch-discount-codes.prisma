@@ -1,4 +1,4 @@
-model BranchDiscountCode {
+model branchDiscountCode {
   id                 String    @id @default(uuid())
   code               String // Unique per branch? or per store? Let's make it unique per store
   discountPercentage Int?

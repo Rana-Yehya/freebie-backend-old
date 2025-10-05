@@ -1,37 +1,33 @@
-model StoreSubscription {
+model storeSubscription {
   id          String             @id @default(uuid())
   // Current active plan
-  planLimit   PlanLimit          @relation(fields: [planLimitId], references: [planName])
+  planLimit   planLimit          @relation(fields: [planLimitId], references: [planName])
   planLimitId PlanName
   status      SubscriptionStatus @default(ACTIVE)
 
-  // Billing period (Nov 1 - Nov 30)
-  lastUpgradeDate        DateTime  @default(now()) // 2024-11-01
-  minimumPlanPeriodUntil DateTime?
-
+  lastChangeSubscriptionDate DateTime?
+  periodEnd                  DateTime?
   // Plan limits are now PER STORE (aggregate of all branches)
-  maxTotalProducts     Int @default(0) // Total across all branches
-  maxBranches          Int @default(0) // How many branches allowed
-  maxDiscountCodes     Int @default(0) // Total discount codes across all branches
-  notificationsPerWeek Int @default(0)
-  adsPerWeek           Int @default(0)
-
+  maxTotalProducts           Int       @default(0) // Total across all branches
+  maxBranches                Int       @default(0) // How many branches allowed
+  maxDiscountCodes           Int       @default(0) // Total discount codes across all branches
+  notificationsPerWeek       Int       @default(0)
+  adsPerWeek                 Int       @default(0)
+  
   // Features
-  allowsBoxes          Boolean @default(false)
-  allowsCollaborations Boolean @default(false)
+  // allowsBoxes          Boolean @default(false)
+  // allowsCollaborations Boolean @default(false)
 
   // Pricing
   commissionRate Float @default(0.14)
-  // monthlyPrice   Float?
-  // annualPrice    Float?
 
   // Simple ad counter - reset each period
-  adsUsedThisPeriod Int       @default(0) // Tracks 0, 1, 2...
-  adsResetAt        DateTime? // Set to currentPeriodEnd
+  // adsUsedThisPeriod Int       @default(0) // Tracks 0, 1, 2...
+  // adsResetAt        DateTime? // Set to currentPeriodEnd
 
   // Relations
   // store       store?
-  planChanges SubscriptionPlanChange[]
+  planChanges subscriptionPlanChange[]
   store       store[]
   createdAt   DateTime                 @default(now())
   updatedAt   DateTime                 @updatedAt

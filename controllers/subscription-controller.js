@@ -6,10 +6,11 @@ const {
   UnauthenticatedError,
 } = require("../errors");
 const { SupportZodModel } = require("../models/support-zod-model");
-const { PlanName } = require("../generated/prisma");
+const { PlanName, ChangeType } = require("../generated/prisma");
+const { storeSubscriptionQueue } = require("../helpers/cron/add-job-to-bullmq");
 
 const createSubscription = async (req, res, next) => {
-  const { subId, isPermanentSub } = req.body;
+  const { subId } = req.body;
   const subIdEnum =
     subId == "diamond"
       ? PlanName.DIAMOND
@@ -20,19 +21,38 @@ const createSubscription = async (req, res, next) => {
       : subId == "basic"
       ? PlanName.BASIC
       : undefined;
-  //subId
-  // const currentPeriodEnd = req.user.subscription.currentPeriodEnd;
-  // const currentPeriodStart = req.user.subscription.currentPeriodStart;
-  // const currentPeriodEndAfterMonth =
-  //   currentPeriodEnd != undefined
-  //     ? currentPeriodEnd.setMonth(now.getMonth() + 1)
-  //     : undefined;
-  // const currentPeriodStartMonth = currentPeriodStart.setMonth(
-  //   now.getMonth() + 1
-  // );
+  if (!subIdEnum) {
+    throw new BadRequestError("Invalid Subscription Plan");
+  }
 
-  if (req.user.subscription.planLimit == subIdEnum) {
+  const date = new Date();
+
+  if (req.user.subscription.planLimitId == subIdEnum) {
     throw new BadRequestError("You already have this subscription");
+  }
+
+  if (req.user.subscription.lastChangeSubscriptionDate >= new Date()) {
+    throw new BadRequestError(
+      `You can't change subscription in ${new Date(
+        req.user.subscription.lastChangeSubscriptionDate - date
+      ).getDate()} day(s)`
+    );
+  }
+  let changeType;
+  if (subIdEnum == PlanName.BASIC) {
+    changeType = ChangeType.DOWNGRADE;
+  } else if (
+    subIdEnum == PlanName.SILVER &&
+    req.user.subscription.planLimitId == PlanName.BASIC
+  ) {
+    changeType = ChangeType.UPGRADE;
+  } else if (
+    subIdEnum == PlanName.GOLD &&
+    req.user.subscription.planLimitId != PlanName.DIAMOND
+  ) {
+    changeType = ChangeType.UPGRADE;
+  } else {
+    changeType = ChangeType.UPGRADE;
   }
   const planLimit = await prisma.planLimit.findUnique({
     where: { planName: subIdEnum },
@@ -57,22 +77,72 @@ const createSubscription = async (req, res, next) => {
   // else if(planLimit.notificationsPerWeek > req.user.subscription.notificationsPerWeek){
 
   // }
-  await prisma.store.update({
+
+  const updatedSub = await prisma.store.update({
     where: { id: req.user.id },
     data: {
       subscription: {
         update: {
-          planLimit: { connect: { planName: planLimit.planName } },
+          planLimit: {
+            connect: {
+              planName: planLimit.planName,
+            },
+          },
+          lastChangeSubscriptionDate: new Date(
+            new Date(date).setDate(date.getDate() + 7)
+          ),
+          periodEnd: new Date(new Date(date).setMonth(date.getMonth() + 1)),
+          maxDiscountCodes: 0,
+          notificationsPerWeek: 0,
+          adsPerWeek: 0,
+          planChanges: {
+            create: {
+              changeType: changeType,
+              fromPlan: req.user.subscription.planLimitId,
+              toPlan: subIdEnum,
+              discountCodesUsedThisPeriod:
+                req.user.subscription.maxDiscountCodes,
+              notificationsUsedThisPeriod:
+                req.user.subscription.notificationsPerWeek,
+              adsUsedThisPeriod: req.user.subscription.adsPerWeek,
+              commissionRateUsedThisPeriod:
+                req.user.subscription.commissionRate,
+            },
+          },
         },
       },
     },
+    include: {
+      subscription: true,
+    },
   });
+  if (updatedSub) {
+    await storeSubscriptionQueue({
+      storeId: req.user.id,
+      // delay: new Date(new Date(date).setMinutes(date.getMinutes() + 1)),
+      delay: updatedSub.subscription.periodEnd,
+      // delay: new Date().setMonth(new Date().getMonth() + 1),
+    });
+  }
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     message: "Switched to subscription plan successfully",
+    user: updatedSub,
   });
 };
 
+const getSubscriptionHistory = async (req, res, next) => {
+  const subscriptionPlanChange = await prisma.subscriptionPlanChange.findMany({
+    where: { subscription: { store: { every: { id: req.user.id } } } },
+  });
+
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    count: subscriptionPlanChange.length,
+    data: subscriptionPlanChange,
+  });
+};
 module.exports = {
   createSubscription,
+  getSubscriptionHistory,
 };
