@@ -42,6 +42,7 @@ const reviewsRouter = require("./routes/review-route");
 const planLimitsRouter = require("./routes/plan-limit-route");
 const subscriptionRouter = require("./routes/subscription-route");
 const discountRouter = require("./routes/discount-route");
+const adsRouter = require("./routes/ads-route");
 
 const notFound = require("./middleware/not-found");
 const errorHandler = require("./middleware/error-handler");
@@ -155,6 +156,7 @@ app.use("/api/v1/reviews", reviewsRouter);
 app.use("/api/v1/plan-limits", planLimitsRouter);
 app.use("/api/v1/subscriptions", subscriptionRouter);
 app.use("/api/v1/discounts", discountRouter);
+app.use("/api/v1/advertisements", adsRouter);
 
 app.use(notFound);
 app.use(errorHandler);

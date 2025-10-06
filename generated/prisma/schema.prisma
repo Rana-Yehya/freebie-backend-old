@@ -36,10 +36,13 @@ enum adminPrivilege {
 
 model adCampaign {
   id          String  @id @default(uuid())
-  title       String
+  titleId     String  @unique
+  title       locale  @relation("titleAd", fields: [titleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   description String?
-  imageUrl    String
-  targetUrl   String // Where the ad clicks go (e.g., store page, product page)
+  image       image   @relation("adImage", fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  imageId     String  @unique
+
+  targetUrl String? // Where the ad clicks go (e.g., store page, product page)
 
   // // Ad status and timing
   // status       AdStatus  @default(PENDING)
@@ -48,20 +51,21 @@ model adCampaign {
 
   // scheduledFor DateTime? // When the ad is scheduled to run
   // Ad scheduling (independent of billing period)
-  startDate     DateTime? // 2024-11-05 (when ad should start showing)
-  endDate       DateTime? // 2024-11-12 (when ad should stop showing)
+  startDate     DateTime // 2024-11-05 (when ad should start showing)
+  endDate       DateTime // 2024-11-12 (when ad should stop showing)
   // Tracking
   clicks        Int            @default(0)
   impressions   Int            @default(0)
   adImpressions adImpression[]
   adClick       adClick[]
   targetType    TargetType
+  product       product?       @relation(fields: [productId], references: [id])
   productId     String?
   // budget      Float? // Maximum budget for the ad
   // spent       Float  @default(0)
 
   // Relations - Ad belongs to a specific store (not branch)
-  store   store  @relation(fields: [storeId], references: [id])
+  store   store  @relation(fields: [storeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   storeId String
 
   // // Which branch this ad promotes (optional)
@@ -76,7 +80,7 @@ model adCampaign {
 
 model adImpression {
   id           String     @id @default(uuid())
-  adCampaign   adCampaign @relation(fields: [adCampaignId], references: [id])
+  adCampaign   adCampaign @relation(fields: [adCampaignId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   adCampaignId String
   userId       String? // If user is logged in
   ipAddress    String?
@@ -88,7 +92,7 @@ model adImpression {
 
 model adClick {
   id           String     @id @default(uuid())
-  adCampaign   adCampaign @relation(fields: [adCampaignId], references: [id])
+  adCampaign   adCampaign @relation(fields: [adCampaignId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   adCampaignId String
   userId       String?
   ipAddress    String?
@@ -318,18 +322,19 @@ model discount {
 }
 
 model image {
-  id               String     @id @unique @default(uuid())
+  id               String      @id @unique @default(uuid())
   publicId         String
   secureUrl        String
   // userId String? 
   // users  user?   
   category         category[]
   occasion         occasion[]
-  product          product?   @relation("imageProduct", fields: [productId], references: [id])
+  product          product?    @relation("imageProduct", fields: [productId], references: [id])
   productId        String?
-  mainImageProduct product?   @relation("mainImageProduct")
-  storeLogo        store[]    @relation("storeLogo")
-  storeBanner      store[]    @relation("storeBanner")
+  ad               adCampaign? @relation("adImage")
+  mainImageProduct product?    @relation("mainImageProduct")
+  storeLogo        store[]     @relation("storeLogo")
+  storeBanner      store[]     @relation("storeBanner")
 }
 
 model inbox {
@@ -355,7 +360,7 @@ model info {
 }
 
 model locale {
-  id                         String    @id @unique @default(uuid())
+  id                         String      @id @unique @default(uuid())
   default                    String?
   en                         String?
   // localeFr      String?
@@ -372,19 +377,20 @@ model locale {
   // localeTr      String?
   // localeCn      String?
   // productId   String? @unique
-  nameProduct                product?  @relation("nameProduct") //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ad                         adCampaign? @relation("titleAd")
+  nameProduct                product?    @relation("nameProduct") //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   country                    country?
   state                      state?
-  storeName                  store?    @relation("storeName")
-  storeBio                   store?    @relation("storeBio")
-  currencyAbbLocale          currency? @relation("currencyAbbLocale")
-  currencyName               currency? @relation("currencyName")
+  storeName                  store?      @relation("storeName")
+  storeBio                   store?      @relation("storeBio")
+  currencyAbbLocale          currency?   @relation("currencyAbbLocale")
+  currencyName               currency?   @relation("currencyName")
   city                       city?
   info                       info?
   category                   category?
   occasion                   occasion?
-  descriptionProduct         product?  @relation("descriptionProduct") //, references: [id], fields: [descriptionProductId])
-  detailedDescriptionProduct product?  @relation("detailedDescriptionProduct") //, references: [id], fields: [detailedDescriptionProductId])
+  descriptionProduct         product?    @relation("descriptionProduct") //, references: [id], fields: [descriptionProductId])
+  detailedDescriptionProduct product?    @relation("detailedDescriptionProduct") //, references: [id], fields: [detailedDescriptionProductId])
 }
 
 model location {
@@ -448,6 +454,69 @@ enum UserOrderStatus {
 // totalAmount Decimal @default(0)
 // amountPaid Decimal @default(0)
 // amountDue Decimal @default(0) // Calculated as totalAmount - amountPaid
+
+model Packaging {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+
+  // PHYSICAL DIMENSIONS (internal space)
+  minWidth  Float? // Minimum width in cm
+  maxWidth  Float? // Maximum width in cm
+  minHeight Float? // Minimum height in cm
+  maxHeight Float? // Maximum height in cm
+  minLength Float? // Minimum length/depth in cm
+  maxLength Float? // Maximum length/depth in cm
+
+  // BASE PRICING
+  baseCost Float    @default(0)
+  costType CostType @default(FIXED)
+
+  // SIZE-BASED PRICING MULTIPLIERS
+  smallMultiplier  Float @default(1.0) // Price for SMALL size
+  mediumMultiplier Float @default(1.2) // Price for MEDIUM size
+  largeMultiplier  Float @default(1.5) // Price for LARGE size
+  xlargeMultiplier Float @default(2.0) // Price for XLARGE size
+
+  // VOLUME-BASED PRICING (if costType = VOLUME_BASED)
+  pricePerCubicCM Float? // Cost per cm³
+
+  // CATEGORIZATION
+  packageType PackageType
+  size        PackageSize // Base size category
+
+  // VISUALS
+  baseImage String? // Standard packaging image
+
+  // STORE MARKUP
+}
+
+enum PackageSize {
+  XSMALL // Jewelry, small accessories
+  SMALL // Phone, cosmetics, small books
+  MEDIUM // Standard gifts, clothing, books
+  LARGE // Multiple items, large gifts
+  XLARGE // Gift baskets, oversized items
+  CUSTOM // Non-standard dimensions
+}
+
+enum CostType {
+  FIXED // Same price regardless of size
+  SIZE_BASED // Price changes with dimensions
+  VOLUME_BASED // Price based on cubic volume
+  TIERED // Different price brackets
+  PER_ITEM // Price per item inside
+}
+
+enum PackageType {
+  GIFT_BOX // Rigid boxes (most common)
+  GIFT_BAG // Bags with handles
+  WRAPPING // Wrap paper, sheets
+  TUBE // Cylindrical for posters/maps
+  ENVELOPE // Flat for cards/documents
+  SPECIALTY // Custom shapes (heart, star, etc.)
+  ECO_WRAP // Sustainable materials
+}
 
 model planLimit {
   // id                   String             @id @default(uuid())
@@ -603,16 +672,16 @@ enum ProductTags {
 model product {
   id                    String  @id @unique @default(uuid())
   nameId                String  @unique
-  name                  locale  @relation("nameProduct", fields: [nameId], references: [id])
+  name                  locale  @relation("nameProduct", fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // image                      String[]
   image                 image[] @relation("imageProduct")
-  mainImage             image   @relation("mainImageProduct", fields: [mainImageId], references: [id])
+  mainImage             image   @relation("mainImageProduct", fields: [mainImageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   mainImageId           String  @unique
   // description                String
   descriptionId         String  @unique
-  description           locale  @relation("descriptionProduct", fields: [descriptionId], references: [id])
+  description           locale  @relation("descriptionProduct", fields: [descriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   detailedDescriptionId String  @unique
-  detailedDescription   locale  @relation("detailedDescriptionProduct", fields: [detailedDescriptionId], references: [id])
+  detailedDescription   locale  @relation("detailedDescriptionProduct", fields: [detailedDescriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   // detailedDescription        String
   // store                    store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
@@ -642,6 +711,7 @@ model product {
   dimensionsHCm              Float            @default(1)
   dimensionsLCm              Float            @default(1)
   weightInKg                 Float            @default(3)
+  ads                        adCampaign[]
   // productOrder               productOrder[]
   // productUser                productCart[]
   createdAt                  DateTime         @default(now())
@@ -950,69 +1020,6 @@ model userLocations {
   state   state?  @relation(fields: [stateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   stateId String?
   isMain  Boolean @default(false)
-}
-
-model Packaging {
-  id          String  @id @default(uuid())
-  name        String
-  description String?
-
-  // PHYSICAL DIMENSIONS (internal space)
-  minWidth  Float? // Minimum width in cm
-  maxWidth  Float? // Maximum width in cm
-  minHeight Float? // Minimum height in cm
-  maxHeight Float? // Maximum height in cm
-  minLength Float? // Minimum length/depth in cm
-  maxLength Float? // Maximum length/depth in cm
-
-  // BASE PRICING
-  baseCost Float    @default(0)
-  costType CostType @default(FIXED)
-
-  // SIZE-BASED PRICING MULTIPLIERS
-  smallMultiplier  Float @default(1.0) // Price for SMALL size
-  mediumMultiplier Float @default(1.2) // Price for MEDIUM size
-  largeMultiplier  Float @default(1.5) // Price for LARGE size
-  xlargeMultiplier Float @default(2.0) // Price for XLARGE size
-
-  // VOLUME-BASED PRICING (if costType = VOLUME_BASED)
-  pricePerCubicCM Float? // Cost per cm³
-
-  // CATEGORIZATION
-  packageType PackageType
-  size        PackageSize // Base size category
-
-  // VISUALS
-  baseImage String? // Standard packaging image
-
-  // STORE MARKUP
-}
-
-enum PackageSize {
-  XSMALL // Jewelry, small accessories
-  SMALL // Phone, cosmetics, small books
-  MEDIUM // Standard gifts, clothing, books
-  LARGE // Multiple items, large gifts
-  XLARGE // Gift baskets, oversized items
-  CUSTOM // Non-standard dimensions
-}
-
-enum CostType {
-  FIXED // Same price regardless of size
-  SIZE_BASED // Price changes with dimensions
-  VOLUME_BASED // Price based on cubic volume
-  TIERED // Different price brackets
-  PER_ITEM // Price per item inside
-}
-
-enum PackageType {
-  GIFT_BOX // Rigid boxes (most common)
-  GIFT_BAG // Bags with handles
-  WRAPPING // Wrap paper, sheets
-  TUBE // Cylindrical for posters/maps
-  ENVELOPE // Flat for cards/documents
-  SPECIALTY // Custom shapes (heart, star, etc.)
-  ECO_WRAP // Sustainable materials
 }
 
 generator client {

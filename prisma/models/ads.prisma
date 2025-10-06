@@ -1,9 +1,12 @@
 model adCampaign {
   id          String  @id @default(uuid())
-  title       String
+  titleId     String  @unique
+  title       locale  @relation("titleAd", fields: [titleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   description String?
-  imageUrl    String
-  targetUrl   String // Where the ad clicks go (e.g., store page, product page)
+  image       image   @relation("adImage", fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  imageId     String  @unique
+
+  targetUrl String? // Where the ad clicks go (e.g., store page, product page)
 
   // // Ad status and timing
   // status       AdStatus  @default(PENDING)
@@ -12,20 +15,21 @@ model adCampaign {
 
   // scheduledFor DateTime? // When the ad is scheduled to run
   // Ad scheduling (independent of billing period)
-  startDate     DateTime? // 2024-11-05 (when ad should start showing)
-  endDate       DateTime? // 2024-11-12 (when ad should stop showing)
+  startDate     DateTime // 2024-11-05 (when ad should start showing)
+  endDate       DateTime // 2024-11-12 (when ad should stop showing)
   // Tracking
   clicks        Int            @default(0)
   impressions   Int            @default(0)
   adImpressions adImpression[]
   adClick       adClick[]
   targetType    TargetType
+  product       product?       @relation(fields: [productId], references: [id])
   productId     String?
   // budget      Float? // Maximum budget for the ad
   // spent       Float  @default(0)
 
   // Relations - Ad belongs to a specific store (not branch)
-  store   store  @relation(fields: [storeId], references: [id])
+  store   store  @relation(fields: [storeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   storeId String
 
   // // Which branch this ad promotes (optional)
@@ -40,7 +44,7 @@ model adCampaign {
 
 model adImpression {
   id           String     @id @default(uuid())
-  adCampaign   adCampaign @relation(fields: [adCampaignId], references: [id])
+  adCampaign   adCampaign @relation(fields: [adCampaignId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   adCampaignId String
   userId       String? // If user is logged in
   ipAddress    String?
@@ -52,7 +56,7 @@ model adImpression {
 
 model adClick {
   id           String     @id @default(uuid())
-  adCampaign   adCampaign @relation(fields: [adCampaignId], references: [id])
+  adCampaign   adCampaign @relation(fields: [adCampaignId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   adCampaignId String
   userId       String?
   ipAddress    String?

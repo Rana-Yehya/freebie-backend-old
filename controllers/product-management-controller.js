@@ -56,8 +56,11 @@ const createProduct = async (req, res, next) => {
     dimensionsLCm,
     weightInKg,
   } = req.body;
-  const image = req.files.images;
-  const mainImage = req.files.mainImage;
+  // const image = req.files.images;
+  // const mainImage = req.files.mainImage;
+  const image = req.files == undefined ? undefined : req.files.images;
+  const mainImage = req.files == undefined ? undefined : req.files.mainImage;
+
   // console.log(productStock);
   const productStockList =
     productStock != undefined ? JSON.parse(productStock) : [];

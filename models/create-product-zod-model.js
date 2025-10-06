@@ -126,35 +126,17 @@ const CreateProductZodModel = z
     discountStartTime: z
       .string()
       .datetime({ message: "Invalid discount start time" })
+      .refine((discountStartTime) => new Date(discountStartTime) > new Date(), {
+        message: "Discount start time must be in the future",
+      })
       .optional(),
     discountEndTime: z
       .string()
       .datetime({ message: "Invalid discount end time" })
+      .refine((discountEndTime) => new Date(discountEndTime) > new Date(), {
+        message: "Discount end time must be in the future",
+      })
       .optional(),
-    // color: z.array(
-    //   z
-    //     .string()
-    //     .min(6, { message: "Color should be a 6 octal hex digit" })
-    //     .max(6, { message: "Color should be a 6 octal hex digit" }),
-    //   {
-    //     message: "Product must be in at least one color",
-    //   }
-    // ),
-
-    // .superRefine((data, ctx) => {
-    //   if (
-    //     data.color === undefined ||
-    //     data.color.isEmpty ||
-    //     data.color === null
-    //   ) {
-    //     ctx.addIssue({
-    //       code: z.ZodIssueCode.custom,
-    //       message: "Product must be in at least one color",
-    //       path: ["color"],
-    //     });
-    //   }
-    // }),
-    // stock: z.number().optional(),
     categoryId: z.string({ message: "Category is required" }),
     occasions: z
       .array(z.string({ message: "Occasion must be a string" }), {
@@ -192,12 +174,6 @@ const CreateProductZodModel = z
       .refine((price) => parseFloat(price) > 0, {
         message: "Weight(Kg) is not a number or it is less than zero",
       }),
-
-    // z.number({ message: "Dimensions Length is required" }),
-    //{ message: "Is deleted is required" }
-    // isDeleted: z.boolean().default(false),
-    //{ message: "Is deleted is required" }
-    // isDeleted: z.boolean().default(false),
   })
   .superRefine((data, ctx) => {
     // if (data.stock <= 0 || (data.stock > 0 && data.isAvailable === false)) {
@@ -263,28 +239,14 @@ const CreateProductZodModel = z
           path: ["discountStartTime", "discountEndTime"],
         });
       }
-      const discountStartTime = new Date(Date.parse(data.discountStartTime));
-      const discountEndTime = new Date(Date.parse(data.discountEndTime));
+      const discountStartTime = new Date(data.discountStartTime);
+      const discountEndTime = new Date(data.discountEndTime);
 
       if (discountStartTime >= discountEndTime) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: "Discount start time must be before discount end time",
           path: ["discountStartTime", "discountEndTime"],
-        });
-      }
-      if (discountStartTime < new Date()) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Discount start time must be in the future",
-          path: ["discountStartTime"],
-        });
-      }
-      if (discountEndTime < new Date()) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Discount end time must be in the future",
-          path: ["discountEndTime"],
         });
       }
       // if (discountStartTime > discountEndTime) {

@@ -1,6 +1,7 @@
 const express = require("express");
 const {
-  getAllCountryAds,
+  getAllUserAds,
+  getAllStoreAds,
   getAd,
   createAd,
   updateAd,
@@ -12,26 +13,35 @@ const {
 const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
-const { adminConstant } = require("../config/constants");
+const { adminConstant, storeConstant } = require("../config/constants");
 
 const router = express.Router();
-//
-router.route("/").get(getAllCountryAds).post(
-  // authenticateUserMiddleware,
-  // authorizeMiddleware(adminConstant),
-  createAd
-);
+router.route("/user").get(getAllUserAds);
+router
+  .route("/store")
+  .get(
+    authenticateUserMiddleware,
+    authorizeMiddleware(storeConstant),
+    getAllStoreAds
+  );
+router
+  .route("/create")
+  .post(
+    authenticateUserMiddleware,
+    authorizeMiddleware(storeConstant),
+    createAd
+  );
 router
   .route("/:id")
   .get(getAd)
   .patch(
     authenticateUserMiddleware,
-    authorizeMiddleware(adminConstant),
+    authorizeMiddleware(storeConstant),
     updateAd
   )
   .delete(
     authenticateUserMiddleware,
-    authorizeMiddleware(adminConstant),
+    authorizeMiddleware(storeConstant),
     deleteAd
   );
 

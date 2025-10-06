@@ -12,16 +12,16 @@ enum ProductTags {
 model product {
   id                    String  @id @unique @default(uuid())
   nameId                String  @unique
-  name                  locale  @relation("nameProduct", fields: [nameId], references: [id])
+  name                  locale  @relation("nameProduct", fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // image                      String[]
   image                 image[] @relation("imageProduct")
-  mainImage             image   @relation("mainImageProduct", fields: [mainImageId], references: [id])
+  mainImage             image   @relation("mainImageProduct", fields: [mainImageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   mainImageId           String  @unique
   // description                String
   descriptionId         String  @unique
-  description           locale  @relation("descriptionProduct", fields: [descriptionId], references: [id])
+  description           locale  @relation("descriptionProduct", fields: [descriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   detailedDescriptionId String  @unique
-  detailedDescription   locale  @relation("detailedDescriptionProduct", fields: [detailedDescriptionId], references: [id])
+  detailedDescription   locale  @relation("detailedDescriptionProduct", fields: [detailedDescriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   // detailedDescription        String
   // store                    store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
@@ -51,6 +51,7 @@ model product {
   dimensionsHCm              Float            @default(1)
   dimensionsLCm              Float            @default(1)
   weightInKg                 Float            @default(3)
+  ads                        adCampaign[]
   // productOrder               productOrder[]
   // productUser                productCart[]
   createdAt                  DateTime         @default(now())

@@ -135,9 +135,9 @@ exports.Prisma.AdminScalarFieldEnum = {
 
 exports.Prisma.AdCampaignScalarFieldEnum = {
   id: 'id',
-  title: 'title',
+  titleId: 'titleId',
   description: 'description',
-  imageUrl: 'imageUrl',
+  imageId: 'imageId',
   targetUrl: 'targetUrl',
   startDate: 'startDate',
   endDate: 'endDate',
@@ -335,6 +335,28 @@ exports.Prisma.OrderScalarFieldEnum = {
   currencyId: 'currencyId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PackagingScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  minWidth: 'minWidth',
+  maxWidth: 'maxWidth',
+  minHeight: 'minHeight',
+  maxHeight: 'maxHeight',
+  minLength: 'minLength',
+  maxLength: 'maxLength',
+  baseCost: 'baseCost',
+  costType: 'costType',
+  smallMultiplier: 'smallMultiplier',
+  mediumMultiplier: 'mediumMultiplier',
+  largeMultiplier: 'largeMultiplier',
+  xlargeMultiplier: 'xlargeMultiplier',
+  pricePerCubicCM: 'pricePerCubicCM',
+  packageType: 'packageType',
+  size: 'size',
+  baseImage: 'baseImage'
 };
 
 exports.Prisma.PlanLimitScalarFieldEnum = {
@@ -549,28 +571,6 @@ exports.Prisma.UserLocationsScalarFieldEnum = {
   isMain: 'isMain'
 };
 
-exports.Prisma.PackagingScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  description: 'description',
-  minWidth: 'minWidth',
-  maxWidth: 'maxWidth',
-  minHeight: 'minHeight',
-  maxHeight: 'maxHeight',
-  minLength: 'minLength',
-  maxLength: 'maxLength',
-  baseCost: 'baseCost',
-  costType: 'costType',
-  smallMultiplier: 'smallMultiplier',
-  mediumMultiplier: 'mediumMultiplier',
-  largeMultiplier: 'largeMultiplier',
-  xlargeMultiplier: 'xlargeMultiplier',
-  pricePerCubicCM: 'pricePerCubicCM',
-  packageType: 'packageType',
-  size: 'size',
-  baseImage: 'baseImage'
-};
-
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -602,6 +602,33 @@ exports.TargetType = exports.$Enums.TargetType = {
 exports.UserOrderStatus = exports.$Enums.UserOrderStatus = {
   UNPAID: 'UNPAID',
   PAID: 'PAID'
+};
+
+exports.CostType = exports.$Enums.CostType = {
+  FIXED: 'FIXED',
+  SIZE_BASED: 'SIZE_BASED',
+  VOLUME_BASED: 'VOLUME_BASED',
+  TIERED: 'TIERED',
+  PER_ITEM: 'PER_ITEM'
+};
+
+exports.PackageType = exports.$Enums.PackageType = {
+  GIFT_BOX: 'GIFT_BOX',
+  GIFT_BAG: 'GIFT_BAG',
+  WRAPPING: 'WRAPPING',
+  TUBE: 'TUBE',
+  ENVELOPE: 'ENVELOPE',
+  SPECIALTY: 'SPECIALTY',
+  ECO_WRAP: 'ECO_WRAP'
+};
+
+exports.PackageSize = exports.$Enums.PackageSize = {
+  XSMALL: 'XSMALL',
+  SMALL: 'SMALL',
+  MEDIUM: 'MEDIUM',
+  LARGE: 'LARGE',
+  XLARGE: 'XLARGE',
+  CUSTOM: 'CUSTOM'
 };
 
 exports.PlanName = exports.$Enums.PlanName = {
@@ -677,33 +704,6 @@ exports.TransactionType = exports.$Enums.TransactionType = {
   REFUND: 'REFUND'
 };
 
-exports.CostType = exports.$Enums.CostType = {
-  FIXED: 'FIXED',
-  SIZE_BASED: 'SIZE_BASED',
-  VOLUME_BASED: 'VOLUME_BASED',
-  TIERED: 'TIERED',
-  PER_ITEM: 'PER_ITEM'
-};
-
-exports.PackageType = exports.$Enums.PackageType = {
-  GIFT_BOX: 'GIFT_BOX',
-  GIFT_BAG: 'GIFT_BAG',
-  WRAPPING: 'WRAPPING',
-  TUBE: 'TUBE',
-  ENVELOPE: 'ENVELOPE',
-  SPECIALTY: 'SPECIALTY',
-  ECO_WRAP: 'ECO_WRAP'
-};
-
-exports.PackageSize = exports.$Enums.PackageSize = {
-  XSMALL: 'XSMALL',
-  SMALL: 'SMALL',
-  MEDIUM: 'MEDIUM',
-  LARGE: 'LARGE',
-  XLARGE: 'XLARGE',
-  CUSTOM: 'CUSTOM'
-};
-
 exports.Prisma.ModelName = {
   admin: 'admin',
   adCampaign: 'adCampaign',
@@ -726,6 +726,7 @@ exports.Prisma.ModelName = {
   location: 'location',
   occasion: 'occasion',
   order: 'order',
+  Packaging: 'Packaging',
   planLimit: 'planLimit',
   productCart: 'productCart',
   productOrder: 'productOrder',
@@ -742,8 +743,7 @@ exports.Prisma.ModelName = {
   transaction: 'transaction',
   userCart: 'userCart',
   user: 'user',
-  userLocations: 'userLocations',
-  Packaging: 'Packaging'
+  userLocations: 'userLocations'
 };
 
 /**

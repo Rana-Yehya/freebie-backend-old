@@ -35,7 +35,7 @@ async function startRemoveProductDiscountWorker() {
         const storeId =
           product.productVariant[0].productStock[0].branch.store.id;
         // console.log("storeId", storeId);
-        const exuistingDiscount = await prisma.discount.findFirst({
+        const existingDiscount = await prisma.discount.findFirst({
           where: {
             AND: [
               { storeId: storeId },
@@ -44,16 +44,16 @@ async function startRemoveProductDiscountWorker() {
             ],
           },
         });
-        // console.log("exuistingDiscount", exuistingDiscount);
+        // console.log("existingDiscount", existingDiscount);
 
-        if (exuistingDiscount != undefined) {
+        if (existingDiscount != undefined) {
           await prisma.product.update({
             where: { id: productId },
             data: {
               actualPrice:
                 parseFloat(product.price) -
                 (parseFloat(product.price) *
-                  parseFloat(exuistingDiscount.discountPercent)) /
+                  parseFloat(existingDiscount.discountPercent)) /
                   100,
               discount: { delete: true },
             },
@@ -118,7 +118,7 @@ async function startAddProductDiscountWorker() {
         const storeId =
           product.productVariant[0].productStock[0].branch.store.id;
 
-        const exuistingDiscount = await prisma.discount.findFirst({
+        const existingDiscount = await prisma.discount.findFirst({
           where: {
             AND: [
               { storeId: storeId },
@@ -128,8 +128,8 @@ async function startAddProductDiscountWorker() {
           },
         });
         if (
-          exuistingDiscount != undefined &&
-          exuistingDiscount.discountPercent >= product.discount.discountPercent
+          existingDiscount != undefined &&
+          existingDiscount.discountPercent >= product.discount.discountPercent
         ) {
         } else {
           await prisma.product.update({

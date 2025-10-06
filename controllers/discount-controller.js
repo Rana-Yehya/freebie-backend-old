@@ -42,7 +42,7 @@ const createDiscount = async (req, res, next) => {
   const dateDiscountStartTime = new Date(discountStartTime);
 
   const dateDiscountEndTime = new Date(discountEndTime);
-  const exuistingDiscount = await prisma.discount.findFirst({
+  const existingDiscount = await prisma.discount.findFirst({
     where: {
       AND: [
         { storeId: req.user.id },
@@ -52,7 +52,7 @@ const createDiscount = async (req, res, next) => {
     },
   });
 
-  if (exuistingDiscount) {
+  if (existingDiscount) {
     throw new BadRequestError("There is another discount in this time range");
   }
   const discount = await prisma.discount.create({
@@ -106,7 +106,7 @@ const updateDiscount = async (req, res, next) => {
 
   //   const parseDiscountEndTime = Date.parse(discount.discountEndTime);
   //   const dateDiscountEndTime = new Date(parseDiscountEndTime);
-  const exuistingDiscount = await prisma.discount.findFirst({
+  const existingDiscount = await prisma.discount.findFirst({
     where: {
       AND: [
         { storeId: req.user.id },
@@ -115,7 +115,7 @@ const updateDiscount = async (req, res, next) => {
       ],
     },
   });
-  if (exuistingDiscount) {
+  if (existingDiscount) {
     throw new BadRequestError("There is another discount in this time range");
   }
   const updatedDiscount = await prisma.discount.update({

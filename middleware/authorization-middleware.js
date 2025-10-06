@@ -6,9 +6,7 @@ const authorizeMiddleware = (...roles) => {
     // console.log(roles);
     const role = req.role;
     if (!roles.includes(role)) {
-      throw new UnauthorizedError(
-        i18n.__("Unauthorized to perform this action")
-      );
+      throw new UnauthorizedError("Unauthorized to perform this action");
     }
     next();
   };

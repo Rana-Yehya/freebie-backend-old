@@ -96,7 +96,7 @@ async function storeSubscriptionQueue({ storeId, delay }) {
       removeOnComplete: true,
       removeOnFail: true,
       jobId: "storeSubscriptionJob",
-      repeat: { every: 120000 }, //2678400000
+      repeat: { every: 2678400000 }, //120000
     } // delay in ms (10 sec)
   );
   console.log(

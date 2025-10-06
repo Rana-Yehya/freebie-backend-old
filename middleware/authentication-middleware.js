@@ -95,7 +95,7 @@ const authenticateUserMiddleware = async (req, res, next) => {
       // ) {
       //   throw new UnauthenticatedError("Unauthorizated");
       // }
-      // const { userId, email } = decoded;
+      // const { userId, email } = decoded;i18n
 
       // req.user = user;
       // decoded.role === storeConstant ? req.user.role === storeConstant : null;

@@ -1,5 +1,5 @@
 model locale {
-  id                         String    @id @unique @default(uuid())
+  id                         String      @id @unique @default(uuid())
   default                    String?
   en                         String?
   // localeFr      String?
@@ -16,17 +16,18 @@ model locale {
   // localeTr      String?
   // localeCn      String?
   // productId   String? @unique
-  nameProduct                product?  @relation("nameProduct") //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ad                         adCampaign? @relation("titleAd")
+  nameProduct                product?    @relation("nameProduct") //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   country                    country?
   state                      state?
-  storeName                  store?    @relation("storeName")
-  storeBio                   store?    @relation("storeBio")
-  currencyAbbLocale          currency? @relation("currencyAbbLocale")
-  currencyName               currency? @relation("currencyName")
+  storeName                  store?      @relation("storeName")
+  storeBio                   store?      @relation("storeBio")
+  currencyAbbLocale          currency?   @relation("currencyAbbLocale")
+  currencyName               currency?   @relation("currencyName")
   city                       city?
   info                       info?
   category                   category?
   occasion                   occasion?
-  descriptionProduct         product?  @relation("descriptionProduct") //, references: [id], fields: [descriptionProductId])
-  detailedDescriptionProduct product?  @relation("detailedDescriptionProduct") //, references: [id], fields: [detailedDescriptionProductId])
+  descriptionProduct         product?    @relation("descriptionProduct") //, references: [id], fields: [descriptionProductId])
+  detailedDescriptionProduct product?    @relation("detailedDescriptionProduct") //, references: [id], fields: [detailedDescriptionProductId])
 }
