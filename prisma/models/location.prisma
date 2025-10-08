@@ -5,5 +5,5 @@ model location {
   stateId  String
   branchId String?
   branch   branch?
-  order    order?
+  order    order[]
 }

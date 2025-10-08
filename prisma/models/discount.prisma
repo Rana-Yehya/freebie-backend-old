@@ -4,10 +4,10 @@ model discount {
   discountPercent   Float    @default(0)
   discountStartTime DateTime
   discountEndTime   DateTime
-  product           product?  @relation(fields: [productId], references: [id])
+  product           product?  @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   productId         String?   @unique
   // product           product? // @relation("currencyAbbLocale")
-  store             store?   @relation(fields: [storeId], references: [id])
+  store             store?   @relation(fields: [storeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   storeId           String?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt

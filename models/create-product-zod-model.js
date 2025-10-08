@@ -122,7 +122,7 @@ const CreateProductZodModel = z
             "Discount Percent is not a number or it is less than zero or it is bigger than 100",
         }
       )
-      .default("0"),
+      .optional(),
     discountStartTime: z
       .string()
       .datetime({ message: "Invalid discount start time" })
@@ -213,7 +213,8 @@ const CreateProductZodModel = z
         });
       }
     }
-    if (data.discountPercent) {
+    console.log("data.discountPercent", data.discountPercent);
+    if (data.discountPercent != undefined) {
       // if (
       //   !(
       //     parseFloat(data.discountPercent) * 100 >= 0 &&
@@ -229,9 +230,7 @@ const CreateProductZodModel = z
       // if (parseFloat(data.discountPercent) > 0) {
       if (
         data.discountStartTime === undefined ||
-        data.discountEndTime === undefined ||
-        data.discountStartTime === null ||
-        data.discountEndTime === null
+        data.discountEndTime === undefined
       ) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,

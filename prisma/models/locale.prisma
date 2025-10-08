@@ -17,6 +17,8 @@ model locale {
   // localeCn      String?
   // productId   String? @unique
   ad                         adCampaign? @relation("titleAd")
+  nameBundle                 bundle?     @relation("nameBundle") //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  descriptionBundle          bundle?     @relation("descriptionBundle") //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   nameProduct                product?    @relation("nameProduct") //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   country                    country?
   state                      state?

@@ -2,7 +2,7 @@ model branch {
   id         String    @id @unique @default(uuid())
   storeId    String
   store      store     @relation(fields: [storeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  location   location? @relation(fields: [locationId], references: [id])
+  location   location? @relation(fields: [locationId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   locationId String?   @unique
   // location     location?
   taxOverrides deliveryTaxBranchOverride[]
@@ -10,7 +10,7 @@ model branch {
   isFreezed     Boolean              @default(false)
   workHours     workHour[]
   productStock  productStock[]
-  discountCodes branchDiscountCode[]
+  // discountCodes branchDiscountCode[]
 
   // productUser  productCart[]
   // productOrder productOrder[]

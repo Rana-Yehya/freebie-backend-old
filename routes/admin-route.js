@@ -4,7 +4,7 @@ const {
   // approveStore,
   setProductTag,
   getAllStores,
-  approveProduct,
+  setProductStatus,
   // freezeStore,
   setStoreStatus,
   getAllUsers,
@@ -51,21 +51,22 @@ router.route("/set-store-status").post(
   setStoreStatus
 );
 
-router.route("/approve-product").post(
-  authenticateUserMiddleware,
-  authorizeMiddleware(adminConstant),
-  authorizeAdminMiddleware(adminPrivilegeAllConstant),
-
-  approveProduct
-);
 router
-  .route("/create-admin")
+  .route("/set-product-status")
   .post(
     authenticateUserMiddleware,
     authorizeMiddleware(adminConstant),
     authorizeAdminMiddleware(adminPrivilegeAllConstant),
-    approveProduct
+    setProductStatus
   );
+// router
+//   .route("/create-admin")
+//   .post(
+//     authenticateUserMiddleware,
+//     authorizeMiddleware(adminConstant),
+//     authorizeAdminMiddleware(adminPrivilegeAllConstant),
+//     approveProduct
+//   );
 router.route("/stores").get(
   authenticateUserMiddleware,
   authorizeMiddleware(adminConstant),

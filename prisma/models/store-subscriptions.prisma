@@ -1,8 +1,8 @@
 model storeSubscription {
   id          String             @id @default(uuid())
   // Current active plan
-  planLimit   planLimit          @relation(fields: [planLimitId], references: [planName])
-  planLimitId PlanName
+  planLimit   planLimit          @relation(fields: [planLimitId], references: [planName], onDelete: SetDefault, onUpdate: SetDefault)
+  planLimitId PlanName @default(BASIC)
   status      SubscriptionStatus @default(ACTIVE)
 
   lastChangeSubscriptionDate DateTime?

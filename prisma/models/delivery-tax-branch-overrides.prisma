@@ -2,11 +2,11 @@ model deliveryTaxBranchOverride {
     id String @id @default(uuid())
 
     // Which tax rule this overrides
-    deliveryTax   deliveryTaxes @relation(fields: [deliveryTaxId], references: [id])
+    deliveryTax   deliveryTaxes @relation(fields: [deliveryTaxId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     deliveryTaxId String
 
     // Which branch has this override
-    branch   branch @relation(fields: [branchId], references: [id])
+    branch   branch @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     branchId String
 
     // Override values (null = use default from deliveryTax)

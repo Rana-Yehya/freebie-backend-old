@@ -23,7 +23,7 @@ model adCampaign {
   adImpressions adImpression[]
   adClick       adClick[]
   targetType    TargetType
-  product       product?       @relation(fields: [productId], references: [id])
+  product       product?       @relation(fields: [productId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   productId     String?
   // budget      Float? // Maximum budget for the ad
   // spent       Float  @default(0)

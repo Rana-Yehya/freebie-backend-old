@@ -2,7 +2,7 @@ model state {
   id                       String          @id @unique @default(uuid())
   // name                     String
   nameId                   String          @unique
-  name                     locale          @relation(fields: [nameId], references: [id]) //onDelete: SetNull, onUpdate: SetNull
+  name                     locale          @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade) //onDelete: SetNull, onUpdate: SetNull
   country                  country         @relation(fields: [countryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   countryId                String
   city                     city[]

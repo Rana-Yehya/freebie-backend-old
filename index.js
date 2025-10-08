@@ -43,6 +43,7 @@ const planLimitsRouter = require("./routes/plan-limit-route");
 const subscriptionRouter = require("./routes/subscription-route");
 const discountRouter = require("./routes/discount-route");
 const adsRouter = require("./routes/ads-route");
+const bundlesRouter = require("./routes/bundle-route");
 
 const notFound = require("./middleware/not-found");
 const errorHandler = require("./middleware/error-handler");
@@ -157,6 +158,7 @@ app.use("/api/v1/plan-limits", planLimitsRouter);
 app.use("/api/v1/subscriptions", subscriptionRouter);
 app.use("/api/v1/discounts", discountRouter);
 app.use("/api/v1/advertisements", adsRouter);
+app.use("/api/v1/bundles", bundlesRouter);
 
 app.use(notFound);
 app.use(errorHandler);

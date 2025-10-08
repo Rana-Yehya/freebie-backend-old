@@ -1,9 +1,9 @@
 model store {
   id     String @id @unique @default(uuid())
   nameId String @unique
-  name   locale @relation("storeName", fields: [nameId], references: [id])
+  name   locale @relation("storeName", fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   bioId  String @unique
-  bio    locale @relation("storeBio", fields: [bioId], references: [id])
+  bio    locale @relation("storeBio", fields: [bioId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   // name               String
   // bio                String
@@ -25,7 +25,7 @@ model store {
   // store - restaurant - place for weddings
   role                 StoreRole          @default(STORE)
   status               StoreStatus        @default(PENDING)
-  subscription         storeSubscription? @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  subscription         storeSubscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
   subscriptionId       String? //@unique
   // Store can have multiple ad campaigns
   adCampaigns          adCampaign[]

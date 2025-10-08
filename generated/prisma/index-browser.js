@@ -168,21 +168,6 @@ exports.Prisma.AdClickScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
-exports.Prisma.BranchDiscountCodeScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  discountPercentage: 'discountPercentage',
-  discountAmount: 'discountAmount',
-  minOrderAmount: 'minOrderAmount',
-  usageLimit: 'usageLimit',
-  usedCount: 'usedCount',
-  isActive: 'isActive',
-  validFrom: 'validFrom',
-  validUntil: 'validUntil',
-  createdAt: 'createdAt',
-  branchId: 'branchId'
-};
-
 exports.Prisma.BranchScalarFieldEnum = {
   id: 'id',
   storeId: 'storeId',
@@ -199,6 +184,24 @@ exports.Prisma.WorkHourScalarFieldEnum = {
   startTime: 'startTime',
   endTime: 'endTime',
   day: 'day'
+};
+
+exports.Prisma.BundleScalarFieldEnum = {
+  id: 'id',
+  nameId: 'nameId',
+  mainImageId: 'mainImageId',
+  descriptionId: 'descriptionId',
+  bundlePrice: 'bundlePrice',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BundleItemScalarFieldEnum = {
+  id: 'id',
+  quantity: 'quantity',
+  bundleId: 'bundleId',
+  productVariantId: 'productVariantId'
 };
 
 exports.Prisma.CategoryScalarFieldEnum = {
@@ -709,9 +712,10 @@ exports.Prisma.ModelName = {
   adCampaign: 'adCampaign',
   adImpression: 'adImpression',
   adClick: 'adClick',
-  branchDiscountCode: 'branchDiscountCode',
   branch: 'branch',
   workHour: 'workHour',
+  bundle: 'bundle',
+  bundleItem: 'bundleItem',
   category: 'category',
   city: 'city',
   country: 'country',

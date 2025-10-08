@@ -20,8 +20,15 @@ const {
   addProductDiscountQueue,
   removeProductDiscountQueue,
 } = require("../helpers/cron/add-job-to-bullmq");
-const getAllProducts = async (req, res, next) => {
+const getAllStoreProducts = async (req, res, next) => {
   const products = await prisma.product.findMany({
+    where: {
+      productVariant: {
+        every: {
+          productStock: { every: { branch: { storeId: req.user.id } } },
+        },
+      },
+    },
     include: { occasions: true },
   });
   return res
@@ -248,13 +255,6 @@ const createProduct = async (req, res, next) => {
             },
       productVariant: {
         create: productStockListToStore.map((productStock) => productStock),
-        // connect: {
-        //   branchId: { in: productStockList.map((branch) => branch.branchId) },
-        // },
-        // createMany: {
-        //   //productStockList
-        //   data: productStockList,
-        // },
       },
       dimensionsWCm: parseFloat(dimensionsWCm),
       dimensionsHCm: parseFloat(dimensionsHCm),
@@ -370,16 +370,6 @@ const updateProduct = async (req, res, next) => {
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
-  let category;
-  if (categoryId) {
-    category = await prisma.category.findUnique({
-      where: { id: categoryId },
-    });
-    if (!category) {
-      throw new BadRequestError("Category not found");
-    }
-  }
-
   let dateDiscountStartTime = null;
   let dateDiscountEndTime = null;
   // const offsetInMinutes = new Date().getTimezoneOffset();
@@ -398,7 +388,7 @@ const updateProduct = async (req, res, next) => {
     where: { id: id },
     select: {
       id: true,
-      price: true,
+      // price: true,
       mainImage: true,
       image: true,
       category: true,
@@ -409,17 +399,6 @@ const updateProduct = async (req, res, next) => {
     throw new BadRequestError("Product not found");
   }
   let imageToStore = [];
-  // if (discountPercent) {
-  //   product = await prisma.product.findUnique({
-  //     where: { id: id },
-  //     include: {
-  //       image: true,
-  //     },
-  //   });
-  //   if (!product) {
-  //     throw new BadRequestError("Category not found");
-  //   }
-  // }
   let mainImageUrlsToStore;
   let mainImagePublicIdsToStore;
   if (mainImage) {
@@ -523,13 +502,13 @@ const updateProduct = async (req, res, next) => {
           ? false
           : true,
       canBeDeliveredOutsideState:
-        product.category.canBeDeliveredOutsideState == true
-          ? canBeDeliveredOutsideState == undefined
-            ? undefined
-            : canBeDeliveredOutsideState === "false"
+        canBeDeliveredOutsideState == undefined
+          ? undefined
+          : product.category.canBeDeliveredOutsideState == true
+          ? canBeDeliveredOutsideState === "false"
             ? false
             : true
-          : undefined,
+          : false,
       tags: undefined,
       preparationTimeInMinutes: preparationTimeInMinutes || undefined,
       // discountPercent:
@@ -605,7 +584,7 @@ const updateProduct = async (req, res, next) => {
       discount: true,
     },
   });
-  if (mainImage) {
+  if (product && mainImage) {
     await destroyImage({
       imagePublicId: product.mainImage.publicId,
     });
@@ -635,17 +614,46 @@ const updateProduct = async (req, res, next) => {
 };
 
 const deleteProduct = async (req, res, next) => {
-  const { id: ProductId } = req.params;
-  if (!ProductId) {
+  const { id: productId } = req.params;
+  if (!productId) {
     throw new BadRequestError("Please send a product id");
   }
-  const product = await prisma.product.update({
-    where: { id: ProductId },
-    data: { status: ProductStatus.DELETED },
+  const order = await prisma.order.findFirst({
+    where: {
+      productOrder: {
+        every: {
+          AND: [
+            { productStock: { variant: { productId: productId } } },
+            {
+              status: { notIn: [OrderStatus.DELIVERED, OrderStatus.CANCELLED] },
+            },
+          ],
+        },
+      },
+    },
+  });
+  if (order) {
+    throw new BadRequestError(
+      "User can not be deleted. This user has unfinished orders"
+    );
+  }
+
+  const product = await prisma.product.delete({
+    where: { id: productId },
+    // data: { status: ProductStatus.DELETED },
     // select: { image: true },
   });
   if (!product) {
     throw new NotFoundError("Product not found");
+  } else {
+    await prisma.store.update({
+      where: { id: req.user.id },
+      data: {
+        subscription: {
+          update: { maxTotalProducts: { decrement: 1 } },
+        },
+      },
+    });
   }
   return res
     .status(StatusCodes.OK)
@@ -700,7 +708,7 @@ const deleteProductImage = async (req, res, next) => {
 };
 
 module.exports = {
-  getAllProducts,
+  getAllStoreProducts,
   createProduct,
   updateProduct,
   deleteProduct,

@@ -1,0 +1,28 @@
+model bundle {
+    id            String       @id @default(uuid())
+    nameId        String       @unique
+    name          locale       @relation("nameBundle", fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    mainImage     image        @relation("mainImageBundle", fields: [mainImageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    mainImageId   String       @unique
+    descriptionId String       @unique
+    description   locale       @relation("descriptionBundle", fields: [descriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    bundlePrice   Float? // Fixed bundle price
+    isActive      Boolean      @default(true)
+    createdAt     DateTime     @default(now())
+    updatedAt     DateTime     @updatedAt
+    bundleItems   bundleItem[]
+
+    @@map("bundles")
+}
+
+model bundleItem {
+    id               String         @id @default(uuid())
+    quantity         Int            @default(1)
+    bundleId         String
+    bundle           bundle         @relation(fields: [bundleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    productVariantId String
+    productVariant   productVariant @relation(fields: [productVariantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+    @@unique([bundleId, productVariantId])
+    @@map("bundle_items")
+}

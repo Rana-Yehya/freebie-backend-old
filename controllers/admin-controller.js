@@ -17,51 +17,7 @@ const {
   PlanName,
 } = require("../generated/prisma");
 const { StoreStatusZodModel } = require("../models/store-status-zod-model");
-
-const approveStore = async (req, res) => {
-  const { storeId } = req.body;
-  if (!storeId) {
-    throw new BadRequestError("Please enter a store id");
-  }
-  const store = await prisma.store.update({
-    where: { id: storeId },
-    data: { status: StoreStatus.APPROVED },
-  });
-  if (!store) {
-    throw new NotFoundError("Store not found");
-  }
-  return res.status(StatusCodes.OK).json({
-    isSuccess: true,
-    message: i18n.__("Store approved successfully"),
-  });
-};
-
-const freezeStore = async (req, res) => {
-  const { storeId } = req.body;
-  if (!storeId) {
-    throw new BadRequestError("Please enter a store id");
-  }
-  await prisma.product.updateMany({
-    where: {
-      productVariant: {
-        every: { productStock: { every: { branch: { storeId: storeId } } } },
-      },
-    },
-    data: { status: ProductStatus.PENDING },
-  });
-  const store = await prisma.store.update({
-    where: { id: storeId },
-    data: { status: StoreStatus.FROZEN },
-  });
-
-  if (!store) {
-    throw new NotFoundError("Store not found");
-  }
-  return res.status(StatusCodes.OK).json({
-    isSuccess: true,
-    message: i18n.__("Store freezed successfully"),
-  });
-};
+const { ProductStatusZodModel } = require("../models/product-status-zod-model");
 
 const setStoreStatus = async (req, res) => {
   const { storeId, status } = req.body;
@@ -132,21 +88,81 @@ const setStoreStatus = async (req, res) => {
     message: i18n.__("Store freezed successfully"),
   });
 };
-const approveProduct = async (req, res) => {
-  const { productId } = req.body;
-  if (!productId) {
-    throw new BadRequestError("Please enter a product id");
+const setProductStatus = async (req, res) => {
+  const { productId, status } = req.body;
+  const zodModel = ProductStatusZodModel.safeParse({
+    productId: productId,
+    status: status,
+  });
+
+  console.log(zodModel);
+  if (!zodModel.success) {
+    throw new BadRequestError(zodModel.error.errors[0].message);
   }
-  const product = await prisma.product.update({
+  const productStatus =
+    status == "pending"
+      ? ProductStatus.PENDING
+      : status == "approved"
+      ? ProductStatus.APPROVED
+      : status == "deleted"
+      ? ProductStatus.DELETED
+      : undefined;
+  const product = await prisma.product.findUnique({
     where: { id: productId },
-    data: { status: ProductStatus.APPROVED },
+    select: { status: true },
   });
   if (!product) {
     throw new NotFoundError("Product not found");
   }
+  if (product.status == productStatus) {
+    throw new BadRequestError("Product already has this status");
+  }
+
+  const updatedProduct = await prisma.product.update({
+    where: { id: productId },
+    data: {
+      status: productStatus,
+      /*
+      productVariant: {
+        updateMany: {
+          where: { productId: productId },
+          data: {
+            bundleItems: {
+              update: {
+                data: {
+                  bundle: {
+                    update: {
+                      data: { isActive: status == "approved" ? true : false },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      */
+    },
+  });
+  if (
+    updatedProduct.status == ProductStatus.APPROVED &&
+    product.status == ProductStatus.PENDING
+  ) {
+    await prisma.bundle.updateMany({
+      where: {
+        bundleItems: { every: { productVariant: { productId: productId } } },
+      },
+      data: {
+        isActive:
+          updatedProduct.status == ProductStatus.APPROVED ? true : false,
+      },
+    });
+  }
+
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     message: i18n.__("Product approved successfully"),
+    data: updatedProduct,
   });
 };
 const setProductTag = async (req, res) => {
@@ -193,6 +209,7 @@ const getAllProducts = async (req, res, next) => {
   const { page = 1, limit = 10 } = req.query;
 
   const product = await prisma.product.findMany({
+    include: { name: true, mainImage: true },
     take: limit,
     skip: (page - 1) * limit,
   });
@@ -283,7 +300,7 @@ const sendNotificationToAllStores = async (req, res, next) => {
 module.exports = {
   // approveStore,
   // freezeStore,
-  approveProduct,
+  setProductStatus,
   setStoreStatus,
   getAllStores,
   sendNotificationToAllStores,

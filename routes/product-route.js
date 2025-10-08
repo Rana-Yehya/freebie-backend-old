@@ -1,6 +1,6 @@
 const express = require("express");
 const {
-  getAllProducts,
+  getAllStoreProducts,
   createProduct,
   updateProduct,
   deleteProduct,
@@ -67,11 +67,11 @@ router
 //     getAllProductsCanBeDeliveredOutsideStates
 //   );
 router
-  .route("/")
+  .route("/store")
   .get(
     authenticateUserMiddleware,
-    authorizeMiddleware(adminConstant),
-    getAllProducts
+    authorizeMiddleware(storeConstant),
+    getAllStoreProducts
   );
 
 router
@@ -99,7 +99,7 @@ router
   .route("/images/:id")
   .delete(
     authenticateUserMiddleware,
-    authorizeMiddleware(adminConstant, storeConstant),
+    authorizeMiddleware(storeConstant),
     deleteProductImage
   );
 module.exports = router;

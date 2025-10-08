@@ -8,6 +8,7 @@ model productVariant {
     //   option3   String?  // e.g., "Material"
     // Inventory relationship
     productStock productStock[]
+    bundleItems  bundleItem[]
     // productCart  productCart[]
     // productOrder productOrder[]
 
