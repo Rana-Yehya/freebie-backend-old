@@ -26,7 +26,12 @@ const { OrderStatus } = require("../generated/prisma");
 const {
   UpdateLocationZodModel,
 } = require("../models/update-location-zod-model");
-//TODO AM I IN NEED TO LOGIN
+const {
+  CreateUserLocationZodModel,
+} = require("../models/create-user-location-zod-model");
+const {
+  UpdateUserLocationZodModel,
+} = require("../models/update-user-location-zod-model");
 
 const login = async (req, res) => {};
 
@@ -89,7 +94,9 @@ const register = async (req, res, next) => {
     dateOfBirth: dateOfBirth,
     gender: gender,
     email: email,
-    userState: userState,
+    userLocation: {
+      stateId: userState,
+    },
     phone: phoneNumber,
     fcmToken: fcmToken,
   });
@@ -143,10 +150,16 @@ const register = async (req, res, next) => {
           isMain: true,
         },
       },
-      state: { connect: { id: userState } },
+      // state: { connect: { id: userState } },
     },
     include: {
-      state: { include: { country: true } },
+      userLocations: {
+        include: {
+          state: {
+            include: { name: true, country: { include: { name: true } } },
+          },
+        },
+      },
       sessions: true,
     },
   });
@@ -276,13 +289,11 @@ const logout = async (req, res) => {
 };
 
 const updateProfile = async (req, res, next) => {
-  const { dateOfBirth, gender, name, countryId, stateId } = req.body;
+  const { dateOfBirth, gender, name } = req.body;
   const zodModel = UpdateUserProfileZodModel.safeParse({
     name: name,
     dateOfBirth: dateOfBirth,
     gender: gender,
-    userState: stateId,
-    userCountry: countryId,
   });
 
   if (!zodModel.success) {
@@ -302,24 +313,15 @@ const updateProfile = async (req, res, next) => {
       name: name || undefined,
       dateOfBirth: date || undefined,
       gender: gender || undefined,
-      ...(stateId && {
-        state:
-          stateId != undefined
-            ? {
-                connect: {
-                  id: stateId,
-                  country:
-                    countryId != undefined ? { is: { id: countryId } } : {},
-                },
-              }
-            : {},
-        // connect: {
-        //   id: stateId || undefined,
-        // },
-      }),
     },
     include: {
-      state: { include: { name: true, country: { include: { name: true } } } },
+      userLocations: {
+        include: {
+          state: {
+            include: { name: true, country: { include: { name: true } } },
+          },
+        },
+      },
     },
   });
 
@@ -330,72 +332,165 @@ const updateProfile = async (req, res, next) => {
   });
 };
 
-const updateUserLocation = async (req, res) => {
-  //countryId, stateId,
-  const { id: userLocationId } = req.params;
-  const { stateId } = req.body;
-  if (!userLocationId) {
-    throw new BadRequestError("User location id is required");
-  }
-  const zodModel = UpdateLocationZodModel.safeParse({
-    userLocationId: userLocationId,
+const createUserLocation = async (req, res) => {
+  const { stateId, isMain } = req.body;
+
+  const zodModel = CreateUserLocationZodModel.safeParse({
     stateId: stateId,
+    isMain: isMain,
   });
 
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
-
-  const userLocations = await prisma.userLocations.update({
-    where: {
-      id: userLocationId,
-    },
+  console.log(req.user.userLocations);
+  const mainUserLocation = req.user.userLocations.filter(
+    (element) => element.isMain == true
+  );
+  console.log(mainUserLocation);
+  const mainUserLocationId =
+    mainUserLocation.length != 0 ? mainUserLocation?.at(0).id : undefined;
+  if (mainUserLocationId == undefined) {
+    throw new BadRequestError("Error in finding your main address");
+  }
+  const user = await prisma.user.update({
+    where: { id: req.user.id },
     data: {
-      state: { connect: { id: stateId } },
+      userLocations: {
+        ...(mainUserLocationId != undefined && isMain == true
+          ? {
+              update: {
+                where: { id: mainUserLocationId || undefined },
+                data: {
+                  isMain: false,
+                },
+              },
+            }
+          : {}),
+
+        create: {
+          state: { connect: { id: stateId } },
+          isMain: isMain == true ? true : false,
+        },
+      },
+    },
+    include: {
+      userLocations: {
+        include: {
+          state: {
+            include: { name: true, country: { include: { name: true } } },
+          },
+        },
+      },
+    },
+  });
+
+  return res.status(StatusCodes.CREATED).json({
+    isSuccess: true,
+    message: i18n.__("Location created successfully"),
+    user: user,
+  });
+};
+const updateUserLocation = async (req, res) => {
+  //countryId, stateId,
+  const { id: userLocationId } = req.params;
+  const { stateId } = req.body;
+  const zodModel = UpdateUserLocationZodModel.safeParse({
+    userLocationId: userLocationId,
+    stateId: stateId,
+    // isMain: isMain,
+  });
+
+  if (!zodModel.success) {
+    throw new BadRequestError(zodModel.error.errors[0].message);
+  }
+  console.log(req.user.userLocations);
+
+  const user = await prisma.user.update({
+    where: { id: req.user.id },
+    data: {
+      userLocations: {
+        update: {
+          where: { id: userLocationId },
+          data: {
+            //  isMain: isMain == true ? true : false,
+            state: { connect: { id: stateId } },
+          },
+        },
+      },
+    },
+    include: {
+      userLocations: {
+        include: {
+          state: {
+            include: { name: true, country: { include: { name: true } } },
+          },
+        },
+      },
     },
   });
 
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     message: i18n.__("Location updated successfully"),
-    userLocations: userLocations,
+    user: user,
   });
 };
 
 const changeUserMainLocation = async (req, res) => {
   //countryId, stateId,
   const { id: userLocationId } = req.params;
-  if (!userLocationId) {
-    throw new BadRequestError("User location id is required");
-  }
+  const zodModel = UpdateUserLocationZodModel.safeParse({
+    userLocationId: userLocationId,
+    // isMain: isMain,
+  });
 
-  const originalUserLocation = await prisma.userLocations.findFirst({
-    where: {
-      isMain: true,
-    },
-    select: {
-      id: true,
-    },
-  });
-  await prisma.userLocations.update({
-    where: {
-      id: originalUserLocation.id,
-    },
-    data: { isMain: false },
-  });
-  const userLocations = await prisma.userLocations.updateMany({
-    where: {
-      id: userLocationId,
-    },
-    data: { isMain: true },
-  });
-  if (!userLocations) {
-    throw new NotFoundError("User location not found");
+  if (!zodModel.success) {
+    throw new BadRequestError(zodModel.error.errors[0].message);
   }
+  console.log(req.user.userLocations);
+  const mainUserLocation = req.user.userLocations.filter(
+    (element) => element.isMain == true
+  );
+  console.log(mainUserLocation);
+  const mainUserLocationId =
+    mainUserLocation.length != 0 ? mainUserLocation?.at(0).id : undefined;
+  if (mainUserLocationId == undefined) {
+    throw new BadRequestError("Error in finding your main address");
+  } else {
+    await prisma.userLocations.update({
+      where: { id: mainUserLocationId },
+      data: {
+        isMain: false,
+      },
+    });
+  }
+  const user = await prisma.user.update({
+    where: { id: req.user.id },
+    data: {
+      userLocations: {
+        update: {
+          where: { id: userLocationId },
+          data: {
+            isMain: true,
+          },
+        },
+      },
+    },
+    include: {
+      userLocations: {
+        include: {
+          state: {
+            include: { name: true, country: { include: { name: true } } },
+          },
+        },
+      },
+    },
+  });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     message: i18n.__("Location updated successfully"),
-    userLocations: userLocations,
+    user: user,
   });
 };
 
@@ -419,32 +514,6 @@ const deleteUserLocation = async (req, res) => {
     message: i18n.__("Location deleted successfully"),
   });
 };
-
-const createUserLocation = async (req, res) => {
-  const { stateId } = req.body;
-
-  const zodModel = UpdateLocationZodModel.safeParse({
-    stateId: stateId,
-  });
-
-  if (!zodModel.success) {
-    throw new BadRequestError(zodModel.error.errors[0].message);
-  }
-
-  const userLocations = await prisma.userLocations.create({
-    data: {
-      user: { connect: { id: req.user.id } },
-      state: { connect: { id: stateId } },
-    },
-  });
-
-  return res.status(StatusCodes.CREATED).json({
-    isSuccess: true,
-    message: i18n.__("Location created successfully"),
-    userLocations: userLocations,
-  });
-};
-
 const showMe = async (req, res) => {
   // throw new BadRequestError("error");
 

@@ -11,7 +11,6 @@ model state {
   // userLocationsId          String?
   originDeliveryTaxes      deliveryTaxes[] @relation("OriginStateFees")
   destinationDeliveryTaxes deliveryTaxes[] @relation("DestinationStateFees")
-  user                     user[]
   createdAt                DateTime        @default(now())
   updatedAt                DateTime        @updatedAt
   location                 location[]

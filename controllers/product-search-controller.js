@@ -1,4 +1,3 @@
-const { CreateProductZodModel } = require("../models/create-product-zod-model");
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
 const {

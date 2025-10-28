@@ -558,7 +558,6 @@ exports.Prisma.UserScalarFieldEnum = {
   dateOfBirth: 'dateOfBirth',
   gender: 'gender',
   moneyInPocket: 'moneyInPocket',
-  stateId: 'stateId',
   phone: 'phone',
   email: 'email',
   role: 'role',

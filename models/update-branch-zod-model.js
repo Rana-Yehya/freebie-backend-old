@@ -28,8 +28,12 @@ const UpdateBranchZodModel = z.object({
       }
     )
     .optional(),
+  address: z
+    .string({ message: "Please enter an address" })
+    .url({ message: "Please enter a link" })
+    .optional(),
   // stateId: z.string({ message: "Please enter a state" }),
-  location: UpdateLocationZodModel,
+  location: UpdateLocationZodModel.optional(),
   //work hours
 });
 module.exports = { UpdateBranchZodModel };

@@ -411,16 +411,16 @@ function startAllWorkers() {
   console.log(`✅ All workers started (${workers.length} total)`);
 
   // Graceful shutdown
-  process.on("SIGTERM", async () => {
-    console.log("🛑 Shutting down workers gracefully...");
-    await Promise.all(workers.map((worker) => worker.close()));
-    process.exit(0);
-  });
+  // process.on("SIGTERM", async () => {
+  //   console.log("🛑 Shutting down workers gracefully...");
+  //   await Promise.all(workers.map((worker) => worker.()));
+  //   process.exit(0);
+  // });
 
-  process.on("SIGINT", async () => {
-    console.log("🛑 Shutting down workers gracefully...");
-    await Promise.all(workers.map((worker) => worker.close()));
-    process.exit(0);
-  });
+  // process.on("SIGINT", async () => {
+  //   console.log("🛑 Shutting down workers gracefully...");
+  //   await Promise.all(workers.map((worker) => worker.close()));
+  //   process.exit(0);
+  // });
 }
 startAllWorkers();

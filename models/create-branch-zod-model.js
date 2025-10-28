@@ -23,6 +23,10 @@ const CreateBranchZodModel = z.object({
       }
     )
     .optional(),
+  address: z
+    .string({ message: "Please enter an address" })
+    .url({ message: "Please enter a link" })
+    .optional(),
   // stateId: z.string({ message: "Please enter a state" }),
   location: CreateLocationZodModel,
   //work hours

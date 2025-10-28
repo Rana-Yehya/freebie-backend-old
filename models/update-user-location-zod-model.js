@@ -1,6 +1,6 @@
 const { z } = require("zod");
 
-const UpdateLocationZodModel = z.object({
+const UpdateUserLocationZodModel = z.object({
   userLocationId: z
     .string({
       message: "Please enter a location id",
@@ -12,6 +12,8 @@ const UpdateLocationZodModel = z.object({
   // storeId: z.string({ message: "Please enter a description" }),
   stateId: z.string({ message: "Please enter a state" }).uuid().optional(),
 
+  isMain: z.boolean().optional(),
+
   //work hours
 });
-module.exports = { UpdateLocationZodModel };
+module.exports = { UpdateUserLocationZodModel };

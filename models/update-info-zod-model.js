@@ -1,5 +1,5 @@
 const { z } = require("zod");
-const { UpdateLocaleZodModel } = require("./update-create-locole-zod-model");
+const { UpdateLocaleZodModel } = require("./update-locole-zod-model");
 
 const UpdateInfoZodModel = z.object({
   slug: z

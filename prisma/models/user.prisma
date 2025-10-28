@@ -9,8 +9,6 @@ model user {
   // countryId          String?
   // userCountry        country?      @relation(fields: [countryId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   userLocations userLocations[]
-  stateId       String?
-  state         state?          @relation(fields: [stateId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   phone         String          @unique
   email         String          @unique
   // password           String?
@@ -38,4 +36,7 @@ model userLocations {
   state   state?  @relation(fields: [stateId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   stateId String?
   isMain  Boolean @default(false)
+
+  @@unique([userId, stateId])
+  @@map("user_locations")
 }

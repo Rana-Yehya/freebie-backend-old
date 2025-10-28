@@ -28,8 +28,15 @@ const authenticateUserMiddleware = async (req, res, next) => {
         include: {
           user: {
             include: {
-              state: {
-                include: { name: true, country: { include: { name: true } } },
+              userLocations: {
+                include: {
+                  state: {
+                    include: {
+                      name: true,
+                      country: { include: { name: true } },
+                    },
+                  },
+                },
               },
             },
           },
@@ -127,7 +134,20 @@ const optionalAuthenticateUserMiddleware = async (req, res, next) => {
       const session = await prisma.session.findUnique({
         where: { id: decoded.sessionId },
         select: {
-          user: { include: { state: { include: { country: true } } } },
+          user: {
+            include: {
+              userLocations: {
+                include: {
+                  state: {
+                    include: {
+                      name: true,
+                      country: { include: { name: true } },
+                    },
+                  },
+                },
+              },
+            },
+          },
           store: { include: { password: false } },
           admin: { include: { password: false } },
         },

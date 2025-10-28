@@ -815,7 +815,6 @@ model state {
   // userLocationsId          String?
   originDeliveryTaxes      deliveryTaxes[] @relation("OriginStateFees")
   destinationDeliveryTaxes deliveryTaxes[] @relation("DestinationStateFees")
-  user                     user[]
   createdAt                DateTime        @default(now())
   updatedAt                DateTime        @updatedAt
   location                 location[]
@@ -1024,8 +1023,6 @@ model user {
   // countryId          String?
   // userCountry        country?      @relation(fields: [countryId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   userLocations userLocations[]
-  stateId       String?
-  state         state?          @relation(fields: [stateId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   phone         String          @unique
   email         String          @unique
   // password           String?

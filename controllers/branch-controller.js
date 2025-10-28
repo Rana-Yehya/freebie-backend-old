@@ -74,8 +74,9 @@ const createBranch = async (req, res, next) => {
   const zodModel = CreateBranchZodModel.safeParse({
     storeId: req.user.id,
     phone: phoneNumber,
+    address: address,
+
     location: {
-      address: address,
       stateId: stateId,
     },
   });
@@ -90,6 +91,7 @@ const createBranch = async (req, res, next) => {
       branches: {
         create: {
           phone: phoneNumber,
+          address: address,
           location: {
             create: {
               state: { connect: { id: stateId } },
@@ -116,8 +118,8 @@ const updateBranch = async (req, res, next) => {
   const zodModel = UpdateBranchZodModel.safeParse({
     branchId: id,
     phone: phoneNumber,
+    address: address,
     location: {
-      address: address,
       stateId: stateId,
     },
   });
@@ -129,6 +131,7 @@ const updateBranch = async (req, res, next) => {
     where: { id: id },
     data: {
       phone: phoneNumber || undefined,
+      address: address,
       location: {
         update: {
           state: stateId != undefined ? { connect: { id: stateId } } : {},

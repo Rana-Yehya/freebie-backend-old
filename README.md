@@ -32,6 +32,10 @@ Add subscription to stores.
 | Gold      | 14%                        | 2                 | 2         | 1 month     | Having collabrations with other stores in interest |
 | Diamond  | 0%                        | 2                 | 2         | 1 year      | This is accessed from our contracted stores only. |
 
+Adding search in bundles is not done
+Adding delivery taxes to shops is not done (thinking about adding it to a subscription)
+Adding packaging is not done
+
 # Stage Three
 
 Adding Advanced Features to the store.

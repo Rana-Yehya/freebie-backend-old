@@ -5314,7 +5314,6 @@ export namespace Prisma {
     userLocations: number
     originDeliveryTaxes: number
     destinationDeliveryTaxes: number
-    user: number
     location: number
   }
 
@@ -5323,7 +5322,6 @@ export namespace Prisma {
     userLocations?: boolean | StateCountOutputTypeCountUserLocationsArgs
     originDeliveryTaxes?: boolean | StateCountOutputTypeCountOriginDeliveryTaxesArgs
     destinationDeliveryTaxes?: boolean | StateCountOutputTypeCountDestinationDeliveryTaxesArgs
-    user?: boolean | StateCountOutputTypeCountUserArgs
     location?: boolean | StateCountOutputTypeCountLocationArgs
   }
 
@@ -5364,13 +5362,6 @@ export namespace Prisma {
    */
   export type StateCountOutputTypeCountDestinationDeliveryTaxesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: deliveryTaxesWhereInput
-  }
-
-  /**
-   * StateCountOutputType without action
-   */
-  export type StateCountOutputTypeCountUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: userWhereInput
   }
 
   /**
@@ -42268,7 +42259,6 @@ export namespace Prisma {
     userLocations?: boolean | state$userLocationsArgs<ExtArgs>
     originDeliveryTaxes?: boolean | state$originDeliveryTaxesArgs<ExtArgs>
     destinationDeliveryTaxes?: boolean | state$destinationDeliveryTaxesArgs<ExtArgs>
-    user?: boolean | state$userArgs<ExtArgs>
     location?: boolean | state$locationArgs<ExtArgs>
     _count?: boolean | StateCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["state"]>
@@ -42309,7 +42299,6 @@ export namespace Prisma {
     userLocations?: boolean | state$userLocationsArgs<ExtArgs>
     originDeliveryTaxes?: boolean | state$originDeliveryTaxesArgs<ExtArgs>
     destinationDeliveryTaxes?: boolean | state$destinationDeliveryTaxesArgs<ExtArgs>
-    user?: boolean | state$userArgs<ExtArgs>
     location?: boolean | state$locationArgs<ExtArgs>
     _count?: boolean | StateCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -42331,7 +42320,6 @@ export namespace Prisma {
       userLocations: Prisma.$userLocationsPayload<ExtArgs>[]
       originDeliveryTaxes: Prisma.$deliveryTaxesPayload<ExtArgs>[]
       destinationDeliveryTaxes: Prisma.$deliveryTaxesPayload<ExtArgs>[]
-      user: Prisma.$userPayload<ExtArgs>[]
       location: Prisma.$locationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -42740,7 +42728,6 @@ export namespace Prisma {
     userLocations<T extends state$userLocationsArgs<ExtArgs> = {}>(args?: Subset<T, state$userLocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$userLocationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     originDeliveryTaxes<T extends state$originDeliveryTaxesArgs<ExtArgs> = {}>(args?: Subset<T, state$originDeliveryTaxesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$deliveryTaxesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     destinationDeliveryTaxes<T extends state$destinationDeliveryTaxesArgs<ExtArgs> = {}>(args?: Subset<T, state$destinationDeliveryTaxesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$deliveryTaxesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    user<T extends state$userArgs<ExtArgs> = {}>(args?: Subset<T, state$userArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$userPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     location<T extends state$locationArgs<ExtArgs> = {}>(args?: Subset<T, state$locationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$locationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -43265,30 +43252,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: DeliveryTaxesScalarFieldEnum | DeliveryTaxesScalarFieldEnum[]
-  }
-
-  /**
-   * state.user
-   */
-  export type state$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the user
-     */
-    select?: userSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the user
-     */
-    omit?: userOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: userInclude<ExtArgs> | null
-    where?: userWhereInput
-    orderBy?: userOrderByWithRelationInput | userOrderByWithRelationInput[]
-    cursor?: userWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
@@ -50789,7 +50752,6 @@ export namespace Prisma {
     dateOfBirth: Date | null
     gender: string | null
     moneyInPocket: number | null
-    stateId: string | null
     phone: string | null
     email: string | null
     role: string | null
@@ -50804,7 +50766,6 @@ export namespace Prisma {
     dateOfBirth: Date | null
     gender: string | null
     moneyInPocket: number | null
-    stateId: string | null
     phone: string | null
     email: string | null
     role: string | null
@@ -50819,7 +50780,6 @@ export namespace Prisma {
     dateOfBirth: number
     gender: number
     moneyInPocket: number
-    stateId: number
     phone: number
     email: number
     role: number
@@ -50844,7 +50804,6 @@ export namespace Prisma {
     dateOfBirth?: true
     gender?: true
     moneyInPocket?: true
-    stateId?: true
     phone?: true
     email?: true
     role?: true
@@ -50859,7 +50818,6 @@ export namespace Prisma {
     dateOfBirth?: true
     gender?: true
     moneyInPocket?: true
-    stateId?: true
     phone?: true
     email?: true
     role?: true
@@ -50874,7 +50832,6 @@ export namespace Prisma {
     dateOfBirth?: true
     gender?: true
     moneyInPocket?: true
-    stateId?: true
     phone?: true
     email?: true
     role?: true
@@ -50976,7 +50933,6 @@ export namespace Prisma {
     dateOfBirth: Date | null
     gender: string | null
     moneyInPocket: number
-    stateId: string | null
     phone: string
     email: string
     role: string
@@ -51010,7 +50966,6 @@ export namespace Prisma {
     dateOfBirth?: boolean
     gender?: boolean
     moneyInPocket?: boolean
-    stateId?: boolean
     phone?: boolean
     email?: boolean
     role?: boolean
@@ -51018,7 +50973,6 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     userLocations?: boolean | user$userLocationsArgs<ExtArgs>
-    state?: boolean | user$stateArgs<ExtArgs>
     sessions?: boolean | user$sessionsArgs<ExtArgs>
     transaction?: boolean | user$transactionArgs<ExtArgs>
     userCart?: boolean | user$userCartArgs<ExtArgs>
@@ -51033,14 +50987,12 @@ export namespace Prisma {
     dateOfBirth?: boolean
     gender?: boolean
     moneyInPocket?: boolean
-    stateId?: boolean
     phone?: boolean
     email?: boolean
     role?: boolean
     isVerified?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    state?: boolean | user$stateArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type userSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -51049,14 +51001,12 @@ export namespace Prisma {
     dateOfBirth?: boolean
     gender?: boolean
     moneyInPocket?: boolean
-    stateId?: boolean
     phone?: boolean
     email?: boolean
     role?: boolean
     isVerified?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    state?: boolean | user$stateArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type userSelectScalar = {
@@ -51065,7 +51015,6 @@ export namespace Prisma {
     dateOfBirth?: boolean
     gender?: boolean
     moneyInPocket?: boolean
-    stateId?: boolean
     phone?: boolean
     email?: boolean
     role?: boolean
@@ -51074,10 +51023,9 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type userOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "dateOfBirth" | "gender" | "moneyInPocket" | "stateId" | "phone" | "email" | "role" | "isVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type userOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "dateOfBirth" | "gender" | "moneyInPocket" | "phone" | "email" | "role" | "isVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type userInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     userLocations?: boolean | user$userLocationsArgs<ExtArgs>
-    state?: boolean | user$stateArgs<ExtArgs>
     sessions?: boolean | user$sessionsArgs<ExtArgs>
     transaction?: boolean | user$transactionArgs<ExtArgs>
     userCart?: boolean | user$userCartArgs<ExtArgs>
@@ -51085,18 +51033,13 @@ export namespace Prisma {
     order?: boolean | user$orderArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type userIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    state?: boolean | user$stateArgs<ExtArgs>
-  }
-  export type userIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    state?: boolean | user$stateArgs<ExtArgs>
-  }
+  export type userIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type userIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $userPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "user"
     objects: {
       userLocations: Prisma.$userLocationsPayload<ExtArgs>[]
-      state: Prisma.$statePayload<ExtArgs> | null
       sessions: Prisma.$sessionPayload<ExtArgs>[]
       transaction: Prisma.$transactionPayload<ExtArgs>[]
       userCart: Prisma.$userCartPayload<ExtArgs> | null
@@ -51109,7 +51052,6 @@ export namespace Prisma {
       dateOfBirth: Date | null
       gender: string | null
       moneyInPocket: number
-      stateId: string | null
       phone: string
       email: string
       role: string
@@ -51511,7 +51453,6 @@ export namespace Prisma {
   export interface Prisma__userClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     userLocations<T extends user$userLocationsArgs<ExtArgs> = {}>(args?: Subset<T, user$userLocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$userLocationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    state<T extends user$stateArgs<ExtArgs> = {}>(args?: Subset<T, user$stateArgs<ExtArgs>>): Prisma__stateClient<$Result.GetResult<Prisma.$statePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     sessions<T extends user$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, user$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$sessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     transaction<T extends user$transactionArgs<ExtArgs> = {}>(args?: Subset<T, user$transactionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$transactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     userCart<T extends user$userCartArgs<ExtArgs> = {}>(args?: Subset<T, user$userCartArgs<ExtArgs>>): Prisma__userCartClient<$Result.GetResult<Prisma.$userCartPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -51551,7 +51492,6 @@ export namespace Prisma {
     readonly dateOfBirth: FieldRef<"user", 'DateTime'>
     readonly gender: FieldRef<"user", 'String'>
     readonly moneyInPocket: FieldRef<"user", 'Float'>
-    readonly stateId: FieldRef<"user", 'String'>
     readonly phone: FieldRef<"user", 'String'>
     readonly email: FieldRef<"user", 'String'>
     readonly role: FieldRef<"user", 'String'>
@@ -51807,10 +51747,6 @@ export namespace Prisma {
      */
     data: userCreateManyInput | userCreateManyInput[]
     skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: userIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -51881,10 +51817,6 @@ export namespace Prisma {
      * Limit how many users to update.
      */
     limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: userIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -51975,25 +51907,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserLocationsScalarFieldEnum | UserLocationsScalarFieldEnum[]
-  }
-
-  /**
-   * user.state
-   */
-  export type user$stateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the state
-     */
-    select?: stateSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the state
-     */
-    omit?: stateOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: stateInclude<ExtArgs> | null
-    where?: stateWhereInput
   }
 
   /**
@@ -53768,7 +53681,6 @@ export namespace Prisma {
     dateOfBirth: 'dateOfBirth',
     gender: 'gender',
     moneyInPocket: 'moneyInPocket',
-    stateId: 'stateId',
     phone: 'phone',
     email: 'email',
     role: 'role',
@@ -56579,7 +56491,6 @@ export namespace Prisma {
     userLocations?: UserLocationsListRelationFilter
     originDeliveryTaxes?: DeliveryTaxesListRelationFilter
     destinationDeliveryTaxes?: DeliveryTaxesListRelationFilter
-    user?: UserListRelationFilter
     location?: LocationListRelationFilter
   }
 
@@ -56595,7 +56506,6 @@ export namespace Prisma {
     userLocations?: userLocationsOrderByRelationAggregateInput
     originDeliveryTaxes?: deliveryTaxesOrderByRelationAggregateInput
     destinationDeliveryTaxes?: deliveryTaxesOrderByRelationAggregateInput
-    user?: userOrderByRelationAggregateInput
     location?: locationOrderByRelationAggregateInput
   }
 
@@ -56614,7 +56524,6 @@ export namespace Prisma {
     userLocations?: UserLocationsListRelationFilter
     originDeliveryTaxes?: DeliveryTaxesListRelationFilter
     destinationDeliveryTaxes?: DeliveryTaxesListRelationFilter
-    user?: UserListRelationFilter
     location?: LocationListRelationFilter
   }, "id" | "id" | "nameId">
 
@@ -57212,7 +57121,6 @@ export namespace Prisma {
     dateOfBirth?: DateTimeNullableFilter<"user"> | Date | string | null
     gender?: StringNullableFilter<"user"> | string | null
     moneyInPocket?: FloatFilter<"user"> | number
-    stateId?: StringNullableFilter<"user"> | string | null
     phone?: StringFilter<"user"> | string
     email?: StringFilter<"user"> | string
     role?: StringFilter<"user"> | string
@@ -57220,7 +57128,6 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"user"> | Date | string
     updatedAt?: DateTimeFilter<"user"> | Date | string
     userLocations?: UserLocationsListRelationFilter
-    state?: XOR<StateNullableScalarRelationFilter, stateWhereInput> | null
     sessions?: SessionListRelationFilter
     transaction?: TransactionListRelationFilter
     userCart?: XOR<UserCartNullableScalarRelationFilter, userCartWhereInput> | null
@@ -57234,7 +57141,6 @@ export namespace Prisma {
     dateOfBirth?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     moneyInPocket?: SortOrder
-    stateId?: SortOrderInput | SortOrder
     phone?: SortOrder
     email?: SortOrder
     role?: SortOrder
@@ -57242,7 +57148,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userLocations?: userLocationsOrderByRelationAggregateInput
-    state?: stateOrderByWithRelationInput
     sessions?: sessionOrderByRelationAggregateInput
     transaction?: transactionOrderByRelationAggregateInput
     userCart?: userCartOrderByWithRelationInput
@@ -57261,13 +57166,11 @@ export namespace Prisma {
     dateOfBirth?: DateTimeNullableFilter<"user"> | Date | string | null
     gender?: StringNullableFilter<"user"> | string | null
     moneyInPocket?: FloatFilter<"user"> | number
-    stateId?: StringNullableFilter<"user"> | string | null
     role?: StringFilter<"user"> | string
     isVerified?: BoolFilter<"user"> | boolean
     createdAt?: DateTimeFilter<"user"> | Date | string
     updatedAt?: DateTimeFilter<"user"> | Date | string
     userLocations?: UserLocationsListRelationFilter
-    state?: XOR<StateNullableScalarRelationFilter, stateWhereInput> | null
     sessions?: SessionListRelationFilter
     transaction?: TransactionListRelationFilter
     userCart?: XOR<UserCartNullableScalarRelationFilter, userCartWhereInput> | null
@@ -57281,7 +57184,6 @@ export namespace Prisma {
     dateOfBirth?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     moneyInPocket?: SortOrder
-    stateId?: SortOrderInput | SortOrder
     phone?: SortOrder
     email?: SortOrder
     role?: SortOrder
@@ -57304,7 +57206,6 @@ export namespace Prisma {
     dateOfBirth?: DateTimeNullableWithAggregatesFilter<"user"> | Date | string | null
     gender?: StringNullableWithAggregatesFilter<"user"> | string | null
     moneyInPocket?: FloatWithAggregatesFilter<"user"> | number
-    stateId?: StringNullableWithAggregatesFilter<"user"> | string | null
     phone?: StringWithAggregatesFilter<"user"> | string
     email?: StringWithAggregatesFilter<"user"> | string
     role?: StringWithAggregatesFilter<"user"> | string
@@ -59924,7 +59825,6 @@ export namespace Prisma {
     userLocations?: userLocationsCreateNestedManyWithoutStateInput
     originDeliveryTaxes?: deliveryTaxesCreateNestedManyWithoutOriginStateInput
     destinationDeliveryTaxes?: deliveryTaxesCreateNestedManyWithoutDestinationStateInput
-    user?: userCreateNestedManyWithoutStateInput
     location?: locationCreateNestedManyWithoutStateInput
   }
 
@@ -59938,7 +59838,6 @@ export namespace Prisma {
     userLocations?: userLocationsUncheckedCreateNestedManyWithoutStateInput
     originDeliveryTaxes?: deliveryTaxesUncheckedCreateNestedManyWithoutOriginStateInput
     destinationDeliveryTaxes?: deliveryTaxesUncheckedCreateNestedManyWithoutDestinationStateInput
-    user?: userUncheckedCreateNestedManyWithoutStateInput
     location?: locationUncheckedCreateNestedManyWithoutStateInput
   }
 
@@ -59952,7 +59851,6 @@ export namespace Prisma {
     userLocations?: userLocationsUpdateManyWithoutStateNestedInput
     originDeliveryTaxes?: deliveryTaxesUpdateManyWithoutOriginStateNestedInput
     destinationDeliveryTaxes?: deliveryTaxesUpdateManyWithoutDestinationStateNestedInput
-    user?: userUpdateManyWithoutStateNestedInput
     location?: locationUpdateManyWithoutStateNestedInput
   }
 
@@ -59966,7 +59864,6 @@ export namespace Prisma {
     userLocations?: userLocationsUncheckedUpdateManyWithoutStateNestedInput
     originDeliveryTaxes?: deliveryTaxesUncheckedUpdateManyWithoutOriginStateNestedInput
     destinationDeliveryTaxes?: deliveryTaxesUncheckedUpdateManyWithoutDestinationStateNestedInput
-    user?: userUncheckedUpdateManyWithoutStateNestedInput
     location?: locationUncheckedUpdateManyWithoutStateNestedInput
   }
 
@@ -60609,7 +60506,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userLocations?: userLocationsCreateNestedManyWithoutUserInput
-    state?: stateCreateNestedOneWithoutUserInput
     sessions?: sessionCreateNestedManyWithoutUserInput
     transaction?: transactionCreateNestedManyWithoutUserInput
     userCart?: userCartCreateNestedOneWithoutUserInput
@@ -60623,7 +60519,6 @@ export namespace Prisma {
     dateOfBirth?: Date | string | null
     gender?: string | null
     moneyInPocket?: number
-    stateId?: string | null
     phone: string
     email: string
     role?: string
@@ -60651,7 +60546,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userLocations?: userLocationsUpdateManyWithoutUserNestedInput
-    state?: stateUpdateOneWithoutUserNestedInput
     sessions?: sessionUpdateManyWithoutUserNestedInput
     transaction?: transactionUpdateManyWithoutUserNestedInput
     userCart?: userCartUpdateOneWithoutUserNestedInput
@@ -60665,7 +60559,6 @@ export namespace Prisma {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
-    stateId?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -60686,7 +60579,6 @@ export namespace Prisma {
     dateOfBirth?: Date | string | null
     gender?: string | null
     moneyInPocket?: number
-    stateId?: string | null
     phone: string
     email: string
     role?: string
@@ -60715,7 +60607,6 @@ export namespace Prisma {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
-    stateId?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -62889,12 +62780,6 @@ export namespace Prisma {
     none?: deliveryTaxesWhereInput
   }
 
-  export type UserListRelationFilter = {
-    every?: userWhereInput
-    some?: userWhereInput
-    none?: userWhereInput
-  }
-
   export type LocationListRelationFilter = {
     every?: locationWhereInput
     some?: locationWhereInput
@@ -62910,10 +62795,6 @@ export namespace Prisma {
   }
 
   export type deliveryTaxesOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type userOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -63406,7 +63287,6 @@ export namespace Prisma {
     dateOfBirth?: SortOrder
     gender?: SortOrder
     moneyInPocket?: SortOrder
-    stateId?: SortOrder
     phone?: SortOrder
     email?: SortOrder
     role?: SortOrder
@@ -63425,7 +63305,6 @@ export namespace Prisma {
     dateOfBirth?: SortOrder
     gender?: SortOrder
     moneyInPocket?: SortOrder
-    stateId?: SortOrder
     phone?: SortOrder
     email?: SortOrder
     role?: SortOrder
@@ -63440,7 +63319,6 @@ export namespace Prisma {
     dateOfBirth?: SortOrder
     gender?: SortOrder
     moneyInPocket?: SortOrder
-    stateId?: SortOrder
     phone?: SortOrder
     email?: SortOrder
     role?: SortOrder
@@ -66454,13 +66332,6 @@ export namespace Prisma {
     connect?: deliveryTaxesWhereUniqueInput | deliveryTaxesWhereUniqueInput[]
   }
 
-  export type userCreateNestedManyWithoutStateInput = {
-    create?: XOR<userCreateWithoutStateInput, userUncheckedCreateWithoutStateInput> | userCreateWithoutStateInput[] | userUncheckedCreateWithoutStateInput[]
-    connectOrCreate?: userCreateOrConnectWithoutStateInput | userCreateOrConnectWithoutStateInput[]
-    createMany?: userCreateManyStateInputEnvelope
-    connect?: userWhereUniqueInput | userWhereUniqueInput[]
-  }
-
   export type locationCreateNestedManyWithoutStateInput = {
     create?: XOR<locationCreateWithoutStateInput, locationUncheckedCreateWithoutStateInput> | locationCreateWithoutStateInput[] | locationUncheckedCreateWithoutStateInput[]
     connectOrCreate?: locationCreateOrConnectWithoutStateInput | locationCreateOrConnectWithoutStateInput[]
@@ -66494,13 +66365,6 @@ export namespace Prisma {
     connectOrCreate?: deliveryTaxesCreateOrConnectWithoutDestinationStateInput | deliveryTaxesCreateOrConnectWithoutDestinationStateInput[]
     createMany?: deliveryTaxesCreateManyDestinationStateInputEnvelope
     connect?: deliveryTaxesWhereUniqueInput | deliveryTaxesWhereUniqueInput[]
-  }
-
-  export type userUncheckedCreateNestedManyWithoutStateInput = {
-    create?: XOR<userCreateWithoutStateInput, userUncheckedCreateWithoutStateInput> | userCreateWithoutStateInput[] | userUncheckedCreateWithoutStateInput[]
-    connectOrCreate?: userCreateOrConnectWithoutStateInput | userCreateOrConnectWithoutStateInput[]
-    createMany?: userCreateManyStateInputEnvelope
-    connect?: userWhereUniqueInput | userWhereUniqueInput[]
   }
 
   export type locationUncheckedCreateNestedManyWithoutStateInput = {
@@ -66582,20 +66446,6 @@ export namespace Prisma {
     deleteMany?: deliveryTaxesScalarWhereInput | deliveryTaxesScalarWhereInput[]
   }
 
-  export type userUpdateManyWithoutStateNestedInput = {
-    create?: XOR<userCreateWithoutStateInput, userUncheckedCreateWithoutStateInput> | userCreateWithoutStateInput[] | userUncheckedCreateWithoutStateInput[]
-    connectOrCreate?: userCreateOrConnectWithoutStateInput | userCreateOrConnectWithoutStateInput[]
-    upsert?: userUpsertWithWhereUniqueWithoutStateInput | userUpsertWithWhereUniqueWithoutStateInput[]
-    createMany?: userCreateManyStateInputEnvelope
-    set?: userWhereUniqueInput | userWhereUniqueInput[]
-    disconnect?: userWhereUniqueInput | userWhereUniqueInput[]
-    delete?: userWhereUniqueInput | userWhereUniqueInput[]
-    connect?: userWhereUniqueInput | userWhereUniqueInput[]
-    update?: userUpdateWithWhereUniqueWithoutStateInput | userUpdateWithWhereUniqueWithoutStateInput[]
-    updateMany?: userUpdateManyWithWhereWithoutStateInput | userUpdateManyWithWhereWithoutStateInput[]
-    deleteMany?: userScalarWhereInput | userScalarWhereInput[]
-  }
-
   export type locationUpdateManyWithoutStateNestedInput = {
     create?: XOR<locationCreateWithoutStateInput, locationUncheckedCreateWithoutStateInput> | locationCreateWithoutStateInput[] | locationUncheckedCreateWithoutStateInput[]
     connectOrCreate?: locationCreateOrConnectWithoutStateInput | locationCreateOrConnectWithoutStateInput[]
@@ -66664,20 +66514,6 @@ export namespace Prisma {
     update?: deliveryTaxesUpdateWithWhereUniqueWithoutDestinationStateInput | deliveryTaxesUpdateWithWhereUniqueWithoutDestinationStateInput[]
     updateMany?: deliveryTaxesUpdateManyWithWhereWithoutDestinationStateInput | deliveryTaxesUpdateManyWithWhereWithoutDestinationStateInput[]
     deleteMany?: deliveryTaxesScalarWhereInput | deliveryTaxesScalarWhereInput[]
-  }
-
-  export type userUncheckedUpdateManyWithoutStateNestedInput = {
-    create?: XOR<userCreateWithoutStateInput, userUncheckedCreateWithoutStateInput> | userCreateWithoutStateInput[] | userUncheckedCreateWithoutStateInput[]
-    connectOrCreate?: userCreateOrConnectWithoutStateInput | userCreateOrConnectWithoutStateInput[]
-    upsert?: userUpsertWithWhereUniqueWithoutStateInput | userUpsertWithWhereUniqueWithoutStateInput[]
-    createMany?: userCreateManyStateInputEnvelope
-    set?: userWhereUniqueInput | userWhereUniqueInput[]
-    disconnect?: userWhereUniqueInput | userWhereUniqueInput[]
-    delete?: userWhereUniqueInput | userWhereUniqueInput[]
-    connect?: userWhereUniqueInput | userWhereUniqueInput[]
-    update?: userUpdateWithWhereUniqueWithoutStateInput | userUpdateWithWhereUniqueWithoutStateInput[]
-    updateMany?: userUpdateManyWithWhereWithoutStateInput | userUpdateManyWithWhereWithoutStateInput[]
-    deleteMany?: userScalarWhereInput | userScalarWhereInput[]
   }
 
   export type locationUncheckedUpdateManyWithoutStateNestedInput = {
@@ -67281,12 +67117,6 @@ export namespace Prisma {
     connect?: userLocationsWhereUniqueInput | userLocationsWhereUniqueInput[]
   }
 
-  export type stateCreateNestedOneWithoutUserInput = {
-    create?: XOR<stateCreateWithoutUserInput, stateUncheckedCreateWithoutUserInput>
-    connectOrCreate?: stateCreateOrConnectWithoutUserInput
-    connect?: stateWhereUniqueInput
-  }
-
   export type sessionCreateNestedManyWithoutUserInput = {
     create?: XOR<sessionCreateWithoutUserInput, sessionUncheckedCreateWithoutUserInput> | sessionCreateWithoutUserInput[] | sessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: sessionCreateOrConnectWithoutUserInput | sessionCreateOrConnectWithoutUserInput[]
@@ -67374,16 +67204,6 @@ export namespace Prisma {
     update?: userLocationsUpdateWithWhereUniqueWithoutUserInput | userLocationsUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: userLocationsUpdateManyWithWhereWithoutUserInput | userLocationsUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: userLocationsScalarWhereInput | userLocationsScalarWhereInput[]
-  }
-
-  export type stateUpdateOneWithoutUserNestedInput = {
-    create?: XOR<stateCreateWithoutUserInput, stateUncheckedCreateWithoutUserInput>
-    connectOrCreate?: stateCreateOrConnectWithoutUserInput
-    upsert?: stateUpsertWithoutUserInput
-    disconnect?: stateWhereInput | boolean
-    delete?: stateWhereInput | boolean
-    connect?: stateWhereUniqueInput
-    update?: XOR<XOR<stateUpdateToOneWithWhereWithoutUserInput, stateUpdateWithoutUserInput>, stateUncheckedUpdateWithoutUserInput>
   }
 
   export type sessionUpdateManyWithoutUserNestedInput = {
@@ -70114,7 +69934,6 @@ export namespace Prisma {
     userLocations?: userLocationsCreateNestedManyWithoutStateInput
     originDeliveryTaxes?: deliveryTaxesCreateNestedManyWithoutOriginStateInput
     destinationDeliveryTaxes?: deliveryTaxesCreateNestedManyWithoutDestinationStateInput
-    user?: userCreateNestedManyWithoutStateInput
     location?: locationCreateNestedManyWithoutStateInput
   }
 
@@ -70127,7 +69946,6 @@ export namespace Prisma {
     userLocations?: userLocationsUncheckedCreateNestedManyWithoutStateInput
     originDeliveryTaxes?: deliveryTaxesUncheckedCreateNestedManyWithoutOriginStateInput
     destinationDeliveryTaxes?: deliveryTaxesUncheckedCreateNestedManyWithoutDestinationStateInput
-    user?: userUncheckedCreateNestedManyWithoutStateInput
     location?: locationUncheckedCreateNestedManyWithoutStateInput
   }
 
@@ -70211,7 +70029,6 @@ export namespace Prisma {
     userLocations?: userLocationsUpdateManyWithoutStateNestedInput
     originDeliveryTaxes?: deliveryTaxesUpdateManyWithoutOriginStateNestedInput
     destinationDeliveryTaxes?: deliveryTaxesUpdateManyWithoutDestinationStateNestedInput
-    user?: userUpdateManyWithoutStateNestedInput
     location?: locationUpdateManyWithoutStateNestedInput
   }
 
@@ -70224,7 +70041,6 @@ export namespace Prisma {
     userLocations?: userLocationsUncheckedUpdateManyWithoutStateNestedInput
     originDeliveryTaxes?: deliveryTaxesUncheckedUpdateManyWithoutOriginStateNestedInput
     destinationDeliveryTaxes?: deliveryTaxesUncheckedUpdateManyWithoutDestinationStateNestedInput
-    user?: userUncheckedUpdateManyWithoutStateNestedInput
     location?: locationUncheckedUpdateManyWithoutStateNestedInput
   }
 
@@ -70349,7 +70165,6 @@ export namespace Prisma {
     userLocations?: userLocationsCreateNestedManyWithoutStateInput
     originDeliveryTaxes?: deliveryTaxesCreateNestedManyWithoutOriginStateInput
     destinationDeliveryTaxes?: deliveryTaxesCreateNestedManyWithoutDestinationStateInput
-    user?: userCreateNestedManyWithoutStateInput
     location?: locationCreateNestedManyWithoutStateInput
   }
 
@@ -70362,7 +70177,6 @@ export namespace Prisma {
     userLocations?: userLocationsUncheckedCreateNestedManyWithoutStateInput
     originDeliveryTaxes?: deliveryTaxesUncheckedCreateNestedManyWithoutOriginStateInput
     destinationDeliveryTaxes?: deliveryTaxesUncheckedCreateNestedManyWithoutDestinationStateInput
-    user?: userUncheckedCreateNestedManyWithoutStateInput
     location?: locationUncheckedCreateNestedManyWithoutStateInput
   }
 
@@ -71070,7 +70884,6 @@ export namespace Prisma {
     city?: cityCreateNestedManyWithoutStateInput
     userLocations?: userLocationsCreateNestedManyWithoutStateInput
     destinationDeliveryTaxes?: deliveryTaxesCreateNestedManyWithoutDestinationStateInput
-    user?: userCreateNestedManyWithoutStateInput
     location?: locationCreateNestedManyWithoutStateInput
   }
 
@@ -71083,7 +70896,6 @@ export namespace Prisma {
     city?: cityUncheckedCreateNestedManyWithoutStateInput
     userLocations?: userLocationsUncheckedCreateNestedManyWithoutStateInput
     destinationDeliveryTaxes?: deliveryTaxesUncheckedCreateNestedManyWithoutDestinationStateInput
-    user?: userUncheckedCreateNestedManyWithoutStateInput
     location?: locationUncheckedCreateNestedManyWithoutStateInput
   }
 
@@ -71101,7 +70913,6 @@ export namespace Prisma {
     city?: cityCreateNestedManyWithoutStateInput
     userLocations?: userLocationsCreateNestedManyWithoutStateInput
     originDeliveryTaxes?: deliveryTaxesCreateNestedManyWithoutOriginStateInput
-    user?: userCreateNestedManyWithoutStateInput
     location?: locationCreateNestedManyWithoutStateInput
   }
 
@@ -71114,7 +70925,6 @@ export namespace Prisma {
     city?: cityUncheckedCreateNestedManyWithoutStateInput
     userLocations?: userLocationsUncheckedCreateNestedManyWithoutStateInput
     originDeliveryTaxes?: deliveryTaxesUncheckedCreateNestedManyWithoutOriginStateInput
-    user?: userUncheckedCreateNestedManyWithoutStateInput
     location?: locationUncheckedCreateNestedManyWithoutStateInput
   }
 
@@ -71203,7 +71013,6 @@ export namespace Prisma {
     city?: cityUpdateManyWithoutStateNestedInput
     userLocations?: userLocationsUpdateManyWithoutStateNestedInput
     destinationDeliveryTaxes?: deliveryTaxesUpdateManyWithoutDestinationStateNestedInput
-    user?: userUpdateManyWithoutStateNestedInput
     location?: locationUpdateManyWithoutStateNestedInput
   }
 
@@ -71216,7 +71025,6 @@ export namespace Prisma {
     city?: cityUncheckedUpdateManyWithoutStateNestedInput
     userLocations?: userLocationsUncheckedUpdateManyWithoutStateNestedInput
     destinationDeliveryTaxes?: deliveryTaxesUncheckedUpdateManyWithoutDestinationStateNestedInput
-    user?: userUncheckedUpdateManyWithoutStateNestedInput
     location?: locationUncheckedUpdateManyWithoutStateNestedInput
   }
 
@@ -71240,7 +71048,6 @@ export namespace Prisma {
     city?: cityUpdateManyWithoutStateNestedInput
     userLocations?: userLocationsUpdateManyWithoutStateNestedInput
     originDeliveryTaxes?: deliveryTaxesUpdateManyWithoutOriginStateNestedInput
-    user?: userUpdateManyWithoutStateNestedInput
     location?: locationUpdateManyWithoutStateNestedInput
   }
 
@@ -71253,7 +71060,6 @@ export namespace Prisma {
     city?: cityUncheckedUpdateManyWithoutStateNestedInput
     userLocations?: userLocationsUncheckedUpdateManyWithoutStateNestedInput
     originDeliveryTaxes?: deliveryTaxesUncheckedUpdateManyWithoutOriginStateNestedInput
-    user?: userUncheckedUpdateManyWithoutStateNestedInput
     location?: locationUncheckedUpdateManyWithoutStateNestedInput
   }
 
@@ -72525,7 +72331,6 @@ export namespace Prisma {
     userLocations?: userLocationsCreateNestedManyWithoutStateInput
     originDeliveryTaxes?: deliveryTaxesCreateNestedManyWithoutOriginStateInput
     destinationDeliveryTaxes?: deliveryTaxesCreateNestedManyWithoutDestinationStateInput
-    user?: userCreateNestedManyWithoutStateInput
     location?: locationCreateNestedManyWithoutStateInput
   }
 
@@ -72538,7 +72343,6 @@ export namespace Prisma {
     userLocations?: userLocationsUncheckedCreateNestedManyWithoutStateInput
     originDeliveryTaxes?: deliveryTaxesUncheckedCreateNestedManyWithoutOriginStateInput
     destinationDeliveryTaxes?: deliveryTaxesUncheckedCreateNestedManyWithoutDestinationStateInput
-    user?: userUncheckedCreateNestedManyWithoutStateInput
     location?: locationUncheckedCreateNestedManyWithoutStateInput
   }
 
@@ -73140,7 +72944,6 @@ export namespace Prisma {
     userLocations?: userLocationsUpdateManyWithoutStateNestedInput
     originDeliveryTaxes?: deliveryTaxesUpdateManyWithoutOriginStateNestedInput
     destinationDeliveryTaxes?: deliveryTaxesUpdateManyWithoutDestinationStateNestedInput
-    user?: userUpdateManyWithoutStateNestedInput
     location?: locationUpdateManyWithoutStateNestedInput
   }
 
@@ -73153,7 +72956,6 @@ export namespace Prisma {
     userLocations?: userLocationsUncheckedUpdateManyWithoutStateNestedInput
     originDeliveryTaxes?: deliveryTaxesUncheckedUpdateManyWithoutOriginStateNestedInput
     destinationDeliveryTaxes?: deliveryTaxesUncheckedUpdateManyWithoutDestinationStateNestedInput
-    user?: userUncheckedUpdateManyWithoutStateNestedInput
     location?: locationUncheckedUpdateManyWithoutStateNestedInput
   }
 
@@ -73587,7 +73389,6 @@ export namespace Prisma {
     userLocations?: userLocationsCreateNestedManyWithoutStateInput
     originDeliveryTaxes?: deliveryTaxesCreateNestedManyWithoutOriginStateInput
     destinationDeliveryTaxes?: deliveryTaxesCreateNestedManyWithoutDestinationStateInput
-    user?: userCreateNestedManyWithoutStateInput
   }
 
   export type stateUncheckedCreateWithoutLocationInput = {
@@ -73600,7 +73401,6 @@ export namespace Prisma {
     userLocations?: userLocationsUncheckedCreateNestedManyWithoutStateInput
     originDeliveryTaxes?: deliveryTaxesUncheckedCreateNestedManyWithoutOriginStateInput
     destinationDeliveryTaxes?: deliveryTaxesUncheckedCreateNestedManyWithoutDestinationStateInput
-    user?: userUncheckedCreateNestedManyWithoutStateInput
   }
 
   export type stateCreateOrConnectWithoutLocationInput = {
@@ -73706,7 +73506,6 @@ export namespace Prisma {
     userLocations?: userLocationsUpdateManyWithoutStateNestedInput
     originDeliveryTaxes?: deliveryTaxesUpdateManyWithoutOriginStateNestedInput
     destinationDeliveryTaxes?: deliveryTaxesUpdateManyWithoutDestinationStateNestedInput
-    user?: userUpdateManyWithoutStateNestedInput
   }
 
   export type stateUncheckedUpdateWithoutLocationInput = {
@@ -73719,7 +73518,6 @@ export namespace Prisma {
     userLocations?: userLocationsUncheckedUpdateManyWithoutStateNestedInput
     originDeliveryTaxes?: deliveryTaxesUncheckedUpdateManyWithoutOriginStateNestedInput
     destinationDeliveryTaxes?: deliveryTaxesUncheckedUpdateManyWithoutDestinationStateNestedInput
-    user?: userUncheckedUpdateManyWithoutStateNestedInput
   }
 
   export type branchUpsertWithoutLocationInput = {
@@ -74037,7 +73835,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userLocations?: userLocationsCreateNestedManyWithoutUserInput
-    state?: stateCreateNestedOneWithoutUserInput
     sessions?: sessionCreateNestedManyWithoutUserInput
     transaction?: transactionCreateNestedManyWithoutUserInput
     userCart?: userCartCreateNestedOneWithoutUserInput
@@ -74050,7 +73847,6 @@ export namespace Prisma {
     dateOfBirth?: Date | string | null
     gender?: string | null
     moneyInPocket?: number
-    stateId?: string | null
     phone: string
     email: string
     role?: string
@@ -74179,7 +73975,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userLocations?: userLocationsUpdateManyWithoutUserNestedInput
-    state?: stateUpdateOneWithoutUserNestedInput
     sessions?: sessionUpdateManyWithoutUserNestedInput
     transaction?: transactionUpdateManyWithoutUserNestedInput
     userCart?: userCartUpdateOneWithoutUserNestedInput
@@ -74192,7 +73987,6 @@ export namespace Prisma {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
-    stateId?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -75928,7 +75722,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userLocations?: userLocationsCreateNestedManyWithoutUserInput
-    state?: stateCreateNestedOneWithoutUserInput
     sessions?: sessionCreateNestedManyWithoutUserInput
     transaction?: transactionCreateNestedManyWithoutUserInput
     userCart?: userCartCreateNestedOneWithoutUserInput
@@ -75941,7 +75734,6 @@ export namespace Prisma {
     dateOfBirth?: Date | string | null
     gender?: string | null
     moneyInPocket?: number
-    stateId?: string | null
     phone: string
     email: string
     role?: string
@@ -76047,7 +75839,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userLocations?: userLocationsUpdateManyWithoutUserNestedInput
-    state?: stateUpdateOneWithoutUserNestedInput
     sessions?: sessionUpdateManyWithoutUserNestedInput
     transaction?: transactionUpdateManyWithoutUserNestedInput
     userCart?: userCartUpdateOneWithoutUserNestedInput
@@ -76060,7 +75851,6 @@ export namespace Prisma {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
-    stateId?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -76156,7 +75946,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userLocations?: userLocationsCreateNestedManyWithoutUserInput
-    state?: stateCreateNestedOneWithoutUserInput
     transaction?: transactionCreateNestedManyWithoutUserInput
     userCart?: userCartCreateNestedOneWithoutUserInput
     review?: reviewCreateNestedManyWithoutUserInput
@@ -76169,7 +75958,6 @@ export namespace Prisma {
     dateOfBirth?: Date | string | null
     gender?: string | null
     moneyInPocket?: number
-    stateId?: string | null
     phone: string
     email: string
     role?: string
@@ -76296,7 +76084,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userLocations?: userLocationsUpdateManyWithoutUserNestedInput
-    state?: stateUpdateOneWithoutUserNestedInput
     transaction?: transactionUpdateManyWithoutUserNestedInput
     userCart?: userCartUpdateOneWithoutUserNestedInput
     review?: reviewUpdateManyWithoutUserNestedInput
@@ -76309,7 +76096,6 @@ export namespace Prisma {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
-    stateId?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -76619,56 +76405,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type userCreateWithoutStateInput = {
-    id?: string
-    name: string
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    moneyInPocket?: number
-    phone: string
-    email: string
-    role?: string
-    isVerified?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    userLocations?: userLocationsCreateNestedManyWithoutUserInput
-    sessions?: sessionCreateNestedManyWithoutUserInput
-    transaction?: transactionCreateNestedManyWithoutUserInput
-    userCart?: userCartCreateNestedOneWithoutUserInput
-    review?: reviewCreateNestedManyWithoutUserInput
-    order?: orderCreateNestedManyWithoutUserInput
-  }
-
-  export type userUncheckedCreateWithoutStateInput = {
-    id?: string
-    name: string
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    moneyInPocket?: number
-    phone: string
-    email: string
-    role?: string
-    isVerified?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    userLocations?: userLocationsUncheckedCreateNestedManyWithoutUserInput
-    sessions?: sessionUncheckedCreateNestedManyWithoutUserInput
-    transaction?: transactionUncheckedCreateNestedManyWithoutUserInput
-    userCart?: userCartUncheckedCreateNestedOneWithoutUserInput
-    review?: reviewUncheckedCreateNestedManyWithoutUserInput
-    order?: orderUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type userCreateOrConnectWithoutStateInput = {
-    where: userWhereUniqueInput
-    create: XOR<userCreateWithoutStateInput, userUncheckedCreateWithoutStateInput>
-  }
-
-  export type userCreateManyStateInputEnvelope = {
-    data: userCreateManyStateInput | userCreateManyStateInput[]
-    skipDuplicates?: boolean
-  }
-
   export type locationCreateWithoutStateInput = {
     id?: string
     address?: string | null
@@ -76881,40 +76617,6 @@ export namespace Prisma {
   export type deliveryTaxesUpdateManyWithWhereWithoutDestinationStateInput = {
     where: deliveryTaxesScalarWhereInput
     data: XOR<deliveryTaxesUpdateManyMutationInput, deliveryTaxesUncheckedUpdateManyWithoutDestinationStateInput>
-  }
-
-  export type userUpsertWithWhereUniqueWithoutStateInput = {
-    where: userWhereUniqueInput
-    update: XOR<userUpdateWithoutStateInput, userUncheckedUpdateWithoutStateInput>
-    create: XOR<userCreateWithoutStateInput, userUncheckedCreateWithoutStateInput>
-  }
-
-  export type userUpdateWithWhereUniqueWithoutStateInput = {
-    where: userWhereUniqueInput
-    data: XOR<userUpdateWithoutStateInput, userUncheckedUpdateWithoutStateInput>
-  }
-
-  export type userUpdateManyWithWhereWithoutStateInput = {
-    where: userScalarWhereInput
-    data: XOR<userUpdateManyMutationInput, userUncheckedUpdateManyWithoutStateInput>
-  }
-
-  export type userScalarWhereInput = {
-    AND?: userScalarWhereInput | userScalarWhereInput[]
-    OR?: userScalarWhereInput[]
-    NOT?: userScalarWhereInput | userScalarWhereInput[]
-    id?: StringFilter<"user"> | string
-    name?: StringFilter<"user"> | string
-    dateOfBirth?: DateTimeNullableFilter<"user"> | Date | string | null
-    gender?: StringNullableFilter<"user"> | string | null
-    moneyInPocket?: FloatFilter<"user"> | number
-    stateId?: StringNullableFilter<"user"> | string | null
-    phone?: StringFilter<"user"> | string
-    email?: StringFilter<"user"> | string
-    role?: StringFilter<"user"> | string
-    isVerified?: BoolFilter<"user"> | boolean
-    createdAt?: DateTimeFilter<"user"> | Date | string
-    updatedAt?: DateTimeFilter<"user"> | Date | string
   }
 
   export type locationUpsertWithWhereUniqueWithoutStateInput = {
@@ -78124,7 +77826,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userLocations?: userLocationsCreateNestedManyWithoutUserInput
-    state?: stateCreateNestedOneWithoutUserInput
     sessions?: sessionCreateNestedManyWithoutUserInput
     userCart?: userCartCreateNestedOneWithoutUserInput
     review?: reviewCreateNestedManyWithoutUserInput
@@ -78137,7 +77838,6 @@ export namespace Prisma {
     dateOfBirth?: Date | string | null
     gender?: string | null
     moneyInPocket?: number
-    stateId?: string | null
     phone: string
     email: string
     role?: string
@@ -78289,7 +77989,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userLocations?: userLocationsUpdateManyWithoutUserNestedInput
-    state?: stateUpdateOneWithoutUserNestedInput
     sessions?: sessionUpdateManyWithoutUserNestedInput
     userCart?: userCartUpdateOneWithoutUserNestedInput
     review?: reviewUpdateManyWithoutUserNestedInput
@@ -78302,7 +78001,6 @@ export namespace Prisma {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
-    stateId?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -78456,7 +78154,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userLocations?: userLocationsCreateNestedManyWithoutUserInput
-    state?: stateCreateNestedOneWithoutUserInput
     sessions?: sessionCreateNestedManyWithoutUserInput
     transaction?: transactionCreateNestedManyWithoutUserInput
     review?: reviewCreateNestedManyWithoutUserInput
@@ -78469,7 +78166,6 @@ export namespace Prisma {
     dateOfBirth?: Date | string | null
     gender?: string | null
     moneyInPocket?: number
-    stateId?: string | null
     phone: string
     email: string
     role?: string
@@ -78542,7 +78238,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userLocations?: userLocationsUpdateManyWithoutUserNestedInput
-    state?: stateUpdateOneWithoutUserNestedInput
     sessions?: sessionUpdateManyWithoutUserNestedInput
     transaction?: transactionUpdateManyWithoutUserNestedInput
     review?: reviewUpdateManyWithoutUserNestedInput
@@ -78555,7 +78250,6 @@ export namespace Prisma {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
-    stateId?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -78605,37 +78299,6 @@ export namespace Prisma {
   export type userLocationsCreateManyUserInputEnvelope = {
     data: userLocationsCreateManyUserInput | userLocationsCreateManyUserInput[]
     skipDuplicates?: boolean
-  }
-
-  export type stateCreateWithoutUserInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    name: localeCreateNestedOneWithoutStateInput
-    country: countryCreateNestedOneWithoutStateInput
-    city?: cityCreateNestedManyWithoutStateInput
-    userLocations?: userLocationsCreateNestedManyWithoutStateInput
-    originDeliveryTaxes?: deliveryTaxesCreateNestedManyWithoutOriginStateInput
-    destinationDeliveryTaxes?: deliveryTaxesCreateNestedManyWithoutDestinationStateInput
-    location?: locationCreateNestedManyWithoutStateInput
-  }
-
-  export type stateUncheckedCreateWithoutUserInput = {
-    id?: string
-    nameId: string
-    countryId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    city?: cityUncheckedCreateNestedManyWithoutStateInput
-    userLocations?: userLocationsUncheckedCreateNestedManyWithoutStateInput
-    originDeliveryTaxes?: deliveryTaxesUncheckedCreateNestedManyWithoutOriginStateInput
-    destinationDeliveryTaxes?: deliveryTaxesUncheckedCreateNestedManyWithoutDestinationStateInput
-    location?: locationUncheckedCreateNestedManyWithoutStateInput
-  }
-
-  export type stateCreateOrConnectWithoutUserInput = {
-    where: stateWhereUniqueInput
-    create: XOR<stateCreateWithoutUserInput, stateUncheckedCreateWithoutUserInput>
   }
 
   export type sessionCreateWithoutUserInput = {
@@ -78815,43 +78478,6 @@ export namespace Prisma {
     data: XOR<userLocationsUpdateManyMutationInput, userLocationsUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type stateUpsertWithoutUserInput = {
-    update: XOR<stateUpdateWithoutUserInput, stateUncheckedUpdateWithoutUserInput>
-    create: XOR<stateCreateWithoutUserInput, stateUncheckedCreateWithoutUserInput>
-    where?: stateWhereInput
-  }
-
-  export type stateUpdateToOneWithWhereWithoutUserInput = {
-    where?: stateWhereInput
-    data: XOR<stateUpdateWithoutUserInput, stateUncheckedUpdateWithoutUserInput>
-  }
-
-  export type stateUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: localeUpdateOneRequiredWithoutStateNestedInput
-    country?: countryUpdateOneRequiredWithoutStateNestedInput
-    city?: cityUpdateManyWithoutStateNestedInput
-    userLocations?: userLocationsUpdateManyWithoutStateNestedInput
-    originDeliveryTaxes?: deliveryTaxesUpdateManyWithoutOriginStateNestedInput
-    destinationDeliveryTaxes?: deliveryTaxesUpdateManyWithoutDestinationStateNestedInput
-    location?: locationUpdateManyWithoutStateNestedInput
-  }
-
-  export type stateUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nameId?: StringFieldUpdateOperationsInput | string
-    countryId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    city?: cityUncheckedUpdateManyWithoutStateNestedInput
-    userLocations?: userLocationsUncheckedUpdateManyWithoutStateNestedInput
-    originDeliveryTaxes?: deliveryTaxesUncheckedUpdateManyWithoutOriginStateNestedInput
-    destinationDeliveryTaxes?: deliveryTaxesUncheckedUpdateManyWithoutDestinationStateNestedInput
-    location?: locationUncheckedUpdateManyWithoutStateNestedInput
-  }
-
   export type sessionUpsertWithWhereUniqueWithoutUserInput = {
     where: sessionWhereUniqueInput
     update: XOR<sessionUpdateWithoutUserInput, sessionUncheckedUpdateWithoutUserInput>
@@ -78959,7 +78585,6 @@ export namespace Prisma {
     isVerified?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    state?: stateCreateNestedOneWithoutUserInput
     sessions?: sessionCreateNestedManyWithoutUserInput
     transaction?: transactionCreateNestedManyWithoutUserInput
     userCart?: userCartCreateNestedOneWithoutUserInput
@@ -78973,7 +78598,6 @@ export namespace Prisma {
     dateOfBirth?: Date | string | null
     gender?: string | null
     moneyInPocket?: number
-    stateId?: string | null
     phone: string
     email: string
     role?: string
@@ -79001,7 +78625,6 @@ export namespace Prisma {
     city?: cityCreateNestedManyWithoutStateInput
     originDeliveryTaxes?: deliveryTaxesCreateNestedManyWithoutOriginStateInput
     destinationDeliveryTaxes?: deliveryTaxesCreateNestedManyWithoutDestinationStateInput
-    user?: userCreateNestedManyWithoutStateInput
     location?: locationCreateNestedManyWithoutStateInput
   }
 
@@ -79014,7 +78637,6 @@ export namespace Prisma {
     city?: cityUncheckedCreateNestedManyWithoutStateInput
     originDeliveryTaxes?: deliveryTaxesUncheckedCreateNestedManyWithoutOriginStateInput
     destinationDeliveryTaxes?: deliveryTaxesUncheckedCreateNestedManyWithoutDestinationStateInput
-    user?: userUncheckedCreateNestedManyWithoutStateInput
     location?: locationUncheckedCreateNestedManyWithoutStateInput
   }
 
@@ -79046,7 +78668,6 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    state?: stateUpdateOneWithoutUserNestedInput
     sessions?: sessionUpdateManyWithoutUserNestedInput
     transaction?: transactionUpdateManyWithoutUserNestedInput
     userCart?: userCartUpdateOneWithoutUserNestedInput
@@ -79060,7 +78681,6 @@ export namespace Prisma {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
-    stateId?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -79094,7 +78714,6 @@ export namespace Prisma {
     city?: cityUpdateManyWithoutStateNestedInput
     originDeliveryTaxes?: deliveryTaxesUpdateManyWithoutOriginStateNestedInput
     destinationDeliveryTaxes?: deliveryTaxesUpdateManyWithoutDestinationStateNestedInput
-    user?: userUpdateManyWithoutStateNestedInput
     location?: locationUpdateManyWithoutStateNestedInput
   }
 
@@ -79107,7 +78726,6 @@ export namespace Prisma {
     city?: cityUncheckedUpdateManyWithoutStateNestedInput
     originDeliveryTaxes?: deliveryTaxesUncheckedUpdateManyWithoutOriginStateNestedInput
     destinationDeliveryTaxes?: deliveryTaxesUncheckedUpdateManyWithoutDestinationStateNestedInput
-    user?: userUncheckedUpdateManyWithoutStateNestedInput
     location?: locationUncheckedUpdateManyWithoutStateNestedInput
   }
 
@@ -79555,7 +79173,6 @@ export namespace Prisma {
     userLocations?: userLocationsUpdateManyWithoutStateNestedInput
     originDeliveryTaxes?: deliveryTaxesUpdateManyWithoutOriginStateNestedInput
     destinationDeliveryTaxes?: deliveryTaxesUpdateManyWithoutDestinationStateNestedInput
-    user?: userUpdateManyWithoutStateNestedInput
     location?: locationUpdateManyWithoutStateNestedInput
   }
 
@@ -79568,7 +79185,6 @@ export namespace Prisma {
     userLocations?: userLocationsUncheckedUpdateManyWithoutStateNestedInput
     originDeliveryTaxes?: deliveryTaxesUncheckedUpdateManyWithoutOriginStateNestedInput
     destinationDeliveryTaxes?: deliveryTaxesUncheckedUpdateManyWithoutDestinationStateNestedInput
-    user?: userUncheckedUpdateManyWithoutStateNestedInput
     location?: locationUncheckedUpdateManyWithoutStateNestedInput
   }
 
@@ -80674,20 +80290,6 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type userCreateManyStateInput = {
-    id?: string
-    name: string
-    dateOfBirth?: Date | string | null
-    gender?: string | null
-    moneyInPocket?: number
-    phone: string
-    email: string
-    role?: string
-    isVerified?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type locationCreateManyStateInput = {
     id?: string
     address?: string | null
@@ -80815,60 +80417,6 @@ export namespace Prisma {
     estimatedDays?: NullableIntFieldUpdateOperationsInput | number | null
     effectiveDate?: DateTimeFieldUpdateOperationsInput | Date | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type userUpdateWithoutStateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: FloatFieldUpdateOperationsInput | number
-    phone?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    role?: StringFieldUpdateOperationsInput | string
-    isVerified?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userLocations?: userLocationsUpdateManyWithoutUserNestedInput
-    sessions?: sessionUpdateManyWithoutUserNestedInput
-    transaction?: transactionUpdateManyWithoutUserNestedInput
-    userCart?: userCartUpdateOneWithoutUserNestedInput
-    review?: reviewUpdateManyWithoutUserNestedInput
-    order?: orderUpdateManyWithoutUserNestedInput
-  }
-
-  export type userUncheckedUpdateWithoutStateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: FloatFieldUpdateOperationsInput | number
-    phone?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    role?: StringFieldUpdateOperationsInput | string
-    isVerified?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userLocations?: userLocationsUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: sessionUncheckedUpdateManyWithoutUserNestedInput
-    transaction?: transactionUncheckedUpdateManyWithoutUserNestedInput
-    userCart?: userCartUncheckedUpdateOneWithoutUserNestedInput
-    review?: reviewUncheckedUpdateManyWithoutUserNestedInput
-    order?: orderUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type userUncheckedUpdateManyWithoutStateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    moneyInPocket?: FloatFieldUpdateOperationsInput | number
-    phone?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    role?: StringFieldUpdateOperationsInput | string
-    isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
