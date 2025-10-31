@@ -12,7 +12,7 @@ const UpdateUserLocationZodModel = z.object({
   // storeId: z.string({ message: "Please enter a description" }),
   stateId: z.string({ message: "Please enter a state" }).uuid().optional(),
 
-  isMain: z.boolean().optional(),
+  // isMain: z.boolean().optional(),
 
   //work hours
 });

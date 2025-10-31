@@ -13,13 +13,30 @@ const {
   destroyMultipleImages,
   destroyImage,
 } = require("../helpers/image-kit/delete-image");
-const { ProductTags, ProductStatus } = require("../generated/prisma");
+const {
+  ProductTags,
+  ProductStatus,
+  OrderStatus,
+} = require("../generated/prisma");
 const { default: z } = require("zod");
 const {
   addJob,
   addProductDiscountQueue,
   removeProductDiscountQueue,
 } = require("../helpers/cron/add-job-to-bullmq");
+const {
+  ProductVariantZodModel,
+} = require("../models/product-variant-zod-model");
+const { ProductStockZodModel } = require("../models/product-stock-zod-model");
+const {
+  UpdateProductStockZodModel,
+} = require("../models/update-product-stock-zod-model");
+const {
+  CreateProductVariantZodModel,
+} = require("../models/create-product-variant-zod-model");
+const {
+  CreateProductStockZodModel,
+} = require("../models/create-product-stock-zod-model");
 const getAllStoreProducts = async (req, res, next) => {
   const products = await prisma.product.findMany({
     where: {
@@ -424,6 +441,9 @@ const updateProduct = async (req, res, next) => {
       });
     }
   }
+  for (let index = 0; index < productStockList.length; index++) {
+    const element = productStockList[index];
+  }
   const updatedProduct = await prisma.product.update({
     where: { id: id },
     data: {
@@ -530,50 +550,83 @@ const updateProduct = async (req, res, next) => {
       dimensionsLCm:
         dimensionsLCm == undefined ? undefined : parseFloat(dimensionsLCm),
       weightInKg: weightInKg == undefined ? undefined : parseFloat(weightInKg),
-
-      productVariant: {
-        // productStockList.map((productIndex) => ({
-        // productStockList.map((productIndex) => (
-        upsert: productStockList.map((productIndex) => ({
-          where: {
-            productId_color: {
-              productId: id,
-              color: productIndex.color,
-            },
-          },
-          update: {
-            productStock: {
-              upsert: {
+      ...(productStockList == []
+        ? {}
+        : {
+            productVariant: {
+              // productStockList.map((productIndex) => ({
+              update: productStockList.map((productIndex) => ({
                 where: {
-                  // id_branchId: {
-                  branchId: productIndex.branchId || "",
-                  id: productIndex.productStockId || "",
+                  id: productIndex.productVariantId,
+                  // productId_color: {
+                  //   productId: id,
+                  //   color: productIndex.color,
                   // },
                 },
-                update: {
-                  stock: productIndex.stock || undefined,
+
+                data: {
+                  color: productIndex.color || undefined,
+                  productStock: {
+                    connect: {
+                      // branchId: productIndex.branchId || "",
+                      id: productIndex.productStockId,
+                    },
+                    update: {
+                      where: {
+                        // id_branchId: {
+                        // branchId: productIndex.branchId || "",
+                        id: productIndex.productStockId,
+                        // },
+                      },
+                      data: {
+                        ...(productIndex.branchId != undefined
+                          ? {
+                              branch: {
+                                connect: {
+                                  id: productIndex.branchId || undefined,
+                                },
+                              },
+                            }
+                          : {}),
+                        stock: productIndex.stock || undefined,
+                      },
+                      // create: {
+                      //   branch: {
+                      //     connect: { id: productIndex.branchId || undefined },
+                      //   },
+                      //   // ...(productIndex.branchId != undefined
+                      //   //   ? {
+                      //   //       branch: {
+                      //   //         connect: { id: productIndex.branchId || undefined },
+                      //   //       },
+                      //   //     }
+                      //   //   : {}), // branchId: productIndex.branchId || undefined,
+                      //   stock: productIndex.stock || undefined,
+                      // },
+                    },
+                  },
                 },
-                create: {
-                  branch: { connect: { id: productIndex.branchId } }, // branchId: productIndex.branchId || undefined,
-                  stock: productIndex.stock || undefined,
-                },
-              },
+                // ...(productIndex.branchId == undefined
+                //   ? {}
+                //   : {
+                //       create: {
+                //         color: productIndex.color || undefined,
+                //         // product: { connect: { id: id } },
+                //         // productId: id,
+                //         productStock: {
+                //           create: {
+                //             branch: {
+                //               connect: { id: productIndex.branchId || undefined },
+                //             },
+                //             // branchId: productIndex.branchId || undefined,
+                //             stock: productIndex.stock || undefined,
+                //           },
+                //         },
+                //       },
+                //     }),
+              })),
             },
-          },
-          create: {
-            color: productIndex.color,
-            // product: { connect: { id: id } },
-            // productId: id,
-            productStock: {
-              create: {
-                branch: { connect: { id: productIndex.branchId } },
-                // branchId: productIndex.branchId || undefined,
-                stock: productIndex.stock || undefined,
-              },
-            },
-          },
-        })),
-      },
+          }),
       // isFeatured: isFeatured || undefined,
       // isPopular: isPopular || undefined,
     },
@@ -611,6 +664,194 @@ const updateProduct = async (req, res, next) => {
     message: i18n.__("Product updated successfully"),
     data: updatedProduct,
   });
+};
+
+const createProductVariant = async (req, res, next) => {
+  const { id } = req.params;
+  const { branchId, stock, color } = req.body;
+
+  const zodModel = CreateProductVariantZodModel.safeParse({
+    branchId: branchId,
+    color: color,
+    stock: stock,
+  });
+  if (!zodModel.success) {
+    throw new BadRequestError(zodModel.error.errors[0].message);
+  }
+
+  const product = await prisma.product.update({
+    where: {
+      id: id,
+    },
+    data: {
+      productVariant: {
+        create: {
+          color: color,
+          productStock: {
+            create: {
+              branch: { connect: { id: branchId } },
+              stock: stock,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!product) {
+    throw new NotFoundError("Product not found");
+  }
+
+  return res.status(StatusCodes.CREATED).json({
+    isSuccess: true,
+    message: "Product Variant created successfully",
+    data: product,
+  });
+};
+const createProductStock = async (req, res, next) => {
+  const { id: productVariantId } = req.params;
+  const { branchId, stock } = req.body;
+
+  const zodModel = CreateProductStockZodModel.safeParse({
+    branchId: branchId,
+    productVariantId: productVariantId,
+    stock: stock,
+  });
+  if (!zodModel.success) {
+    throw new BadRequestError(zodModel.error.errors[0].message);
+  }
+
+  const product = await prisma.productVariant.update({
+    where: {
+      id: productVariantId,
+    },
+    data: {
+      productStock: {
+        create: {
+          branch: { connect: { id: branchId } },
+          stock: stock,
+        },
+      },
+    },
+  });
+
+  if (!product) {
+    throw new NotFoundError("Product not found");
+  }
+
+  return res.status(StatusCodes.CREATED).json({
+    isSuccess: true,
+    message: "Product Stock created successfully",
+    data: product,
+  });
+};
+const deleteProductVariant = async (req, res, next) => {
+  const { productId, productVariantId } = req.body;
+
+  const zodModel = ProductVariantZodModel.safeParse({
+    productId: productId,
+    productVariantId: productVariantId,
+  });
+  if (!zodModel.success) {
+    throw new BadRequestError(zodModel.error.errors[0].message);
+  }
+
+  const order = await prisma.order.findFirst({
+    where: {
+      productOrder: {
+        every: {
+          AND: [
+            { productStock: { variantId: productVariantId } },
+            {
+              status: { notIn: [OrderStatus.DELIVERED, OrderStatus.CANCELLED] },
+            },
+          ],
+        },
+      },
+    },
+  });
+  if (order) {
+    throw new BadRequestError(
+      "Product variant can not be deleted. This variant has unfinished orders"
+    );
+  }
+  const productInDB = await prisma.product.findUnique({
+    where: {
+      id: productId,
+    },
+    select: {
+      productVariant: { select: { id: true } },
+    },
+  });
+  if (!productInDB) {
+    throw new NotFoundError("Product not found");
+  }
+  if (productInDB.productVariant.length === 1) {
+    throw new BadRequestError("Product must have at least one variant");
+  }
+  await prisma.productVariant.delete({
+    where: { id: productVariantId },
+    // data: { status: ProductStatus.DELETED },
+    // select: { image: true },
+  });
+
+  return res
+    .status(StatusCodes.OK)
+    .json({ isSuccess: true, message: "Product Variant deleted successfully" });
+};
+const deleteProductStock = async (req, res, next) => {
+  const { productVariantId, productStockId } = req.body;
+
+  const zodModel = ProductStockZodModel.safeParse({
+    productStockId: productStockId,
+    productVariantId: productVariantId,
+  });
+  if (!zodModel.success) {
+    throw new BadRequestError(zodModel.error.errors[0].message);
+  }
+
+  const order = await prisma.order.findFirst({
+    where: {
+      productOrder: {
+        every: {
+          AND: [
+            { productStockId: productStockId },
+            {
+              status: { notIn: [OrderStatus.DELIVERED, OrderStatus.CANCELLED] },
+            },
+          ],
+        },
+      },
+    },
+  });
+  if (order) {
+    throw new BadRequestError(
+      "Stock can not be deleted. This stock has unfinished orders"
+    );
+  }
+  const productInDB = await prisma.productVariant.findUnique({
+    where: {
+      id: productVariantId,
+    },
+    select: {
+      productStock: { select: { id: true } },
+    },
+  });
+  if (!productInDB) {
+    throw new NotFoundError("Product not found");
+  }
+  if (productInDB.productStock.length === 1) {
+    throw new BadRequestError("Product Variant must have at least one stock");
+  }
+  await prisma.productStock.delete({
+    where: { id: productStockId },
+    // data: { status: ProductStatus.DELETED },
+    // select: { image: true },
+  });
+
+  return res
+    .status(StatusCodes.OK)
+    .json({ isSuccess: true, message: "Product stock deleted successfully" });
 };
 
 const deleteProduct = async (req, res, next) => {
@@ -710,6 +951,10 @@ const deleteProductImage = async (req, res, next) => {
 module.exports = {
   getAllStoreProducts,
   createProduct,
+  deleteProductStock,
+  deleteProductVariant,
+  createProductVariant,
+  createProductStock,
   updateProduct,
   deleteProduct,
   deleteProductImage,

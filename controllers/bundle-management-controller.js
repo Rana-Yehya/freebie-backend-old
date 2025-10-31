@@ -34,74 +34,6 @@ const getAllStoreBundles = async (req, res, next) => {
     .json({ isSuccess: true, count: bundles.length, data: bundles });
 };
 
-const getBundle = async (req, res, next) => {
-  const { id: bundleId } = req.params;
-  if (!bundleId) {
-    throw new BadRequestError("Please send a bundle id");
-  }
-  // const searchInCart =
-  //   req.user != null && req.user.role === userConstant ? true : false;
-  let bundle = await prisma.bundle.findUnique({
-    where: { id: bundleId },
-    include: {
-      name: true,
-      mainImage: true,
-      description: true,
-      bundleItems: {
-        include: {
-          productVariant: {
-            include: {
-              product: {
-                include: {
-                  name: true,
-                  image: true,
-                  mainImage: true,
-                },
-              },
-              productStock: true,
-            },
-          },
-        },
-      },
-    },
-  });
-
-  if (!bundle) {
-    throw new NotFoundError("Bundle not found");
-  }
-  // console.log(product);
-
-  // let orderUserIds = [];
-  // for (let i = 0; i < product.productVariant.length; i = i + 1) {
-  //   for (
-  //     let j = 0;
-  //     j < product.productVariant[i].productStock.length;
-  //     j = j + 1
-  //   ) {
-  //     const stock = product.productVariant[i].productStock[j];
-  //     if (stock != undefined && stock.productOrder != undefined) {
-  //       for (let k = 0; k < stock.productOrder.length; k = k + 1) {
-  //         const order = stock.productOrder[k];
-  //         if (order.status == OrderStatus.DELIVERED) {
-  //           orderUserIds.push(order.order.userId);
-  //         }
-  //       }
-  //       product.productVariant[i].productStock[j].productOrder = undefined;
-  //     }
-
-  //     // orderUserIds.push(stock.productOrder);
-  //   }
-  // }
-  // let canBeReviewed = false;
-  // if (req.user != undefined && orderUserIds.includes(req.user.id)) {
-  //   canBeReviewed = true;
-  // }
-
-  // const orderUser = order.map((order) => order);
-  //canBeReviewed: canBeReviewed,
-  return res.status(StatusCodes.OK).json({ isSuccess: true, data: bundle });
-};
-
 const createBundle = async (req, res, next) => {
   const {
     name,
@@ -324,17 +256,17 @@ const deleteBundle = async (req, res, next) => {
   if (!bundleId) {
     throw new BadRequestError("Please send a bundle id");
   }
-  const product = await prisma.bundle.update({
+  const bundle = await prisma.bundle.update({
     where: { id: bundleId },
     data: { status: ProductStatus.DELETED },
     // select: { image: true },
   });
-  if (!product) {
+  if (!bundle) {
     throw new NotFoundError("Product not found");
   }
   return res
     .status(StatusCodes.OK)
-    .json({ isSuccess: true, message: "Product deleted successfully" });
+    .json({ isSuccess: true, message: "Bundle deleted successfully" });
 };
 
 module.exports = {
@@ -342,5 +274,4 @@ module.exports = {
   createBundle,
   updateBundle,
   deleteBundle,
-  getBundle,
 };

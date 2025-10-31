@@ -7,7 +7,7 @@ const CreateUserLocationZodModel = z.object({
     .string({ message: "Please enter a state" })
     .uuid({ message: "Please enter a valid state id" }),
 
-  isMain: z.boolean().optional(),
+  // isMain: z.boolean().optional(),
   //work hours
 });
 module.exports = { CreateUserLocationZodModel };

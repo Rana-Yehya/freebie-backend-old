@@ -3,12 +3,14 @@ model userCart {
   userId      String        @unique
   user        user          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   productCart productCart[]
-  subtotal    Float         @default(0)
-  taxAmount   Float         @default(0)
-  deliveryFee Float         @default(0)
-  totalAmount Float         @default(0)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  bundleCart  bundleCart[]
+
+  subtotal    Float    @default(0)
+  taxAmount   Float    @default(0)
+  deliveryFee Float    @default(0)
+  totalAmount Float    @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // @@id([userId, productId])
   // product   product? @relation(fields: [productId], references: [id])

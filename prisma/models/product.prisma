@@ -46,7 +46,7 @@ model product {
   occasions                  occasion[]
   avgRating                  Float            @default(0)
   reviewsCount               Int              @default(0)
-  reviews                    review[]
+  reviews                    productReview[]
   dimensionsWCm              Float            @default(1)
   dimensionsHCm              Float            @default(1)
   dimensionsLCm              Float            @default(1)

@@ -1,14 +1,8 @@
 const { prisma } = require("../config/prisma");
 const { StatusCodes } = require("http-status-codes");
 const { NotFoundError, BadRequestError } = require("../errors");
-const { userConstant, adminConstant } = require("../config/constants");
-const {
-  ProductTags,
-  ProductStatus,
-  OrderStatus,
-} = require("../generated/prisma");
 
-const searchAllProducts = async (req, res, next) => {
+const searchAllBundles = async (req, res, next) => {
   const stateIds = req.query.stateIds;
   const { page = 1, limit = 10 } = req.query;
   const { priceSmall, priceHigh, isFeatured, isPopular, isBigSale, name } =
@@ -30,16 +24,6 @@ const searchAllProducts = async (req, res, next) => {
     " isBigSale",
     isBigSale
   );
-
-  const tags =
-    isFeatured == "true"
-      ? ProductTags.FEATURED
-      : isPopular == "true"
-      ? ProductTags.POPULAR
-      : isBigSale == "true"
-      ? ProductTags.BIGSALE
-      : undefined;
-  console.log("tags", tags);
   const colorList = req.query.colors
     ? decodeURIComponent(req.query.colors)
         .replace(/[\[\] ]/g, "")
@@ -61,7 +45,8 @@ const searchAllProducts = async (req, res, next) => {
         .split(",")
     : undefined;
   console.log(colorList);
-  let productQuerySearch = {
+  /*
+  let bundleQuerySearch = {
     AND: [
       {
         name: name
@@ -72,12 +57,12 @@ const searchAllProducts = async (req, res, next) => {
                 { ar: { contains: name.trim() } },
               ],
             }
-          : undefined, // id: { in: [...productIdsList, ...productOccsionsIdsList] },
+          : undefined, // id: { in: [...bundleIdsList, ...bundleOccsionsIdsList] },
         occasions: occasionsIdsList
           ? { some: { id: { in: occasionsIdsList } } }
           : undefined,
         categoryId: categoryIdsList ? { in: categoryIdsList } : undefined,
-        productVariant: {
+        bundleVariant: {
           some: {
             color: colorList ? { in: colorList } : undefined,
           },
@@ -85,7 +70,7 @@ const searchAllProducts = async (req, res, next) => {
         OR: [
           { price: { gte: priceSmallFloat, lte: priceHighFloat } },
           {
-            // productPrice: {
+            // bundlePrice: {
             actualPrice: { gte: priceSmallFloat, lte: priceHighFloat },
             //            },
           },
@@ -97,9 +82,9 @@ const searchAllProducts = async (req, res, next) => {
           {
             AND: [
               {
-                productVariant: {
+                bundleVariant: {
                   every: {
-                    productStock: {
+                    bundleStock: {
                       every: {
                         branch: {
                           location: { state: { id: { in: stateIdList } } },
@@ -117,7 +102,8 @@ const searchAllProducts = async (req, res, next) => {
       },
     ],
   };
-  //   ALTER TABLE "product"
+  */
+  //   ALTER TABLE "bundle"
   // DROP COLUMN IF EXISTS "actualPrice";
   //   ADD COLUMN "actualPrice" FLOAT GENERATED ALWAYS AS (
   //   CASE
@@ -131,108 +117,131 @@ const searchAllProducts = async (req, res, next) => {
   // ) STORED;
   //   console.log(req.user);
 
-  if (!(req.user && req.user.role === adminConstant)) {
-    productQuerySearch = {
-      ...productQuerySearch,
-      ...{ status: ProductStatus.APPROVED },
-    };
-  }
-  console.log(productQuerySearch);
-  const product = await prisma.product.findMany({
+  // if (!(req.user && req.user.role === adminConstant)) {
+  //   bundleQuerySearch = {
+  //     ...bundleQuerySearch,
+  //     ...{ status: BundleStatus.APPROVED },
+  //   };
+  // }
+  // console.log(bundleQuerySearch);
+  const bundle = await prisma.bundle.findMany({
     take: parseInt(limit) || 10,
     skip: ((parseInt(page) || 1) - 1) * (parseInt(limit) || 10),
-    where: productQuerySearch,
-    select: selectedQuery,
-  });
-  return res
-    .status(StatusCodes.OK)
-    .json({ isSuccess: true, count: product.length, data: product });
-};
-
-const getProduct = async (req, res, next) => {
-  const { id: productId } = req.params;
-  if (!productId) {
-    throw new BadRequestError("Please send a product id");
-  }
-  // const searchInCart =
-  //   req.user != null && req.user.role === userConstant ? true : false;
-  let product = await prisma.product.findUnique({
-    where: { id: productId },
-    include: {
-      name: true,
-      discount: true,
-
-      description: true,
-      detailedDescription: true,
-      category: {
-        include: {
-          name: true,
-          image: true,
-        },
-      },
-      occasions: {
-        select: {
-          id: true,
-          name: true,
-          image: {
-            select: { publicId: true, secureUrl: true },
-          },
-        },
-      },
-      productVariant: {
-        include: {
-          productStock: {
-            include: {
-              productOrder: {
-                select: { status: true, order: { select: { userId: true } } },
-              },
-              branch: { include: { location: true } },
+    where: {
+      name: name
+        ? {
+            OR: [
+              { default: { contains: name.trim() } },
+              { en: { contains: name.trim() } },
+              { ar: { contains: name.trim() } },
+            ],
+          }
+        : undefined,
+      bundlePrice: { gte: priceSmallFloat, lte: priceHighFloat },
+      bundleItems: {
+        some: {
+          productVariant: {
+            color: colorList ? { in: colorList } : undefined,
+            product: {
+              occasions: occasionsIdsList
+                ? { some: { id: { in: occasionsIdsList } } }
+                : undefined,
+              categoryId: categoryIdsList ? { in: categoryIdsList } : undefined,
             },
           },
         },
       },
-      image: true,
+    },
+    include: {
+      name: true,
+      mainImage: true,
+    },
+  });
+  return res
+    .status(StatusCodes.OK)
+    .json({ isSuccess: true, count: bundle.length, data: bundle });
+};
+
+const getBundle = async (req, res, next) => {
+  const { id: bundleId } = req.params;
+  if (!bundleId) {
+    throw new BadRequestError("Please send a bundle id");
+  }
+  // const searchInCart =
+  //   req.user != null && req.user.role === userConstant ? true : false;
+  let bundle = await prisma.bundle.findUnique({
+    where: { id: bundleId },
+    include: {
+      name: true,
+
+      mainImage: true,
+      bundleItems: {
+        include: {
+          productVariant: {
+            include: {
+              product: {
+                include: {
+                  mainImage: true,
+                  image: true,
+                  category: {
+                    include: {
+                      image: true,
+                      name: true,
+                    },
+                  },
+
+                  occasions: {
+                    select: {
+                      id: true,
+                      name: true,
+                      image: {
+                        select: { publicId: true, secureUrl: true },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     },
   });
 
-  if (!product) {
-    throw new NotFoundError("Product not found");
-  }
-  // console.log(product);
+  // if (!bundle) {
+  //   throw new NotFoundError("Bundle not found");
+  // }
+  // // console.log(bundle);
 
-  let orderUserIds = [];
-  for (let i = 0; i < product.productVariant.length; i = i + 1) {
-    for (
-      let j = 0;
-      j < product.productVariant[i].productStock.length;
-      j = j + 1
-    ) {
-      const stock = product.productVariant[i].productStock[j];
-      if (stock != undefined && stock.productOrder != undefined) {
-        for (let k = 0; k < stock.productOrder.length; k = k + 1) {
-          const order = stock.productOrder[k];
-          if (order.status == OrderStatus.DELIVERED) {
-            orderUserIds.push(order.order.userId);
-          }
-        }
-        product.productVariant[i].productStock[j].productOrder = undefined;
-      }
+  // let orderUserIds = [];
+  // for (let i = 0; i < bundle.bundleVariant.length; i = i + 1) {
+  //   for (let j = 0; j < bundle.bundleVariant[i].bundleStock.length; j = j + 1) {
+  //     const stock = bundle.bundleVariant[i].bundleStock[j];
+  //     if (stock != undefined && stock.bundleOrder != undefined) {
+  //       for (let k = 0; k < stock.bundleOrder.length; k = k + 1) {
+  //         const order = stock.bundleOrder[k];
+  //         if (order.status == OrderStatus.DELIVERED) {
+  //           orderUserIds.push(order.order.userId);
+  //         }
+  //       }
+  //       bundle.bundleVariant[i].bundleStock[j].bundleOrder = undefined;
+  //     }
 
-      // orderUserIds.push(stock.productOrder);
-    }
-  }
-  let canBeReviewed = false;
-  if (req.user != undefined && orderUserIds.includes(req.user.id)) {
-    canBeReviewed = true;
-  }
+  //     // orderUserIds.push(stock.bundleOrder);
+  //   }
+  // }
+  // let canBeReviewed = false;
+  // if (req.user != undefined && orderUserIds.includes(req.user.id)) {
+  //   canBeReviewed = true;
+  // }
 
   // const orderUser = order.map((order) => order);
-  return res
-    .status(StatusCodes.OK)
-    .json({ isSuccess: true, canBeReviewed: canBeReviewed, data: product });
+
+  // canBeReviewed: canBeReviewed,
+  return res.status(StatusCodes.OK).json({ isSuccess: true, data: bundle });
 };
 
 module.exports = {
-  getProduct,
-  searchAllProducts,
+  getBundle,
+  searchAllBundles,
 };

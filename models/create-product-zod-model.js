@@ -1,7 +1,7 @@
 const { z } = require("zod");
 const {
-  CreateProductStockZodModel,
-} = require("./create-product-stock-zod-model");
+  CreateProductVariantZodModel,
+} = require("./create-product-variant-zod-model");
 const { CreateLocaleZodModel } = require("./create-locole-zod-model");
 
 const CreateProductZodModel = z
@@ -147,7 +147,7 @@ const CreateProductZodModel = z
       })
       .optional(),
     productStock: z
-      .array(CreateProductStockZodModel, {
+      .array(CreateProductVariantZodModel, {
         message: "Product Stock can't be empty",
       })
       .nonempty({

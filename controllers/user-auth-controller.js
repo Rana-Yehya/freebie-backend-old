@@ -333,44 +333,32 @@ const updateProfile = async (req, res, next) => {
 };
 
 const createUserLocation = async (req, res) => {
-  const { stateId, isMain } = req.body;
+  const { stateId } = req.body;
 
   const zodModel = CreateUserLocationZodModel.safeParse({
     stateId: stateId,
-    isMain: isMain,
+    // isMain: isMain,
   });
 
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
-  console.log(req.user.userLocations);
-  const mainUserLocation = req.user.userLocations.filter(
-    (element) => element.isMain == true
-  );
-  console.log(mainUserLocation);
-  const mainUserLocationId =
-    mainUserLocation.length != 0 ? mainUserLocation?.at(0).id : undefined;
-  if (mainUserLocationId == undefined) {
-    throw new BadRequestError("Error in finding your main address");
-  }
+  // const mainUserLocation = req.user.userLocations.filter(
+  //   (element) => element.isMain == true
+  // );
+  // console.log(mainUserLocation);
+  // const mainUserLocationId =
+  //   mainUserLocation.length != 0 ? mainUserLocation?.at(0).id : undefined;
+  // if (mainUserLocationId == undefined) {
+  //   throw new BadRequestError("Error in finding your main address");
+  // }
   const user = await prisma.user.update({
     where: { id: req.user.id },
     data: {
       userLocations: {
-        ...(mainUserLocationId != undefined && isMain == true
-          ? {
-              update: {
-                where: { id: mainUserLocationId || undefined },
-                data: {
-                  isMain: false,
-                },
-              },
-            }
-          : {}),
-
         create: {
           state: { connect: { id: stateId } },
-          isMain: isMain == true ? true : false,
+          // isMain: isMain == true ? true : false,
         },
       },
     },
@@ -404,7 +392,7 @@ const updateUserLocation = async (req, res) => {
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
-  console.log(req.user.userLocations);
+  // console.log(req.user.userLocations);
 
   const user = await prisma.user.update({
     where: { id: req.user.id },
@@ -448,44 +436,40 @@ const changeUserMainLocation = async (req, res) => {
   if (!zodModel.success) {
     throw new BadRequestError(zodModel.error.errors[0].message);
   }
-  console.log(req.user.userLocations);
-  const mainUserLocation = req.user.userLocations.filter(
-    (element) => element.isMain == true
-  );
-  console.log(mainUserLocation);
-  const mainUserLocationId =
-    mainUserLocation.length != 0 ? mainUserLocation?.at(0).id : undefined;
-  if (mainUserLocationId == undefined) {
-    throw new BadRequestError("Error in finding your main address");
-  } else {
-    await prisma.userLocations.update({
-      where: { id: mainUserLocationId },
-      data: {
-        isMain: false,
+
+  const user = await prisma.$transaction(async (tx) => {
+    const deletedLocation = await prisma.userLocations.delete({
+      where: {
+        id: userLocationId,
       },
     });
-  }
-  const user = await prisma.user.update({
-    where: { id: req.user.id },
-    data: {
-      userLocations: {
-        update: {
-          where: { id: userLocationId },
-          data: {
-            isMain: true,
+
+    const user = await prisma.user.update({
+      where: { id: req.user.id },
+      data: {
+        userLocations: {
+          create: {
+            state: { connect: { id: req.user.mainUserLocations.stateId } },
+          },
+        },
+        mainUserLocations: {
+          update: {
+            state: { connect: { id: deletedLocation.stateId } },
           },
         },
       },
-    },
-    include: {
-      userLocations: {
-        include: {
-          state: {
-            include: { name: true, country: { include: { name: true } } },
+
+      include: {
+        userLocations: {
+          include: {
+            state: {
+              include: { name: true, country: { include: { name: true } } },
+            },
           },
         },
       },
-    },
+    });
+    return user;
   });
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
@@ -494,6 +478,21 @@ const changeUserMainLocation = async (req, res) => {
   });
 };
 
+const getUserLocations = async (req, res) => {
+  //countryId, stateId,
+
+  const userLocations = await prisma.userLocations.findMany({
+    where: {
+      userId: req.user.id,
+    },
+  });
+
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: i18n.__("Location deleted successfully"),
+    data: userLocations,
+  });
+};
 const deleteUserLocation = async (req, res) => {
   //countryId, stateId,
   const { id: userLocationId } = req.params;
@@ -573,6 +572,7 @@ module.exports = {
   showMe,
   deleteAccount,
   sendCode,
+  getUserLocations,
   changeUserMainLocation,
   deleteUserLocation,
   updateUserLocation,

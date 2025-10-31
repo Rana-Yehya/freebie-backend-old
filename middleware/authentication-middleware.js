@@ -28,7 +28,7 @@ const authenticateUserMiddleware = async (req, res, next) => {
         include: {
           user: {
             include: {
-              userLocations: {
+              mainUserLocations: {
                 include: {
                   state: {
                     include: {
@@ -38,6 +38,16 @@ const authenticateUserMiddleware = async (req, res, next) => {
                   },
                 },
               },
+              // userLocations: {
+              //   include: {
+              //     state: {
+              //       include: {
+              //         name: true,
+              //         country: { include: { name: true } },
+              //       },
+              //     },
+              //   },
+              // },
             },
           },
           store: {
@@ -136,7 +146,7 @@ const optionalAuthenticateUserMiddleware = async (req, res, next) => {
         select: {
           user: {
             include: {
-              userLocations: {
+              mainUserLocations: {
                 include: {
                   state: {
                     include: {

@@ -174,6 +174,7 @@ exports.Prisma.BranchScalarFieldEnum = {
   locationId: 'locationId',
   phone: 'phone',
   isFreezed: 'isFreezed',
+  addresses: 'addresses',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -184,6 +185,17 @@ exports.Prisma.WorkHourScalarFieldEnum = {
   startTime: 'startTime',
   endTime: 'endTime',
   day: 'day'
+};
+
+exports.Prisma.BundleCartScalarFieldEnum = {
+  userCartUserId: 'userCartUserId',
+  bundleId: 'bundleId',
+  deliveryTaxesId: 'deliveryTaxesId',
+  quantity: 'quantity',
+  status: 'status',
+  oldQuantity: 'oldQuantity',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.BundleScalarFieldEnum = {
@@ -442,10 +454,20 @@ exports.Prisma.ProductScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.ReviewScalarFieldEnum = {
+exports.Prisma.ProductReviewScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   productId: 'productId',
+  stars: 'stars',
+  comment: 'comment',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BundleReviewScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  bundleId: 'bundleId',
   stars: 'stars',
   comment: 'comment',
   createdAt: 'createdAt',
@@ -558,6 +580,7 @@ exports.Prisma.UserScalarFieldEnum = {
   dateOfBirth: 'dateOfBirth',
   gender: 'gender',
   moneyInPocket: 'moneyInPocket',
+  userLocationsId: 'userLocationsId',
   phone: 'phone',
   email: 'email',
   role: 'role',
@@ -569,8 +592,7 @@ exports.Prisma.UserScalarFieldEnum = {
 exports.Prisma.UserLocationsScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  stateId: 'stateId',
-  isMain: 'isMain'
+  stateId: 'stateId'
 };
 
 exports.Prisma.SortOrder = {
@@ -599,6 +621,12 @@ exports.TargetType = exports.$Enums.TargetType = {
   SALE_PAGE: 'SALE_PAGE',
   GIFT_BOX: 'GIFT_BOX',
   FEATURED_PRODUCTS: 'FEATURED_PRODUCTS'
+};
+
+exports.ProductCartStatus = exports.$Enums.ProductCartStatus = {
+  ACTIVE: 'ACTIVE',
+  NODELIVERYSTATES: 'NODELIVERYSTATES',
+  OUTOFSTOCK: 'OUTOFSTOCK'
 };
 
 exports.UserOrderStatus = exports.$Enums.UserOrderStatus = {
@@ -638,12 +666,6 @@ exports.PlanName = exports.$Enums.PlanName = {
   SILVER: 'SILVER',
   GOLD: 'GOLD',
   DIAMOND: 'DIAMOND'
-};
-
-exports.ProductCartStatus = exports.$Enums.ProductCartStatus = {
-  ACTIVE: 'ACTIVE',
-  NODELIVERYSTATES: 'NODELIVERYSTATES',
-  OUTOFSTOCK: 'OUTOFSTOCK'
 };
 
 exports.OrderStatus = exports.$Enums.OrderStatus = {
@@ -713,6 +735,7 @@ exports.Prisma.ModelName = {
   adClick: 'adClick',
   branch: 'branch',
   workHour: 'workHour',
+  bundleCart: 'bundleCart',
   bundle: 'bundle',
   bundleItem: 'bundleItem',
   category: 'category',
@@ -736,7 +759,8 @@ exports.Prisma.ModelName = {
   productStock: 'productStock',
   productVariant: 'productVariant',
   product: 'product',
-  review: 'review',
+  productReview: 'productReview',
+  bundleReview: 'bundleReview',
   session: 'session',
   state: 'state',
   storeSubscription: 'storeSubscription',

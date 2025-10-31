@@ -6,6 +6,7 @@ model deliveryTaxes {
   destinationState      state         @relation("DestinationStateFees", fields: [destinationStateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   destinationStateId    String
   productCart           productCart[]
+  bundleCart            bundleCart[]
   baseFee               Float
   additionalFeesAfterKg Float         @default(100)
   feePerKg              Float         @default(0)

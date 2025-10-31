@@ -161,11 +161,11 @@ model branch {
   workHours    workHour[]
   productStock productStock[]
   // discountCodes branchDiscountCode[]
-
+  addresses    String?
   // productUser  productCart[]
   // productOrder productOrder[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime                    @default(now())
+  updatedAt    DateTime                    @updatedAt
   // branchCity        String
   // branchState       String
   // branchZip         String
@@ -193,19 +193,48 @@ model workHour {
   day       Int
 }
 
+model bundleCart {
+  userCart        userCart          @relation(fields: [userCartUserId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  userCartUserId  String
+  bundle          bundle            @relation(fields: [bundleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bundleId        String
+  // variant                productVariant @relation(fields: [variantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // variantId              String
+  deliveryTaxes   deliveryTaxes?    @relation(fields: [deliveryTaxesId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  deliveryTaxesId String?
+  // color                  String
+  quantity        Int               @default(1)
+  status          ProductCartStatus @default(ACTIVE)
+  oldQuantity     Int?              @default(0)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  //userCartId
+  @@unique([userCartUserId, bundleId])
+  @@map("bundle_cart")
+}
+
+// enum ProductCartStatus {
+//   ACTIVE
+//   NODELIVERYSTATES
+//   OUTOFSTOCK
+// }
+
 model bundle {
-  id            String       @id @default(uuid())
-  nameId        String       @unique
-  name          locale       @relation("nameBundle", fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  mainImage     image        @relation("mainImageBundle", fields: [mainImageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  mainImageId   String       @unique
-  descriptionId String       @unique
-  description   locale       @relation("descriptionBundle", fields: [descriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id            String         @id @default(uuid())
+  nameId        String         @unique
+  name          locale         @relation("nameBundle", fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  mainImage     image          @relation("mainImageBundle", fields: [mainImageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  mainImageId   String         @unique
+  descriptionId String         @unique
+  description   locale         @relation("descriptionBundle", fields: [descriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   bundlePrice   Float? // Fixed bundle price
-  isActive      Boolean      @default(true)
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  bundleCart    bundleCart[]
   bundleItems   bundleItem[]
+  reviews       bundleReview[]
+  isActive      Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   @@map("bundles")
 }
@@ -309,6 +338,7 @@ model deliveryTaxes {
   destinationState      state         @relation("DestinationStateFees", fields: [destinationStateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   destinationStateId    String
   productCart           productCart[]
+  bundleCart            bundleCart[]
   baseFee               Float
   additionalFeesAfterKg Float         @default(100)
   feePerKg              Float         @default(0)
@@ -659,7 +689,7 @@ model productStock {
   // productId    String
   branch       branch         @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   branchId     String
-  stock        Int?
+  stock        Int            @default(0)
   // color        String
   productOrder productOrder[]
   productCart  productCart[]
@@ -678,7 +708,7 @@ model productVariant {
   product      product        @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   productId    String
   // Variant attributes (size, color, etc.)
-  color        String // e.g., "Color"
+  color        String? // e.g., "Color"
   //   option2   String?  // e.g., "Size"
   //   option3   String?  // e.g., "Material"
   // Inventory relationship
@@ -739,7 +769,7 @@ model product {
   occasions                  occasion[]
   avgRating                  Float            @default(0)
   reviewsCount               Int              @default(0)
-  reviews                    review[]
+  reviews                    productReview[]
   dimensionsWCm              Float            @default(1)
   dimensionsHCm              Float            @default(1)
   dimensionsLCm              Float            @default(1)
@@ -776,7 +806,7 @@ enum ProductStatus {
 //   bulkPricing BulkPricing[] // For quantity breaks
 // }
 
-model review {
+model productReview {
   id        String   @id @unique @default(uuid())
   user      user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId    String
@@ -788,6 +818,22 @@ model review {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, productId])
+  @@map("product_reviews")
+}
+
+model bundleReview {
+  id        String   @id @unique @default(uuid())
+  user      user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    String
+  bundle    bundle   @relation(fields: [bundleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bundleId  String
+  stars     Int
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, bundleId])
+  @@map("bundle_reviews")
 }
 
 model session {
@@ -999,12 +1045,14 @@ model userCart {
   userId      String        @unique
   user        user          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   productCart productCart[]
-  subtotal    Float         @default(0)
-  taxAmount   Float         @default(0)
-  deliveryFee Float         @default(0)
-  totalAmount Float         @default(0)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  bundleCart  bundleCart[]
+
+  subtotal    Float    @default(0)
+  taxAmount   Float    @default(0)
+  deliveryFee Float    @default(0)
+  totalAmount Float    @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // @@id([userId, productId])
   // product   product? @relation(fields: [productId], references: [id])
@@ -1013,26 +1061,29 @@ model userCart {
 }
 
 model user {
-  id            String          @id @unique @default(uuid())
-  name          String
-  dateOfBirth   DateTime?
-  gender        String?
-  moneyInPocket Float           @default(0)
+  id                String          @id @unique @default(uuid())
+  name              String
+  dateOfBirth       DateTime?
+  gender            String?
+  moneyInPocket     Float           @default(0)
   // is the country is deleted, the user country will be set to null
   // what is the action after this?
   // countryId          String?
   // userCountry        country?      @relation(fields: [countryId], references: [id], onDelete: SetNull, onUpdate: SetNull)
-  userLocations userLocations[]
-  phone         String          @unique
-  email         String          @unique
+  mainUserLocations userLocations   @relation("MainUserLocation", fields: [userLocationsId], references: [id])
+  userLocationsId   String //@default("2aaeb826-8ed5-446a-a194-6370bd9df79e")
+  userLocations     userLocations[]
+  phone             String          @unique
+  email             String          @unique
   // password           String?
-  role          String          @default("user")
-  isVerified    Boolean         @default(false)
-  sessions      session[]       @relation("userSession")
-  transaction   transaction[]
-  userCart      userCart?
-  review        review[]
-  order         order[]
+  role              String          @default("user")
+  isVerified        Boolean         @default(false)
+  sessions          session[]       @relation("userSession")
+  transaction       transaction[]
+  userCart          userCart?
+  productReview     productReview[]
+  bundleReview      bundleReview[]
+  order             order[]
   // categoriesInterest category[]
   // occasionsInterest  occasion[]
 
@@ -1044,12 +1095,18 @@ model user {
 }
 
 model userLocations {
-  id      String  @id @unique @default(uuid())
-  userId  String
-  user    user    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  state   state?  @relation(fields: [stateId], references: [id], onDelete: SetNull, onUpdate: SetNull)
-  stateId String?
-  isMain  Boolean @default(false)
+  id       String  @id @unique @default(uuid())
+  userId   String
+  // mainUser   user    @relation("mainUserLocation", fields: [mainUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // mainUserId String
+  user     user    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  state    state?  @relation(fields: [stateId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  stateId  String?
+  // isMain  Boolean @default(false)
+  mainUser user[]  @relation("MainUserLocation")
+
+  @@unique([userId, stateId])
+  @@map("user_locations")
 }
 
 generator client {

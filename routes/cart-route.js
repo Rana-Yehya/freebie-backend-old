@@ -1,8 +1,6 @@
 const express = require("express");
 const {
   getAllCartItems,
-  deleteCartItem,
-  createUpdateCartItem,
   // updateCartQuantity,
   deleteCart,
   calculateSubTotal,
@@ -16,28 +14,28 @@ const {
   authorizeMiddleware,
 } = require("../middleware/authorization-middleware");
 const { userConstant } = require("../config/constants");
+const {
+  createUpdateCartProductItem,
+  deleteCartProductItem,
+} = require("../controllers/cart-product-controller");
+const {
+  deleteCartBundleItem,
+  createUpdateCartBundleItem,
+} = require("../controllers/cart-bundle-controller");
 
 const router = express.Router();
 //
+
 router
-  .route("/")
-  .get(
-    authenticateUserMiddleware,
-    authorizeMiddleware(userConstant),
-    getAllCartItems
-  )
+  .route("/product")
   .post(
     authenticateUserMiddleware,
     authorizeMiddleware(userConstant),
-    createUpdateCartItem
-  )
-  .delete(
-    authenticateUserMiddleware,
-    authorizeMiddleware(userConstant),
-    deleteCart
+    createUpdateCartProductItem
   );
+
 router
-  .route("/") //:id
+  .route("/product") //:id
   // .patch(
   //   authenticateUserMiddleware,
   //   authorizeMiddleware(userConstant),
@@ -47,15 +45,32 @@ router
   .delete(
     authenticateUserMiddleware,
     authorizeMiddleware(userConstant),
-    deleteCartItem
+    deleteCartProductItem
   );
+
 router
-  .route("/:id") //:id
+  .route("/bundle")
+  .post(
+    authenticateUserMiddleware,
+    authorizeMiddleware(userConstant),
+    createUpdateCartBundleItem
+  );
+
+router
+  .route("/bundle/:id") //:id
   .delete(
     authenticateUserMiddleware,
     authorizeMiddleware(userConstant),
-    deleteCartItem
+    deleteCartBundleItem
   );
+router
+  .route("/")
+  .delete(
+    authenticateUserMiddleware,
+    authorizeMiddleware(userConstant),
+    deleteCart
+  );
+
 router
   .route("/calculate-subtotal")
   .get(
@@ -69,5 +84,13 @@ router
     authenticateUserMiddleware,
     authorizeMiddleware(userConstant),
     calculateDeliveryFees
+  );
+
+router
+  .route("/")
+  .get(
+    authenticateUserMiddleware,
+    authorizeMiddleware(userConstant),
+    getAllCartItems
   );
 module.exports = router;

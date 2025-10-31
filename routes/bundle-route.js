@@ -4,8 +4,11 @@ const {
   createBundle,
   deleteBundle,
   updateBundle,
-  getBundle,
 } = require("../controllers/bundle-management-controller");
+const {
+  searchAllBundles,
+  getBundle,
+} = require("../controllers/bundle-search-controller");
 
 const {
   authenticateUserMiddleware,
@@ -17,6 +20,10 @@ const {
 const { storeConstant, adminConstant } = require("../config/constants");
 
 const router = express.Router();
+
+router
+  .route("/search")
+  .get(optionalAuthenticateUserMiddleware, searchAllBundles);
 
 router
   .route("/store")

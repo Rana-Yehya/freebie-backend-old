@@ -14,6 +14,7 @@ const {
   deleteUserLocation,
   updateUserLocation,
   createUserLocation,
+  getUserLocations,
 } = require("../controllers/user-auth-controller");
 const {
   authenticateUserMiddleware,
@@ -57,6 +58,11 @@ router
 
 router
   .route("/location")
+  .get(
+    authenticateUserMiddleware,
+    authorizeMiddleware(userConstant),
+    getUserLocations
+  )
   .post(
     authenticateUserMiddleware,
     authorizeMiddleware(userConstant),

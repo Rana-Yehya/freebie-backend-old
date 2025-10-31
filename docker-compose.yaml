@@ -4,6 +4,7 @@ services:
       context: .
     container_name: freebie
     restart: always
+    # command: nodemon --debug=PORT app.js
     environment:
       - TZ=Africa/Cairo
       - REDIS_PORT=6379
@@ -13,16 +14,18 @@ services:
       - PORT=5000
       - NODE_ENV=development
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/freebie?schema=public
-    ports: 
+    ports:
       - "5000:5000"
     depends_on:
       - db
       - redis
     develop:
       watch:
-        - action: sync+restart
-          path: ./*
-          target: /docker      
+        - action: sync
+          path: ./
+          target: ./docker
+        - action: rebuild
+          path: package.json
     volumes:
       - .:/docker
   redis:
@@ -40,7 +43,7 @@ services:
     build:
       context: .
     container_name: freebie-worker
-    restart: always
+    # restart: always
     environment:
       - TZ=Africa/Cairo
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/freebie?schema=public
@@ -51,12 +54,12 @@ services:
     depends_on:
       - redis
       - db
-    command: node helpers/cron/execute-job-in-bullmq.js  --watch
+    command: node helpers/cron/execute-job-in-bullmq.js
     develop:
       watch:
-        - action: sync+restart
+        - action: sync+exec
           path: ./*
-          target: /docker      
+          target: /docker
   db:
     image: postgres:16
     container_name: postgres
