@@ -35,7 +35,7 @@ router
   );
 
 router
-  .route("/product") //:id
+  .route("/product/:id") //:id
   // .patch(
   //   authenticateUserMiddleware,
   //   authorizeMiddleware(userConstant),

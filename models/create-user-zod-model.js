@@ -31,7 +31,7 @@ const CreateUserZodModel = z.object({
         message: "The phone number is not correct",
       }
     ),
-  password: z.string().optional(),
+  password: z.string({ message: "Password is required" }),
   fcmToken: z.string().optional(),
 });
 // type UserModel = z.infer<typeof CreateUserZodModel>;

@@ -53434,6 +53434,7 @@ export namespace Prisma {
     userLocationsId: string | null
     phone: string | null
     email: string | null
+    password: string | null
     role: string | null
     isVerified: boolean | null
     createdAt: Date | null
@@ -53449,6 +53450,7 @@ export namespace Prisma {
     userLocationsId: string | null
     phone: string | null
     email: string | null
+    password: string | null
     role: string | null
     isVerified: boolean | null
     createdAt: Date | null
@@ -53464,6 +53466,7 @@ export namespace Prisma {
     userLocationsId: number
     phone: number
     email: number
+    password: number
     role: number
     isVerified: number
     createdAt: number
@@ -53489,6 +53492,7 @@ export namespace Prisma {
     userLocationsId?: true
     phone?: true
     email?: true
+    password?: true
     role?: true
     isVerified?: true
     createdAt?: true
@@ -53504,6 +53508,7 @@ export namespace Prisma {
     userLocationsId?: true
     phone?: true
     email?: true
+    password?: true
     role?: true
     isVerified?: true
     createdAt?: true
@@ -53519,6 +53524,7 @@ export namespace Prisma {
     userLocationsId?: true
     phone?: true
     email?: true
+    password?: true
     role?: true
     isVerified?: true
     createdAt?: true
@@ -53621,6 +53627,7 @@ export namespace Prisma {
     userLocationsId: string
     phone: string
     email: string
+    password: string | null
     role: string
     isVerified: boolean
     createdAt: Date
@@ -53655,6 +53662,7 @@ export namespace Prisma {
     userLocationsId?: boolean
     phone?: boolean
     email?: boolean
+    password?: boolean
     role?: boolean
     isVerified?: boolean
     createdAt?: boolean
@@ -53679,6 +53687,7 @@ export namespace Prisma {
     userLocationsId?: boolean
     phone?: boolean
     email?: boolean
+    password?: boolean
     role?: boolean
     isVerified?: boolean
     createdAt?: boolean
@@ -53695,6 +53704,7 @@ export namespace Prisma {
     userLocationsId?: boolean
     phone?: boolean
     email?: boolean
+    password?: boolean
     role?: boolean
     isVerified?: boolean
     createdAt?: boolean
@@ -53711,13 +53721,14 @@ export namespace Prisma {
     userLocationsId?: boolean
     phone?: boolean
     email?: boolean
+    password?: boolean
     role?: boolean
     isVerified?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type userOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "dateOfBirth" | "gender" | "moneyInPocket" | "userLocationsId" | "phone" | "email" | "role" | "isVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type userOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "dateOfBirth" | "gender" | "moneyInPocket" | "userLocationsId" | "phone" | "email" | "password" | "role" | "isVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type userInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     mainUserLocations?: boolean | userLocationsDefaultArgs<ExtArgs>
     userLocations?: boolean | user$userLocationsArgs<ExtArgs>
@@ -53757,6 +53768,7 @@ export namespace Prisma {
       userLocationsId: string
       phone: string
       email: string
+      password: string | null
       role: string
       isVerified: boolean
       createdAt: Date
@@ -54200,6 +54212,7 @@ export namespace Prisma {
     readonly userLocationsId: FieldRef<"user", 'String'>
     readonly phone: FieldRef<"user", 'String'>
     readonly email: FieldRef<"user", 'String'>
+    readonly password: FieldRef<"user", 'String'>
     readonly role: FieldRef<"user", 'String'>
     readonly isVerified: FieldRef<"user", 'Boolean'>
     readonly createdAt: FieldRef<"user", 'DateTime'>
@@ -54904,7 +54917,7 @@ export namespace Prisma {
 
   export type UserLocationsGroupByOutputType = {
     id: string
-    userId: string
+    userId: string | null
     stateId: string | null
     _count: UserLocationsCountAggregateOutputType | null
     _min: UserLocationsMinAggregateOutputType | null
@@ -54929,7 +54942,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     stateId?: boolean
-    user?: boolean | userDefaultArgs<ExtArgs>
+    user?: boolean | userLocations$userArgs<ExtArgs>
     state?: boolean | userLocations$stateArgs<ExtArgs>
     mainUser?: boolean | userLocations$mainUserArgs<ExtArgs>
     _count?: boolean | UserLocationsCountOutputTypeDefaultArgs<ExtArgs>
@@ -54939,7 +54952,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     stateId?: boolean
-    user?: boolean | userDefaultArgs<ExtArgs>
+    user?: boolean | userLocations$userArgs<ExtArgs>
     state?: boolean | userLocations$stateArgs<ExtArgs>
   }, ExtArgs["result"]["userLocations"]>
 
@@ -54947,7 +54960,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     stateId?: boolean
-    user?: boolean | userDefaultArgs<ExtArgs>
+    user?: boolean | userLocations$userArgs<ExtArgs>
     state?: boolean | userLocations$stateArgs<ExtArgs>
   }, ExtArgs["result"]["userLocations"]>
 
@@ -54959,30 +54972,30 @@ export namespace Prisma {
 
   export type userLocationsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "stateId", ExtArgs["result"]["userLocations"]>
   export type userLocationsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | userDefaultArgs<ExtArgs>
+    user?: boolean | userLocations$userArgs<ExtArgs>
     state?: boolean | userLocations$stateArgs<ExtArgs>
     mainUser?: boolean | userLocations$mainUserArgs<ExtArgs>
     _count?: boolean | UserLocationsCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type userLocationsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | userDefaultArgs<ExtArgs>
+    user?: boolean | userLocations$userArgs<ExtArgs>
     state?: boolean | userLocations$stateArgs<ExtArgs>
   }
   export type userLocationsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | userDefaultArgs<ExtArgs>
+    user?: boolean | userLocations$userArgs<ExtArgs>
     state?: boolean | userLocations$stateArgs<ExtArgs>
   }
 
   export type $userLocationsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "userLocations"
     objects: {
-      user: Prisma.$userPayload<ExtArgs>
+      user: Prisma.$userPayload<ExtArgs> | null
       state: Prisma.$statePayload<ExtArgs> | null
       mainUser: Prisma.$userPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      userId: string
+      userId: string | null
       stateId: string | null
     }, ExtArgs["result"]["userLocations"]>
     composites: {}
@@ -55378,7 +55391,7 @@ export namespace Prisma {
    */
   export interface Prisma__userLocationsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends userDefaultArgs<ExtArgs> = {}>(args?: Subset<T, userDefaultArgs<ExtArgs>>): Prisma__userClient<$Result.GetResult<Prisma.$userPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends userLocations$userArgs<ExtArgs> = {}>(args?: Subset<T, userLocations$userArgs<ExtArgs>>): Prisma__userClient<$Result.GetResult<Prisma.$userPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     state<T extends userLocations$stateArgs<ExtArgs> = {}>(args?: Subset<T, userLocations$stateArgs<ExtArgs>>): Prisma__stateClient<$Result.GetResult<Prisma.$statePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     mainUser<T extends userLocations$mainUserArgs<ExtArgs> = {}>(args?: Subset<T, userLocations$mainUserArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$userPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -55631,7 +55644,7 @@ export namespace Prisma {
     /**
      * The data needed to create a userLocations.
      */
-    data: XOR<userLocationsCreateInput, userLocationsUncheckedCreateInput>
+    data?: XOR<userLocationsCreateInput, userLocationsUncheckedCreateInput>
   }
 
   /**
@@ -55806,6 +55819,25 @@ export namespace Prisma {
      * Limit how many userLocations to delete.
      */
     limit?: number
+  }
+
+  /**
+   * userLocations.user
+   */
+  export type userLocations$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the user
+     */
+    select?: userSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the user
+     */
+    omit?: userOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: userInclude<ExtArgs> | null
+    where?: userWhereInput
   }
 
   /**
@@ -56467,6 +56499,7 @@ export namespace Prisma {
     userLocationsId: 'userLocationsId',
     phone: 'phone',
     email: 'email',
+    password: 'password',
     role: 'role',
     isVerified: 'isVerified',
     createdAt: 'createdAt',
@@ -60074,6 +60107,7 @@ export namespace Prisma {
     userLocationsId?: StringFilter<"user"> | string
     phone?: StringFilter<"user"> | string
     email?: StringFilter<"user"> | string
+    password?: StringNullableFilter<"user"> | string | null
     role?: StringFilter<"user"> | string
     isVerified?: BoolFilter<"user"> | boolean
     createdAt?: DateTimeFilter<"user"> | Date | string
@@ -60097,6 +60131,7 @@ export namespace Prisma {
     userLocationsId?: SortOrder
     phone?: SortOrder
     email?: SortOrder
+    password?: SortOrderInput | SortOrder
     role?: SortOrder
     isVerified?: SortOrder
     createdAt?: SortOrder
@@ -60123,6 +60158,7 @@ export namespace Prisma {
     gender?: StringNullableFilter<"user"> | string | null
     moneyInPocket?: FloatFilter<"user"> | number
     userLocationsId?: StringFilter<"user"> | string
+    password?: StringNullableFilter<"user"> | string | null
     role?: StringFilter<"user"> | string
     isVerified?: BoolFilter<"user"> | boolean
     createdAt?: DateTimeFilter<"user"> | Date | string
@@ -60146,6 +60182,7 @@ export namespace Prisma {
     userLocationsId?: SortOrder
     phone?: SortOrder
     email?: SortOrder
+    password?: SortOrderInput | SortOrder
     role?: SortOrder
     isVerified?: SortOrder
     createdAt?: SortOrder
@@ -60169,6 +60206,7 @@ export namespace Prisma {
     userLocationsId?: StringWithAggregatesFilter<"user"> | string
     phone?: StringWithAggregatesFilter<"user"> | string
     email?: StringWithAggregatesFilter<"user"> | string
+    password?: StringNullableWithAggregatesFilter<"user"> | string | null
     role?: StringWithAggregatesFilter<"user"> | string
     isVerified?: BoolWithAggregatesFilter<"user"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"user"> | Date | string
@@ -60180,16 +60218,16 @@ export namespace Prisma {
     OR?: userLocationsWhereInput[]
     NOT?: userLocationsWhereInput | userLocationsWhereInput[]
     id?: StringFilter<"userLocations"> | string
-    userId?: StringFilter<"userLocations"> | string
+    userId?: StringNullableFilter<"userLocations"> | string | null
     stateId?: StringNullableFilter<"userLocations"> | string | null
-    user?: XOR<UserScalarRelationFilter, userWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, userWhereInput> | null
     state?: XOR<StateNullableScalarRelationFilter, stateWhereInput> | null
     mainUser?: UserListRelationFilter
   }
 
   export type userLocationsOrderByWithRelationInput = {
     id?: SortOrder
-    userId?: SortOrder
+    userId?: SortOrderInput | SortOrder
     stateId?: SortOrderInput | SortOrder
     user?: userOrderByWithRelationInput
     state?: stateOrderByWithRelationInput
@@ -60202,16 +60240,16 @@ export namespace Prisma {
     AND?: userLocationsWhereInput | userLocationsWhereInput[]
     OR?: userLocationsWhereInput[]
     NOT?: userLocationsWhereInput | userLocationsWhereInput[]
-    userId?: StringFilter<"userLocations"> | string
+    userId?: StringNullableFilter<"userLocations"> | string | null
     stateId?: StringNullableFilter<"userLocations"> | string | null
-    user?: XOR<UserScalarRelationFilter, userWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, userWhereInput> | null
     state?: XOR<StateNullableScalarRelationFilter, stateWhereInput> | null
     mainUser?: UserListRelationFilter
   }, "id" | "id" | "userId_stateId">
 
   export type userLocationsOrderByWithAggregationInput = {
     id?: SortOrder
-    userId?: SortOrder
+    userId?: SortOrderInput | SortOrder
     stateId?: SortOrderInput | SortOrder
     _count?: userLocationsCountOrderByAggregateInput
     _max?: userLocationsMaxOrderByAggregateInput
@@ -60223,7 +60261,7 @@ export namespace Prisma {
     OR?: userLocationsScalarWhereWithAggregatesInput[]
     NOT?: userLocationsScalarWhereWithAggregatesInput | userLocationsScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"userLocations"> | string
-    userId?: StringWithAggregatesFilter<"userLocations"> | string
+    userId?: StringNullableWithAggregatesFilter<"userLocations"> | string | null
     stateId?: StringNullableWithAggregatesFilter<"userLocations"> | string | null
   }
 
@@ -63626,6 +63664,7 @@ export namespace Prisma {
     moneyInPocket?: number
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -63649,6 +63688,7 @@ export namespace Prisma {
     userLocationsId: string
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -63670,6 +63710,7 @@ export namespace Prisma {
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -63693,6 +63734,7 @@ export namespace Prisma {
     userLocationsId?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -63715,6 +63757,7 @@ export namespace Prisma {
     userLocationsId: string
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -63729,6 +63772,7 @@ export namespace Prisma {
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -63744,6 +63788,7 @@ export namespace Prisma {
     userLocationsId?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -63752,35 +63797,35 @@ export namespace Prisma {
 
   export type userLocationsCreateInput = {
     id?: string
-    user: userCreateNestedOneWithoutUserLocationsInput
+    user?: userCreateNestedOneWithoutUserLocationsInput
     state?: stateCreateNestedOneWithoutUserLocationsInput
     mainUser?: userCreateNestedManyWithoutMainUserLocationsInput
   }
 
   export type userLocationsUncheckedCreateInput = {
     id?: string
-    userId: string
+    userId?: string | null
     stateId?: string | null
     mainUser?: userUncheckedCreateNestedManyWithoutMainUserLocationsInput
   }
 
   export type userLocationsUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    user?: userUpdateOneRequiredWithoutUserLocationsNestedInput
+    user?: userUpdateOneWithoutUserLocationsNestedInput
     state?: stateUpdateOneWithoutUserLocationsNestedInput
     mainUser?: userUpdateManyWithoutMainUserLocationsNestedInput
   }
 
   export type userLocationsUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     stateId?: NullableStringFieldUpdateOperationsInput | string | null
     mainUser?: userUncheckedUpdateManyWithoutMainUserLocationsNestedInput
   }
 
   export type userLocationsCreateManyInput = {
     id?: string
-    userId: string
+    userId?: string | null
     stateId?: string | null
   }
 
@@ -63790,7 +63835,7 @@ export namespace Prisma {
 
   export type userLocationsUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     stateId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -66541,6 +66586,7 @@ export namespace Prisma {
     userLocationsId?: SortOrder
     phone?: SortOrder
     email?: SortOrder
+    password?: SortOrder
     role?: SortOrder
     isVerified?: SortOrder
     createdAt?: SortOrder
@@ -66560,6 +66606,7 @@ export namespace Prisma {
     userLocationsId?: SortOrder
     phone?: SortOrder
     email?: SortOrder
+    password?: SortOrder
     role?: SortOrder
     isVerified?: SortOrder
     createdAt?: SortOrder
@@ -66575,6 +66622,7 @@ export namespace Prisma {
     userLocationsId?: SortOrder
     phone?: SortOrder
     email?: SortOrder
+    password?: SortOrder
     role?: SortOrder
     isVerified?: SortOrder
     createdAt?: SortOrder
@@ -70940,10 +70988,12 @@ export namespace Prisma {
     connect?: userWhereUniqueInput | userWhereUniqueInput[]
   }
 
-  export type userUpdateOneRequiredWithoutUserLocationsNestedInput = {
+  export type userUpdateOneWithoutUserLocationsNestedInput = {
     create?: XOR<userCreateWithoutUserLocationsInput, userUncheckedCreateWithoutUserLocationsInput>
     connectOrCreate?: userCreateOrConnectWithoutUserLocationsInput
     upsert?: userUpsertWithoutUserLocationsInput
+    disconnect?: userWhereInput | boolean
+    delete?: userWhereInput | boolean
     connect?: userWhereUniqueInput
     update?: XOR<XOR<userUpdateToOneWithWhereWithoutUserLocationsInput, userUpdateWithoutUserLocationsInput>, userUncheckedUpdateWithoutUserLocationsInput>
   }
@@ -77853,6 +77903,7 @@ export namespace Prisma {
     moneyInPocket?: number
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -77875,6 +77926,7 @@ export namespace Prisma {
     userLocationsId: string
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -77997,6 +78049,7 @@ export namespace Prisma {
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -78019,6 +78072,7 @@ export namespace Prisma {
     userLocationsId?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -79760,6 +79814,7 @@ export namespace Prisma {
     moneyInPocket?: number
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -79782,6 +79837,7 @@ export namespace Prisma {
     userLocationsId: string
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -79881,6 +79937,7 @@ export namespace Prisma {
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -79903,6 +79960,7 @@ export namespace Prisma {
     userLocationsId?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -79992,6 +80050,7 @@ export namespace Prisma {
     moneyInPocket?: number
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -80014,6 +80073,7 @@ export namespace Prisma {
     userLocationsId: string
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -80081,6 +80141,7 @@ export namespace Prisma {
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -80103,6 +80164,7 @@ export namespace Prisma {
     userLocationsId?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -80160,6 +80222,7 @@ export namespace Prisma {
     moneyInPocket?: number
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -80182,6 +80245,7 @@ export namespace Prisma {
     userLocationsId: string
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -80302,6 +80366,7 @@ export namespace Prisma {
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -80324,6 +80389,7 @@ export namespace Prisma {
     userLocationsId?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -80532,13 +80598,13 @@ export namespace Prisma {
 
   export type userLocationsCreateWithoutStateInput = {
     id?: string
-    user: userCreateNestedOneWithoutUserLocationsInput
+    user?: userCreateNestedOneWithoutUserLocationsInput
     mainUser?: userCreateNestedManyWithoutMainUserLocationsInput
   }
 
   export type userLocationsUncheckedCreateWithoutStateInput = {
     id?: string
-    userId: string
+    userId?: string | null
     mainUser?: userUncheckedCreateNestedManyWithoutMainUserLocationsInput
   }
 
@@ -80796,7 +80862,7 @@ export namespace Prisma {
     OR?: userLocationsScalarWhereInput[]
     NOT?: userLocationsScalarWhereInput | userLocationsScalarWhereInput[]
     id?: StringFilter<"userLocations"> | string
-    userId?: StringFilter<"userLocations"> | string
+    userId?: StringNullableFilter<"userLocations"> | string | null
     stateId?: StringNullableFilter<"userLocations"> | string | null
   }
 
@@ -82054,6 +82120,7 @@ export namespace Prisma {
     moneyInPocket?: number
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -82076,6 +82143,7 @@ export namespace Prisma {
     userLocationsId: string
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -82221,6 +82289,7 @@ export namespace Prisma {
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -82243,6 +82312,7 @@ export namespace Prisma {
     userLocationsId?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -82390,6 +82460,7 @@ export namespace Prisma {
     moneyInPocket?: number
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -82412,6 +82483,7 @@ export namespace Prisma {
     userLocationsId: string
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -82508,6 +82580,7 @@ export namespace Prisma {
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -82530,6 +82603,7 @@ export namespace Prisma {
     userLocationsId?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -82576,13 +82650,13 @@ export namespace Prisma {
 
   export type userLocationsCreateWithoutMainUserInput = {
     id?: string
-    user: userCreateNestedOneWithoutUserLocationsInput
+    user?: userCreateNestedOneWithoutUserLocationsInput
     state?: stateCreateNestedOneWithoutUserLocationsInput
   }
 
   export type userLocationsUncheckedCreateWithoutMainUserInput = {
     id?: string
-    userId: string
+    userId?: string | null
     stateId?: string | null
   }
 
@@ -82817,13 +82891,13 @@ export namespace Prisma {
 
   export type userLocationsUpdateWithoutMainUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    user?: userUpdateOneRequiredWithoutUserLocationsNestedInput
+    user?: userUpdateOneWithoutUserLocationsNestedInput
     state?: stateUpdateOneWithoutUserLocationsNestedInput
   }
 
   export type userLocationsUncheckedUpdateWithoutMainUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     stateId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -82964,6 +83038,7 @@ export namespace Prisma {
     moneyInPocket?: number
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -82986,6 +83061,7 @@ export namespace Prisma {
     userLocationsId: string
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -83040,6 +83116,7 @@ export namespace Prisma {
     moneyInPocket?: number
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -83061,6 +83138,7 @@ export namespace Prisma {
     moneyInPocket?: number
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -83103,6 +83181,7 @@ export namespace Prisma {
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -83125,6 +83204,7 @@ export namespace Prisma {
     userLocationsId?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -83200,6 +83280,7 @@ export namespace Prisma {
     userLocationsId?: StringFilter<"user"> | string
     phone?: StringFilter<"user"> | string
     email?: StringFilter<"user"> | string
+    password?: StringNullableFilter<"user"> | string | null
     role?: StringFilter<"user"> | string
     isVerified?: BoolFilter<"user"> | boolean
     createdAt?: DateTimeFilter<"user"> | Date | string
@@ -84853,7 +84934,7 @@ export namespace Prisma {
 
   export type userLocationsCreateManyStateInput = {
     id?: string
-    userId: string
+    userId?: string | null
   }
 
   export type deliveryTaxesCreateManyOriginStateInput = {
@@ -84911,19 +84992,19 @@ export namespace Prisma {
 
   export type userLocationsUpdateWithoutStateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    user?: userUpdateOneRequiredWithoutUserLocationsNestedInput
+    user?: userUpdateOneWithoutUserLocationsNestedInput
     mainUser?: userUpdateManyWithoutMainUserLocationsNestedInput
   }
 
   export type userLocationsUncheckedUpdateWithoutStateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     mainUser?: userUncheckedUpdateManyWithoutMainUserLocationsNestedInput
   }
 
   export type userLocationsUncheckedUpdateManyWithoutStateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type deliveryTaxesUpdateWithoutOriginStateInput = {
@@ -85748,6 +85829,7 @@ export namespace Prisma {
     moneyInPocket?: number
     phone: string
     email: string
+    password?: string | null
     role?: string
     isVerified?: boolean
     createdAt?: Date | string
@@ -85762,6 +85844,7 @@ export namespace Prisma {
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -85783,6 +85866,7 @@ export namespace Prisma {
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -85804,6 +85888,7 @@ export namespace Prisma {
     moneyInPocket?: FloatFieldUpdateOperationsInput | number
     phone?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

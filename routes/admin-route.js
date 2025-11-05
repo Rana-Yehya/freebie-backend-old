@@ -10,6 +10,7 @@ const {
   getAllUsers,
   sendNotificationToAllUsers,
   sendNotificationToAllStores,
+  getAllBundles,
 } = require("../controllers/admin-controller");
 const {
   authenticateUserMiddleware,
@@ -98,13 +99,24 @@ router.route("/send-notification-to-all-stores").post(
   sendNotificationToAllStores
 );
 
-router.route("/products").get(
-  authenticateUserMiddleware,
-  authorizeMiddleware(adminConstant),
-  authorizeAdminMiddleware(adminPrivilegeAllConstant),
+router
+  .route("/products")
+  .get(
+    authenticateUserMiddleware,
+    authorizeMiddleware(adminConstant),
+    authorizeAdminMiddleware(adminPrivilegeAllConstant),
+    getAllProducts
+  );
 
-  getAllProducts
-);
+router
+  .route("/bundles")
+  .get(
+    authenticateUserMiddleware,
+    authorizeMiddleware(adminConstant),
+    authorizeAdminMiddleware(adminPrivilegeAllConstant),
+    getAllBundles
+  );
+
 router.route("/set-product-tag").post(
   authenticateUserMiddleware,
   authorizeMiddleware(adminConstant),

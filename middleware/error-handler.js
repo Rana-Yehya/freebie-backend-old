@@ -76,13 +76,15 @@ const errorHandler = async (err, req, res, next) => {
   //   customError.statusCode = StatusCodes.BAD_REQUEST;
   // }
   // console.log(err.meta);
-  if (err.meta && err.meta.cause) {
+  else if (err.meta && err.meta.cause) {
     customError.message = err.meta.cause;
     customError.statusCode = StatusCodes.BAD_REQUEST;
-  }
-  if (err.name && err.name === "ValidationError") {
+  } else if (err.name && err.name === "ValidationError") {
     customError.message = err.message;
     customError.statusCode = StatusCodes.BAD_REQUEST;
+  } else if (err.code && err.code === "P2002") {
+    customError.message = "You have conflicted with another user";
+    customError.statusCode = StatusCodes.CONFLICT;
   }
   // if (err.name && err.name === 'CastError') {
   //   customError.message = `No Item with value ${err.value}`;

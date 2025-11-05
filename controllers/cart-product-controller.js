@@ -220,7 +220,7 @@ const createUpdateCartProductItem = async (req, res, next) => {
 
 const deleteCartProductItem = async (req, res, next) => {
   // const { productId: productId, color: color } = req.query;
-  const productStockId = req.params.id;
+  const { id: productStockId } = req.params;
   if (!productStockId) {
     throw new BadRequestError("Please enter a product stock id");
   }

@@ -32,8 +32,66 @@ const {
 const {
   UpdateUserLocationZodModel,
 } = require("../models/update-user-location-zod-model");
+const { UserLoginZodModel } = require("../models/user-login-zod-model");
+const { passwordCompare, passwordEncrypt } = require("../utils/password-utils");
 
-const login = async (req, res) => {};
+const login = async (req, res) => {
+  const { phoneNumber, password, email } = req.body;
+  const zodModel = UserLoginZodModel.safeParse({
+    email: email,
+    phone: phoneNumber,
+    password: password,
+  });
+
+  if (!zodModel.success) {
+    throw new BadRequestError(zodModel.error.errors[0].message);
+  }
+
+  const userInDB = await prisma.user.findFirst({
+    where: {
+      OR: [{ email }, { phone: phoneNumber }],
+    },
+  });
+  if (!userInDB) {
+    throw new UnauthenticatedError("Incorrect Credentials");
+  }
+  console.log(userInDB.password);
+  console.log(userInDB.password != undefined);
+
+  const isPasswordMatch = await passwordCompare({
+    passwordToCmpare: password,
+    password: userInDB.password,
+  });
+  if (!isPasswordMatch) {
+    throw new UnauthenticatedError("Invalid Credentials");
+  }
+
+  const session = await prisma.session.create({
+    // where: { id: user.id },
+    data: {
+      // isVerified: true,
+      // refreshTokenSecret: refreshTokenSecret,
+      // accessTokenSecret: accessTokenSecret,
+      user: { connect: { id: userInDB.id } },
+    },
+  });
+
+  const accessTokenJWT = createAccessJWT({
+    payload: { userId: userInDB.id, sessionId: session.id, role: userConstant },
+  });
+  const refreshTokenJWT = createRefreshJWT({
+    payload: { userId: userInDB.id, sessionId: session.id, role: userConstant }, //adminConstant
+  });
+  const { password: _, ...result } = userInDB;
+
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: i18n.__("Login Successfully"),
+    accessToken: accessTokenJWT,
+    refreshToken: refreshTokenJWT,
+    user: result,
+  });
+};
 
 const sendCode = async (req, res, next) => {
   const { phoneNumber } = req.body;
@@ -85,10 +143,34 @@ const sendCode = async (req, res, next) => {
     isAlreadyExist: userInDB ? true : false,
   });
 };
+const updatePassword = async (req, res, next) => {
+  const { password } = req.body;
+  const userInDB = await prisma.user.update({
+    where: { id: req.user.id },
+    data: {
+      password: await passwordEncrypt(password),
+    },
+  });
+  const { password: _, ...rest } = userInDB;
+  return res.status(StatusCodes.OK).json({
+    isSuccess: true,
+    message: i18n.__("Password changed successfully"),
+    user: rest,
+    // isAlreadyExist: userInDB ? true : false,
+  });
+};
 
 const register = async (req, res, next) => {
-  const { name, phoneNumber, userState, dateOfBirth, gender, fcmToken, email } =
-    req.body;
+  const {
+    name,
+    phoneNumber,
+    userState,
+    dateOfBirth,
+    gender,
+    fcmToken,
+    email,
+    password,
+  } = req.body;
   const zodModel = CreateUserZodModel.safeParse({
     name: name,
     dateOfBirth: dateOfBirth,
@@ -98,6 +180,7 @@ const register = async (req, res, next) => {
       stateId: userState,
     },
     phone: phoneNumber,
+    password: password,
     fcmToken: fcmToken,
   });
 
@@ -128,6 +211,8 @@ const register = async (req, res, next) => {
   //this is for detecting the user login from another device
   // const refreshTokenSecret = crypto.randomBytes(40).toString("hex");
   // const accessTokenSecret = crypto.randomBytes(40).toString("hex");
+
+  const passwordHash = await passwordEncrypt(password);
   const user = await prisma.user.create({
     data: {
       name: name,
@@ -135,6 +220,7 @@ const register = async (req, res, next) => {
       gender: gender,
       email: email,
       phone: phoneNumber,
+      password: passwordHash,
       sessions: {
         create: {
           fcmToken: fcmToken,
@@ -144,16 +230,15 @@ const register = async (req, res, next) => {
       // role: role,
       //TODO CAN ADD AN EXTRA LEVEL OF CHECK AND INTEGRATE THE VEERIFICATION WITH IOREEDIS
       isVerified: true,
-      userLocations: {
+      mainUserLocations: {
         create: {
           state: { connect: { id: userState } },
-          isMain: true,
         },
       },
       // state: { connect: { id: userState } },
     },
     include: {
-      userLocations: {
+      mainUserLocations: {
         include: {
           state: {
             include: { name: true, country: { include: { name: true } } },
@@ -186,12 +271,13 @@ const register = async (req, res, next) => {
   // // });
   // await spamOtpRequestHelper({ phone: phoneNumber, next });
   // await sendOtpHelper({ name, phone: phoneNumber, email });
+  const { password: _, ...result } = user;
   return res.status(StatusCodes.CREATED).json({
     isSuccess: true,
     message: i18n.__("Account Created Successfully"),
     accessToken: accessTokenJWT,
     refreshToken: refreshTokenJWT,
-    user: user,
+    user: result,
   });
 };
 
@@ -394,34 +480,18 @@ const updateUserLocation = async (req, res) => {
   }
   // console.log(req.user.userLocations);
 
-  const user = await prisma.user.update({
-    where: { id: req.user.id },
+  const userLocations = await prisma.userLocations.update({
+    where: { id: userLocationId },
     data: {
-      userLocations: {
-        update: {
-          where: { id: userLocationId },
-          data: {
-            //  isMain: isMain == true ? true : false,
-            state: { connect: { id: stateId } },
-          },
-        },
-      },
-    },
-    include: {
-      userLocations: {
-        include: {
-          state: {
-            include: { name: true, country: { include: { name: true } } },
-          },
-        },
-      },
+      //  isMain: isMain == true ? true : false,
+      state: { connect: { id: stateId } },
     },
   });
 
   return res.status(StatusCodes.OK).json({
     isSuccess: true,
     message: i18n.__("Location updated successfully"),
-    user: user,
+    userLocation: userLocations,
   });
 };
 
@@ -573,6 +643,7 @@ module.exports = {
   deleteAccount,
   sendCode,
   getUserLocations,
+  updatePassword,
   changeUserMainLocation,
   deleteUserLocation,
   updateUserLocation,

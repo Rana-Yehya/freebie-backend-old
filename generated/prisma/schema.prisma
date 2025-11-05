@@ -1075,7 +1075,7 @@ model user {
   userLocations     userLocations[]
   phone             String          @unique
   email             String          @unique
-  // password           String?
+  password          String? //@default("\$2b\$10\$U9L3L8JLCvzblIc9JGdOY.GpawndsKbSGtdyv0PW1o6UNdMlz6c9C")
   role              String          @default("user")
   isVerified        Boolean         @default(false)
   sessions          session[]       @relation("userSession")
@@ -1096,10 +1096,10 @@ model user {
 
 model userLocations {
   id       String  @id @unique @default(uuid())
-  userId   String
+  userId   String?
   // mainUser   user    @relation("mainUserLocation", fields: [mainUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // mainUserId String
-  user     user    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user     user?   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   state    state?  @relation(fields: [stateId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   stateId  String?
   // isMain  Boolean @default(false)

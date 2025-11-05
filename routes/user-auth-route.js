@@ -15,6 +15,7 @@ const {
   updateUserLocation,
   createUserLocation,
   getUserLocations,
+  updatePassword,
 } = require("../controllers/user-auth-controller");
 const {
   authenticateUserMiddleware,
@@ -55,7 +56,13 @@ router
 router
   .route("/delete")
   .delete(optionalAuthenticateUserMiddleware, deleteAccount);
-
+router
+  .route("/update-password")
+  .post(
+    authenticateUserMiddleware,
+    authorizeMiddleware(userConstant),
+    updatePassword
+  );
 router
   .route("/location")
   .get(

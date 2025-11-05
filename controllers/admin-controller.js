@@ -196,10 +196,29 @@ const getAllUsers = async (req, res, next) => {
   const user = await prisma.user.findMany({
     take: limit,
     skip: (page - 1) * limit,
+    select: {
+      password: false,
+    },
   });
   return res
     .status(StatusCodes.OK)
     .json({ isSuccess: true, count: user.length, data: user });
+};
+const getAllBundles = async (req, res, next) => {
+  // let isAcceptedByAdmin = true;
+  // if (req.user.role === adminConstant) {
+  //   isAcceptedByAdmin = null;
+  // }
+  const { page = 1, limit = 10 } = req.query;
+
+  const bundle = await prisma.bundle.findMany({
+    select: { name: true, mainImage: true },
+    take: limit,
+    skip: (page - 1) * limit,
+  });
+  return res
+    .status(StatusCodes.OK)
+    .json({ isSuccess: true, count: bundle.length, data: bundle });
 };
 const getAllProducts = async (req, res, next) => {
   // let isAcceptedByAdmin = true;
@@ -209,7 +228,7 @@ const getAllProducts = async (req, res, next) => {
   const { page = 1, limit = 10 } = req.query;
 
   const product = await prisma.product.findMany({
-    include: { name: true, mainImage: true },
+    select: { name: true, mainImage: true },
     take: limit,
     skip: (page - 1) * limit,
   });
@@ -237,6 +256,7 @@ const getAllStores = async (req, res, next) => {
       transactions: false,
       sessions: false,
       status: true,
+      password: false,
     },
   });
   return res
@@ -305,6 +325,7 @@ module.exports = {
   getAllStores,
   sendNotificationToAllStores,
   getAllProducts,
+  getAllBundles,
   getAllUsers,
   sendNotificationToAllUsers,
   setProductTag,

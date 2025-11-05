@@ -1,7 +1,7 @@
 {
     "Please provide email or phone number and password": "Please provide the email or phone number and the password",
     "Internal Server Error": "Internal Server Error",
-    "Invalid Credentials": "Information information is incorrect",
+    "Invalid Credentials": "Invalid Credentials",
     "User not found": "The user does not exist",
     "Password is required": "The password is required",
     "Email is required": "Email is required",
@@ -197,7 +197,7 @@
     "Name must be at least 3 characters long": "The name should be at least 3 letters",
     "Name must be at most 20 characters long": "The name should be at most 20 letters",
     "Invalid date of birth": "Date of birth is not valid",
-    "Invalid gender": "Incredible sex",
+    "Invalid gender": "Invalid sex",
     "Quantity is required": "The quantity is required",
     "Phone number is required": "The phone number is required",
     "Unauthorizated": "Unauthorized",

@@ -82,16 +82,16 @@ const getAllCartItems = async (req, res, next) => {
 
       if (
         branchState != branchDeliveryTaxes ||
-        userDeliveryTaxes != req.user.state.id
+        userDeliveryTaxes != req.user.mainUserLocations.state.id
       ) {
         console.log(branchState);
         console.log(branchDeliveryTaxes);
         console.log(userDeliveryTaxes);
-        console.log(req.user.state.id);
+        // console.log(req.user.state.id);
         deliveryStates = await prisma.deliveryTaxes.findFirst({
           where: {
             originStateId: branchState,
-            destinationStateId: req.user.state.id,
+            destinationStateId: req.user.mainUserLocations.state.id,
           },
           select: {
             id: true,
@@ -125,54 +125,56 @@ const getAllCartItems = async (req, res, next) => {
       // console.log(item.quantity);
 
       // console.log(stock);
-      if (stock < item.quantity) {
-        // throw new BadRequestError("Stock is not enough");
-        if (productCartStatus == ProductCartStatus.ACTIVE) {
-          productCartStatus = ProductCartStatus.OUTOFSTOCK;
-          // await prisma.userCart.update({
-          //   where: { userId: req.user.id },
-          //   data: {
-          //     product: {
-          //       update: {
-          //         where: {
-          //           userCartUserId_productStockId: {
-          //             userCartUserId: req.user.id,
-          //             productStockId: productStockId,
-          //           },
-          //         },
-          //         data: {
-          //           doesHaveEnoughQuantity: false,
-          //           quantity: stock,
-          //           oldQuantity: item.quantity,
-          //         },
-          //       },
-          //     },
-          //   },
-          // });
-        }
-      } else if (stock >= item.oldQuantity) {
-        if (productCartStatus == ProductCartStatus.OUTOFSTOCK) {
-          productCartStatus = ProductCartStatus.ACTIVE;
-          // await prisma.userCart.update({
-          //   where: { userId: req.user.id },
-          //   data: {
-          //     product: {
-          //       update: {
-          //         where: {
-          //           userCartUserId_productStockId: {
-          //             userCartUserId: req.user.id,
-          //             productStockId: productStockId,
-          //           },
-          //         },
-          //         data: {
-          //           doesHaveEnoughQuantity: true,
-          //           quantity: item.quantity,
-          //           oldQuantity: 0,
-          //         },
-          //       },
-          //     },
-          //   },
-          // });
+      if (item.productStock.variant.product.doesNeedPreparation != true) {
+        if (stock < item.quantity) {
+          // throw new BadRequestError("Stock is not enough");
+          if (productCartStatus == ProductCartStatus.ACTIVE) {
+            productCartStatus = ProductCartStatus.OUTOFSTOCK;
+            // await prisma.userCart.update({
+            //   where: { userId: req.user.id },
+            //   data: {
+            //     product: {
+            //       update: {
+            //         where: {
+            //           userCartUserId_productStockId: {
+            //             userCartUserId: req.user.id,
+            //             productStockId: productStockId,
+            //           },
+            //         },
+            //         data: {
+            //           doesHaveEnoughQuantity: false,
+            //           quantity: stock,
+            //           oldQuantity: item.quantity,
+            //         },
+            //       },
+            //     },
+            //   },
+            // });
+          }
+        } else if (stock >= item.oldQuantity) {
+          if (productCartStatus == ProductCartStatus.OUTOFSTOCK) {
+            productCartStatus = ProductCartStatus.ACTIVE;
+            // await prisma.userCart.update({
+            //   where: { userId: req.user.id },
+            //   data: {
+            //     product: {
+            //       update: {
+            //         where: {
+            //           userCartUserId_productStockId: {
+            //             userCartUserId: req.user.id,
+            //             productStockId: productStockId,
+            //           },
+            //         },
+            //         data: {
+            //           doesHaveEnoughQuantity: true,
+            //           quantity: item.quantity,
+            //           oldQuantity: 0,
+            //         },
+            //       },
+            //     },
+            //   },
+            // });
+          }
         }
       }
       console.log(productCartStatus);
