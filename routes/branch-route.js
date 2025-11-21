@@ -18,9 +18,13 @@ const { storeConstant, adminConstant } = require("../config/constants");
 const {
   authenticateUserMiddleware,
 } = require("../middleware/authentication-middleware");
+const { prisma } = require("../config/prisma");
 
 const router = express.Router();
-
+router.route("/branchLocation").get(async (req, res) => {
+  const branchLocation = await prisma.branchLocation.findMany();
+  return res.json({ branchLocation });
+});
 router
   .route("/")
   .get(

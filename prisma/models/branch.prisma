@@ -2,8 +2,8 @@ model branch {
   id           String                      @id @unique @default(uuid())
   storeId      String
   store        store                       @relation(fields: [storeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  location     location?                   @relation(fields: [locationId], references: [id], onDelete: SetNull, onUpdate: SetNull)
-  locationId   String?                     @unique
+  location     branchLocation?           //        @relation(fields: [locationId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  // locationId   String?                     @unique
   // location     location?
   taxOverrides deliveryTaxBranchOverride[]
   phone        String?
@@ -11,7 +11,7 @@ model branch {
   workHours    workHour[]
   productStock productStock[]
   // discountCodes branchDiscountCode[]
-  addresses    String?
+  address    String?
   // productUser  productCart[]
   // productOrder productOrder[]
   createdAt    DateTime                    @default(now())

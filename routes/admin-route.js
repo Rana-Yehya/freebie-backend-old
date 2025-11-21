@@ -26,6 +26,7 @@ const {
 const {
   authorizeAdminMiddleware,
 } = require("../middleware/authorization-admin-middleware");
+const { prisma } = require("../config/prisma");
 
 const router = express.Router();
 
@@ -107,6 +108,12 @@ router
     authorizeAdminMiddleware(adminPrivilegeAllConstant),
     getAllProducts
   );
+router.route("/userLocations").get(async (req, res) => {
+  const userLocations = await prisma.userLocations.findMany({});
+  res.json({
+    userLocations,
+  });
+});
 
 router
   .route("/bundles")

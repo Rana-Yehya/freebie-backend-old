@@ -1,10 +1,10 @@
 model adCampaign {
   id          String  @id @default(uuid())
   titleId     String  @unique
-  title       locale  @relation("titleAd", fields: [titleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  description String?
-  image       image   @relation("adImage", fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  imageId     String  @unique
+  title       locale?  @relation("titleAd")// fields: [titleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // description String?
+  image       image?   @relation("adImage")//, fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // imageId     String  @unique
 
   targetUrl String? // Where the ad clicks go (e.g., store page, product page)
 

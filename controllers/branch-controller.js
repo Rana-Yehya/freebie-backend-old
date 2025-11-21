@@ -183,20 +183,28 @@ const deleteBranch = async (req, res, next) => {
     throw new BadRequestError("Store has orders in progress");
   }
 
-  const branch = await prisma.store.update({
-    where: { id: req.user.id },
-    data: {
-      subscription: { update: { maxBranches: { decrement: 1 } } },
-      branches: {
-        delete: {
-          id: branchId,
-          // store: { id: req.user.id },
-        },
-      },
+  const branch = await prisma.branch.delete({
+    // where: { id: req.user.id },
+    // data: {
+    //   subscription: { update: { maxBranches: { decrement: 1 } } },
+    //   branches: {
+
+    //     delete: {
+    where: {
+      id: branchId,
+      // store: { id: req.user.id },
     },
   });
+
   if (!branch) {
     throw new NotFoundError("Branch not found");
+  } else {
+    await prisma.store.update({
+      where: { id: req.user.id },
+      data: {
+        subscription: { update: { maxBranches: { decrement: 1 } } },
+      },
+    });
   }
   return res
     .status(StatusCodes.OK)

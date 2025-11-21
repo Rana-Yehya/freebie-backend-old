@@ -1,16 +1,27 @@
 model image {
-  id               String      @id @unique @default(uuid())
-  publicId         String
-  secureUrl        String
+  id                   String              @id @unique @default(uuid())
+  publicId             String
+  secureUrl            String
   // userId String? 
   // users  user?   
-  category         category[]
-  occasion         occasion[]
-  product          product?    @relation("imageProduct", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  productId        String?
-  ad               adCampaign? @relation("adImage")
-  mainImageProduct product?    @relation("mainImageProduct")
-  mainImageBundle  bundle?     @relation("mainImageBundle")
-  storeLogo        store[]     @relation("storeLogo")
-  storeBanner      store[]     @relation("storeBanner")
+  category             category?           @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  categoryId           String?             @unique
+  occasion             occasion?           @relation(fields: [occasionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  occasionId           String?             @unique
+  product              product?            @relation("imageProduct", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productId            String?
+  ad                   adCampaign?         @relation("adImage", fields: [adId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  adId                 String?             @unique
+  mainImageProduct     product?            @relation("mainImageProduct", fields: [mainImageProductId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  mainImageProductId   String?             @unique
+  mainImageBundle      bundle?             @relation("mainImageBundle", fields: [mainImageBundleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  mainImageBundleId    String?             @unique
+  storeLogo            store?              @relation("storeLogo", fields: [storeLogoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  storeLogoId          String?             @unique
+  storeBanner          store?              @relation("storeBanner", fields: [storeBannerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  storeBannerId        String?             @unique
+  packaging            packaging?          @relation(fields: [packagingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  packagingId          String?             @unique
+  packagingVariation   packagingVariation? @relation(fields: [packagingVariationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  packagingVariationId String?             @unique
 }

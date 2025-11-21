@@ -34,7 +34,7 @@ services:
     container_name: redis-server
     environment:
       - TZ=Africa/Cairo
-    restart: always
+    # restart: always
     ports:
       - "6379:6379"
     volumes:

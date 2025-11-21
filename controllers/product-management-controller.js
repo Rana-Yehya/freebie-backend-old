@@ -441,9 +441,6 @@ const updateProduct = async (req, res, next) => {
       });
     }
   }
-  for (let index = 0; index < productStockList.length; index++) {
-    const element = productStockList[index];
-  }
   const updatedProduct = await prisma.product.update({
     where: { id: id },
     data: {
@@ -669,7 +666,9 @@ const updateProduct = async (req, res, next) => {
 const createProductVariant = async (req, res, next) => {
   const { id } = req.params;
   const { branchId, stock, color } = req.body;
-
+  if (!id) {
+    throw new BadRequestError("Please enter a product id");
+  }
   const zodModel = CreateProductVariantZodModel.safeParse({
     branchId: branchId,
     color: color,

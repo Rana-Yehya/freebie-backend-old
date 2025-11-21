@@ -397,12 +397,15 @@ const updateProfile = async (req, res) => {
       type: type || undefined,
     },
   });
-  if (logo) {
+  console.log("logo user", req.user.logo);
+  console.log("banner user", req.user.banner);
+
+  if (logo && req.user.logo != undefined) {
     await destroyImage({
       imagePublicId: req.user.logo.publicId,
     });
   }
-  if (banner) {
+  if (banner && req.user.banner != undefined) {
     await destroyImage({
       imagePublicId: req.user.banner.publicId,
     });

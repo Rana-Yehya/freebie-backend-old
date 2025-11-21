@@ -1,18 +1,18 @@
 model bundle {
-    id            String         @id @default(uuid())
-    nameId        String         @unique
-    name          locale         @relation("nameBundle", fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    mainImage     image          @relation("mainImageBundle", fields: [mainImageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    mainImageId   String         @unique
-    descriptionId String         @unique
-    description   locale         @relation("descriptionBundle", fields: [descriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    bundlePrice   Float? // Fixed bundle price
-    bundleCart    bundleCart[]
-    bundleItems   bundleItem[]
-    reviews       bundleReview[]
-    isActive      Boolean        @default(true)
-    createdAt     DateTime       @default(now())
-    updatedAt     DateTime       @updatedAt
+    id          String         @id @default(uuid())
+    // nameId        String         @unique
+    name        locale?        @relation("nameBundle") //, fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    mainImage   image?         @relation("mainImageBundle") //, fields: [mainImageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    // mainImageId   String         @unique
+    // descriptionId String         @unique
+    description locale?        @relation("descriptionBundle") //, fields: [descriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    bundlePrice Float? // Fixed bundle price
+    bundleCart  bundleCart[]
+    bundleItems bundleItem[]
+    reviews     bundleReview[]
+    isActive    Boolean        @default(true)
+    createdAt   DateTime       @default(now())
+    updatedAt   DateTime       @updatedAt
 
     @@map("bundles")
 }

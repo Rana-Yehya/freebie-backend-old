@@ -9,7 +9,7 @@
   "type": "commonjs",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "node index.js"
   },
   "dependencies": {
     "@prisma/client": "^6.16.2",
@@ -45,7 +45,6 @@
     "schema": "./prisma"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10",
     "prisma": "^6.16.2"
   }
 }

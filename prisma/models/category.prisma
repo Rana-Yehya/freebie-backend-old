@@ -1,9 +1,8 @@
 model category {
   id                         String    @id @unique @default(uuid())
-  nameId                     String    @unique
-  name                       locale    @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  imageId                    String
-  image                      image     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // nameId                     String    @unique
+  name                       locale? //   @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  image                      image?//     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   product                    product[]
   canBeDeliveredOutsideState Boolean   @default(true)
   createdAt                  DateTime  @default(now())

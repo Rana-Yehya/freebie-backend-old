@@ -18,7 +18,7 @@ model admin {
 
   // categoriesInterest category[]
   // occasionsInterest  occasion[]
-  adminPrivilege adminPrivilege 
+  adminPrivilege AdminPrivilege 
   // products           product[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -29,7 +29,7 @@ model admin {
   countryId String?
 }
 
-enum adminPrivilege {
+enum AdminPrivilege {
   ALL
   DELIVERY
 }

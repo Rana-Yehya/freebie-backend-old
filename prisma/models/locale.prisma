@@ -1,7 +1,7 @@
 model locale {
-  id                         String      @id @unique @default(uuid())
-  default                    String?
-  en                         String?
+  id      String      @id @unique @default(uuid())
+  default String?
+  en      String?
   // localeFr      String?
   // localeDe      String?
   // localeEs      String?
@@ -11,25 +11,46 @@ model locale {
   // localeZh      String?
   // localeJa      String?
   // localeKo      String?
-  ar                         String?
+  ar      String?
   // localePl      String?
   // localeTr      String?
   // localeCn      String?
   // productId   String? @unique
-  ad                         adCampaign? @relation("titleAd")
-  nameBundle                 bundle?     @relation("nameBundle") //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  descriptionBundle          bundle?     @relation("descriptionBundle") //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  nameProduct                product?    @relation("nameProduct") //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  country                    country?
-  state                      state?
-  storeName                  store?      @relation("storeName")
-  storeBio                   store?      @relation("storeBio")
-  currencyAbbLocale          currency?   @relation("currencyAbbLocale")
-  currencyName               currency?   @relation("currencyName")
-  city                       city?
-  info                       info?
-  category                   category?
-  occasion                   occasion?
-  descriptionProduct         product?    @relation("descriptionProduct") //, references: [id], fields: [descriptionProductId])
-  detailedDescriptionProduct product?    @relation("detailedDescriptionProduct") //, references: [id], fields: [detailedDescriptionProductId])
+  ad      adCampaign? @relation("titleAd", fields: [adId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  adId    String?     @unique
+
+  nameBundle   bundle? @relation("nameBundle", fields: [nameBundleId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  nameBundleId String? @unique
+
+  descriptionBundle   bundle? @relation("descriptionBundle", fields: [descriptionBundleId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  descriptionBundleId String? @unique
+
+  nameProduct   product? @relation("nameProduct", fields: [nameProductId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  nameProductId String?  @unique
+
+  packaging                    packaging? @relation(fields: [packagingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  packagingId                  String?    @unique
+  country                      country?   @relation(fields: [countryId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  countryId                    String?    @unique
+  state                        state?     @relation(fields: [stateId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  stateId                      String?    @unique
+  storeName                    store?     @relation("storeName", fields: [storeNameId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  storeNameId                  String?    @unique
+  storeBio                     store?     @relation("storeBio", fields: [storeBioId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  storeBioId                   String?    @unique
+  currencyAbb                  currency?  @relation("currencyAbbLocale", fields: [currencyAbbId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  currencyAbbId                String?    @unique
+  currencyName                 currency?  @relation("currencyName", fields: [currencyNameId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  currencyNameId               String?    @unique
+  city                         city?
+  info                         info?      @relation(fields: [infoId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  infoId                       String?    @unique
+  category                     category?  @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  categoryId                   String?    @unique
+  occasion                     occasion?  @relation(fields: [occasionId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  occasionId                   String?    @unique
+  descriptionProduct           product?   @relation("descriptionProduct", fields: [descriptionProductId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  descriptionProductId         String?    @unique
+  detailedDescriptionProduct   product?   @relation("detailedDescriptionProduct", fields: [detailedDescriptionProductId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  detailedDescriptionProductId String?    @unique
 }

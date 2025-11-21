@@ -44,13 +44,14 @@ const subscriptionRouter = require("./routes/subscription-route");
 const discountRouter = require("./routes/discount-route");
 const adsRouter = require("./routes/ads-route");
 const bundlesRouter = require("./routes/bundle-route");
-
+const packagingRouter = require("./routes/packaging-route");
 const notFound = require("./middleware/not-found");
 const errorHandler = require("./middleware/error-handler");
 const {
   localizationMiddleware,
 } = require("./middleware/localization-middleware");
 const { passwordEncrypt } = require("./utils/password-utils");
+const { adminPrivilege, AdminPrivilege } = require("./generated/prisma");
 
 const app = express();
 
@@ -159,6 +160,7 @@ app.use("/api/v1/subscriptions", subscriptionRouter);
 app.use("/api/v1/discounts", discountRouter);
 app.use("/api/v1/advertisements", adsRouter);
 app.use("/api/v1/bundles", bundlesRouter);
+app.use("/api/v1/packaging", packagingRouter);
 
 app.use(notFound);
 app.use(errorHandler);
@@ -178,6 +180,7 @@ const startServer = async () => {
           email: "freebie.egypt@gmail.com",
           phone: "+201225989865",
           password: await passwordEncrypt("password"),
+          adminPrivilege: AdminPrivilege.ALL,
         },
       });
     }

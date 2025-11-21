@@ -14,6 +14,9 @@ const CreateStoreZodModel = z.object({
     .any({
       message: "Please enter a logo",
     })
+    .refine((file) => file != null, {
+      message: "Please enter a logo",
+    })
     .refine(
       (file) =>
         [
@@ -32,6 +35,9 @@ const CreateStoreZodModel = z.object({
   banner: z
     .any({
       message: "Please enter a banner",
+    })
+    .refine((file) => file != null, {
+      message: "Please enter a logo",
     })
     .refine(
       (file) =>

@@ -22,6 +22,7 @@ const getAllCartItems = async (req, res, next) => {
       // ],
     },
     include: {
+      packagingVariation: true,
       bundleCart: true,
       productCart: {
         include: {
@@ -79,7 +80,6 @@ const getAllCartItems = async (req, res, next) => {
       const userDeliveryTaxes = item.deliveryTaxes.destinationStateId;
       let deliveryStates;
       let productCartStatus;
-
       if (
         branchState != branchDeliveryTaxes ||
         userDeliveryTaxes != req.user.mainUserLocations.state.id
@@ -236,6 +236,7 @@ const getAllCartItems = async (req, res, next) => {
     taxAmount: userCart != null ? userCart.taxAmount : 0,
     deliveryFee: userCart != null ? userCart.deliveryFee : 0,
     totalAmount: userCart != null ? userCart.totalAmount : 0,
+    packaging: userCart != null ? userCart.packagingVariation : null,
     productCart: userCart != null ? userCart.productCart : [],
     bundleCart: userCart != null ? userCart.bundleCart : [],
   });

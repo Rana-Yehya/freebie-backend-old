@@ -1,17 +1,17 @@
 model state {
-  id                       String          @id @unique @default(uuid())
+  id            String          @id @unique @default(uuid())
   // name                     String
-  nameId                   String          @unique
-  name                     locale          @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade) //onDelete: SetNull, onUpdate: SetNull
-  country                  country         @relation(fields: [countryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  countryId                String
-  city                     city[]
-  userLocations            userLocations[]
+  name          locale? // @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade) //onDelete: SetNull, onUpdate: SetNull
+  country       country         @relation(fields: [countryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  countryId     String
+  city          city[]
+  userLocations userLocations[]
+  location      branchLocation[]
+
   //   @relation(fields: [userLocationsId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
   // userLocationsId          String?
   originDeliveryTaxes      deliveryTaxes[] @relation("OriginStateFees")
   destinationDeliveryTaxes deliveryTaxes[] @relation("DestinationStateFees")
   createdAt                DateTime        @default(now())
   updatedAt                DateTime        @updatedAt
-  location                 location[]
 }

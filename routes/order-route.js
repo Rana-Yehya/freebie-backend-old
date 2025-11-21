@@ -30,7 +30,13 @@ const {
 
 const router = express.Router();
 // payment gateway
-router.route("/create-paid-order").post(createPaidOrder);
+router
+  .route("/create-paid-order")
+  .post(
+    authenticateUserMiddleware,
+    authorizeMiddleware(userConstant),
+    createPaidOrder
+  );
 router
   .route("/delete-unpaid-order/:id")
   .delete(authenticateUserMiddleware, deleteUnpaidOrder);

@@ -18,6 +18,7 @@ const {
 } = require("../generated/prisma");
 const { StoreStatusZodModel } = require("../models/store-status-zod-model");
 const { ProductStatusZodModel } = require("../models/product-status-zod-model");
+const { TrunkContextImpl } = require("twilio/lib/rest/routes/v2/trunk");
 
 const setStoreStatus = async (req, res) => {
   const { storeId, status } = req.body;
@@ -197,6 +198,12 @@ const getAllUsers = async (req, res, next) => {
     take: limit,
     skip: (page - 1) * limit,
     select: {
+      name: true,
+      gender: true,
+      email: true,
+      phone: true,
+      createdAt: true,
+      mainUserLocations: true,
       password: false,
     },
   });

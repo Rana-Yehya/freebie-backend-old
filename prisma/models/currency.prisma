@@ -1,9 +1,9 @@
 model currency {
   id            String        @id @unique @default(uuid())
-  nameId        String        @unique
-  name          locale        @relation("currencyName", fields: [nameId], references: [id])
-  currencyAbbId String        @unique
-  currencyAbb   locale        @relation("currencyAbbLocale", fields: [currencyAbbId], references: [id])
+  // nameId        String        @unique
+  name          locale?        @relation("currencyName")//, fields: [nameId], references: [id])
+  // currencyAbbId String        @unique
+  currencyAbb   locale?        @relation("currencyAbbLocale")//, fields: [currencyAbbId], references: [id])
   order         order[]
   transaction   transaction[]
   country       country       @relation(fields: [countryId], references: [id], onDelete: Cascade, onUpdate: Cascade)

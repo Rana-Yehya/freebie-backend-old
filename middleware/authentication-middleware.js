@@ -143,7 +143,7 @@ const optionalAuthenticateUserMiddleware = async (req, res, next) => {
     if (decoded) {
       const session = await prisma.session.findUnique({
         where: { id: decoded.sessionId },
-        select: {
+        include: {
           user: {
             include: {
               mainUserLocations: {
@@ -158,44 +158,44 @@ const optionalAuthenticateUserMiddleware = async (req, res, next) => {
               },
             },
           },
-          store: { include: { password: false } },
-          admin: { include: { password: false } },
+          store: {
+            include: {
+              name: true,
+              bio: true,
+              logo: true,
+              banner: true,
+              subscription: { include: { planLimit: true } },
+            },
+          },
+          admin: {
+            include: { country: { include: { name: true } } },
+          },
         },
       });
-      if (
-        (session.admin &&
-          decoded.role == adminConstant &&
-          session.admin.id == decoded.userId) ||
-        (session.user &&
-          decoded.role == userConstant &&
-          session.user.id == decoded.userId) ||
-        (session.store &&
-          decoded.role == storeConstant &&
-          session.store.id == decoded.userId)
-      ) {
-        req.user = session.admin || session.user || session.store;
-        req.session = session.id;
-        req.fcmToken = session.fcmToken;
-        req.role = decoded.role;
+      console.log(session);
+      if (session != null) {
+        if (
+          (session.admin &&
+            decoded.role == adminConstant &&
+            session.admin.id == decoded.userId) ||
+          (session.user &&
+            decoded.role == userConstant &&
+            session.user.id == decoded.userId) ||
+          (session.store &&
+            decoded.role == storeConstant &&
+            session.store.id == decoded.userId)
+        ) {
+          req.user = session.admin || session.user || session.store;
+          req.session = session.id;
+          req.fcmToken = session.fcmToken;
+          req.role = decoded.role;
+          return next();
+        } else {
+          throw new UnauthenticatedError("Unauthorizated");
+        }
       } else {
-        throw new UnauthenticatedError("Unauthorizated");
+        return next();
       }
-      // const { userId, email } = decoded;
-
-      // if (decoded.role === storeConstant) {
-      //   req.user.role = storeConstant;
-      // } else if (decoded.role === adminConstant) {
-      //   req.user.role = adminConstant;
-      // } else {
-      //           req.user.role = userConstant;
-
-      // }
-      // decoded.role === userConstant ? (req.user.role = userConstant) : null;
-      // decoded.role === userConstant ? (req.user.role = userConstant) : null;
-
-      return next();
-    } else {
-      return next();
     }
   } else {
     return next();

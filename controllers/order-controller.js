@@ -158,6 +158,7 @@ const createOrder = async (req, res, next) => {
           productStockId: true,
           productStock: {
             select: {
+              branch: { select: { store: { select: { subscription: true } } } },
               variant: {
                 select: {
                   id: true,
@@ -198,6 +199,8 @@ const createOrder = async (req, res, next) => {
         ? item.productStock.variant.product.actualPrice
         : item.productStock.variant.product.price,
       deliveryFee: deliverySum,
+      commissionRate:
+        item.productStock.branch.store.subscription.commissionRate,
       subtotal:
         (item.productStock.variant.product.actualPrice
           ? item.productStock.variant.product.actualPrice
@@ -263,9 +266,10 @@ const createOrder = async (req, res, next) => {
       location: {
         create: {
           address: address,
-          state: { connect: { id: req.user.stateId } },
+          state: { connect: { id: req.user.mainUserLocations.state.id } },
         },
       },
+
       productOrder: {
         createMany: { data: productOrder },
       },
@@ -280,7 +284,9 @@ const createOrder = async (req, res, next) => {
   return res.status(StatusCodes.CREATED).json({ isSuccess: true, data: order });
 };
 const createPaidOrder = async (req, res, next) => {
-  const { userId, orderId } = req.body;
+  const userId = req.user.id;
+
+  const { orderId } = req.body;
   const userCart = await prisma.userCart.findUnique({
     where: {
       userId: userId,

@@ -18,7 +18,7 @@ model admin {
 
   // categoriesInterest category[]
   // occasionsInterest  occasion[]
-  adminPrivilege adminPrivilege
+  adminPrivilege AdminPrivilege
   // products           product[]
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
@@ -29,18 +29,18 @@ model admin {
   countryId String?
 }
 
-enum adminPrivilege {
+enum AdminPrivilege {
   ALL
   DELIVERY
 }
 
 model adCampaign {
-  id          String  @id @default(uuid())
-  titleId     String  @unique
-  title       locale  @relation("titleAd", fields: [titleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  description String?
-  image       image   @relation("adImage", fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  imageId     String  @unique
+  id      String  @id @default(uuid())
+  titleId String  @unique
+  title   locale? @relation("titleAd") // fields: [titleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // description String?
+  image   image?  @relation("adImage") //, fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // imageId     String  @unique
 
   targetUrl String? // Where the ad clicks go (e.g., store page, product page)
 
@@ -152,8 +152,8 @@ model branch {
   id           String                      @id @unique @default(uuid())
   storeId      String
   store        store                       @relation(fields: [storeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  location     location?                   @relation(fields: [locationId], references: [id], onDelete: SetNull, onUpdate: SetNull)
-  locationId   String?                     @unique
+  location     branchLocation? //        @relation(fields: [locationId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  // locationId   String?                     @unique
   // location     location?
   taxOverrides deliveryTaxBranchOverride[]
   phone        String?
@@ -161,7 +161,7 @@ model branch {
   workHours    workHour[]
   productStock productStock[]
   // discountCodes branchDiscountCode[]
-  addresses    String?
+  address      String?
   // productUser  productCart[]
   // productOrder productOrder[]
   createdAt    DateTime                    @default(now())
@@ -221,20 +221,20 @@ model bundleCart {
 // }
 
 model bundle {
-  id            String         @id @default(uuid())
-  nameId        String         @unique
-  name          locale         @relation("nameBundle", fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  mainImage     image          @relation("mainImageBundle", fields: [mainImageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  mainImageId   String         @unique
-  descriptionId String         @unique
-  description   locale         @relation("descriptionBundle", fields: [descriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  bundlePrice   Float? // Fixed bundle price
-  bundleCart    bundleCart[]
-  bundleItems   bundleItem[]
-  reviews       bundleReview[]
-  isActive      Boolean        @default(true)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  id          String         @id @default(uuid())
+  // nameId        String         @unique
+  name        locale?        @relation("nameBundle") //, fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  mainImage   image?         @relation("mainImageBundle") //, fields: [mainImageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // mainImageId   String         @unique
+  // descriptionId String         @unique
+  description locale?        @relation("descriptionBundle") //, fields: [descriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bundlePrice Float? // Fixed bundle price
+  bundleCart  bundleCart[]
+  bundleItems bundleItem[]
+  reviews     bundleReview[]
+  isActive    Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 
   @@map("bundles")
 }
@@ -253,10 +253,9 @@ model bundleItem {
 
 model category {
   id                         String    @id @unique @default(uuid())
-  nameId                     String    @unique
-  name                       locale    @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  imageId                    String
-  image                      image     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // nameId                     String    @unique
+  name                       locale? //   @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  image                      image? //     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   product                    product[]
   canBeDeliveredOutsideState Boolean   @default(true)
   createdAt                  DateTime  @default(now())
@@ -282,8 +281,8 @@ model city {
 
 model country {
   id             String    @id @unique @default(uuid())
-  nameId         String    @unique
-  name           locale    @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // nameId         String    @unique
+  name           locale? // @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   currency       currency?
   countryIsoCode String    @unique
   admin          admin[]
@@ -293,17 +292,17 @@ model country {
 }
 
 model currency {
-  id            String        @id @unique @default(uuid())
-  nameId        String        @unique
-  name          locale        @relation("currencyName", fields: [nameId], references: [id])
-  currencyAbbId String        @unique
-  currencyAbb   locale        @relation("currencyAbbLocale", fields: [currencyAbbId], references: [id])
-  order         order[]
-  transaction   transaction[]
-  country       country       @relation(fields: [countryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  countryId     String        @unique
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  id          String        @id @unique @default(uuid())
+  // nameId        String        @unique
+  name        locale?       @relation("currencyName") //, fields: [nameId], references: [id])
+  // currencyAbbId String        @unique
+  currencyAbb locale?       @relation("currencyAbbLocale") //, fields: [currencyAbbId], references: [id])
+  order       order[]
+  transaction transaction[]
+  country     country       @relation(fields: [countryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  countryId   String        @unique
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 }
 
 model deliveryTaxBranchOverride {
@@ -381,20 +380,31 @@ model discount {
 }
 
 model image {
-  id               String      @id @unique @default(uuid())
-  publicId         String
-  secureUrl        String
+  id                   String              @id @unique @default(uuid())
+  publicId             String
+  secureUrl            String
   // userId String? 
   // users  user?   
-  category         category[]
-  occasion         occasion[]
-  product          product?    @relation("imageProduct", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  productId        String?
-  ad               adCampaign? @relation("adImage")
-  mainImageProduct product?    @relation("mainImageProduct")
-  mainImageBundle  bundle?     @relation("mainImageBundle")
-  storeLogo        store[]     @relation("storeLogo")
-  storeBanner      store[]     @relation("storeBanner")
+  category             category?           @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  categoryId           String?             @unique
+  occasion             occasion?           @relation(fields: [occasionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  occasionId           String?             @unique
+  product              product?            @relation("imageProduct", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productId            String?
+  ad                   adCampaign?         @relation("adImage", fields: [adId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  adId                 String?             @unique
+  mainImageProduct     product?            @relation("mainImageProduct", fields: [mainImageProductId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  mainImageProductId   String?             @unique
+  mainImageBundle      bundle?             @relation("mainImageBundle", fields: [mainImageBundleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  mainImageBundleId    String?             @unique
+  storeLogo            store?              @relation("storeLogo", fields: [storeLogoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  storeLogoId          String?             @unique
+  storeBanner          store?              @relation("storeBanner", fields: [storeBannerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  storeBannerId        String?             @unique
+  packaging            packaging?          @relation(fields: [packagingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  packagingId          String?             @unique
+  packagingVariation   packagingVariation? @relation(fields: [packagingVariationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  packagingVariationId String?             @unique
 }
 
 model inbox {
@@ -413,16 +423,16 @@ model info {
   // buy something or take money from wallet -> false = buy, true = take
   slug      String   @unique
   // data      String
-  nameId    String   @unique
-  name      locale   @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // nameId    String   @unique
+  name      locale? // @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model locale {
-  id                         String      @id @unique @default(uuid())
-  default                    String?
-  en                         String?
+  id      String      @id @unique @default(uuid())
+  default String?
+  en      String?
   // localeFr      String?
   // localeDe      String?
   // localeEs      String?
@@ -432,45 +442,69 @@ model locale {
   // localeZh      String?
   // localeJa      String?
   // localeKo      String?
-  ar                         String?
+  ar      String?
   // localePl      String?
   // localeTr      String?
   // localeCn      String?
   // productId   String? @unique
-  ad                         adCampaign? @relation("titleAd")
-  nameBundle                 bundle?     @relation("nameBundle") //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  descriptionBundle          bundle?     @relation("descriptionBundle") //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  nameProduct                product?    @relation("nameProduct") //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  country                    country?
-  state                      state?
-  storeName                  store?      @relation("storeName")
-  storeBio                   store?      @relation("storeBio")
-  currencyAbbLocale          currency?   @relation("currencyAbbLocale")
-  currencyName               currency?   @relation("currencyName")
-  city                       city?
-  info                       info?
-  category                   category?
-  occasion                   occasion?
-  descriptionProduct         product?    @relation("descriptionProduct") //, references: [id], fields: [descriptionProductId])
-  detailedDescriptionProduct product?    @relation("detailedDescriptionProduct") //, references: [id], fields: [detailedDescriptionProductId])
+  ad      adCampaign? @relation("titleAd", fields: [adId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  adId    String?     @unique
+
+  nameBundle   bundle? @relation("nameBundle", fields: [nameBundleId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  nameBundleId String? @unique
+
+  descriptionBundle   bundle? @relation("descriptionBundle", fields: [descriptionBundleId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  descriptionBundleId String? @unique
+
+  nameProduct   product? @relation("nameProduct", fields: [nameProductId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  nameProductId String?  @unique
+
+  packaging                    packaging? @relation(fields: [packagingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  packagingId                  String?    @unique
+  country                      country?   @relation(fields: [countryId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  countryId                    String?    @unique
+  state                        state?     @relation(fields: [stateId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  stateId                      String?    @unique
+  storeName                    store?     @relation("storeName", fields: [storeNameId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  storeNameId                  String?    @unique
+  storeBio                     store?     @relation("storeBio", fields: [storeBioId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  storeBioId                   String?    @unique
+  currencyAbb                  currency?  @relation("currencyAbbLocale", fields: [currencyAbbId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  currencyAbbId                String?    @unique
+  currencyName                 currency?  @relation("currencyName", fields: [currencyNameId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  currencyNameId               String?    @unique
+  city                         city?
+  info                         info?      @relation(fields: [infoId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  infoId                       String?    @unique
+  category                     category?  @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  categoryId                   String?    @unique
+  occasion                     occasion?  @relation(fields: [occasionId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  occasionId                   String?    @unique
+  descriptionProduct           product?   @relation("descriptionProduct", fields: [descriptionProductId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  descriptionProductId         String?    @unique
+  detailedDescriptionProduct   product?   @relation("detailedDescriptionProduct", fields: [detailedDescriptionProductId], references: [id], onDelete: Cascade, onUpdate: Cascade) //@relation("locale", fields: [localeProductId], references: [id]) // @relation("ProductTolocale", fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  detailedDescriptionProductId String?    @unique
 }
 
-model location {
-  id       String  @id @unique @default(uuid())
-  address  String?
-  state    state   @relation(fields: [stateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  stateId  String
-  branchId String?
-  branch   branch?
-  order    order[]
+model branchLocation {
+  id        String   @id @unique @default(uuid())
+  address   String?
+  state     state    @relation(fields: [stateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  stateId   String
+  branch    branch?  @relation(fields: [branchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  branchId  String?  @unique
+  order     order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("branch_location")
 }
 
 model occasion {
   id        String    @id @unique @default(uuid())
-  nameId    String    @unique
-  name      locale    @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  imageId   String
-  image     image     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // nameId    String    @unique
+  name      locale? //   @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  image     image? //     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // productOccasion productOccasion[]
   // userId          String
   // user            user              @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -480,27 +514,29 @@ model occasion {
 }
 
 model order {
-  id                 String          @id @unique @default(uuid())
-  userId             String
-  user               user            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  trackingNumber     String
-  productOrder       productOrder[]
-  subtotal           Float           @default(0)
-  taxAmount          Float           @default(0)
-  deliveryFee        Float           @default(0)
-  totalAmount        Float           @default(0)
-  paymentMethod      String //credit_card, paypal, mobile.
-  location           location?       @relation(fields: [locationId], references: [id], onDelete: SetNull, onUpdate: SetNull)
-  locationId         String?
-  notes              String
-  status             UserOrderStatus @default(UNPAID)
-  cancellationReason String?
-  refundAmount       Float?
-  currencyId         String?
-  currency           currency?       @relation(fields: [currencyId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  id                   String              @id @unique @default(uuid())
+  userId               String
+  user                 user                @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  trackingNumber       String
+  productOrder         productOrder[]
+  subtotal             Float               @default(0)
+  taxAmount            Float               @default(0)
+  deliveryFee          Float               @default(0)
+  totalAmount          Float               @default(0)
+  paymentMethod        String //credit_card, paypal, mobile.
+  location             branchLocation?     @relation(fields: [locationId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  locationId           String?
+  notes                String
+  status               UserOrderStatus     @default(UNPAID)
+  packagingVariation   packagingVariation? @relation(fields: [packagingVariationId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  packagingVariationId String?
+  cancellationReason   String?
+  refundAmount         Float?
+  currencyId           String?
+  currency             currency?           @relation(fields: [currencyId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   // estimatedDeliveryDate DateTime       @default(dbgenerated("(NOW() + '7 days'::interval)"))
-  createdAt          DateTime        @default(now())
-  updatedAt          DateTime        @updatedAt
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
 }
 
 enum UserOrderStatus {
@@ -517,57 +553,39 @@ enum UserOrderStatus {
 // amountPaid Decimal @default(0)
 // amountDue Decimal @default(0) // Calculated as totalAmount - amountPaid
 
-model Packaging {
-  id          String  @id @default(uuid())
-  name        String
-  description String?
+model packaging {
+  id   String  @id @default(uuid())
+  // nameId String @unique
+  name locale? // @relation(fields: [nameId], references: [id], onDelete: Cascade) // @relation("namePackage", fields: [nameId], references: [id], onDelete: Cascade)
 
-  // PHYSICAL DIMENSIONS (internal space)
-  minWidth  Float? // Minimum width in cm
-  maxWidth  Float? // Maximum width in cm
-  minHeight Float? // Minimum height in cm
-  maxHeight Float? // Maximum height in cm
-  minLength Float? // Minimum length/depth in cm
-  maxLength Float? // Maximum length/depth in cm
+  // description String?
+  price              Float                @default(0)
+  dimensionsWCm      Float                @default(1)
+  dimensionsHCm      Float                @default(1)
+  dimensionsLCm      Float                @default(1)
+  weightLimit        Float? // optional weight limit
+  packagingVariation packagingVariation[] // @default([])
+  // colors        String[]   @default([])
+  image              image? //    @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // imageId       String   @unique
 
-  // BASE PRICING
-  baseCost Float    @default(0)
-  costType CostType @default(FIXED)
-
-  // SIZE-BASED PRICING MULTIPLIERS
-  smallMultiplier  Float @default(1.0) // Price for SMALL size
-  mediumMultiplier Float @default(1.2) // Price for MEDIUM size
-  largeMultiplier  Float @default(1.5) // Price for LARGE size
-  xlargeMultiplier Float @default(2.0) // Price for XLARGE size
-
-  // VOLUME-BASED PRICING (if costType = VOLUME_BASED)
-  pricePerCubicCM Float? // Cost per cm³
-
-  // CATEGORIZATION
   packageType PackageType
-  size        PackageSize // Base size category
 
-  // VISUALS
-  baseImage String? // Standard packaging image
-
-  // STORE MARKUP
+  @@map("packaging")
 }
 
-enum PackageSize {
-  XSMALL // Jewelry, small accessories
-  SMALL // Phone, cosmetics, small books
-  MEDIUM // Standard gifts, clothing, books
-  LARGE // Multiple items, large gifts
-  XLARGE // Gift baskets, oversized items
-  CUSTOM // Non-standard dimensions
-}
+model packagingVariation {
+  id          String     @id @default(uuid())
+  color       String?
+  packaging   packaging  @relation(fields: [packagingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  packagingId String // @unique
+  image       image?
+  order       order[]
+  userCart    userCart[]
 
-enum CostType {
-  FIXED // Same price regardless of size
-  SIZE_BASED // Price changes with dimensions
-  VOLUME_BASED // Price based on cubic volume
-  TIERED // Different price brackets
-  PER_ITEM // Price per item inside
+  @@unique([packagingId, color])
+  //@@unique([id, packagingId])
+  @@map("packaging_variation")
 }
 
 enum PackageType {
@@ -733,18 +751,18 @@ enum ProductTags {
 }
 
 model product {
-  id                    String  @id @unique @default(uuid())
-  nameId                String  @unique
-  name                  locale  @relation("nameProduct", fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id                  String  @id @unique @default(uuid())
+  //  nameId                String  @unique
+  name                locale? @relation("nameProduct") //, fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // image                      String[]
-  image                 image[] @relation("imageProduct")
-  mainImage             image   @relation("mainImageProduct", fields: [mainImageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  mainImageId           String  @unique
+  image               image[] @relation("imageProduct")
+  mainImage           image?  @relation("mainImageProduct") //, fields: [mainImageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // mainImageId         String  @unique
   // description                String
-  descriptionId         String  @unique
-  description           locale  @relation("descriptionProduct", fields: [descriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  detailedDescriptionId String  @unique
-  detailedDescription   locale  @relation("detailedDescriptionProduct", fields: [detailedDescriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  //descriptionId         String  @unique
+  description         locale? @relation("descriptionProduct") //, fields: [descriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  //detailedDescriptionId String  @unique
+  detailedDescription locale? @relation("detailedDescriptionProduct") //, fields: [detailedDescriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   // detailedDescription        String
   // store                    store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
@@ -849,21 +867,21 @@ model session {
 }
 
 model state {
-  id                       String          @id @unique @default(uuid())
+  id            String           @id @unique @default(uuid())
   // name                     String
-  nameId                   String          @unique
-  name                     locale          @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade) //onDelete: SetNull, onUpdate: SetNull
-  country                  country         @relation(fields: [countryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  countryId                String
-  city                     city[]
-  userLocations            userLocations[]
+  name          locale? // @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade) //onDelete: SetNull, onUpdate: SetNull
+  country       country          @relation(fields: [countryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  countryId     String
+  city          city[]
+  userLocations userLocations[]
+  location      branchLocation[]
+
   //   @relation(fields: [userLocationsId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
   // userLocationsId          String?
   originDeliveryTaxes      deliveryTaxes[] @relation("OriginStateFees")
   destinationDeliveryTaxes deliveryTaxes[] @relation("DestinationStateFees")
   createdAt                DateTime        @default(now())
   updatedAt                DateTime        @updatedAt
-  location                 location[]
 }
 
 model storeSubscription {
@@ -911,18 +929,19 @@ enum SubscriptionStatus {
 }
 
 model store {
-  id     String @id @unique @default(uuid())
-  nameId String @unique
-  name   locale @relation("storeName", fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  bioId  String @unique
-  bio    locale @relation("storeBio", fields: [bioId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id   String  @id @unique @default(uuid())
+  // nameId String @unique
+  name locale? @relation("storeName") //, fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // bioId  String @unique
+  bio  locale? @relation("storeBio") //, fields: [bioId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   // name               String
   // bio                String
-  logoId               String             @unique
-  logo                 image              @relation("storeLogo", fields: [logoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  bannerId             String             @unique
-  banner               image              @relation("storeBanner", fields: [bannerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // logoId               String             @unique
+  logo                 image?             @relation("storeLogo") //, fields: [logoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  //bannerId             String             @unique
+  banner               image?             @relation("storeBanner")
+  // @relation("storeBanner", fields: [bannerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   phone                String             @unique
   email                String             @unique
   password             String
@@ -1042,17 +1061,18 @@ model transaction {
 
 model userCart {
   // id          String        @id @default(uuid())
-  userId      String        @unique
-  user        user          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  productCart productCart[]
-  bundleCart  bundleCart[]
-
-  subtotal    Float    @default(0)
-  taxAmount   Float    @default(0)
-  deliveryFee Float    @default(0)
-  totalAmount Float    @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  userId               String              @unique
+  user                 user                @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productCart          productCart[]
+  bundleCart           bundleCart[]
+  packagingVariation   packagingVariation? @relation(fields: [packagingVariationId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  packagingVariationId String?
+  subtotal             Float               @default(0)
+  taxAmount            Float               @default(0)
+  deliveryFee          Float               @default(0)
+  totalAmount          Float               @default(0)
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
 
   // @@id([userId, productId])
   // product   product? @relation(fields: [productId], references: [id])
@@ -1070,8 +1090,8 @@ model user {
   // what is the action after this?
   // countryId          String?
   // userCountry        country?      @relation(fields: [countryId], references: [id], onDelete: SetNull, onUpdate: SetNull)
-  mainUserLocations userLocations   @relation("MainUserLocation", fields: [userLocationsId], references: [id])
-  userLocationsId   String //@default("2aaeb826-8ed5-446a-a194-6370bd9df79e")
+  mainUserLocations userLocations?  @relation("mainLocation") //  @relation("MainUserLocation", fields: [userLocationsId], references: [id])
+  //userLocationsId   String //@default("2aaeb826-8ed5-446a-a194-6370bd9df79e")
   userLocations     userLocations[]
   phone             String          @unique
   email             String          @unique
@@ -1095,17 +1115,18 @@ model user {
 }
 
 model userLocations {
-  id       String  @id @unique @default(uuid())
-  userId   String?
-  // mainUser   user    @relation("mainUserLocation", fields: [mainUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  // mainUserId String
-  user     user?   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  state    state?  @relation(fields: [stateId], references: [id], onDelete: SetNull, onUpdate: SetNull)
-  stateId  String?
-  // isMain  Boolean @default(false)
-  mainUser user[]  @relation("MainUserLocation")
+  id         String  @id @unique @default(uuid())
+  mainUser   user?   @relation("mainLocation", fields: [mainUserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  mainUserId String? @unique
+  user       user?   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId     String?
 
-  @@unique([userId, stateId])
+  state   state?  @relation(fields: [stateId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  stateId String?
+  // isMain  Boolean @default(false)
+  // mainUser user[]  @relation("MainUserLocation")
+
+  // @@unique([userId, stateId])
   @@map("user_locations")
 }
 

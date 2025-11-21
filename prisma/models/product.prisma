@@ -10,18 +10,18 @@ enum ProductTags {
 }
 
 model product {
-  id                    String  @id @unique @default(uuid())
-  nameId                String  @unique
-  name                  locale  @relation("nameProduct", fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id                  String  @id @unique @default(uuid())
+  //  nameId                String  @unique
+  name                locale? @relation("nameProduct") //, fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // image                      String[]
-  image                 image[] @relation("imageProduct")
-  mainImage             image   @relation("mainImageProduct", fields: [mainImageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  mainImageId           String  @unique
+  image               image[] @relation("imageProduct")
+  mainImage           image?  @relation("mainImageProduct") //, fields: [mainImageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // mainImageId         String  @unique
   // description                String
-  descriptionId         String  @unique
-  description           locale  @relation("descriptionProduct", fields: [descriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  detailedDescriptionId String  @unique
-  detailedDescription   locale  @relation("detailedDescriptionProduct", fields: [detailedDescriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  //descriptionId         String  @unique
+  description         locale? @relation("descriptionProduct") //, fields: [descriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  //detailedDescriptionId String  @unique
+  detailedDescription locale? @relation("detailedDescriptionProduct") //, fields: [detailedDescriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   // detailedDescription        String
   // store                    store     @relation(fields: [storeId], references: [id], onDelete: Cascade)

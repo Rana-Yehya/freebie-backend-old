@@ -1,9 +1,8 @@
 model occasion {
   id        String    @id @unique @default(uuid())
-  nameId    String    @unique
-  name      locale    @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  imageId   String
-  image     image     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // nameId    String    @unique
+  name      locale? //   @relation(fields: [nameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  image     image?//     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // productOccasion productOccasion[]
   // userId          String
   // user            user              @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
