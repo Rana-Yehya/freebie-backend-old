@@ -1,4 +1,38 @@
 services:
+  redis:
+    image: redis:7.2
+    command: redis-server --requirepass authpassword --user username on >authpassword ~* +@all
+    container_name: redis-server
+    environment:
+      - TZ=Africa/Cairo
+    # restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    volumes:
+      - redis_data:/data
+  db:
+    image: postgres:16
+    container_name: postgres
+    environment:
+      - TZ=Africa/Cairo
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=freebie
+    ports:
+      - "5439:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  
   app:
     build:
       context: .
@@ -17,8 +51,10 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     develop:
       watch:
         - action: sync
@@ -28,52 +64,32 @@ services:
           path: package.json
     volumes:
       - .:/docker
-  redis:
-    image: redis:7.2
-    command: redis-server --requirepass authpassword --user username
-    container_name: redis-server
-    environment:
-      - TZ=Africa/Cairo
-    # restart: always
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
   worker:
+    # image: ghcr.io/taskforcesh/bullmq-proxy:latest
     build:
       context: .
     container_name: freebie-worker
-    # restart: always
+    restart: always
     environment:
       - TZ=Africa/Cairo
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/freebie?schema=public
       - REDIS_PORT=6379
       - REDIS_HOST=redis
+      - REDIS_USERNAME=username
       - REDIS_PASSWORD=authpassword
       - NODE_ENV=development
     depends_on:
-      - redis
-      - db
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     command: node helpers/cron/execute-job-in-bullmq.js
-    develop:
-      watch:
-        - action: sync+exec
-          path: ./*
-          target: /docker
-  db:
-    image: postgres:16
-    container_name: postgres
-    restart: always
-    environment:
-      - TZ=Africa/Cairo
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=freebie
-    ports:
-      - "5439:5432"
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-
+    # develop:
+    #   watch:
+    #     - action: sync+exec
+    #       path: ./*
+    #       target: /docker
+  
 volumes:
   redis_data:
-  postgres-data:
+  postgres_data:

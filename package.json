@@ -9,7 +9,7 @@
   "type": "commonjs",
   "scripts": {
     "start": "node index.js",
-    "dev": "node index.js"
+    "dev": "prisma migrate dev --name=test && node index.js"
   },
   "dependencies": {
     "@prisma/client": "^6.16.2",

@@ -87,7 +87,6 @@ async function storeSubscriptionQueue({ storeId, delay }) {
   } else {
     console.log(`Job not found`);
   }
-  //TODO repeat
   await myQueue.add(
     "storeSubscriptionJob",
     { storeId: storeId }, // job data
